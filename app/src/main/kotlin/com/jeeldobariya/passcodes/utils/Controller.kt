@@ -135,7 +135,7 @@ class Controller(context: Context) {
         }
     }
 
-    suspend fun generateCsvDataExportString(): String {
+    suspend fun exportDataToCsvString(): String {
         val header = "domain,username,password,notes\n"
 
         val passwords: List<Password> = getAllPasswords().first()
@@ -145,5 +145,9 @@ class Controller(context: Context) {
         }
 
         return header + rows
+    }
+
+    suspend fun importtDataFromCsvString(csvString: String) {
+        TODO("Under Development.....")
     }
 }

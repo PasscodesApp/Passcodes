@@ -78,10 +78,8 @@ class PasswordManagerActivity : AppCompatActivity() {
         }
 
         binding.exportPasswordBtn.setOnClickListener {
-            Toast.makeText(this, getString(R.string.future_feat_clause), Toast.LENGTH_SHORT).show()
-
             lifecycleScope.launch(Dispatchers.IO) {
-                val csvDataExportBlob = controller.generateCsvDataExportString()
+                val csvDataExportBlob = controller.exportDataToCsvString()
 
                 withContext(Dispatchers.Main) {
                     exportData = csvDataExportBlob
