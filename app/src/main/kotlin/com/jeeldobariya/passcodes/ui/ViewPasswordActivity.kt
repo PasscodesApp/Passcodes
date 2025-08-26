@@ -97,6 +97,8 @@ class ViewPasswordActivity : AppCompatActivity() {
     // Added all the onclick event listeners
     private fun addOnClickListenerOnButton() {
         binding.copyPasswordBtn.setOnClickListener {
+            Toast.makeText(this, getString(R.string.future_feat_clause), Toast.LENGTH_SHORT).show()
+
             val confirmDialog = AlertDialog.Builder(this@ViewPasswordActivity)
                 .setTitle(R.string.copy_password_dialog_title)
                 .setMessage(R.string.danger_copy_to_clipboard_desc)

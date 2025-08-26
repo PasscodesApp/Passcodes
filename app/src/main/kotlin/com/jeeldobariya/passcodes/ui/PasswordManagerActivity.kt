@@ -5,6 +5,8 @@ import android.view.View.GONE
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -15,12 +17,16 @@ import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.Controller
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PasswordManagerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPasswordManagerBinding
     private lateinit var controller: Controller
+
+    private lateinit var exportCsvLauncher: ActivityResultLauncher<Intent>
+    private var exportData: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         CommonUtils.updateCurrTheme(this)
@@ -34,6 +40,20 @@ class PasswordManagerActivity : AppCompatActivity() {
         }
 
         controller = Controller(this) // Initialize the controller here
+
+        exportCsvLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val uri = result.data?.data
+                if (uri != null && !exportData.isNullOrEmpty()) {
+                    contentResolver.openOutputStream(uri)?.use { outputStream ->
+                        outputStream.write(exportData!!.toByteArray())
+                    }
+                    Toast.makeText(this, getString(R.string.export_success), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         // Add event onclick listener
         addOnClickListenerOnButton(binding)
@@ -60,10 +80,25 @@ class PasswordManagerActivity : AppCompatActivity() {
 
         binding.exportPasswordBtn.setOnClickListener {
             Toast.makeText(this, getString(R.string.future_feat_clause), Toast.LENGTH_SHORT).show()
-            lifecycleScope.launch(context = Dispatchers.IO) {
-                val dataExportString = controller.generateCsvDataExportString()
-                Log.i("DataExport", dataExportString)
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val csvDataExportBlob = controller.generateCsvDataExportString()
+                Log.i("DataExport", csvDataExportBlob)
+
+                withContext(Dispatchers.Main) {
+                    exportData = csvDataExportBlob
+                    exportCsvFilePicker()
+                }
             }
         }
+    }
+
+    private fun exportCsvFilePicker() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "text/csv"
+            putExtra(Intent.EXTRA_TITLE, "passwords.csv")
+        }
+        exportCsvLauncher.launch(intent)
     }
 }
