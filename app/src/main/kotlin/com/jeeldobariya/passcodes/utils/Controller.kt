@@ -1,6 +1,8 @@
 package com.jeeldobariya.passcodes.utils
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import com.jeeldobariya.passcodes.database.MasterDatabase
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
@@ -10,10 +12,12 @@ import kotlinx.coroutines.flow.first
 class InvalidInputException(message: String = "Input parameters cannot be blank.") : Exception(message)
 class DatabaseOperationException(message: String = "A database operation error occurred.", cause: Throwable? = null) : Exception(message, cause)
 class PasswordNotFoundException(message: String = "Password with the given ID was not found.") : Exception(message)
-
+class InvalidImportFormat(message: String = "Given Data Is In Invalid Format") :  Exception(message)
 
 class Controller(context: Context) {
     private val passwordsDao: PasswordsDao
+
+    private val CSVHEADER = "domain,username,password,notes"
 
     init {
         // Initialize Room database and get the DAO instance
@@ -136,18 +140,41 @@ class Controller(context: Context) {
     }
 
     suspend fun exportDataToCsvString(): String {
-        val header = "domain,username,password,notes\n"
-
         val passwords: List<Password> = getAllPasswords().first()
 
         val rows = passwords.joinToString("\n") { password ->
             "${password.domain},${password.username},${password.password},${password.notes}"
         }
 
-        return header + rows
+        return CSVHEADER + "\n" + rows
     }
 
-    suspend fun importtDataFromCsvString(csvString: String) {
-        TODO("Under Development.....")
+    suspend fun importtDataFromCsvString(csvString: String): Int {
+        val lines = csvString.lines().filter { it.isNotBlank() }
+
+        if (lines.isEmpty() || lines[0] != CSVHEADER) {
+            throw InvalidImportFormat()
+        }
+
+        var importedPasswordCount = 0
+
+        lines.drop(1).forEach { line ->
+            val cols = line.split(",")
+
+            try {
+                savePasswordEntity(
+                    domain = cols[0].trim(),
+                    username = cols[1].trim(),
+                    password = cols[2].trim(),
+                    notes = cols[3].trim()
+                )
+
+                importedPasswordCount++
+            } catch (e: InvalidInputException) {
+                e.printStackTrace()
+            }
+        }
+
+        return importedPasswordCount
     }
 }

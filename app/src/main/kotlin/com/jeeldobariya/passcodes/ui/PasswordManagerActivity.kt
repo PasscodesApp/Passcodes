@@ -3,6 +3,7 @@ package com.jeeldobariya.passcodes.ui
 import android.content.Intent
 import android.view.View.GONE
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,7 +26,9 @@ class PasswordManagerActivity : AppCompatActivity() {
     private lateinit var controller: Controller
 
     private lateinit var exportCsvLauncher: ActivityResultLauncher<Intent>
-    private var exportData: String? = null
+    private var tmpExportCSVData: String? = null
+
+    private lateinit var importCsvLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         CommonUtils.updateCurrTheme(this)
@@ -40,14 +43,51 @@ class PasswordManagerActivity : AppCompatActivity() {
 
         controller = Controller(this) // Initialize the controller here
 
+        importCsvLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val uri = result.data?.data
+                if (uri != null) {
+                    val CSVData: String? = contentResolver.openInputStream(uri)?.bufferedReader()?.use {
+                        it.readText()
+                    }
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        if (CSVData != null) {
+                            try {
+                                val importCount: Int = controller.importtDataFromCsvString(CSVData)
+
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        this@PasswordManagerActivity,
+                                        getString(R.string.import_success, importCount),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } catch (e: Exception) {
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        this@PasswordManagerActivity,
+                                        getString(R.string.import_failed),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         exportCsvLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data
-                if (uri != null && !exportData.isNullOrEmpty()) {
+                if (uri != null && !tmpExportCSVData.isNullOrEmpty()) {
                     contentResolver.openOutputStream(uri)?.use { outputStream ->
-                        outputStream.write(exportData!!.toByteArray())
+                        outputStream.write(tmpExportCSVData!!.toByteArray())
                     }
                     Toast.makeText(this, getString(R.string.export_success), Toast.LENGTH_SHORT).show()
                 }
@@ -74,7 +114,7 @@ class PasswordManagerActivity : AppCompatActivity() {
         }
 
         binding.importPasswordBtn.setOnClickListener {
-            Toast.makeText(this, getString(R.string.future_feat_clause), Toast.LENGTH_SHORT).show()
+            importCsvFilePicker()
         }
 
         binding.exportPasswordBtn.setOnClickListener {
@@ -82,7 +122,7 @@ class PasswordManagerActivity : AppCompatActivity() {
                 val csvDataExportBlob = controller.exportDataToCsvString()
 
                 withContext(Dispatchers.Main) {
-                    exportData = csvDataExportBlob
+                    tmpExportCSVData = csvDataExportBlob
                     exportCsvFilePicker()
                 }
             }
@@ -92,9 +132,20 @@ class PasswordManagerActivity : AppCompatActivity() {
     private fun exportCsvFilePicker() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/csv"
+            type = "text/comma-separated-values"
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
+
         exportCsvLauncher.launch(intent)
+    }
+
+    private fun importCsvFilePicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "text/comma-separated-values"
+            putExtra(Intent.EXTRA_TITLE, "passwords.csv")
+        }
+
+        importCsvLauncher.launch(intent)
     }
 }
