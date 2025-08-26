@@ -3,7 +3,6 @@ package com.jeeldobariya.passcodes.ui
 import android.content.Intent
 import android.view.View.GONE
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -83,7 +82,6 @@ class PasswordManagerActivity : AppCompatActivity() {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val csvDataExportBlob = controller.generateCsvDataExportString()
-                Log.i("DataExport", csvDataExportBlob)
 
                 withContext(Dispatchers.Main) {
                     exportData = csvDataExportBlob
