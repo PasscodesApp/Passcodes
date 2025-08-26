@@ -3,18 +3,24 @@ package com.jeeldobariya.passcodes.ui
 import android.content.Intent
 import android.view.View.GONE
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
 import com.jeeldobariya.passcodes.flags.FeatureFlagManager
 import com.jeeldobariya.passcodes.utils.CommonUtils
+import com.jeeldobariya.passcodes.utils.Controller
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class PasswordManagerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPasswordManagerBinding // Use late init for binding
+    private lateinit var binding: ActivityPasswordManagerBinding
+    private lateinit var controller: Controller
 
     override fun onCreate(savedInstanceState: Bundle?) {
         CommonUtils.updateCurrTheme(this)
@@ -26,6 +32,8 @@ class PasswordManagerActivity : AppCompatActivity() {
             binding.importPasswordBtn.visibility = GONE
             binding.exportPasswordBtn.visibility = GONE
         }
+
+        controller = Controller(this) // Initialize the controller here
 
         // Add event onclick listener
         addOnClickListenerOnButton(binding)
@@ -52,6 +60,10 @@ class PasswordManagerActivity : AppCompatActivity() {
 
         binding.exportPasswordBtn.setOnClickListener {
             Toast.makeText(this, getString(R.string.future_feat_clause), Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch(context = Dispatchers.IO) {
+                val dataExportString = controller.generateCsvDataExportString()
+                Log.i("DataExport", dataExportString)
+            }
         }
     }
 }

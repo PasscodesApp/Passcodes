@@ -5,6 +5,7 @@ import com.jeeldobariya.passcodes.database.MasterDatabase
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 class InvalidInputException(message: String = "Input parameters cannot be blank.") : Exception(message)
 class DatabaseOperationException(message: String = "A database operation error occurred.", cause: Throwable? = null) : Exception(message, cause)
@@ -132,5 +133,17 @@ class Controller(context: Context) {
             e.printStackTrace()
             throw DatabaseOperationException("Error deleting password.", e)
         }
+    }
+
+    suspend fun generateCsvDataExportString(): String {
+        val header = "domain,username,password,notes\n"
+
+        val passwords: List<Password> = getAllPasswords().first()
+
+        val rows = passwords.joinToString("\n") { password ->
+            "${password.domain},${password.username},${password.password},${password.notes}"
+        }
+
+        return header + rows
     }
 }
