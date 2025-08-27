@@ -1,8 +1,6 @@
 package com.jeeldobariya.passcodes.utils
 
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import com.jeeldobariya.passcodes.database.MasterDatabase
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
@@ -17,12 +15,14 @@ class InvalidImportFormat(message: String = "Given Data Is In Invalid Format") :
 class Controller(context: Context) {
     private val passwordsDao: PasswordsDao
 
-    private val CSVHEADER = "name,url,username,password,notes"
-
     init {
         // Initialize Room database and get the DAO instance
         val db = MasterDatabase.getDatabase(context)
         passwordsDao = db.passwordsDao
+    }
+
+    companion object {
+        const val CSV_HEADER = "name,url,username,password,notes"
     }
 
     /**
@@ -146,13 +146,13 @@ class Controller(context: Context) {
             "${password.domain},https://local.${password.domain},${password.username},${password.password},${password.notes}"
         }
 
-        return CSVHEADER + "\n" + rows
+        return CSV_HEADER + "\n" + rows
     }
 
-    suspend fun importtDataFromCsvString(csvString: String): Int {
+    suspend fun importDataFromCsvString(csvString: String): Int {
         val lines = csvString.lines().filter { it.isNotBlank() }
 
-        if (lines.isEmpty() || lines[0] != CSVHEADER) {
+        if (lines.isEmpty() || lines[0] != CSV_HEADER) {
             throw InvalidImportFormat()
         }
 

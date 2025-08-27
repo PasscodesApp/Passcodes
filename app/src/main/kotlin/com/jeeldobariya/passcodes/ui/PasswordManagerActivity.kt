@@ -56,7 +56,7 @@ class PasswordManagerActivity : AppCompatActivity() {
                     lifecycleScope.launch(Dispatchers.IO) {
                         if (CSVData != null) {
                             try {
-                                val importCount: Int = controller.importtDataFromCsvString(CSVData)
+                                val importCount: Int = controller.importDataFromCsvString(CSVData)
 
                                 withContext(Dispatchers.Main) {
                                     Toast.makeText(
