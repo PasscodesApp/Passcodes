@@ -17,7 +17,7 @@ class InvalidImportFormat(message: String = "Given Data Is In Invalid Format") :
 class Controller(context: Context) {
     private val passwordsDao: PasswordsDao
 
-    private val CSVHEADER = "domain,username,password,notes"
+    private val CSVHEADER = "name,url,username,password,notes"
 
     init {
         // Initialize Room database and get the DAO instance
@@ -143,7 +143,7 @@ class Controller(context: Context) {
         val passwords: List<Password> = getAllPasswords().first()
 
         val rows = passwords.joinToString("\n") { password ->
-            "${password.domain},${password.username},${password.password},${password.notes}"
+            "${password.domain},https://local.${password.domain},${password.username},${password.password},${password.notes}"
         }
 
         return CSVHEADER + "\n" + rows
@@ -164,9 +164,9 @@ class Controller(context: Context) {
             try {
                 savePasswordEntity(
                     domain = cols[0].trim(),
-                    username = cols[1].trim(),
-                    password = cols[2].trim(),
-                    notes = cols[3].trim()
+                    username = cols[2].trim(),
+                    password = cols[3].trim(),
+                    notes = cols[4].trim()
                 )
 
                 importedPasswordCount++
