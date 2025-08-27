@@ -114,10 +114,14 @@ class PasswordManagerActivity : AppCompatActivity() {
         }
 
         binding.importPasswordBtn.setOnClickListener {
+            Toast.makeText(this@PasswordManagerActivity, getString(R.string.preview_feature), Toast.LENGTH_LONG).show()
+
             importCsvFilePicker()
         }
 
         binding.exportPasswordBtn.setOnClickListener {
+            Toast.makeText(this@PasswordManagerActivity, getString(R.string.preview_feature), Toast.LENGTH_LONG).show()
+
             lifecycleScope.launch(Dispatchers.IO) {
                 val csvDataExportBlob = controller.exportDataToCsvString()
 

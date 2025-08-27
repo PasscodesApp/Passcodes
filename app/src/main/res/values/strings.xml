@@ -76,6 +76,7 @@
     <!-- Toast Message -->
     <string name="restart_app_require">Restart App Require.</string>
     <string name="future_feat_clause">This feature is currently under development.</string>
+    <string name="preview_feature">This is preview feature.. Might have Bugs...</string>
     <string name="not_found_error_message">404: Not found.</string>
     <string name="warn_fill_form">Warning: Please fill out the form first.</string>
     <string name="fail_msg">Failed: Please try again.</string>
