@@ -135,6 +135,10 @@ class Controller(context: Context) {
         }
     }
 
+    suspend fun clearAllData() {
+        passwordsDao.clearAllPasswordData()
+    }
+
     suspend fun exportDataToCsvString(): String {
         val passwords: List<Password> = getAllPasswords().first()
 

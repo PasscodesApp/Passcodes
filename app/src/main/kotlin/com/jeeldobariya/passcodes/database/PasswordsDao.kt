@@ -30,4 +30,7 @@ interface PasswordsDao {
 
     @Delete
     suspend fun deletePassword(password: Password): Int
+
+    @Query("DELETE FROM passwords")
+    suspend fun clearAllPasswordData(): Int
 }

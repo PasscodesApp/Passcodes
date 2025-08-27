@@ -33,6 +33,7 @@
     <string name="delete_password_button_text">Delete Password</string>
     <string name="import_password_button_text">Import Password</string>
     <string name="export_password_button_text">Export Password</string>
+    <string name="clear_all_data_button_text">Clear All Data</string>
     <string name="password_security_check_button_text">Check Security</string>
     <string name="setting_button_text">Settings</string>
     <string name="toggle_theme_button_text">Toggle Theme</string>

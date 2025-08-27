@@ -15,13 +15,16 @@ import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
 import com.jeeldobariya.passcodes.flags.FeatureFlagManager
 import androidx.core.content.edit
+import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.Constant
+import com.jeeldobariya.passcodes.utils.Controller
+import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
-    
+    private lateinit var controller: Controller
 
     // List of available themes to cycle through
     private val THEMES = listOf(
@@ -41,6 +44,8 @@ class SettingsActivity : AppCompatActivity() {
         setInitialLangSelection()
 
         binding.switchLatestFeatures.isChecked = FeatureFlagManager.get(this).latestFeaturesEnabled
+
+        controller = Controller(this) // Initialize the controller here
 
         // Add event onclick listener
         addOnClickListenerOnButton()
@@ -97,6 +102,10 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchLatestFeatures.setOnCheckedChangeListener { _, isChecked ->
             FeatureFlagManager.get(this).latestFeaturesEnabled = isChecked
             Toast.makeText(this@SettingsActivity, getString(R.string.future_feat_clause) + isChecked.toString(), Toast.LENGTH_SHORT).show()
+        }
+
+        binding.clearAllDataBtn.setOnClickListener { v ->
+            lifecycleScope.launch { controller.clearAllData() }
         }
     }
 }
