@@ -5,11 +5,12 @@ import com.jeeldobariya.passcodes.database.MasterDatabase
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 class InvalidInputException(message: String = "Input parameters cannot be blank.") : Exception(message)
 class DatabaseOperationException(message: String = "A database operation error occurred.", cause: Throwable? = null) : Exception(message, cause)
 class PasswordNotFoundException(message: String = "Password with the given ID was not found.") : Exception(message)
-
+class InvalidImportFormat(message: String = "Given Data Is In Invalid Format") :  Exception(message)
 
 class Controller(context: Context) {
     private val passwordsDao: PasswordsDao
@@ -18,6 +19,10 @@ class Controller(context: Context) {
         // Initialize Room database and get the DAO instance
         val db = MasterDatabase.getDatabase(context)
         passwordsDao = db.passwordsDao
+    }
+
+    companion object {
+        const val CSV_HEADER = "name,url,username,password,notes"
     }
 
     /**
@@ -71,14 +76,10 @@ class Controller(context: Context) {
      * Retrieves a password entity by username and domain.
      * @return The Password object if found.
      * @throws DatabaseOperationException if a database error occurs.
-     * @throws PasswordNotFoundException if the password is not found.
      */
-    suspend fun getPasswordByUsernameAndDomain(username: String, domain: String): Password {
+    suspend fun getPasswordByUsernameAndDomain(username: String, domain: String): Password? {
         return try {
             passwordsDao.getPasswordByUsernameAndDomain(username, domain)
-                ?: throw PasswordNotFoundException("Password for username '$username' and domain '$domain' not found.")
-        } catch (e: PasswordNotFoundException) {
-            throw e
         } catch (e: Exception) {
             e.printStackTrace()
             throw DatabaseOperationException("Error retrieving password by username and domain.", e)
@@ -132,5 +133,60 @@ class Controller(context: Context) {
             e.printStackTrace()
             throw DatabaseOperationException("Error deleting password.", e)
         }
+    }
+
+    suspend fun clearAllData() {
+        passwordsDao.clearAllPasswordData()
+    }
+
+    suspend fun exportDataToCsvString(): String {
+        val passwords: List<Password> = getAllPasswords().first()
+
+        val rows = passwords.joinToString("\n") { password ->
+            "${password.domain},https://local.${password.domain},${password.username},${password.password},${password.notes}"
+        }
+
+        return CSV_HEADER + "\n" + rows
+    }
+
+    suspend fun importDataFromCsvString(csvString: String): Int {
+        val lines = csvString.lines().filter { it.isNotBlank() }
+
+        if (lines.isEmpty() || lines[0] != CSV_HEADER) {
+            throw InvalidImportFormat()
+        }
+
+        var importedPasswordCount = 0
+
+        lines.drop(1).forEach { line ->
+            val cols = line.split(",")
+
+            try {
+                val password: Password? = passwordsDao.getPasswordByUsernameAndDomain(username = cols[2].trim(), domain = cols[0].trim())
+
+                if (password != null) {
+                    updatePassword(
+                        id = password.id,
+                        domain = password.domain,
+                        username = password.username,
+                        password = cols[3].trim(),
+                        notes = cols[4].trim()
+                    )
+                } else {
+                    savePasswordEntity(
+                        domain = cols[0].trim(),
+                        username = cols[2].trim(),
+                        password = cols[3].trim(),
+                        notes = cols[4].trim()
+                    )
+                }
+
+                importedPasswordCount++
+            } catch (e: InvalidInputException) {
+                e.printStackTrace()
+            }
+        }
+
+        return importedPasswordCount
     }
 }

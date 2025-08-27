@@ -1,10 +1,8 @@
 plugins {
-    // These plugins are applied to the root project itself, often not needed for a typical Android app.
-    // If you need to define shared properties or tasks for all subprojects, you can do it here.
-    id("com.android.application") version "8.11.0" apply false
-    // id("com.android.library") version "8.11.0" apply false
-    id("org.jetbrains.kotlin.android") version "2.1.21" apply false
-    id("com.google.devtools.ksp") version "2.1.21-2.0.2" apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.oss.licenses) apply false
 }
 
 // Allprojects block is common for setting up common repositories for all subprojects.

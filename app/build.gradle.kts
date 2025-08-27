@@ -4,12 +4,10 @@ import org.gradle.api.GradleException
 import com.android.build.api.dsl.ApplicationExtension
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp")
-    // If you use Kotlin Parcelize, uncomment the next line:
-    // id("kotlin-parcelize")
-    id("com.google.android.gms.oss-licenses-plugin")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.oss.licenses)
 }
 
 android {
@@ -143,54 +141,28 @@ android {
 }
 
 dependencies {
-    val kotlinVersion = "1.9.0"
-    val materialVersion = "1.12.0"
-    val ossLicenseVersion = "17.2.1"
-    val appCompatVersion = "1.7.0"
-    val roomVersion = "2.7.2"
-    // val jsonVersion = "20250517"
-    val junitVersion = "4.13.2"
-    val truthVersion = "1.4.4"
-    val androidxTestExtJunitVersion = "1.2.1"
-    val espressoCoreVersion = "3.6.1"
+    implementation(libs.kotlin.stdlib)
 
-    val coroutinesVersion = "1.10.2"
-    val lifecycleVersion = "2.9.2"
+    implementation(libs.material)
+    implementation(libs.oss.license)
+    implementation(libs.appcompat)
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
-    implementation("com.google.android.material:material:$materialVersion")
-    implementation("com.google.android.gms:play-services-oss-licenses:$ossLicenseVersion")
-    implementation("androidx.appcompat:appcompat:$appCompatVersion")
-    // viewbinding is often not explicitly needed here if buildFeatures.viewBinding = true
-    // implementation("androidx.databinding:viewbinding:7.4.1")
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
 
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation(libs.lifecycle.runtime)
+    // implementation(libs.lifecycle.viewmodel)
 
-    // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    // test
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
 
-    // Lifecycle components for lifecycleScope
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
-    // implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion") // Good for future ViewModels
-
-    // // External JSON library
-    // implementation("org.json:json:$jsonVersion") // Standard org.json library
-
-    // Testing dependencies
-    testImplementation("junit:junit:$junitVersion")
-    testImplementation("com.google.truth:truth:$truthVersion")
-    
-    // Room testing
-    androidTestImplementation("androidx.room:room-testing:$roomVersion") // Essential for Room testing
-    androidTestImplementation("androidx.test.ext:junit:$androidxTestExtJunitVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoCoreVersion")
-
-    // Coroutine test utilities (for runTest)
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-
-    // Assertion library (Google Truth)
-    androidTestImplementation("com.google.truth:truth:$truthVersion")
+    androidTestImplementation(libs.room.testing)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.truth)
 }

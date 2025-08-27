@@ -1,0 +1,50 @@
+[versions]
+kotlin = "1.9.0"
+material = "1.12.0"
+oss-license = "17.2.1"
+appcompat = "1.7.0"
+room = "2.7.2"
+# json = "20250517"
+junit = "4.13.2"
+truth = "1.4.4"
+androidx-test-ext-junit = "1.2.1"
+espresso-core = "3.6.1"
+coroutines = "1.10.2"
+lifecycle = "2.9.2"
+
+# Plugin versions
+agp = "8.11.0"
+kotlin-plugin = "2.1.21"
+ksp = "2.1.21-2.0.2"
+oss-license-plugin = "0.10.6" # latest safe version for oss-licenses-plugin
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+
+material = { module = "com.google.android.material:material", version.ref = "material" }
+oss-license = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "oss-license" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+# lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+
+# json = { module = "org.json:json", version.ref = "json" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-plugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+oss-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "oss-license-plugin" }
