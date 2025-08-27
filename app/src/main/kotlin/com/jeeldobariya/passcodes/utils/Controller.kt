@@ -76,14 +76,10 @@ class Controller(context: Context) {
      * Retrieves a password entity by username and domain.
      * @return The Password object if found.
      * @throws DatabaseOperationException if a database error occurs.
-     * @throws PasswordNotFoundException if the password is not found.
      */
-    suspend fun getPasswordByUsernameAndDomain(username: String, domain: String): Password {
+    suspend fun getPasswordByUsernameAndDomain(username: String, domain: String): Password? {
         return try {
             passwordsDao.getPasswordByUsernameAndDomain(username, domain)
-                ?: throw PasswordNotFoundException("Password for username '$username' and domain '$domain' not found.")
-        } catch (e: PasswordNotFoundException) {
-            throw e
         } catch (e: Exception) {
             e.printStackTrace()
             throw DatabaseOperationException("Error retrieving password by username and domain.", e)
@@ -162,12 +158,24 @@ class Controller(context: Context) {
             val cols = line.split(",")
 
             try {
-                savePasswordEntity(
-                    domain = cols[0].trim(),
-                    username = cols[2].trim(),
-                    password = cols[3].trim(),
-                    notes = cols[4].trim()
-                )
+                val password: Password? = passwordsDao.getPasswordByUsernameAndDomain(username = cols[2].trim(), domain = cols[0].trim())
+
+                if (password != null) {
+                    updatePassword(
+                        id = password.id,
+                        domain = password.domain,
+                        username = password.username,
+                        password = cols[3].trim(),
+                        notes = cols[4].trim()
+                    )
+                } else {
+                    savePasswordEntity(
+                        domain = cols[0].trim(),
+                        username = cols[2].trim(),
+                        password = cols[3].trim(),
+                        notes = cols[4].trim()
+                    )
+                }
 
                 importedPasswordCount++
             } catch (e: InvalidInputException) {
