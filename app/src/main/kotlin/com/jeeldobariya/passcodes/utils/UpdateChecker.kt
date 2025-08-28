@@ -6,14 +6,13 @@ import okhttp3.*
 import java.io.IOException
 
 object UpdateChecker {
-    private const val RELEASES_URL =
-        "https://api.github.com/repos/JeelDobariya38/Passcodes/releases"
-
     private val client = OkHttpClient()
 
     fun checkVersion(context: Context, currentVersion: String) {
+        SemVerUtils.normalize(currentVersion)
+
         val request = Request.Builder()
-            .url(RELEASES_URL)
+            .url(Constant.GITHUB_RELEASE_API_URL)
             .build()
 
         client.newCall(request).enqueue(object : Callback {

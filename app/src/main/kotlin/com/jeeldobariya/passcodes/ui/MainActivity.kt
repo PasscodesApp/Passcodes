@@ -15,7 +15,6 @@ import com.jeeldobariya.passcodes.BuildConfig
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
 import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.UpdateChecker
-import com.jeeldobariya.passcodes.utils.SemVerUtils
 
 // import com.jeeldobariya.passcodes.utils.Permissions
 
@@ -32,8 +31,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val currVersion: String = SemVerUtils.normalize(BuildConfig.VERSION_NAME)
-            UpdateChecker.checkVersion(this@MainActivity, currVersion)
+            UpdateChecker.checkVersion(this@MainActivity, BuildConfig.VERSION_NAME)
         }
 
         // Add event onclick listener
