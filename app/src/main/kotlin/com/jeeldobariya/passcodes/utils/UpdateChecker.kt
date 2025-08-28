@@ -35,7 +35,7 @@ object UpdateChecker {
                         if (release.prerelease) {
                             showToast(
                                 context,
-                                "⚠️ You are using a PRE-RELEASE build ($currentVersion). Not safe for production!"
+                                "⚠️ You are using a PRE-RELEASE ($currentVersion). Not safe for use!  Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
                             )
                         }
                     }
@@ -51,12 +51,12 @@ object UpdateChecker {
 
                 latestStable?.let {
                     if (SemVerUtils.compare(currentVersion, it) < 0) {
-                        showToast(context, "Update available: $it")
+                        showToast(context, "New Update available: $it... Vist our website...")
                     }
                 }
 
                 if (!userReleaseFound) {
-                    showToast(context, "⚠️ Version ($currentVersion) not found on GitHub releases")
+                    showToast(context, "⚠️ Version ($currentVersion) not found on GitHub releases... Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})")
                 }
             }
         })
