@@ -150,6 +150,9 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
+    implementation(libs.okhttp)
+    implementation(libs.json)
+
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
 
