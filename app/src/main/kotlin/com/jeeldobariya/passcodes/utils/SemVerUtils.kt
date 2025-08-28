@@ -43,4 +43,17 @@ object SemVerUtils {
         }
         return list
     }
+
+    fun normalize(tag: String): String {
+        // Remove 'v' prefix if present
+        val clean = tag.trimStart('v', 'V')
+
+        // Cut off pre-release (-...) or build metadata (+...)
+        val cutIndex = clean.indexOfAny(charArrayOf('-', '+'))
+        return if (cutIndex != -1) {
+            "v" + clean.substring(0, cutIndex)
+        } else {
+            "v$clean"
+        }
+    }
 }

@@ -32,6 +32,23 @@ class SemVerUtilsTest {
     }
 
     @Test
+    fun testNormalize() {
+        assertThat(SemVerUtils.normalize("v1.2.3-beta")).isEqualTo("v1.2.3")
+        assertThat(SemVerUtils.normalize("1.0.0-alpha.1+001")).isEqualTo("v1.0.0")
+        assertThat(SemVerUtils.normalize("V2.3.4-rc1")).isEqualTo("v2.3.4")
+        assertThat(SemVerUtils.normalize("1.5.0")).isEqualTo("v1.5.0")
+        assertThat(SemVerUtils.normalize("v2.5.0")).isEqualTo("v2.5.0")
+        assertThat(SemVerUtils.normalize("v1.0.0-Stable-Dev")).isEqualTo("v1.0.0")
+
+        // Note: try some invalid / wired stuff just to test
+        assertThat(SemVerUtils.normalize("v1.0-Stable-Dev")).isEqualTo("v1.0")
+        assertThat(SemVerUtils.normalize("v1.0------")).isEqualTo("v1.0")
+        assertThat(SemVerUtils.normalize("v1.0-abc")).isEqualTo("v1.0")
+        assertThat(SemVerUtils.normalize("v--1.0-abc")).isEqualTo("v")
+        assertThat(SemVerUtils.normalize("")).isEqualTo("v")
+    }
+
+    @Test
     fun testParseReleases() {
         val json = """
             [
