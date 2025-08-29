@@ -9,6 +9,7 @@ object UpdateChecker {
     private val client = OkHttpClient()
 
     fun checkVersion(context: Context, currentVersion: String) {
+        context = context.applicationContext
         currentVersion = SemVerUtils.normalize(currentVersion)
 
         val request = Request.Builder()
