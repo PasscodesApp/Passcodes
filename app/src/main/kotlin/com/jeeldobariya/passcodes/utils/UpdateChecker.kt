@@ -9,7 +9,7 @@ object UpdateChecker {
     private val client = OkHttpClient()
 
     fun checkVersion(context: Context, currentVersion: String) {
-        SemVerUtils.normalize(currentVersion)
+        currentVersion = SemVerUtils.normalize(currentVersion)
 
         val request = Request.Builder()
             .url(Constant.GITHUB_RELEASE_API_URL)
