@@ -136,7 +136,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/clear_all_data_btn"
                 android:layout_width="wrap_content"
-                style="@style/Widget.Material3.Button.TonalButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:textColor="?attr/colorOnError"
                 android:backgroundTint="?attr/colorOnErrorContainer"
                 android:layout_height="wrap_content"
