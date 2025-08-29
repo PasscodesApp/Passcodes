@@ -9,8 +9,8 @@ object UpdateChecker {
     private val client = OkHttpClient()
 
     fun checkVersion(context: Context, currentVersion: String) {
-        context = context.applicationContext
-        currentVersion = SemVerUtils.normalize(currentVersion)
+        val appcontext = context.applicationContext
+        val currentNormalizeVersion = SemVerUtils.normalize(currentVersion)
 
         val request = Request.Builder()
             .url(Constant.GITHUB_RELEASE_API_URL)
@@ -31,12 +31,12 @@ object UpdateChecker {
                 for (release in releases) {
                     if (release.draft) continue // ignore drafts
 
-                    if (release.tag == currentVersion) {
+                    if (release.tag == currentNormalizeVersion) {
                         userReleaseFound = true
                         if (release.prerelease) {
                             showToast(
-                                context,
-                                "⚠️ You are using a PRE-RELEASE ($currentVersion). Not safe for use!  Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
+                                appcontext,
+                                "⚠️ You are using a PRE-RELEASE ($currentNormalizeVersion). Not safe for use!  Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
                             )
                         }
                     }
@@ -51,13 +51,13 @@ object UpdateChecker {
                 }
 
                 latestStable?.let {
-                    if (SemVerUtils.compare(currentVersion, it) < 0) {
-                        showToast(context, "New Update available: $it... Vist our website...")
+                    if (SemVerUtils.compare(currentNormalizeVersion, it) < 0) {
+                        showToast(appcontext, "New Update available: $it... Vist our website...")
                     }
                 }
 
                 if (!userReleaseFound) {
-                    showToast(context, "⚠️ Version ($currentVersion) not found on GitHub releases... Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})")
+                    showToast(appcontext, "⚠️ Version ($currentNormalizeVersion) not found on GitHub releases... Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})")
                 }
             }
         })
