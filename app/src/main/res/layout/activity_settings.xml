@@ -136,12 +136,11 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/clear_all_data_btn"
                 android:layout_width="wrap_content"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:textColor="?attr/colorOnError"
-                android:backgroundTint="?attr/colorOnErrorContainer"
-                android:layout_height="wrap_content"
                 android:text="@string/clear_all_data_button_text"
                 android:textSize="12sp"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:textColor="?attr/colorError"
+                android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
