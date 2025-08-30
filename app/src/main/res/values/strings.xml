@@ -87,7 +87,7 @@
     <string name="action_discard">Action discarded.</string>
     <string name="error_invalid_password_id">Something Went Wrong: Invalid ID!!</string>
     <string name="import_success">Imported %1$d passwords</string>
-    <string name="import_failed">Failed to import CSV</string>
+    <string name="import_failed">Failed to import %1$d passwords</string>
     <string name="export_success">Passwords exported</string>
 
     <!-- Alert Dialog Message -->

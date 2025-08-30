@@ -56,14 +56,22 @@ class PasswordManagerActivity : AppCompatActivity() {
                     lifecycleScope.launch(Dispatchers.IO) {
                         if (CSVData != null) {
                             try {
-                                val importCount: Int = controller.importDataFromCsvString(CSVData)
+                                val result: IntArray = controller.importDataFromCsvString(CSVData)
 
                                 withContext(Dispatchers.Main) {
-                                    Toast.makeText(
-                                        this@PasswordManagerActivity,
-                                        getString(R.string.import_success, importCount),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    if (result[1] == 0) {
+                                        Toast.makeText(
+                                            this@PasswordManagerActivity,
+                                            getString(R.string.import_success, result[0]),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        Toast.makeText(
+                                            this@PasswordManagerActivity,
+                                            getString(R.string.import_failed, result[1]),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 }
                             } catch (e: Exception) {
                                 withContext(Dispatchers.Main) {

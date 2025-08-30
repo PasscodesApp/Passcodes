@@ -1,6 +1,7 @@
 package com.jeeldobariya.passcodes.utils
 
 import android.content.Context
+import android.widget.Toast
 import com.jeeldobariya.passcodes.database.MasterDatabase
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
@@ -149,7 +150,7 @@ class Controller(context: Context) {
         return CSV_HEADER + "\n" + rows
     }
 
-    suspend fun importDataFromCsvString(csvString: String): Int {
+    suspend fun importDataFromCsvString(csvString: String): IntArray {
         val lines = csvString.lines().filter { it.isNotBlank() }
 
         if (lines.isEmpty() || lines[0] != CSV_HEADER) {
@@ -157,12 +158,18 @@ class Controller(context: Context) {
         }
 
         var importedPasswordCount = 0
+        var failToImportedPasswordCount = 0
 
         lines.drop(1).forEach { line ->
             val cols = line.split(",")
 
+            /* NOTE: this need to be done, because our app not allow empty domain. */
+            val chosenDomain : String = if (!cols[0].isBlank()) {
+                cols[0].trim() // used: name
+            } else cols[1].trim() // used: url
+
             try {
-                val password: Password? = passwordsDao.getPasswordByUsernameAndDomain(username = cols[2].trim(), domain = cols[0].trim())
+                val password: Password? = passwordsDao.getPasswordByUsernameAndDomain(username = cols[2].trim(), domain = chosenDomain)
 
                 if (password != null) {
                     updatePassword(
@@ -174,7 +181,7 @@ class Controller(context: Context) {
                     )
                 } else {
                     savePasswordEntity(
-                        domain = cols[0].trim(),
+                        domain = chosenDomain,
                         username = cols[2].trim(),
                         password = cols[3].trim(),
                         notes = cols[4].trim()
@@ -184,9 +191,10 @@ class Controller(context: Context) {
                 importedPasswordCount++
             } catch (e: InvalidInputException) {
                 e.printStackTrace()
+                failToImportedPasswordCount++
             }
         }
 
-        return importedPasswordCount
+        return intArrayOf(importedPasswordCount, failToImportedPasswordCount)
     }
 }
