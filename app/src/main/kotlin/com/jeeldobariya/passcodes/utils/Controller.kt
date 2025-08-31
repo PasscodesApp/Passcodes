@@ -23,7 +23,7 @@ class Controller(context: Context) {
     }
 
     companion object {
-        const val CSV_HEADER = "name,url,username,password,notes"
+        const val CSV_HEADER = "name,url,username,password,note"
     }
 
     /**
@@ -153,8 +153,12 @@ class Controller(context: Context) {
     suspend fun importDataFromCsvString(csvString: String): IntArray {
         val lines = csvString.lines().filter { it.isNotBlank() }
 
-        if (lines.isEmpty() || lines[0] != CSV_HEADER) {
-            throw InvalidImportFormat()
+        if (lines.isEmpty()) {
+            throw InvalidImportFormat("Given data seems to be Empty!!")
+        }
+        
+        if (lines[0] != CSV_HEADER) {
+            throw InvalidImportFormat("Given data is not in valid csv format!! correct format:- ${CSV_HEADER}")
         }
 
         var importedPasswordCount = 0
