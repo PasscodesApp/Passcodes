@@ -1,9 +1,9 @@
 @REM WARNING: Script is Deprecated!! From 2025-07-29T12:45:00Z.
-@REM Checkout: https://github.com/JeelDobariya38/Passcodes/blob/main/docs/building.md.
+@REM Checkout: https://github.com/PasscodesApp/Passcodes/blob/main/docs/building.md.
 
 @REM Build & install on Android phone
 
-echo "WARNING: Script is Deprecated!! From 2025-07-29T12:45:00Z. More Info:- https://github.com/JeelDobariya38/Passcodes/blob/main/docs/building.md."
+echo "WARNING: Script is Deprecated!! From 2025-07-29T12:45:00Z. More Info:- https://github.com/PasscodesApp/Passcodes/blob/main/docs/building.md."
 
 pause
 

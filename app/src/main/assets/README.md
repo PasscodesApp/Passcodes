@@ -1,6 +1,6 @@
 # Passcodes
 
-[![Android CI/CD](https://github.com/JeelDobariya38/Passcodes/actions/workflows/build-apks.yml/badge.svg)](https://github.com/JeelDobariya38/Passcodes/actions/workflows/build-apks.yml)
+[![Android CI/CD](https://github.com/PasscodesApp/Passcodes/actions/workflows/build-apks.yml/badge.svg)](https://github.com/PasscodesApp/Passcodes/actions/workflows/build-apks.yml)
 ![Visitor Counter (@hehuapei/visitor-badge)](https://visitor-badge.laobi.icu/badge?page_id=JeelDobariya38.Passcodes&format=true)
 
 > [!WARNING]
@@ -73,7 +73,7 @@ Note: high version can still run, but are not guaranteed offically.
 
 ## Installation Steps
 
-1. Go to our [github repository release page](https://github.com/JeelDobariya38/Passcodes/releases/latest).
+1. Go to our [github repository release page](https://github.com/PasscodesApp/Passcodes/releases/latest).
 
 2. Download the apk for your phone. If Don't know the architecture of phone then download apk file that has universal in its name.
 
@@ -99,8 +99,8 @@ You can checkout support docs, provided in [docs/](docs/) Or You can even seek h
 
 ## Changelog & Release Notes
 
-- Professional ChangeLog: [here](https://github.com/JeelDobariya38/Passcodes/blob/main/changelog.md)
-- Casual Release Notes: [here](https://github.com/JeelDobariya38/Passcodes/blob/main/docs/release-notes.md)
+- Professional ChangeLog: [here](https://github.com/PasscodesApp/Passcodes/blob/main/changelog.md)
+- Casual Release Notes: [here](https://github.com/PasscodesApp/Passcodes/blob/main/docs/release-notes.md)
 
 ## Contribution Are Appreciated!!!
 
@@ -112,8 +112,8 @@ You can checkout support docs, provided in [docs/](docs/) Or You can even seek h
 >
 > For more, infomation on what kind of contribtuion we approve or allow, please open a issue in our repo. that way you avoid wasteing your time...
 
-By, contributing to project you accept the [CONTRIBUTING.md](https://github.com/JeelDobariya38/Passcodes/blob/main/CONTRIBUTING.md) & [MIT License](https://github.com/JeelDobariya38/Passcodes/blob/main/LICENSE.txt).
+By, contributing to project you accept the [CONTRIBUTING.md](https://github.com/PasscodesApp/Passcodes/blob/main/CONTRIBUTING.md) & [MIT License](https://github.com/PasscodesApp/Passcodes/blob/main/LICENSE.txt).
 
 ## Licence
 
-Passcodes Project is license under [MIT](https://github.com/JeelDobariya38/Passcodes/blob/main/LICENSE.txt) License. Downloading the app would mean, you are okay and have accepted the license.
+Passcodes Project is license under [MIT](https://github.com/PasscodesApp/Passcodes/blob/main/LICENSE.txt) License. Downloading the app would mean, you are okay and have accepted the license.
