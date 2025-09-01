@@ -18,7 +18,7 @@ _Pull requests, bug reports, and all other forms of contribution are welcomed an
 
 ## :bulb: Asking Questions
 
-See our [Community](https://t.me/passwordmanagercommunity) on telegram we appricate your question over there. In short, GitHub issues are not the appropriate place to debug your specific question, but should be reserved for filing bugs and feature requests.
+See our [Community](https://t.me/passcodescommunity) on telegram we appricate your question over there. In short, GitHub issues are not the appropriate place to debug your specific question, but should be reserved for filing bugs and feature requests.
 
 ## :inbox_tray: Opening an Issue
 
