@@ -29,12 +29,12 @@ Release Notes: [docs/release-notes.md](docs/release-notes.md), there you will fi
 - **Improve UI/UX**: improve view password screen, also adjust the button colors.. Contributed by [@JeelDobariya]
 - **Add Feature Flaging**: give user a control on whether they wanna latest exprience or stable exprience. add a way for launching preview features without worry about their stablity. Contributed by [@JeelDobariya]
 - **Update Checker**: made a basic update checker that help users stay out to date with latest release & also notify user about already reported security vulnerability. Contributed by [@JeelDobariya]
-- **Copy Button (preview feature)**: add copy button for copy passwords for easy of use. but as it is potential threat to security. made it a preview feature. Contributed by [@JeelDobariya]
-- **G-Passwords Import/Export (preview feature)**: add a import/export feature. which also compatible with google passwords. i have test it with my google password setup. but, i am not sure wether this will run in every edge case or not. so it previw feature. Contributed by [@JeelDobariya]
+- **Copy Button (preview feature)**: add copy button for copy passwords for easy of use. but as it is potential threat to security, made it a preview feature. Contributed by [@JeelDobariya]
+- **G-Passwords Import/Export (preview feature)**: add a import/export feature. which also compatible with google passwords. I have test it with my google password setup. but, I am not sure wether this will run in every edge case or not. So, it a preview feature. Contributed by [@JeelDobariya]
 
 ### Changed
 
-- **Mirgated Project**: Migrate project from `JeelDobariya38 (personal)` to `PasscodesApp (organization)`. To refelct my long term vision. Contributed by [@JeelDobariya].
+- **Mirgated Project**: Migrate project from `JeelDobariya38 (personal)` to `PasscodesApp (my organization)` account. To reflect my long term vision. Contributed by [@JeelDobariya].
 
 ## v1.0.0 - Stable (Aug 16, 2025)
 

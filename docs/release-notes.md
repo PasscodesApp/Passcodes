@@ -18,15 +18,15 @@ For more details and more professional tone, see [changelog.md](/changelog.md).
   ```
 </details>
 
-`TL;DR`: Design Improvement.. | Will work with google passwords.... | We are offical organization on github.... from 31 Aug 2025
+`TL;DR`: Design Improvement.. | Will work with google passwords.... | We are offically an organization on Github from `Aug 31, 2025`.... 
 
-This pur first offically release after the github organization... this release has feature like import & export password from google passwords app... this is also a alpa release and both feature copy password & import export password are disable by defualt due to security threats... they can turn on if you wish...
+This our first **offically release after migrating to the github organization...** this release has feature like import & export passwords from google passwords app... this is also a alpha release and both features (copy password & import export password) are disable by defualt due to security threats... they can be turn on if you wish...
 
-Also as the passcodes have change from just my personal hobby project to offical organization.. this release is step for us to move to open source and open to contribute... and more important reflect, my long term vision on passcodes... what it means? upcoming things will be more fascinating to view and to be part of... and also the app will have more long term support... (if you ignore, the fact that I am not verified developer as of date 1/9/25 by google... but will do it in near time...)
+Also as the passcodes have change from just my personal hobby project to offical organization.. this release is step for us to move to open source and open to contribute... and more importantly it reflect, my long term vision with passcodes as a project... what it means? upcoming things will be more fascinating to view and to be part of... and also the app will have more long term support... (if you ignore, the fact that I am not verified developer as of "1/9/25 by google"... but will do it in near time...)
 
-Organization is name PasscodesApp and not Passcodes. Because, it not avaliable on github.......
+Organization is name **PasscodesApp and not Passcodes. Because, it not avaliable on github.......**
 
-Stick to watch and observe passcodes...
+Stick to watch and observe passcodes upcoming progress... [Telegram](https://t.me/passcodescommunity)
 
 
 ## v1.0.0-Stable (Aug 16, 2025)
