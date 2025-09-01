@@ -19,8 +19,8 @@ android {
             applicationId = "com.jeeldobariya.passcodes"
             minSdk = 26
             targetSdk = 34
-            versionCode = 1
-            versionName = "v1.0.0-Stable"
+            versionCode = 2
+            versionName = "v1.1.0-Alpha"
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
