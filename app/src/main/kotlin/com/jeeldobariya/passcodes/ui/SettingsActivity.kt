@@ -105,7 +105,11 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.clearAllDataBtn.setOnClickListener { v ->
-            lifecycleScope.launch { controller.clearAllData() }
+            lifecycleScope.launch { 
+                controller.clearAllData()
+            }
+
+            Toast.makeText(this@SettingsActivity, "Delete the user data!!", Toast.LENGTH_SHORT).show()
         }
     }
 }

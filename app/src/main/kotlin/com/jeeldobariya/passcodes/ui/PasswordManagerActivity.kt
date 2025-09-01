@@ -56,21 +56,29 @@ class PasswordManagerActivity : AppCompatActivity() {
                     lifecycleScope.launch(Dispatchers.IO) {
                         if (CSVData != null) {
                             try {
-                                val importCount: Int = controller.importDataFromCsvString(CSVData)
+                                val result: IntArray = controller.importDataFromCsvString(CSVData)
 
                                 withContext(Dispatchers.Main) {
                                     Toast.makeText(
                                         this@PasswordManagerActivity,
-                                        getString(R.string.import_success, importCount),
-                                        Toast.LENGTH_SHORT
+                                        getString(R.string.import_success, result[0]),
+                                        Toast.LENGTH_LONG
                                     ).show()
+                                    
+                                    if (result[1] != 0) {
+                                        Toast.makeText(
+                                            this@PasswordManagerActivity,
+                                            getString(R.string.import_failed, result[1]),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
                                 }
                             } catch (e: Exception) {
                                 withContext(Dispatchers.Main) {
                                     Toast.makeText(
                                         this@PasswordManagerActivity,
-                                        getString(R.string.import_failed),
-                                        Toast.LENGTH_SHORT
+                                        e.message,
+                                        Toast.LENGTH_LONG
                                     ).show()
                                 }
                             }
@@ -136,7 +144,7 @@ class PasswordManagerActivity : AppCompatActivity() {
     private fun exportCsvFilePicker() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/comma-separated-values"
+            type = "text/csv"
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
 
@@ -146,7 +154,7 @@ class PasswordManagerActivity : AppCompatActivity() {
     private fun importCsvFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/comma-separated-values"
+            type = "text/csv"
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
 

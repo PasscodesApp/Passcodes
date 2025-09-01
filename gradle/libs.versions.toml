@@ -1,10 +1,11 @@
 [versions]
 kotlin = "1.9.0"
 material = "1.12.0"
+okhttp = "5.1.0"
 oss-license = "17.2.1"
 appcompat = "1.7.0"
 room = "2.7.2"
-# json = "20250517"
+json = "20250517"
 junit = "4.13.2"
 truth = "1.4.4"
 androidx-test-ext-junit = "1.2.1"
@@ -29,6 +30,8 @@ room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp"}
+
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
@@ -36,7 +39,7 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 # lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
-# json = { module = "org.json:json", version.ref = "json" }
+json = { module = "org.json:json", version.ref = "json" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }

@@ -31,9 +31,9 @@
     <string name="load_password_button_text">Load Password</string>
     <string name="update_password_button_text">Update Password</string>
     <string name="delete_password_button_text">Delete Password</string>
-    <string name="import_password_button_text">Import Password</string>
-    <string name="export_password_button_text">Export Password</string>
-    <string name="clear_all_data_button_text">Clear All Data</string>
+    <string name="import_password_button_text">Import G-Password</string>
+    <string name="export_password_button_text">Export G-Password</string>
+    <string name="clear_all_data_button_text">Clear Data</string>
     <string name="password_security_check_button_text">Check Security</string>
     <string name="setting_button_text">Settings</string>
     <string name="toggle_theme_button_text">Toggle Theme</string>
@@ -67,7 +67,7 @@
     <string name="password_prefix">Password: </string>
     <string name="notes_prefix">Notes: </string>
     <string name="createdat_prefix">Created At: </string>
-    <string name="updatedat_prefix">Updated At: </string>
+    <string name="updatedat_prefix">Last Updated: </string>
 
     <!-- Permission -->
     <string name="permission_granted">Permission granted</string>
@@ -87,7 +87,7 @@
     <string name="action_discard">Action discarded.</string>
     <string name="error_invalid_password_id">Something Went Wrong: Invalid ID!!</string>
     <string name="import_success">Imported %1$d passwords</string>
-    <string name="import_failed">Failed to import CSV</string>
+    <string name="import_failed">Failed to import %1$d passwords</string>
     <string name="export_success">Passwords exported</string>
 
     <!-- Alert Dialog Message -->

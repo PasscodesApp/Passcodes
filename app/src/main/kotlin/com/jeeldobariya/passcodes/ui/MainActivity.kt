@@ -6,10 +6,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import android.view.LayoutInflater
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 import com.jeeldobariya.passcodes.R
+import com.jeeldobariya.passcodes.BuildConfig
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
 import com.jeeldobariya.passcodes.utils.CommonUtils
+import com.jeeldobariya.passcodes.utils.UpdateChecker
 
 // import com.jeeldobariya.passcodes.utils.Permissions
 
@@ -24,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            UpdateChecker.checkVersion(this@MainActivity, BuildConfig.VERSION_NAME)
+        }
 
         // Add event onclick listener
         addOnClickListenerOnButton()
