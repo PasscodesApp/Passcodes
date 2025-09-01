@@ -1,7 +1,7 @@
 package com.jeeldobariya.passcodes.utils
 
 object Constant {
-    const val REPOSITORY_SIGNATURE = "JeelDobariya38/Passcodes"
+    const val REPOSITORY_SIGNATURE = "PasscodesApp/Passcodes"
 
     // URL Constants
     const val TELEGRAM_COMMUNITY_URL = "https://t.me/passcodescommunity"

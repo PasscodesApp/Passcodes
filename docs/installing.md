@@ -21,7 +21,7 @@ For inital installion of app, you follow step given below it work in most scenar
    - and if yes, then mostly you are good to go but, officially we only support device between android 8 to 14. For more high android version app can be run, But we don;t officially support it.
 
 2. After completing first step, Pick a version of app to install.
-   - Go to our [github repository release page](https://github.com/JeelDobariya38/Passcodes/releases). There you will find a list of release avaiable.
+   - Go to our [github repository release page](https://github.com/PasscodesApp/Passcodes/releases). There you will find a list of release avaiable.
    - pick up any one of the release you like. (we recommend you to pick a good release. [how can you find a good release](#guide-to-find-a-best-release)?)
    - after pick up a release, you can read the changelog to know what has changed. (optional step)
 
@@ -35,7 +35,7 @@ For inital installion of app, you follow step given below it work in most scenar
 
    - open the app.
 
-if any problem occur while performing the above 4 step. report your problem using [github issues](https://github.com/JeelDobariya38/Passcodes/issues/new) after checking other support docs avaiable in github repositoy "docs/" folder.
+if any problem occur while performing the above 4 step. report your problem using [github issues](https://github.com/PasscodesApp/Passcodes/issues/new) after checking other support docs avaiable in github repositoy "docs/" folder.
 
 ## Updation Process
 

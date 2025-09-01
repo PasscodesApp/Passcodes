@@ -3,7 +3,33 @@
 Here, You will find short ad sweet and casual `tldrs` for release notes or changelog.
 For more details and more professional tone, see [changelog.md](/changelog.md).
 
-### v1.0.0-Stable (Aug 16, 2025)
+## v1.0.0-Stable (Sept 1, 2025)
+
+<details>
+  <summary>View Internal Details</summary>
+  
+  ```
+  Pacakage Name = "com.jeeldobariya.passcodes"
+  Min Android = 8.0 (API level 26)
+  Max Android = 14 (API level 34)
+  Version Code = 2
+  Version Name = "v1.1.0-Alpha"
+  Master Database Version = "v1"
+  ```
+</details>
+
+`TL;DR`: Design Improvement.. | Will work with google passwords.... | We are offically an organization on Github from `Aug 31, 2025`.... 
+
+This our first **offically release after migrating to the github organization...** this release has feature like import & export passwords from google passwords app... this is also a alpha release and both features (copy password & import export password) are disable by defualt due to security threats... they can be turn on if you wish...
+
+Also as the passcodes have change from just my personal hobby project to offical organization.. this release is step for us to move to open source and open to contribute... and more importantly it reflect, my long term vision with passcodes as a project... what it means? upcoming things will be more fascinating to view and to be part of... and also the app will have more long term support... (if you ignore, the fact that I am not verified developer as of "1/9/25 by google"... but will do it in near time...)
+
+Organization is name **PasscodesApp and not Passcodes. Because, it not avaliable on github.......**
+
+Stick to watch and observe passcodes upcoming progress... [Telegram](https://t.me/passcodescommunity)
+
+
+## v1.0.0-Stable (Aug 16, 2025)
 
 <details>
   <summary>View Internal Details</summary>
@@ -26,7 +52,7 @@ things have change internally also... like app was first build using java.. but,
 now, you can also switch theme and languages in app..
 also improve UI/UX by providing help text.. especially as you all have question like "what is domain?" "what can i write in domain?" and so on.....
 
-### v0.1.0-Alpha (Aug 26, 2024)
+## v0.1.0-Alpha (Aug 26, 2024)
 
 <details>
   <summary>View Internal Details</summary>

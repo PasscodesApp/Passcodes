@@ -18,11 +18,11 @@ _Pull requests, bug reports, and all other forms of contribution are welcomed an
 
 ## :bulb: Asking Questions
 
-See our [Community](https://t.me/passwordmanagercommunity) on telegram we appricate your question over there. In short, GitHub issues are not the appropriate place to debug your specific question, but should be reserved for filing bugs and feature requests.
+See our [Community](https://t.me/passcodescommunity) on telegram we appricate your question over there. In short, GitHub issues are not the appropriate place to debug your specific question, but should be reserved for filing bugs and feature requests.
 
 ## :inbox_tray: Opening an Issue
 
-Before [creating an issue](https://github.com/JeelDobariya38/Passcodes/issues/new), check if you are using the latest version of the project. If you are not up-to-date, see if updating fixes your issue first.
+Before [creating an issue](https://github.com/PasscodesApp/Passcodes/issues/new), check if you are using the latest version of the project. If you are not up-to-date, see if updating fixes your issue first.
 
 ### :lock: Reporting Security Issues
 

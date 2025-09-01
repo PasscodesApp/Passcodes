@@ -53,10 +53,10 @@ class SemVerUtilsTest {
         val json = """
             [
                 {
-                    "url": "https://api.github.com/repos/JeelDobariya38/Passcodes/releases/240385777",
-                    "assets_url": "https://api.github.com/repos/JeelDobariya38/Passcodes/releases/240385777/assets",
-                    "upload_url": "https://uploads.github.com/repos/JeelDobariya38/Passcodes/releases/240385777/assets{?name,label}",
-                    "html_url": "https://github.com/JeelDobariya38/Passcodes/releases/tag/v1.0.0",
+                    "url": "https://api.github.com/repos/PasscodesApp/Passcodes/releases/240385777",
+                    "assets_url": "https://api.github.com/repos/PasscodesApp/Passcodes/releases/240385777/assets",
+                    "upload_url": "https://uploads.github.com/repos/PasscodesApp/Passcodes/releases/240385777/assets{?name,label}",
+                    "html_url": "https://github.com/PasscodesApp/Passcodes/releases/tag/v1.0.0",
                     "id": 240385777,
                     "author": {},
                     "node_id": "RE_kwDOMffp084OU_7x",
@@ -70,16 +70,16 @@ class SemVerUtilsTest {
                     "updated_at": "2025-08-17T12:56:19Z",
                     "published_at": "2025-08-16T18:29:16Z",
                     "assets": [],
-                    "tarball_url": "https://api.github.com/repos/JeelDobariya38/Passcodes/tarball/v1.0.0",
-                    "zipball_url": "https://api.github.com/repos/JeelDobariya38/Passcodes/zipball/v1.0.0",
+                    "tarball_url": "https://api.github.com/repos/PasscodesApp/Passcodes/tarball/v1.0.0",
+                    "zipball_url": "https://api.github.com/repos/PasscodesApp/Passcodes/zipball/v1.0.0",
                     "body": "",
                     "mentions_count": 3
                 },
                 {
-                    "url": "https://api.github.com/repos/JeelDobariya38/Passcodes/releases/171838408",
-                    "assets_url": "https://api.github.com/repos/JeelDobariya38/Passcodes/releases/171838408/assets",
-                    "upload_url": "https://uploads.github.com/repos/JeelDobariya38/Passcodes/releases/171838408/assets{?name,label}",
-                    "html_url": "https://github.com/JeelDobariya38/Passcodes/releases/tag/v0.1.0",
+                    "url": "https://api.github.com/repos/PasscodesApp/Passcodes/releases/171838408",
+                    "assets_url": "https://api.github.com/repos/PasscodesApp/Passcodes/releases/171838408/assets",
+                    "upload_url": "https://uploads.github.com/repos/PasscodesApp/Passcodes/releases/171838408/assets{?name,label}",
+                    "html_url": "https://github.com/PasscodesApp/Passcodes/releases/tag/v0.1.0",
                     "id": 171838408,
                     "author": {},
                     "node_id": "RE_kwDOMffp084KPgvI",
@@ -93,8 +93,8 @@ class SemVerUtilsTest {
                     "updated_at": "2025-08-16T16:09:32Z",
                     "published_at": "2024-08-26T03:51:02Z",
                     "assets": [],
-                    "tarball_url": "https://api.github.com/repos/JeelDobariya38/Passcodes/tarball/v0.1.0",
-                    "zipball_url": "https://api.github.com/repos/JeelDobariya38/Passcodes/zipball/v0.1.0",
+                    "tarball_url": "https://api.github.com/repos/PasscodesApp/Passcodes/tarball/v0.1.0",
+                    "zipball_url": "https://api.github.com/repos/PasscodesApp/Passcodes/zipball/v0.1.0",
                     "body": "",
                     "mentions_count": 2
                 }
