@@ -26,7 +26,7 @@ Release Notes: [docs/release-notes.md](docs/release-notes.md), there you will fi
 
 ### Fixed
 
-- **Fixed Import Passwords**: fix the bug, that was not let user select csv files from file picker. due to incorrect mimetype in code..
+- **Fixed Import Passwords**: fix the bug, that was not let user select csv files from file picker. due to incorrect mimetype in code.. Contributed by [@JeelDobariya]
 
 
 ## v1.1.0 - Alpha (Sept 1, 2025)
