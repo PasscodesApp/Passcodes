@@ -3,7 +3,29 @@
 Here, You will find short ad sweet and casual `tldrs` for release notes or changelog.
 For more details and more professional tone, see [changelog.md](/changelog.md).
 
-## v1.0.0-Stable (Sept 1, 2025)
+## v1.1.1-Alpha (Sept 11, 2025)
+
+<details>
+  <summary>View Internal Details</summary>
+  
+  ```
+  Pacakage Name = "com.jeeldobariya.passcodes"
+  Min Android = 8.0 (API level 26)
+  Max Android = 14 (API level 34)
+  Version Code = 2
+  Version Name = "v1.1.1-Alpha"
+  Master Database Version = "v1"
+  ```
+</details>
+
+`TL;DR`: Sorry for delay, but we have fix import files feature...
+
+We are very sorry for the delay.. we have offically fix the import password csv file selection bug...
+
+In big project, such small mistakes/things happens.. so, ignore it please...
+
+
+## v1.1.0-Alpha (Sept 1, 2025)
 
 <details>
   <summary>View Internal Details</summary>
