@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Passcodes</string>
-    <string name="app_version" translatable="false">v1.1.0 - Alpha</string>
+    <string name="app_version" translatable="false">v1.1.1 - Alpha</string>
 
     <!-- Contributor Names -->
     <string name="developer_name">Developed by: Dobariya Jeel</string>

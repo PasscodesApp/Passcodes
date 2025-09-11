@@ -8,6 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Release Notes: [docs/release-notes.md](docs/release-notes.md), there you will find short and sweet release notes.
 
 
+## v1.1.1 - Alpha (Sept 11, 2025)
+
+<details>
+  <summary>View Internal Details</summary>
+  
+  ```
+  Pacakage Name = "com.jeeldobariya.passcodes"
+  Min Android = 8.0 (API level 26)
+  Max Android = 14 (API level 34)
+  Version Code = 2
+  Version Name = "v1.1.1-Alpha"
+  Master Database Version = "v1"
+  ```
+</details>
+
+
+### Fixed
+
+- **Fixed Import Passwords**: fix the bug, that was not let user select csv files from file picker. due to incorrect mimetype in code.. Contributed by [@JeelDobariya]
+
+
 ## v1.1.0 - Alpha (Sept 1, 2025)
 
 <details>
@@ -36,6 +57,7 @@ Release Notes: [docs/release-notes.md](docs/release-notes.md), there you will fi
 
 - **Mirgated Project**: Migrate project from `JeelDobariya38 (personal)` to `PasscodesApp (my organization)` account. To reflect my long term vision. Contributed by [@JeelDobariya].
 
+
 ## v1.0.0 - Stable (Aug 16, 2025)
 
 <details>
@@ -62,6 +84,7 @@ Release Notes: [docs/release-notes.md](docs/release-notes.md), there you will fi
 - **Mirgated Package Name**: Migrate package name from `com.passwordmanager` to `com.jeeldobariya.passcodes`. Contributed by [@JeelDobariya].
 - **Improve Safety By Kotlin Implementaion**: Move from `Java` to `Kotlin` Language. Contributed by [@JeelDobariya].
 - **Improve Data Storing Process**: Move from `SqliteDatabase` to `Room` Libaray for better datastorage. Contributed by [@JeelDobariya].
+
 
 ## v0.1.0 - Alpha (Aug 26, 2024)
 

@@ -236,19 +236,6 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                android:layout_marginBottom="8dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/designer_name"
-                    android:padding="16dp"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"/>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp">
                 <TextView
                     android:layout_width="match_parent"

@@ -154,7 +154,7 @@ class PasswordManagerActivity : AppCompatActivity() {
     private fun importCsvFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/csv"
+            type = "text/*"
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
 
