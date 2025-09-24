@@ -114,6 +114,8 @@ You can checkout support docs, provided in [PasscodesApp/Passcodes-Docs](https:/
 > There are still other ways to contribute to project.. like by testing app, by contributing to documenation or more or less just by spreading the word around.. about the app. but, code contribution is limited from my side.... & I hope you can understand...
 >
 > For more, infomation on what kind of contribtuion we approve or allow, please open a issue in our repo. that way you avoid wasteing your time...
+>
+> [Read More](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/open-contributing-timeline.md)
 
 By, contributing to project you accept the [Terms For Contributions](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/terms-for-contributions.md), [CONTRIBUTING.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/CONTRIBUTING.md) & [MIT License](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/LICENSE.txt).
 
