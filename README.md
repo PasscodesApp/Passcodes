@@ -47,44 +47,31 @@ Note: high version can still run, but are not guaranteed offically.
 ## Features
 
 - [x] Intuitive UI.
-
 - [ ] Update Checkers & Manager.
-
 - [x] Password Management. (Current Priority)
-
 - [ ] Secure File. (Least Priority, Because it include permission. Which, I am as developer not familar with 😂)
     - Could be Image. (JPG. PNG ....)
     - Could be Vidoe.
     - Could any Binary File. (more like won't be a text file)
-
 - [ ] Other Secret Info Management.
     - Could be note. (txt file)
     - Could be any info that can encode as key & value.
-      ```json
-      {
-        "key": "SECRET API KEY",
-        "content": "qwerty-let-say",
-        "createdat": "...",
-        "updatedat": "..."
-      }
-      ```
-    
+```json
+{
+  "key": "SECRET API KEY",
+  "content": "qwerty-let-say",
+  "createdat": "...",
+  "updatedat": "..."
+}
+```
 - [ ] NON Secret Info Store.
-
 - [ ] Encryption and Decryption.
-
 - [ ] Backup Manager.
-
 - [ ] Import/Export Passwords.
-
 - [ ] Extensivity with custom database.
-
 - [ ] Multiple Language Translation.
-
 - [ ] Theme & Customization.
-
 - [ ] Key Manager.
-
 - [ ] Multi Platform Support. (KMP)
 
 ## Installation Steps
