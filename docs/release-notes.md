@@ -3,6 +3,11 @@
 Here, You will find short ad sweet and casual `tldrs` for release notes or changelog.
 For more details and more professional tone, see [changelog.md](/changelog.md).
 
+> [!NOTE]
+> This is a raw version of the file..
+>  
+> Final version is over on [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/release-notes.md)
+
 ## v1.1.1-Alpha (Sept 11, 2025)
 
 <details>

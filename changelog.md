@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Release Notes: [docs/release-notes.md](docs/release-notes.md), there you will find short and sweet release notes.
 
+> [!NOTE]
+> This is a raw version of the file..
+>  
+> Final version is over on [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/changelog.md)
+
 
 ## v1.1.1 - Alpha (Sept 11, 2025)
 
