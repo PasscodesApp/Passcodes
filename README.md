@@ -123,8 +123,8 @@ And also have look at [Open Contributing Timeline](https://github.com/PasscodesA
 
 ## Security Policy
 
-We follow the same security policy as the [app repository](https://github.com/PasscodesApp/Passcodes). which is avaiable in app repository over [here](https://github.com/PasscodesApp/Passcodes/blob/main/SECURITY.md).
+Avaliable here in [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/SECURITY.md).
 
 ## License
 
-Passcodes Project is license under [MIT](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/LICENSE.txt) License. Downloading Or Use the app would mean, you are okay and have accepted the license terms.
+Passcodes Project is license under [MIT](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/LICENSE.txt) License. Downloading Or Use the app or any associated stuff would mean, you are okay and have accepted the license terms.
