@@ -1,5 +1,10 @@
 # Security Guide
 
+> [!IMPORTANT]
+> This file is no longer valid and is bit old.. take look at [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/security-guidelines.md) for latest changes.
+>
+> This file will be deleted in Nov, 2025..
+
 Here, In this file, You can find the information about security concern that arise with saving your password with passcodes app.
 
 > [!warning]

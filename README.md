@@ -17,7 +17,7 @@
 A android app that take down the headache of remembering passwords. It is open source solutions that help you in keeping your passwords safe and secure, in your own local storage without ever needing to push them to cloud.
 
 > What we think of passcodes?
-> Password management is one such thing that is as simple as remember a password yet, it very important topic in term of security. So, we as developer of passcodes think to streamline and securing the process as much as possible. [Read more](docs/project-overview.md)
+> Password management is one such thing that is as simple as remember a password yet, it very important topic in term of security. So, we as developer of passcodes think to streamline and securing the process as much as possible. [Read more](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/project-overview.md)
 
 ## Website
 
@@ -50,21 +50,21 @@ Note: high version can still run, but are not guaranteed offically.
 - [ ] Update Checkers & Manager.
 - [x] Password Management. (Current Priority)
 - [ ] Secure File. (Least Priority, Because it include permission. Which, I am as developer not familar with 😂)
-  - Could be Image. (JPG. PNG ....)
-  - Could be Vidoe.
-  - Could any Binary File. (more like won't be a text file)
+    - Could be Image. (JPG. PNG ....)
+    - Could be Vidoe.
+    - Could any Binary File. (more like won't be a text file)
 - [ ] Other Secret Info Management.
-  - Could be note. (txt file)
-  - Could be any info that can encode as key & value.
-    ```json
-    {
-      "key": "SECRET API KEY",
-      "content": "qwerty-let-say",
-      "createdat": "...",
-      "updatedat": "..."
-    }
-    ```
-- [ ] NON Secret Info Store
+    - Could be note. (txt file)
+    - Could be any info that can encode as key & value.
+```json
+{
+  "key": "SECRET API KEY",
+  "content": "qwerty-let-say",
+  "createdat": "...",
+  "updatedat": "..."
+}
+```
+- [ ] NON Secret Info Store.
 - [ ] Encryption and Decryption.
 - [ ] Backup Manager.
 - [ ] Import/Export Passwords.
@@ -82,7 +82,7 @@ Note: high version can still run, but are not guaranteed offically.
 
 3. Install the apk and you are ready to use the app.
 
-It was most shortest and sweetest description (I have ever crafted), For more detailed description, Vist the file [docs/installing.md](docs/installing.md)
+It was most shortest and sweetest description (I have ever crafted), For more detailed description, Vist the file [installing.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/installing.md) in `PasscodesApp/Passcodes-Docs`.
 
 ## Building The App
 
@@ -94,16 +94,16 @@ It was most shortest and sweetest description (I have ever crafted), For more de
 
 4. For code documention and support docs, check the `docs/` folder in our repository.
 
-It was general, intuitive, short and sweet description, For more detailed description, Vist the file [docs/building.md](docs/building.md).
+It was general, intuitive, short and sweet description, For more detailed description, Vist the file [building.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/dev-docs/building.md) in `PasscodesApp/Passcodes-Docs`.
 
 ## Support Docs
 
-You can checkout support docs, provided in [docs/](docs/) Or You can even seek help on our [telegram community](https://t.me/passcodescommunity)
+You can checkout support docs, provided in [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs) Or You can even seek help on our [telegram community](https://t.me/passcodescommunity)
 
 ## Changelog & Release Notes
 
-- Professional ChangeLog: [here](https://github.com/PasscodesApp/Passcodes/blob/main/changelog.md)
-- Casual Release Notes: [here](https://github.com/PasscodesApp/Passcodes/blob/main/docs/release-notes.md)
+- Professional ChangeLog: [here](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/changelog.md)
+- Casual Release Notes: [here](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/release-notes.md)
 
 ## Contribution Are Appreciated!!!
 
@@ -114,9 +114,17 @@ You can checkout support docs, provided in [docs/](docs/) Or You can even seek h
 > There are still other ways to contribute to project.. like by testing app, by contributing to documenation or more or less just by spreading the word around.. about the app. but, code contribution is limited from my side.... & I hope you can understand...
 >
 > For more, infomation on what kind of contribtuion we approve or allow, please open a issue in our repo. that way you avoid wasteing your time...
+>
+> [Read More](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/open-contributing-timeline.md)
 
-By, contributing to project you accept the [CONTRIBUTING.md](https://github.com/PasscodesApp/Passcodes/blob/main/CONTRIBUTING.md) & [MIT License](https://github.com/PasscodesApp/Passcodes/blob/main/LICENSE.txt).
+By, contributing to project you accept the [Terms For Contributions](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/terms-for-contributions.md), [CONTRIBUTING.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/CONTRIBUTING.md) & [MIT License](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/LICENSE.txt).
 
-## Licence
+And also have look at [Open Contributing Timeline](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/open-contributing-timeline.md).
 
-Passcodes Project is license under [MIT](https://github.com/PasscodesApp/Passcodes/blob/main/LICENSE.txt) License. Downloading the app would mean, you are okay and have accepted the license.
+## Security Policy
+
+Avaliable here in [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/SECURITY.md).
+
+## License
+
+Passcodes Project is license under [MIT](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/LICENSE.txt) License. Downloading Or Use the app or any associated stuff would mean, you are okay and have accepted the license terms.
