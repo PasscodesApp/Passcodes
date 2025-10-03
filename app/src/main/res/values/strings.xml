@@ -98,4 +98,5 @@
     <string name="danger_copy_to_clipboard_desc">Copying sensitive data like passwords to clipboard is not so good for security!!!</string>
     <string name="confirm_dialog_button_text">Confirm</string>
     <string name="discard_dialog_button_text">Discard</string>
+    <string name="passcodes_logo">Passcodes Logo</string>
 </resources>
