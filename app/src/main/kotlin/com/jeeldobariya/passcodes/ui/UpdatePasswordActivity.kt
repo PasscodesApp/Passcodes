@@ -5,17 +5,12 @@ import android.widget.Toast
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityUpdatePasswordBinding
 import com.jeeldobariya.passcodes.utils.CommonUtils
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
+
 
 /*
  * Activity expects id as intent parameters.
