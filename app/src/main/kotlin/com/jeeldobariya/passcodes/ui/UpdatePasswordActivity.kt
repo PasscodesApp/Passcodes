@@ -89,11 +89,3 @@ class UpdatePasswordActivity : AppCompatActivity() {
         }
     }
 }
-
-fun <T> AppCompatActivity.collectLatestLifecycleFlow(flow: Flow<T>, collect: (T) -> Unit) {
-    lifecycleScope.launch {
-        repeatOnLifecycle(Lifecycle.State.STARTED) {
-            flow.collectLatest(collect)
-        }
-    }
-}
