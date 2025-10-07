@@ -57,7 +57,8 @@ class LoadPasswordActivity : AppCompatActivity() {
                         e.printStackTrace()
                         // Ensure adapter is initialized with empty list on error
                         if (!this@LoadPasswordActivity::passwordAdapter.isInitialized) {
-                            passwordAdapter = PasswordAdapter(this@LoadPasswordActivity, emptyList())
+                            passwordAdapter =
+                                PasswordAdapter(this@LoadPasswordActivity, emptyList())
                             binding.passwordList.adapter = passwordAdapter
                         }
                     }
@@ -67,7 +68,8 @@ class LoadPasswordActivity : AppCompatActivity() {
                     // and emitted by the Flow.
                     withContext(Dispatchers.Main) { // Ensure UI updates are on the main thread
                         if (!this@LoadPasswordActivity::passwordAdapter.isInitialized) {
-                            passwordAdapter = PasswordAdapter(this@LoadPasswordActivity, passwordList)
+                            passwordAdapter =
+                                PasswordAdapter(this@LoadPasswordActivity, passwordList)
                             binding.passwordList.adapter = passwordAdapter
                         } else {
                             passwordAdapter.updateData(passwordList)

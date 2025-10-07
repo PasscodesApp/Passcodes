@@ -20,13 +20,13 @@ class UpdatePasswordViewModel(
 
     private val _usernameState = MutableStateFlow("")
     val usernameState = _usernameState.asStateFlow()
-    
+
     private val _passwordState = MutableStateFlow("")
     val passwordState = _passwordState.asStateFlow()
 
     private val _notesState = MutableStateFlow("")
     val notesState = _notesState.asStateFlow()
-    
+
     private val _isErrorState = MutableStateFlow(false)
     val isErrorState = _isErrorState.asStateFlow()
 
@@ -88,6 +88,6 @@ class UpdatePasswordViewModel(
                     true
                 }
             }
-        } 
+        }
     }
 }

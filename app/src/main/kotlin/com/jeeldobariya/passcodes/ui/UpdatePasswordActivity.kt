@@ -32,7 +32,8 @@ class UpdatePasswordActivity : AppCompatActivity() {
         val passwordEntityId = intent.getIntExtra("id", -1) // -1 is an invalid id.
 
         if (passwordEntityId == -1) { // invalid entity
-            Toast.makeText(this, getString(R.string.error_invalid_password_id), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_invalid_password_id), Toast.LENGTH_SHORT)
+                .show()
             finish()
             return // Exit onCreate if ID is invalid
         }
@@ -72,11 +73,12 @@ class UpdatePasswordActivity : AppCompatActivity() {
             val confirmDialog = AlertDialog.Builder(this@UpdatePasswordActivity)
                 .setTitle(R.string.update_password_dialog_title)
                 .setMessage(R.string.irreversible_dialog_desc)
-                .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which -> 
+                .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
                     viewModel.onUpdatePasswordButtonClick()
                 }
-                .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which -> 
-                    Toast.makeText(this, getString(R.string.action_discard), Toast.LENGTH_SHORT).show();
+                .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->
+                    Toast.makeText(this, getString(R.string.action_discard), Toast.LENGTH_SHORT)
+                        .show();
                 }
                 .create()
 

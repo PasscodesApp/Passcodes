@@ -57,7 +57,10 @@ object UpdateChecker {
                 }
 
                 if (!userReleaseFound) {
-                    showToast(appcontext, "⚠️ Version ($currentNormalizeVersion) not found on GitHub releases... Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})")
+                    showToast(
+                        appcontext,
+                        "⚠️ Version ($currentNormalizeVersion) not found on GitHub releases... Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
+                    )
                 }
             }
         })

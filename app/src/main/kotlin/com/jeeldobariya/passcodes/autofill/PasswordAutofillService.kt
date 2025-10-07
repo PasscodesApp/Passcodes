@@ -51,7 +51,9 @@ class PasswordAutofillService : AutofillService() {
         }
 
         serviceScope.launch {
-            val passcodes = PasscodeDatabase.getDatabase(applicationContext).passcodeDao().getAllPasscodes().first()
+            val passcodes =
+                PasscodeDatabase.getDatabase(applicationContext).passcodeDao().getAllPasscodes()
+                    .first()
             val responseBuilder = FillResponse.Builder()
 
             for (passcode in passcodes) {

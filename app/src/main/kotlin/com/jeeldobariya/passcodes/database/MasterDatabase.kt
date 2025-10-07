@@ -19,13 +19,13 @@ abstract class MasterDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): MasterDatabase {
             return INSTANCE ?: synchronized(this) {
-                
+
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     MasterDatabase::class.java,
                     "master"
                 )
-                .build()
+                    .build()
                 INSTANCE = instance
                 instance
             }

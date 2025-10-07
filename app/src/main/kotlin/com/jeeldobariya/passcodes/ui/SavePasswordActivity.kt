@@ -37,7 +37,7 @@ class SavePasswordActivity : AppCompatActivity() {
 
     // Added all the onclick event listeners
     private fun addOnClickListenerOnButton() {
-        binding.inputDomain.setOnFocusChangeListener { v, hasFocus -> 
+        binding.inputDomain.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 binding.inputDomain.setHint(getString(R.string.placeholder_domain_field));
             } else {
@@ -45,7 +45,7 @@ class SavePasswordActivity : AppCompatActivity() {
             }
         };
 
-        binding.inputUsername.setOnFocusChangeListener { v, hasFocus -> 
+        binding.inputUsername.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 binding.inputUsername.setHint(getString(R.string.placeholder_username_field));
             } else {
@@ -53,7 +53,7 @@ class SavePasswordActivity : AppCompatActivity() {
             }
         };
 
-        binding.inputPassword.setOnFocusChangeListener { v, hasFocus -> 
+        binding.inputPassword.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 binding.inputPassword.setHint(getString(R.string.placeholder_password_field));
             } else {
@@ -71,28 +71,49 @@ class SavePasswordActivity : AppCompatActivity() {
         }
     }
 
-    fun performSavePasswordAction(domain: String, username: String, password: String, notes: String) {
+    fun performSavePasswordAction(
+        domain: String,
+        username: String,
+        password: String,
+        notes: String
+    ) {
         // Launch a coroutine to call the suspend function
         lifecycleScope.launch {
             try {
                 val rowId = controller.savePasswordEntity(domain, username, password, notes)
                 // Switch back to Main dispatcher for UI updates
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@SavePasswordActivity, "${getString(R.string.success_clause)} $rowId", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SavePasswordActivity,
+                        "${getString(R.string.success_clause)} $rowId",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     finish()
                 }
             } catch (e: InvalidInputException) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@SavePasswordActivity, getString(R.string.warn_fill_form), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SavePasswordActivity,
+                        getString(R.string.warn_fill_form),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } catch (e: DatabaseOperationException) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@SavePasswordActivity, "${getString(R.string.fail_msg)}: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@SavePasswordActivity,
+                        "${getString(R.string.fail_msg)}: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                     e.printStackTrace()
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@SavePasswordActivity, "${getString(R.string.fail_msg)}: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@SavePasswordActivity,
+                        "${getString(R.string.fail_msg)}: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                     e.printStackTrace()
                 }
             }

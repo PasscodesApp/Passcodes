@@ -17,8 +17,10 @@ class Permissions(private val activity: Activity) {
      * @return True if permissions are granted, false otherwise.
      */
     fun checkPermission(): Boolean {
-        val resultWrite = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        val resultRead = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val resultWrite =
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val resultRead =
+            ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
         return resultWrite == PackageManager.PERMISSION_GRANTED && resultRead == PackageManager.PERMISSION_GRANTED
     }
 
@@ -28,7 +30,10 @@ class Permissions(private val activity: Activity) {
     fun requestPermission() {
         ActivityCompat.requestPermissions(
             activity,
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ),
             PERMISSION_REQUEST_CODE
         )
     }
@@ -43,8 +48,8 @@ class Permissions(private val activity: Activity) {
         // We expect two permissions (WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE)
         // and check if both were granted.
         return grantResults.isNotEmpty() &&
-               grantResults.size >= 2 && // Ensure we got results for at least two permissions
-               grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-               grantResults[1] == PackageManager.PERMISSION_GRANTED
+                grantResults.size >= 2 && // Ensure we got results for at least two permissions
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED
     }
 }
