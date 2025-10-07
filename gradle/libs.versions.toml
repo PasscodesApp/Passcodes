@@ -12,6 +12,7 @@ androidx-test-ext-junit = "1.2.1"
 espresso-core = "3.6.1"
 coroutines = "1.10.2"
 lifecycle = "2.9.2"
+koin = "4.1.1"
 
 # Plugin versions
 agp = "8.13.0"
@@ -37,7 +38,11 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
-# lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+
+koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-viewmodel = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+# koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 json = { module = "org.json:json", version.ref = "json" }
 

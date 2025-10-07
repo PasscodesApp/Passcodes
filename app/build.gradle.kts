@@ -158,7 +158,10 @@ dependencies {
     implementation(libs.coroutines.android)
 
     implementation(libs.lifecycle.runtime)
-    // implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.viewmodel)
+
+    implementation(libs.koin)
+    implementation(libs.koin.viewmodel)
 
     // test
     testImplementation(libs.junit)
