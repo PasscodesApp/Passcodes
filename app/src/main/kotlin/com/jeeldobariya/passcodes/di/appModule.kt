@@ -1,5 +1,6 @@
 package com.jeeldobariya.passcodes.di
 
+import com.jeeldobariya.passcodes.ui.SavePasswordViewModel
 import com.jeeldobariya.passcodes.ui.UpdatePasswordViewModel
 import com.jeeldobariya.passcodes.utils.Controller
 import org.koin.android.ext.koin.androidContext
@@ -14,6 +15,10 @@ val appModule = module {
 
     viewModel {
         UpdatePasswordViewModel(get())
+    }
+
+    viewModel {
+        SavePasswordViewModel(get())
     }
 
 }
