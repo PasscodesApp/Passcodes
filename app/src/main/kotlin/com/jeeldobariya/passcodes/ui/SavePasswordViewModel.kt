@@ -24,7 +24,7 @@ class SavePasswordViewModel (
     // val notesState = _notesState.asStateFlow()
 
     private val _isErrorState = MutableStateFlow(false)
-    // val isErrorState = _isErrorState.asStateFlow()
+    val isErrorState = _isErrorState.asStateFlow()
 
     fun onChangeDomainText(text: String) {
         _domainState.update {

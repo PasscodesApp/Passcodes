@@ -75,6 +75,9 @@ class UpdatePasswordActivity : AppCompatActivity() {
                 .setMessage(R.string.irreversible_dialog_desc)
                 .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
                     viewModel.onUpdatePasswordButtonClick()
+                    if (!viewModel.isErrorState.value) {
+                        finish()
+                    }
                 }
                 .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->
                     Toast.makeText(this, getString(R.string.action_discard), Toast.LENGTH_SHORT)
