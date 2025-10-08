@@ -12,19 +12,19 @@ class SavePasswordViewModel (
     val controller: Controller
 ) : ViewModel() {
     private val _domainState = MutableStateFlow("")
-    val domainState = _domainState.asStateFlow()
+    // val domainState = _domainState.asStateFlow()
 
     private val _usernameState = MutableStateFlow("")
-    val usernameState = _usernameState.asStateFlow()
+    // val usernameState = _usernameState.asStateFlow()
 
     private val _passwordState = MutableStateFlow("")
-    val passwordState = _passwordState.asStateFlow()
+    // val passwordState = _passwordState.asStateFlow()
 
     private val _notesState = MutableStateFlow("")
-    val notesState = _notesState.asStateFlow()
+    // val notesState = _notesState.asStateFlow()
 
     private val _isErrorState = MutableStateFlow(false)
-    val isErrorState = _isErrorState.asStateFlow()
+    // val isErrorState = _isErrorState.asStateFlow()
 
     fun onChangeDomainText(text: String) {
         _domainState.update {
