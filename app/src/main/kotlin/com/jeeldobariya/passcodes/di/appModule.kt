@@ -1,5 +1,6 @@
 package com.jeeldobariya.passcodes.di
 
+import com.jeeldobariya.passcodes.ui.LoadPasswordViewModel
 import com.jeeldobariya.passcodes.ui.SavePasswordViewModel
 import com.jeeldobariya.passcodes.ui.UpdatePasswordViewModel
 import com.jeeldobariya.passcodes.utils.Controller
@@ -19,6 +20,10 @@ val appModule = module {
 
     viewModel {
         SavePasswordViewModel(get())
+    }
+
+    viewModel {
+        LoadPasswordViewModel(get())
     }
 
 }
