@@ -1,7 +1,6 @@
 package com.jeeldobariya.passcodes.utils
 
 import android.content.Context
-import android.widget.Toast
 import com.jeeldobariya.passcodes.database.MasterDatabase
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao

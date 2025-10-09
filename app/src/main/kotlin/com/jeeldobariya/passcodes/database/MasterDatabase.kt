@@ -1,9 +1,9 @@
-package com.jeeldobariya.passcodes.database;
+package com.jeeldobariya.passcodes.database
 
-import android.content.Context;
-import androidx.room.Database;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 
 @Database(
     entities = [Password::class],

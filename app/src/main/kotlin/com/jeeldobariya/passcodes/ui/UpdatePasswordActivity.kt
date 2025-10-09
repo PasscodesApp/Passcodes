@@ -1,8 +1,8 @@
 package com.jeeldobariya.passcodes.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.Toast
-import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
@@ -40,7 +40,7 @@ class UpdatePasswordActivity : AppCompatActivity() {
 
         viewModel.loadInitialData(passwordEntityId)
 
-        binding.tvId.setText("${getString(R.string.id_prefix)} ${viewModel.passwordEntityId}")
+        binding.tvId.text = "${getString(R.string.id_prefix)} ${viewModel.passwordEntityId}"
 
         collectLatestLifecycleFlow(viewModel.domainState) { domain ->
             binding.inputDomain.setText(domain)
@@ -81,11 +81,11 @@ class UpdatePasswordActivity : AppCompatActivity() {
                 }
                 .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->
                     Toast.makeText(this, getString(R.string.action_discard), Toast.LENGTH_SHORT)
-                        .show();
+                        .show()
                 }
                 .create()
 
-            confirmDialog.show();
+            confirmDialog.show()
         }
     }
 }

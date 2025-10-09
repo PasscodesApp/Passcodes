@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SavePasswordViewModel (
+class SavePasswordViewModel(
     val controller: Controller
 ) : ViewModel() {
     private val _domainState = MutableStateFlow("")
@@ -53,7 +53,7 @@ class SavePasswordViewModel (
     fun onSavePasswordButtonClick() {
         viewModelScope.launch {
             try {
-                val rowsAffected = controller.savePasswordEntity(
+                controller.savePasswordEntity(
                     _domainState.value,
                     _usernameState.value,
                     _passwordState.value,

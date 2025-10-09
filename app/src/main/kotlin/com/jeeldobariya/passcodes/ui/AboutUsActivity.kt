@@ -1,12 +1,12 @@
 package com.jeeldobariya.passcodes.ui
 
-import com.jeeldobariya.passcodes.databinding.ActivityAboutUsBinding
-import com.jeeldobariya.passcodes.utils.Constant
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import com.jeeldobariya.passcodes.databinding.ActivityAboutUsBinding
 import com.jeeldobariya.passcodes.utils.CommonUtils
+import com.jeeldobariya.passcodes.utils.Constant
 
 class AboutUsActivity : AppCompatActivity() {
 

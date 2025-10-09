@@ -2,20 +2,18 @@ package com.jeeldobariya.passcodes.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import androidx.core.os.LocaleListCompat
-import android.view.View
 import androidx.core.view.WindowCompat
-import android.view.LayoutInflater
-
+import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
 import com.jeeldobariya.passcodes.flags.FeatureFlagManager
-import androidx.core.content.edit
-import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.Constant
 import com.jeeldobariya.passcodes.utils.Controller
@@ -95,7 +93,7 @@ class SettingsActivity : AppCompatActivity() {
             }
 
         binding.toggleThemeBtn.setOnClickListener {
-            val sharedPrefs = getSharedPreferences(Constant.APP_PREFS_NAME, Context.MODE_PRIVATE)
+            val sharedPrefs = getSharedPreferences(Constant.APP_PREFS_NAME, MODE_PRIVATE)
             val currentThemeStyle =
                 sharedPrefs.getInt(Constant.THEME_KEY, R.style.PasscodesTheme_Default)
 

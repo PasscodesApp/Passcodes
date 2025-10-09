@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class LoadPasswordViewModel(
     var controller: Controller
-): ViewModel() {
+) : ViewModel() {
 
     private val _passwordsListState = MutableStateFlow(emptyList<Password>())
     val passwordsListState = _passwordsListState.asStateFlow()

@@ -1,11 +1,11 @@
 package com.jeeldobariya.passcodes.ui
 
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
@@ -15,7 +15,6 @@ import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.getValue
 
 /*
  * Activity expects id as intent parameters.
@@ -35,7 +34,7 @@ class ViewPasswordActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val intent = intent
-        val passwordEntityId  = intent.getIntExtra("id", -1) // -1 is an invalid id.
+        val passwordEntityId = intent.getIntExtra("id", -1) // -1 is an invalid id.
 
         if (passwordEntityId == -1) { // invalid entity
             Toast.makeText(this, getString(R.string.error_invalid_password_id), Toast.LENGTH_SHORT)
@@ -97,7 +96,10 @@ class ViewPasswordActivity : AppCompatActivity() {
                 .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
                     val clipboard = getSystemService(CLIPBOARD_SERVICE) as? ClipboardManager
                     val clip: ClipData =
-                        ClipData.newPlainText(viewModel.usernameState.value, viewModel.passwordState.value)
+                        ClipData.newPlainText(
+                            viewModel.usernameState.value,
+                            viewModel.passwordState.value
+                        )
 
                     // Set the ClipData to the clipboard
                     if (clipboard != null) {
@@ -129,7 +131,7 @@ class ViewPasswordActivity : AppCompatActivity() {
                 .setTitle(R.string.delete_password_dialog_title)
                 .setMessage(R.string.irreversible_dialog_desc)
                 .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
-                    runBlocking {  viewModel.onDeletePasswordButtonClick() }
+                    runBlocking { viewModel.onDeletePasswordButtonClick() }
                     finish()
                 }
                 .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->

@@ -1,24 +1,16 @@
 package com.jeeldobariya.passcodes.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.databinding.ActivityLoadPasswordBinding
 import com.jeeldobariya.passcodes.ui.adapter.PasswordAdapter
 import com.jeeldobariya.passcodes.utils.CommonUtils
-import com.jeeldobariya.passcodes.utils.Controller
-import com.jeeldobariya.passcodes.utils.DatabaseOperationException
 import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.flow.catch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoadPasswordActivity : AppCompatActivity() {

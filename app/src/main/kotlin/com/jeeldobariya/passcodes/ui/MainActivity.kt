@@ -1,20 +1,16 @@
 package com.jeeldobariya.passcodes.ui
 
-import android.content.Context
-import android.os.Bundle
 import android.content.Intent
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import android.view.LayoutInflater
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
-import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.BuildConfig
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
 import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.UpdateChecker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // import com.jeeldobariya.passcodes.utils.Permissions
 

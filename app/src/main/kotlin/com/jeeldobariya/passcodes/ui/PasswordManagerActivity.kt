@@ -1,9 +1,8 @@
 package com.jeeldobariya.passcodes.ui
 
 import android.content.Intent
-import android.view.View.GONE
 import android.os.Bundle
-import android.util.Log
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts

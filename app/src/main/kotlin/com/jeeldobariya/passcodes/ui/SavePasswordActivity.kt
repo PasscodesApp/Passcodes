@@ -7,7 +7,6 @@ import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivitySavePasswordBinding
 import com.jeeldobariya.passcodes.utils.CommonUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.getValue
 
 class SavePasswordActivity : AppCompatActivity() {
 
@@ -23,27 +22,27 @@ class SavePasswordActivity : AppCompatActivity() {
 
         binding.inputDomain.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                binding.inputDomain.setHint(getString(R.string.placeholder_domain_field));
+                binding.inputDomain.setHint(getString(R.string.placeholder_domain_field))
             } else {
-                binding.inputDomain.setHint("");
+                binding.inputDomain.setHint("")
             }
-        };
+        }
 
         binding.inputUsername.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                binding.inputUsername.setHint(getString(R.string.placeholder_username_field));
+                binding.inputUsername.setHint(getString(R.string.placeholder_username_field))
             } else {
-                binding.inputUsername.setHint("");
+                binding.inputUsername.setHint("")
             }
-        };
+        }
 
         binding.inputPassword.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                binding.inputPassword.setHint(getString(R.string.placeholder_password_field));
+                binding.inputPassword.setHint(getString(R.string.placeholder_password_field))
             } else {
-                binding.inputPassword.setHint("");
+                binding.inputPassword.setHint("")
             }
-        };
+        }
 
         // Add event onclick listener
         addOnClickListenerOnButton()

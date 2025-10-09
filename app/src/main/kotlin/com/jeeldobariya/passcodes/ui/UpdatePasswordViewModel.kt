@@ -76,7 +76,7 @@ class UpdatePasswordViewModel(
     fun onUpdatePasswordButtonClick() {
         viewModelScope.launch {
             try {
-                val rowsAffected = controller.updatePassword(
+                controller.updatePassword(
                     passwordEntityId,
                     _domainState.value,
                     _usernameState.value,

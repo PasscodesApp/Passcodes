@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class ViewPasswordViewModel(
     val controller: Controller
-): ViewModel() {
+) : ViewModel() {
     var passwordEntityId: Int = -1
 
     private val _domainState = MutableStateFlow("")
@@ -58,7 +58,7 @@ class ViewPasswordViewModel(
     fun onDeletePasswordButtonClick() {
         viewModelScope.launch {
             try {
-                val rowsDeleted = controller.deletePassword(passwordEntityId)
+                controller.deletePassword(passwordEntityId)
             } catch (_: Exception) {
                 _isErrorState.update {
                     true
