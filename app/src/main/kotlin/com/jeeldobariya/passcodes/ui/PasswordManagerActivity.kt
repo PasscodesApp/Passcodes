@@ -1,9 +1,8 @@
 package com.jeeldobariya.passcodes.ui
 
 import android.content.Intent
-import android.view.View.GONE
 import android.os.Bundle
-import android.util.Log
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -49,9 +48,10 @@ class PasswordManagerActivity : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data
                 if (uri != null) {
-                    val CSVData: String? = contentResolver.openInputStream(uri)?.bufferedReader()?.use {
-                        it.readText()
-                    }
+                    val CSVData: String? =
+                        contentResolver.openInputStream(uri)?.bufferedReader()?.use {
+                            it.readText()
+                        }
 
                     lifecycleScope.launch(Dispatchers.IO) {
                         if (CSVData != null) {
@@ -64,7 +64,7 @@ class PasswordManagerActivity : AppCompatActivity() {
                                         getString(R.string.import_success, result[0]),
                                         Toast.LENGTH_LONG
                                     ).show()
-                                    
+
                                     if (result[1] != 0) {
                                         Toast.makeText(
                                             this@PasswordManagerActivity,
@@ -97,7 +97,8 @@ class PasswordManagerActivity : AppCompatActivity() {
                     contentResolver.openOutputStream(uri)?.use { outputStream ->
                         outputStream.write(tmpExportCSVData!!.toByteArray())
                     }
-                    Toast.makeText(this, getString(R.string.export_success), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.export_success), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -122,13 +123,21 @@ class PasswordManagerActivity : AppCompatActivity() {
         }
 
         binding.importPasswordBtn.setOnClickListener {
-            Toast.makeText(this@PasswordManagerActivity, getString(R.string.preview_feature), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this@PasswordManagerActivity,
+                getString(R.string.preview_feature),
+                Toast.LENGTH_LONG
+            ).show()
 
             importCsvFilePicker()
         }
 
         binding.exportPasswordBtn.setOnClickListener {
-            Toast.makeText(this@PasswordManagerActivity, getString(R.string.preview_feature), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this@PasswordManagerActivity,
+                getString(R.string.preview_feature),
+                Toast.LENGTH_LONG
+            ).show()
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val csvDataExportBlob = controller.exportDataToCsvString()

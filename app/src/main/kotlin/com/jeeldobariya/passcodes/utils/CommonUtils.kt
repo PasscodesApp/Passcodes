@@ -8,7 +8,8 @@ class CommonUtils {
     companion object {
         fun getCurrTheme(context: Context): Int {
             val sharedPrefs = context.getSharedPreferences(Constant.APP_PREFS_NAME, MODE_PRIVATE)
-            val savedThemeStyle = sharedPrefs.getInt(Constant.THEME_KEY, R.style.PasscodesTheme_Default)
+            val savedThemeStyle =
+                sharedPrefs.getInt(Constant.THEME_KEY, R.style.PasscodesTheme_Default)
             return savedThemeStyle
         }
 

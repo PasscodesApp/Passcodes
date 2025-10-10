@@ -1,17 +1,24 @@
 package com.jeeldobariya.passcodes.utils
 
 import android.content.Context
-import android.widget.Toast
 import com.jeeldobariya.passcodes.database.MasterDatabase
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
-class InvalidInputException(message: String = "Input parameters cannot be blank.") : Exception(message)
-class DatabaseOperationException(message: String = "A database operation error occurred.", cause: Throwable? = null) : Exception(message, cause)
-class PasswordNotFoundException(message: String = "Password with the given ID was not found.") : Exception(message)
-class InvalidImportFormat(message: String = "Given Data Is In Invalid Format") :  Exception(message)
+class InvalidInputException(message: String = "Input parameters cannot be blank.") :
+    Exception(message)
+
+class DatabaseOperationException(
+    message: String = "A database operation error occurred.",
+    cause: Throwable? = null
+) : Exception(message, cause)
+
+class PasswordNotFoundException(message: String = "Password with the given ID was not found.") :
+    Exception(message)
+
+class InvalidImportFormat(message: String = "Given Data Is In Invalid Format") : Exception(message)
 
 class Controller(context: Context) {
     private val passwordsDao: PasswordsDao
@@ -32,7 +39,12 @@ class Controller(context: Context) {
      * @throws InvalidInputException if parameters are blank.
      * @throws DatabaseOperationException if a database error occurs.
      */
-    suspend fun savePasswordEntity(domain: String, username: String, password: String, notes: String): Long {
+    suspend fun savePasswordEntity(
+        domain: String,
+        username: String,
+        password: String,
+        notes: String
+    ): Long {
         if (domain.isBlank() || username.isBlank() || password.isBlank()) {
             throw InvalidInputException()
         }
@@ -96,7 +108,13 @@ class Controller(context: Context) {
         return passwordsDao.getAllPasswords()
     }
 
-    suspend fun updatePassword(id: Int, domain: String, username: String, password: String, notes: String): Int {
+    suspend fun updatePassword(
+        id: Int,
+        domain: String,
+        username: String,
+        password: String,
+        notes: String
+    ): Int {
         if (domain.isBlank() || username.isBlank() || password.isBlank()) {
             throw InvalidInputException()
         }
@@ -156,7 +174,7 @@ class Controller(context: Context) {
         if (lines.isEmpty()) {
             throw InvalidImportFormat("Given data seems to be Empty!!")
         }
-        
+
         if (lines[0] != CSV_HEADER) {
             throw InvalidImportFormat("Given data is not in valid csv format!! correct format:- ${CSV_HEADER}")
         }
@@ -168,12 +186,15 @@ class Controller(context: Context) {
             val cols = line.split(",")
 
             /* NOTE: this need to be done, because our app not allow empty domain. */
-            val chosenDomain : String = if (!cols[0].isBlank()) {
+            val chosenDomain: String = if (!cols[0].isBlank()) {
                 cols[0].trim() // used: name
             } else cols[1].trim() // used: url
 
             try {
-                val password: Password? = passwordsDao.getPasswordByUsernameAndDomain(username = cols[2].trim(), domain = chosenDomain)
+                val password: Password? = passwordsDao.getPasswordByUsernameAndDomain(
+                    username = cols[2].trim(),
+                    domain = chosenDomain
+                )
 
                 if (password != null) {
                     updatePassword(
