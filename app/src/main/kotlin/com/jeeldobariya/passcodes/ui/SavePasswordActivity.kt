@@ -60,7 +60,7 @@ class SavePasswordActivity : AppCompatActivity() {
             viewModel.onChangeNotesText(binding.inputNotes.text.toString())
 
             viewModel.onSavePasswordButtonClick()
-            if (!viewModel.isErrorState.value) {
+            if (!viewModel.state.value.isError) {
                 finish()
             }
         }

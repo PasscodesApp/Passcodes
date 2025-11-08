@@ -11,58 +11,37 @@ import kotlinx.coroutines.launch
 class SavePasswordViewModel(
     val controller: Controller
 ) : ViewModel() {
-    private val _domainState = MutableStateFlow("")
-    // val domainState = _domainState.asStateFlow()
 
-    private val _usernameState = MutableStateFlow("")
-    // val usernameState = _usernameState.asStateFlow()
-
-    private val _passwordState = MutableStateFlow("")
-    // val passwordState = _passwordState.asStateFlow()
-
-    private val _notesState = MutableStateFlow("")
-    // val notesState = _notesState.asStateFlow()
-
-    private val _isErrorState = MutableStateFlow(false)
-    val isErrorState = _isErrorState.asStateFlow()
+    private val _state = MutableStateFlow(SavePasswordState("", "", "", "", false))
+    val state = _state.asStateFlow()
 
     fun onChangeDomainText(text: String) {
-        _domainState.update {
-            text
-        }
+        _state.update { it.copy(domain = text) }
     }
 
     fun onChangeUsernameText(text: String) {
-        _usernameState.update {
-            text
-        }
+        _state.update { it.copy(username = text) }
     }
 
     fun onChangePasswordText(text: String) {
-        _passwordState.update {
-            text
-        }
+        _state.update { it.copy(password = text) }
     }
 
     fun onChangeNotesText(text: String) {
-        _notesState.update {
-            text
-        }
+        _state.update { it.copy(notes = text) }
     }
 
     fun onSavePasswordButtonClick() {
         viewModelScope.launch {
             try {
                 controller.savePasswordEntity(
-                    _domainState.value,
-                    _usernameState.value,
-                    _passwordState.value,
-                    _notesState.value
+                    _state.value.domain,
+                    _state.value.username,
+                    _state.value.password,
+                    _state.value.notes
                 )
             } catch (e: Exception) {
-                _isErrorState.update {
-                    true
-                }
+                _state.update { it.copy(isError = true) }
             }
         }
     }
