@@ -12,7 +12,7 @@ class SavePasswordViewModel(
     val controller: Controller
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(SavePasswordState("", "", "", "", false))
+    private val _state = MutableStateFlow(SavePasswordState())
     val state = _state.asStateFlow()
 
     fun onAction(action: SavePasswordAction) {
