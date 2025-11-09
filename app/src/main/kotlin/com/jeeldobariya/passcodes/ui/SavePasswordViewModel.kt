@@ -15,23 +15,33 @@ class SavePasswordViewModel(
     private val _state = MutableStateFlow(SavePasswordState("", "", "", "", false))
     val state = _state.asStateFlow()
 
-    fun onChangeDomainText(text: String) {
-        _state.update { it.copy(domain = text) }
+    fun onAction(action: SavePasswordAction) {
+        when (action) {
+            is SavePasswordAction.onChangeDomain -> { onChangeDomainText(action.newDomain) }
+            is SavePasswordAction.onChangeUsername -> { onChangeUsernameText(action.newUsername) }
+            is SavePasswordAction.onChangePassword -> { onChangePasswordText(action.newPassword) }
+            is SavePasswordAction.onChangeNotes -> { onChangeNotesText(action.newNotes) }
+            SavePasswordAction.onSavePasswordButtonClick -> { savePasswordEntity() }
+        }
     }
 
-    fun onChangeUsernameText(text: String) {
-        _state.update { it.copy(username = text) }
+    private fun onChangeDomainText(newDomain: String) {
+        _state.update { it.copy(domain = newDomain) }
     }
 
-    fun onChangePasswordText(text: String) {
-        _state.update { it.copy(password = text) }
+    private fun onChangeUsernameText(newUsername: String) {
+        _state.update { it.copy(username = newUsername) }
     }
 
-    fun onChangeNotesText(text: String) {
-        _state.update { it.copy(notes = text) }
+    private fun onChangePasswordText(newPassword: String) {
+        _state.update { it.copy(password = newPassword) }
     }
 
-    fun onSavePasswordButtonClick() {
+    private fun onChangeNotesText(newNotes: String) {
+        _state.update { it.copy(notes = newNotes) }
+    }
+
+    private fun savePasswordEntity() {
         viewModelScope.launch {
             try {
                 controller.savePasswordEntity(

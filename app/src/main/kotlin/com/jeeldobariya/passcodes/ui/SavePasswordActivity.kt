@@ -54,12 +54,13 @@ class SavePasswordActivity : AppCompatActivity() {
     // Added all the onclick event listeners
     private fun addOnClickListenerOnButton() {
         binding.savePasswordBtn.setOnClickListener {
-            viewModel.onChangeDomainText(binding.inputDomain.text.toString())
-            viewModel.onChangeUsernameText(binding.inputUsername.text.toString())
-            viewModel.onChangePasswordText(binding.inputPassword.text.toString())
-            viewModel.onChangeNotesText(binding.inputNotes.text.toString())
+            viewModel.onAction(SavePasswordAction.onChangeDomain(binding.inputDomain.text.toString()))
+            viewModel.onAction(SavePasswordAction.onChangeUsername(binding.inputUsername.text.toString()))
+            viewModel.onAction(SavePasswordAction.onChangePassword(binding.inputPassword.text.toString()))
+            viewModel.onAction(SavePasswordAction.onChangeNotes(binding.inputNotes.text.toString()))
 
-            viewModel.onSavePasswordButtonClick()
+            viewModel.onAction(SavePasswordAction.onSavePasswordButtonClick)
+
             if (!viewModel.state.value.isError) {
                 finish()
             }
