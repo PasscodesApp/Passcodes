@@ -42,17 +42,11 @@ class UpdatePasswordActivity : AppCompatActivity() {
 
         binding.tvId.text = "${getString(R.string.id_prefix)} ${viewModel.passwordEntityId}"
 
-        collectLatestLifecycleFlow(viewModel.domainState) { domain ->
-            binding.inputDomain.setText(domain)
-        }
-        collectLatestLifecycleFlow(viewModel.usernameState) { username ->
-            binding.inputUsername.setText(username)
-        }
-        collectLatestLifecycleFlow(viewModel.passwordState) { password ->
-            binding.inputPassword.setText(password)
-        }
-        collectLatestLifecycleFlow(viewModel.notesState) { notes ->
-            binding.inputNotes.setText(notes)
+        collectLatestLifecycleFlow(viewModel.state) { state ->
+            binding.inputDomain.setText(state.domain)
+            binding.inputUsername.setText(state.username)
+            binding.inputPassword.setText(state.password)
+            binding.inputNotes.setText(state.notes)
         }
 
         // Add event onclick listener
@@ -65,17 +59,17 @@ class UpdatePasswordActivity : AppCompatActivity() {
     // Added all the onclick event listeners
     private fun addOnClickListenerOnButton() {
         binding.updatePasswordBtn.setOnClickListener {
-            viewModel.onChangeDomainText(binding.inputDomain.text.toString())
-            viewModel.onChangeUsernameText(binding.inputUsername.text.toString())
-            viewModel.onChangePasswordText(binding.inputPassword.text.toString())
-            viewModel.onChangeNotesText(binding.inputNotes.text.toString())
+            viewModel.onAction(UpdatePasswordAction.onChangeDomain(binding.inputDomain.text.toString()))
+            viewModel.onAction(UpdatePasswordAction.onChangeUsername(binding.inputUsername.text.toString()))
+            viewModel.onAction(UpdatePasswordAction.onChangePassword(binding.inputPassword.text.toString()))
+            viewModel.onAction(UpdatePasswordAction.onChangeNotes(binding.inputNotes.text.toString()))
 
             val confirmDialog = AlertDialog.Builder(this@UpdatePasswordActivity)
                 .setTitle(R.string.update_password_dialog_title)
                 .setMessage(R.string.irreversible_dialog_desc)
                 .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
-                    viewModel.onUpdatePasswordButtonClick()
-                    if (!viewModel.isErrorState.value) {
+                    viewModel.onAction(UpdatePasswordAction.onUpdatePasswordButtonClick)
+                    if (!viewModel.state.value.isError) {
                         finish()
                     }
                 }
