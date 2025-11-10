@@ -26,18 +26,16 @@ class LoadPasswordActivity : AppCompatActivity() {
         binding = ActivityLoadPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        collectLatestLifecycleFlow(viewModel.passwordsListState) { passwordList ->
+        collectLatestLifecycleFlow(viewModel.state) { state ->
             if (!this@LoadPasswordActivity::passwordAdapter.isInitialized) {
                 passwordAdapter =
-                    PasswordAdapter(this@LoadPasswordActivity, passwordList)
+                    PasswordAdapter(this@LoadPasswordActivity, state.passwordEntityList)
                 binding.passwordList.adapter = passwordAdapter
             } else {
-                passwordAdapter.updateData(passwordList)
+                passwordAdapter.updateData(state.passwordEntityList)
             }
-        }
 
-        collectLatestLifecycleFlow(viewModel.isErrorState) { error ->
-            if (error) {
+            if (state.isError) {
                 Toast.makeText(
                     this@LoadPasswordActivity,
                     "${getString(R.string.something_went_wrong_msg)}",

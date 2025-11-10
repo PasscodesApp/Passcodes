@@ -2,7 +2,6 @@ package com.jeeldobariya.passcodes.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.utils.Controller
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,20 +14,17 @@ class LoadPasswordViewModel(
     var controller: Controller
 ) : ViewModel() {
 
-    private val _passwordsListState = MutableStateFlow(emptyList<Password>())
-    val passwordsListState = _passwordsListState.asStateFlow()
-
-    private val _isErrorState = MutableStateFlow(false)
-    val isErrorState = _isErrorState.asStateFlow()
+    private val _state = MutableStateFlow(LoadPasswordState())
+    val state = _state.asStateFlow()
 
     fun loadInitialData() {
         viewModelScope.launch {
-            _passwordsListState.update {
-                controller.getAllPasswords().catch {
-                    _isErrorState.update {
-                        true
-                    }
-                }.first()
+            _state.update {
+                LoadPasswordState(
+                    passwordEntityList = controller.getAllPasswords().catch {
+                        _state.update { it.copy(isError = true) }
+                    }.first()
+                )
             }
         }
     }
