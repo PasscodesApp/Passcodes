@@ -15,23 +15,8 @@ class ViewPasswordViewModel(
 ) : ViewModel() {
     var passwordEntityId: Int = -1
 
-    private val _domainState = MutableStateFlow("")
-    val domainState = _domainState.asStateFlow()
-
-    private val _usernameState = MutableStateFlow("")
-    val usernameState = _usernameState.asStateFlow()
-
-    private val _passwordState = MutableStateFlow("")
-    val passwordState = _passwordState.asStateFlow()
-
-    private val _notesState = MutableStateFlow("")
-    val notesState = _notesState.asStateFlow()
-
-    private val _lastUpdatedAtState = MutableStateFlow("")
-    val lastUpdatedAtState = _lastUpdatedAtState.asStateFlow()
-
-    private val _isErrorState = MutableStateFlow(false)
-    val isErrorState = _isErrorState.asStateFlow()
+    private val _state = MutableStateFlow(ViewPasswordState())
+    val state = _state.asStateFlow()
 
     fun loadInitialData(passwordId: Int) {
         passwordEntityId = passwordId
@@ -40,29 +25,33 @@ class ViewPasswordViewModel(
             try {
                 val password: Password = controller.getPasswordById(passwordId)
 
-                _domainState.update { password.domain }
-                _usernameState.update { password.username }
-                _passwordState.update { password.password }
-                _notesState.update { password.notes }
-                _lastUpdatedAtState.update {
-                    DateTimeUtils.getRelativeDays(password.updatedAt.orEmpty())
+                _state.update {
+                    it.copy(
+                        domain = password.domain,
+                        username = password.username,
+                        password = password.password,
+                        notes = password.notes,
+                        lastUpdatedAt = DateTimeUtils.getRelativeDays(password.updatedAt.orEmpty())
+                    )
                 }
             } catch (_: Exception) {
-                _isErrorState.update {
-                    true
-                }
+                _state.update { it.copy(isError = true) }
             }
         }
     }
 
-    fun onDeletePasswordButtonClick() {
+    fun onAction(action: ViewPasswordAction) {
+        when (action) {
+            ViewPasswordAction.deletePasswordAction -> { deletePasswordEntity() }
+        }
+    }
+
+    private fun deletePasswordEntity() {
         viewModelScope.launch {
             try {
                 controller.deletePassword(passwordEntityId)
             } catch (_: Exception) {
-                _isErrorState.update {
-                    true
-                }
+                _state.update { it.copy(isError = true) }
             }
         }
     }
