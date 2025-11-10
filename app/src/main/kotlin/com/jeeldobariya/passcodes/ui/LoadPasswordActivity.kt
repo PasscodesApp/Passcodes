@@ -38,7 +38,7 @@ class LoadPasswordActivity : AppCompatActivity() {
             if (state.isError) {
                 Toast.makeText(
                     this@LoadPasswordActivity,
-                    "${getString(R.string.something_went_wrong_msg)}",
+                    getString(R.string.something_went_wrong_msg),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -54,7 +54,7 @@ class LoadPasswordActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.loadInitialData()
+        viewModel.onAction(LoadPasswordAction.refreshPassswordData)
     }
 
     // Added all the onclick event listeners

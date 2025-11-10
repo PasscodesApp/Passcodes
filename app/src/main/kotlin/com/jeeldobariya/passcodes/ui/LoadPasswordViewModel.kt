@@ -17,7 +17,13 @@ class LoadPasswordViewModel(
     private val _state = MutableStateFlow(LoadPasswordState())
     val state = _state.asStateFlow()
 
-    fun loadInitialData() {
+    fun onAction(action: LoadPasswordAction) {
+        when (action) {
+            LoadPasswordAction.refreshPassswordData -> { refreshData() }
+        }
+    }
+
+    private fun refreshData() {
         viewModelScope.launch {
             _state.update {
                 LoadPasswordState(
