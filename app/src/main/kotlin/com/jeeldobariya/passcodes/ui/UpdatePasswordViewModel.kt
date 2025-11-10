@@ -41,11 +41,11 @@ class UpdatePasswordViewModel(
 
     fun onAction(action: UpdatePasswordAction) {
         when (action) {
-            is UpdatePasswordAction.onChangeDomain -> { onChangeDomainText(action.newDomain) }
-            is UpdatePasswordAction.onChangeUsername -> { onChangeUsernameText(action.newUsername) }
-            is UpdatePasswordAction.onChangePassword -> { onChangePasswordText(action.newPassword) }
-            is UpdatePasswordAction.onChangeNotes -> { onChangeNotesText(action.newNotes) }
-            UpdatePasswordAction.onUpdatePasswordButtonClick -> { updatePasswordEntity() }
+            is UpdatePasswordAction.OnChangeDomain -> { onChangeDomainText(action.newDomain) }
+            is UpdatePasswordAction.OnChangeUsername -> { onChangeUsernameText(action.newUsername) }
+            is UpdatePasswordAction.OnChangePassword -> { onChangePasswordText(action.newPassword) }
+            is UpdatePasswordAction.OnChangeNotes -> { onChangeNotesText(action.newNotes) }
+            UpdatePasswordAction.OnUpdatePasswordButtonClick -> { updatePasswordEntity() }
         }
     }
 

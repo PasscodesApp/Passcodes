@@ -20,9 +20,9 @@ class ViewPasswordViewModel(
 
     fun onAction(action: ViewPasswordAction) {
         when (action) {
-            is ViewPasswordAction.loadPassswordData -> { refreshData(action.passwordId) }
-            ViewPasswordAction.refreshPassswordData -> { refreshData(passwordEntityId) }
-            ViewPasswordAction.deletePasswordAction -> { deletePasswordEntity() }
+            is ViewPasswordAction.LoadPassswordData -> { refreshData(action.passwordId) }
+            ViewPasswordAction.RefreshPassswordData -> { refreshData(passwordEntityId) }
+            ViewPasswordAction.DeletePasswordAction -> { deletePasswordEntity() }
         }
     }
 

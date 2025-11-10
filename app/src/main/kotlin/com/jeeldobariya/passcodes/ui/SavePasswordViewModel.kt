@@ -17,11 +17,11 @@ class SavePasswordViewModel(
 
     fun onAction(action: SavePasswordAction) {
         when (action) {
-            is SavePasswordAction.onChangeDomain -> { onChangeDomainText(action.newDomain) }
-            is SavePasswordAction.onChangeUsername -> { onChangeUsernameText(action.newUsername) }
-            is SavePasswordAction.onChangePassword -> { onChangePasswordText(action.newPassword) }
-            is SavePasswordAction.onChangeNotes -> { onChangeNotesText(action.newNotes) }
-            SavePasswordAction.onSavePasswordButtonClick -> { savePasswordEntity() }
+            is SavePasswordAction.OnChangeDomain -> { onChangeDomainText(action.newDomain) }
+            is SavePasswordAction.OnChangeUsername -> { onChangeUsernameText(action.newUsername) }
+            is SavePasswordAction.OnChangePassword -> { onChangePasswordText(action.newPassword) }
+            is SavePasswordAction.OnChangeNotes -> { onChangeNotesText(action.newNotes) }
+            SavePasswordAction.OnSavePasswordButtonClick -> { savePasswordEntity() }
         }
     }
 

@@ -43,7 +43,7 @@ class ViewPasswordActivity : AppCompatActivity() {
             return // Exit onCreate if ID is invalid
         }
 
-        viewModel.onAction(ViewPasswordAction.loadPassswordData(passwordEntityId))
+        viewModel.onAction(ViewPasswordAction.LoadPassswordData(passwordEntityId))
 
         collectLatestLifecycleFlow(viewModel.state) { state ->
             binding.tvDomain.text =
@@ -78,7 +78,7 @@ class ViewPasswordActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.onAction(ViewPasswordAction.refreshPassswordData)
+        viewModel.onAction(ViewPasswordAction.RefreshPassswordData)
     }
 
     // Added all the onclick event listeners
@@ -127,7 +127,7 @@ class ViewPasswordActivity : AppCompatActivity() {
                 .setTitle(R.string.delete_password_dialog_title)
                 .setMessage(R.string.irreversible_dialog_desc)
                 .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
-                    runBlocking { viewModel.onAction(ViewPasswordAction.deletePasswordAction) }
+                    runBlocking { viewModel.onAction(ViewPasswordAction.DeletePasswordAction) }
                     finish()
                 }
                 .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->

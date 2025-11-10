@@ -59,16 +59,16 @@ class UpdatePasswordActivity : AppCompatActivity() {
     // Added all the onclick event listeners
     private fun addOnClickListenerOnButton() {
         binding.updatePasswordBtn.setOnClickListener {
-            viewModel.onAction(UpdatePasswordAction.onChangeDomain(binding.inputDomain.text.toString()))
-            viewModel.onAction(UpdatePasswordAction.onChangeUsername(binding.inputUsername.text.toString()))
-            viewModel.onAction(UpdatePasswordAction.onChangePassword(binding.inputPassword.text.toString()))
-            viewModel.onAction(UpdatePasswordAction.onChangeNotes(binding.inputNotes.text.toString()))
+            viewModel.onAction(UpdatePasswordAction.OnChangeDomain(binding.inputDomain.text.toString()))
+            viewModel.onAction(UpdatePasswordAction.OnChangeUsername(binding.inputUsername.text.toString()))
+            viewModel.onAction(UpdatePasswordAction.OnChangePassword(binding.inputPassword.text.toString()))
+            viewModel.onAction(UpdatePasswordAction.OnChangeNotes(binding.inputNotes.text.toString()))
 
             val confirmDialog = AlertDialog.Builder(this@UpdatePasswordActivity)
                 .setTitle(R.string.update_password_dialog_title)
                 .setMessage(R.string.irreversible_dialog_desc)
                 .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
-                    viewModel.onAction(UpdatePasswordAction.onUpdatePasswordButtonClick)
+                    viewModel.onAction(UpdatePasswordAction.OnUpdatePasswordButtonClick)
                     if (!viewModel.state.value.isError) {
                         finish()
                     }
