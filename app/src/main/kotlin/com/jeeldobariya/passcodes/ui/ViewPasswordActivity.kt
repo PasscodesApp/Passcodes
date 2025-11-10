@@ -43,7 +43,7 @@ class ViewPasswordActivity : AppCompatActivity() {
             return // Exit onCreate if ID is invalid
         }
 
-        viewModel.loadInitialData(passwordEntityId)
+        viewModel.onAction(ViewPasswordAction.loadPassswordData(passwordEntityId))
 
         collectLatestLifecycleFlow(viewModel.state) { state ->
             binding.tvDomain.text =
@@ -74,6 +74,11 @@ class ViewPasswordActivity : AppCompatActivity() {
 
         // Make window fullscreen
         WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onAction(ViewPasswordAction.refreshPassswordData)
     }
 
     // Added all the onclick event listeners

@@ -18,7 +18,15 @@ class ViewPasswordViewModel(
     private val _state = MutableStateFlow(ViewPasswordState())
     val state = _state.asStateFlow()
 
-    fun loadInitialData(passwordId: Int) {
+    fun onAction(action: ViewPasswordAction) {
+        when (action) {
+            is ViewPasswordAction.loadPassswordData -> { refreshData(action.passwordId) }
+            ViewPasswordAction.refreshPassswordData -> { refreshData(passwordEntityId) }
+            ViewPasswordAction.deletePasswordAction -> { deletePasswordEntity() }
+        }
+    }
+
+    private fun refreshData(passwordId: Int) {
         passwordEntityId = passwordId
 
         viewModelScope.launch {
@@ -37,12 +45,6 @@ class ViewPasswordViewModel(
             } catch (_: Exception) {
                 _state.update { it.copy(isError = true) }
             }
-        }
-    }
-
-    fun onAction(action: ViewPasswordAction) {
-        when (action) {
-            ViewPasswordAction.deletePasswordAction -> { deletePasswordEntity() }
         }
     }
 
