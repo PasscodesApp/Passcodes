@@ -15,7 +15,7 @@ class UpdatePasswordViewModel(
 
     var passwordEntityId: Int = -1
 
-    private val _state = MutableStateFlow(SavePasswordState())
+    private val _state = MutableStateFlow(UpdatePasswordState())
     val state = _state.asStateFlow()
 
     fun loadInitialData(passwordId: Int) {
