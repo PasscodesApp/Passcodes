@@ -43,30 +43,21 @@ class ViewPasswordActivity : AppCompatActivity() {
             return // Exit onCreate if ID is invalid
         }
 
-        viewModel.loadInitialData(passwordEntityId)
+        viewModel.onAction(ViewPasswordAction.LoadPassswordData(passwordEntityId))
 
-        collectLatestLifecycleFlow(viewModel.domainState) { domain ->
+        collectLatestLifecycleFlow(viewModel.state) { state ->
             binding.tvDomain.text =
-                "${getString(R.string.domain_prefix)}  $domain"
-        }
-        collectLatestLifecycleFlow(viewModel.usernameState) { username ->
+                "${getString(R.string.domain_prefix)}  ${state.domain}"
             binding.tvUsername.text =
-                "${getString(R.string.username_prefix)}  $username"
-        }
-        collectLatestLifecycleFlow(viewModel.passwordState) { password ->
+                "${getString(R.string.username_prefix)}  ${state.username}"
             binding.tvPassword.text =
-                "${getString(R.string.password_prefix)}  $password"
-        }
-        collectLatestLifecycleFlow(viewModel.notesState) { notes ->
+                "${getString(R.string.password_prefix)}  ${state.password}"
             binding.tvNotes.text =
-                "${getString(R.string.notes_prefix)}  $notes"
-        }
-        collectLatestLifecycleFlow(viewModel.lastUpdatedAtState) { lastUpdatedAt ->
+                "${getString(R.string.notes_prefix)}  ${state.notes}"
             binding.tvUpdatedAt.text =
-                "${getString(R.string.updatedat_prefix)}  $lastUpdatedAt"
-        }
-        collectLatestLifecycleFlow(viewModel.isErrorState) { error ->
-            if (error) {
+                "${getString(R.string.updatedat_prefix)}  ${state.lastUpdatedAt}"
+
+            if (state.isError) {
                 Toast.makeText(
                     this@ViewPasswordActivity,
                     getString(R.string.something_went_wrong_msg),
@@ -85,6 +76,11 @@ class ViewPasswordActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onAction(ViewPasswordAction.RefreshPassswordData)
+    }
+
     // Added all the onclick event listeners
     private fun addOnClickListenerOnButton() {
         binding.copyPasswordBtn.setOnClickListener {
@@ -97,8 +93,8 @@ class ViewPasswordActivity : AppCompatActivity() {
                     val clipboard = getSystemService(CLIPBOARD_SERVICE) as? ClipboardManager
                     val clip: ClipData =
                         ClipData.newPlainText(
-                            viewModel.usernameState.value,
-                            viewModel.passwordState.value
+                            viewModel.state.value.username,
+                            viewModel.state.value.password
                         )
 
                     // Set the ClipData to the clipboard
@@ -131,7 +127,7 @@ class ViewPasswordActivity : AppCompatActivity() {
                 .setTitle(R.string.delete_password_dialog_title)
                 .setMessage(R.string.irreversible_dialog_desc)
                 .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
-                    runBlocking { viewModel.onDeletePasswordButtonClick() }
+                    runBlocking { viewModel.onAction(ViewPasswordAction.DeletePasswordAction) }
                     finish()
                 }
                 .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->

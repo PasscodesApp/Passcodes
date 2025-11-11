@@ -15,20 +15,8 @@ class UpdatePasswordViewModel(
 
     var passwordEntityId: Int = -1
 
-    private val _domainState = MutableStateFlow("")
-    val domainState = _domainState.asStateFlow()
-
-    private val _usernameState = MutableStateFlow("")
-    val usernameState = _usernameState.asStateFlow()
-
-    private val _passwordState = MutableStateFlow("")
-    val passwordState = _passwordState.asStateFlow()
-
-    private val _notesState = MutableStateFlow("")
-    val notesState = _notesState.asStateFlow()
-
-    private val _isErrorState = MutableStateFlow(false)
-    val isErrorState = _isErrorState.asStateFlow()
+    private val _state = MutableStateFlow(UpdatePasswordState())
+    val state = _state.asStateFlow()
 
     fun loadInitialData(passwordId: Int) {
         passwordEntityId = passwordId
@@ -37,56 +25,58 @@ class UpdatePasswordViewModel(
             try {
                 val password: Password = controller.getPasswordById(passwordId)
 
-                _domainState.update { password.domain }
-                _usernameState.update { password.username }
-                _passwordState.update { password.password }
-                _notesState.update { password.notes }
-            } catch (e: Exception) {
-                _isErrorState.update {
-                    true
+                _state.update {
+                    it.copy(
+                        domain = password.domain,
+                        username = password.username,
+                        password = password.password,
+                        notes = password.notes
+                    )
                 }
+            } catch (e: Exception) {
+                _state.update { it.copy(isError = false) }
             }
         }
     }
 
-    fun onChangeDomainText(text: String) {
-        _domainState.update {
-            text
+    fun onAction(action: UpdatePasswordAction) {
+        when (action) {
+            is UpdatePasswordAction.OnChangeDomain -> { onChangeDomainText(action.newDomain) }
+            is UpdatePasswordAction.OnChangeUsername -> { onChangeUsernameText(action.newUsername) }
+            is UpdatePasswordAction.OnChangePassword -> { onChangePasswordText(action.newPassword) }
+            is UpdatePasswordAction.OnChangeNotes -> { onChangeNotesText(action.newNotes) }
+            UpdatePasswordAction.OnUpdatePasswordButtonClick -> { updatePasswordEntity() }
         }
     }
 
-    fun onChangeUsernameText(text: String) {
-        _usernameState.update {
-            text
-        }
+    private fun onChangeDomainText(newDomain: String) {
+        _state.update { it.copy(domain = newDomain) }
     }
 
-    fun onChangePasswordText(text: String) {
-        _passwordState.update {
-            text
-        }
+    private fun onChangeUsernameText(newUsername: String) {
+        _state.update { it.copy(username = newUsername) }
     }
 
-    fun onChangeNotesText(text: String) {
-        _notesState.update {
-            text
-        }
+    private fun onChangePasswordText(newPassword: String) {
+        _state.update { it.copy(password = newPassword) }
     }
 
-    fun onUpdatePasswordButtonClick() {
+    private fun onChangeNotesText(newNotes: String) {
+        _state.update { it.copy(notes = newNotes) }
+    }
+
+    private fun updatePasswordEntity() {
         viewModelScope.launch {
             try {
                 controller.updatePassword(
                     passwordEntityId,
-                    _domainState.value,
-                    _usernameState.value,
-                    _passwordState.value,
-                    _notesState.value
+                    _state.value.domain,
+                    _state.value.username,
+                    _state.value.password,
+                    _state.value.notes
                 )
             } catch (e: Exception) {
-                _isErrorState.update {
-                    true
-                }
+                _state.update { it.copy(isError = false) }
             }
         }
     }
