@@ -1,5 +1,5 @@
 [versions]
-kotlin = "1.9.0"
+kotlin = "2.2.0"
 material = "1.13.0"
 okhttp = "5.1.0"
 oss-license = "17.3.0"
