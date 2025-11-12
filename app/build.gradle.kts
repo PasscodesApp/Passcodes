@@ -1,6 +1,6 @@
 import java.io.FileInputStream
 import java.util.Properties
-import org.gradle.api.GradleException
+// import org.gradle.api.GradleException
 import com.android.build.api.dsl.ApplicationExtension
 
 plugins {
@@ -86,8 +86,8 @@ android {
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
                 // Use manifestPlaceholders.put() for key-value pairs
-                manifestPlaceholders.put("appIcon", "@mipmap/ic_launcher")
-                manifestPlaceholders.put("appLabel", "@string/app_name")
+                manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+                manifestPlaceholders["appLabel"] = "@string/app_name"
             }
 
             getByName("debug") {
@@ -95,8 +95,8 @@ android {
                 versionNameSuffix = "-Dev"
                 isMinifyEnabled = false
 
-                manifestPlaceholders.put("appIcon", "@mipmap/dev_ic_launcher")
-                manifestPlaceholders.put("appLabel", "Passcodes Dev")
+                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
+                manifestPlaceholders["appLabel"] = "Passcodes Dev"
             }
 
             create("staging") {
@@ -115,8 +115,8 @@ android {
                 isDebuggable = false
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-                manifestPlaceholders.put("appIcon", "@mipmap/dev_ic_launcher")
-                manifestPlaceholders.put("appLabel", "Passcodes Staging")
+                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
+                manifestPlaceholders["appLabel"] = "Passcodes Staging"
             }
         }
 
