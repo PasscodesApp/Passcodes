@@ -2,12 +2,19 @@ import java.io.FileInputStream
 import java.util.Properties
 // import org.gradle.api.GradleException
 import com.android.build.api.dsl.ApplicationExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.oss.licenses)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
+    }
 }
 
 android {
@@ -135,10 +142,6 @@ android {
         val location = "$projectDir/schemas"
         arg("room.schemaLocation", location)
     }
-
-    kotlinOptions {
-        jvmTarget = "21"
-    }
 }
 
 dependencies {
@@ -179,4 +182,3 @@ dependencies {
     androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.truth) // Keeping truth explicit for androidTest, though it's in both bundles.
 }
-
