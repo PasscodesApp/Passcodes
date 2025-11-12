@@ -16,8 +16,8 @@ koin = "4.1.1"
 
 # Plugin versions
 agp = "8.13.1"
-kotlin-plugin = "2.1.21"
-ksp = "2.1.21-2.0.2"
+kotlin-plugin = "2.2.21"
+ksp = "2.3.2"
 oss-license-plugin = "0.10.9" # Also update in settings.gradle.kts
 
 [libraries]
