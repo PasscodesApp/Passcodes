@@ -1,13 +1,20 @@
 import java.io.FileInputStream
 import java.util.Properties
-import org.gradle.api.GradleException
+// import org.gradle.api.GradleException
 import com.android.build.api.dsl.ApplicationExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.oss.licenses)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
+    }
 }
 
 android {
@@ -20,7 +27,7 @@ android {
             minSdk = 26
             targetSdk = 34
             versionCode = 2
-            versionName = "v1.1.1-Alpha"
+            versionName = "v1.1.2-rc.1"
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -86,8 +93,8 @@ android {
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
                 // Use manifestPlaceholders.put() for key-value pairs
-                manifestPlaceholders.put("appIcon", "@mipmap/ic_launcher")
-                manifestPlaceholders.put("appLabel", "@string/app_name")
+                manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+                manifestPlaceholders["appLabel"] = "@string/app_name"
             }
 
             getByName("debug") {
@@ -95,8 +102,8 @@ android {
                 versionNameSuffix = "-Dev"
                 isMinifyEnabled = false
 
-                manifestPlaceholders.put("appIcon", "@mipmap/dev_ic_launcher")
-                manifestPlaceholders.put("appLabel", "Passcodes Dev")
+                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
+                manifestPlaceholders["appLabel"] = "Passcodes Dev"
             }
 
             create("staging") {
@@ -115,14 +122,14 @@ android {
                 isDebuggable = false
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-                manifestPlaceholders.put("appIcon", "@mipmap/dev_ic_launcher")
-                manifestPlaceholders.put("appLabel", "Passcodes Staging")
+                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
+                manifestPlaceholders["appLabel"] = "Passcodes Staging"
             }
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
         }
 
         buildFeatures {
@@ -135,41 +142,43 @@ android {
         val location = "$projectDir/schemas"
         arg("room.schemaLocation", location)
     }
-
-    kotlinOptions {
-        jvmTarget = "11"
-    }
 }
 
 dependencies {
+    // Standard Kotlin Libraries
     implementation(libs.kotlin.stdlib)
 
+    // UI/Google Services
     implementation(libs.material)
     implementation(libs.oss.license)
     implementation(libs.appcompat)
 
-    implementation(libs.room.ktx)
+    // Data/Persistence (Room Bundle)
+    implementation(libs.bundles.room)
     ksp(libs.room.compiler)
 
+    // Networking/Parsing
     implementation(libs.okhttp)
     implementation(libs.json)
 
-    implementation(libs.coroutines.core)
-    implementation(libs.coroutines.android)
+    // Concurrency (Coroutines Bundle)
+    implementation(libs.bundles.coroutines)
 
-    implementation(libs.lifecycle.runtime)
-    implementation(libs.lifecycle.viewmodel)
+    // Android Architecture Components (Lifecycle Bundle)
+    implementation(libs.bundles.lifecycle)
 
+    // Dependency Injection
     implementation(libs.koin)
-    implementation(libs.koin.viewmodel)
 
-    // test
-    testImplementation(libs.junit)
-    testImplementation(libs.truth)
+    
+    // --- Testing ---
 
+    // Local Unit Testing (Unit Test Bundle)
+    testImplementation(libs.bundles.unit.test)
+
+    // Android Instrumented Testing (Android Test Bundle)
+    androidTestImplementation(libs.bundles.android.test)
     androidTestImplementation(libs.room.testing)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.coroutines.test)
-    androidTestImplementation(libs.truth)
+    androidTestImplementation(libs.truth) // Keeping truth explicit for androidTest, though it's in both bundles.
 }

@@ -76,6 +76,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:contentDescription="View Security Guidelines"
                             android:src="@drawable/ic_security"
                             app:tint="?attr/colorPrimary"
                             android:layout_marginBottom="8dp" />
@@ -106,6 +107,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:contentDescription="Release Notes"
                             android:src="@drawable/ic_history"
                             app:tint="?attr/colorPrimary"
                             android:layout_marginBottom="8dp" />
@@ -136,6 +138,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:contentDescription="Document Icon"
                             android:src="@drawable/ic_article"
                             app:tint="?attr/colorPrimary"
                             android:layout_marginBottom="8dp" />
@@ -166,6 +169,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
+                            android:contentDescription="Report Bug"
                             android:src="@drawable/ic_bug_report"
                             app:tint="?attr/colorPrimary"
                             android:layout_marginBottom="8dp" />
@@ -199,6 +203,7 @@
                             android:layout_width="128dp"
                             android:layout_height="128dp"
                             android:layout_marginBottom="8dp"
+                            android:contentDescription="Join Telegram Community"
                             android:src="@drawable/ic_send"
                             app:tint="?attr/colorPrimary" />
                         <TextView
