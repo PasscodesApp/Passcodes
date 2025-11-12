@@ -54,7 +54,7 @@ class LoadPasswordActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.onAction(LoadPasswordAction.RefreshPassswordData)
+        viewModel.onAction(LoadPasswordAction.RefreshPassword)
     }
 
     // Added all the onclick event listeners

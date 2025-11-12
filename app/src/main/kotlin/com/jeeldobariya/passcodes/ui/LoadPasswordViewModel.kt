@@ -19,7 +19,7 @@ class LoadPasswordViewModel(
 
     fun onAction(action: LoadPasswordAction) {
         when (action) {
-            LoadPasswordAction.RefreshPassswordData -> { refreshData() }
+            LoadPasswordAction.RefreshPassword -> { refreshData() }
         }
     }
 
