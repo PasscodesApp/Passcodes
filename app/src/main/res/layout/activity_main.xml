@@ -26,7 +26,7 @@
             android:layout_margin="4dp"
             android:text="@string/app_name"
             android:textAlignment="center"
-            android:textSize="32dp" />
+            android:textSize="32sp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_margin="4dp"
             android:text="@string/app_version"
             android:textAlignment="center"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/password_manager_button_text"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/setting_btn"
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/setting_button_text"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/about_us_btn"
@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_us_button_text"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>
 
