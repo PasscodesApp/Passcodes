@@ -1,21 +1,21 @@
 [versions]
 kotlin = "1.9.0"
-material = "1.12.0"
+material = "1.13.0"
 okhttp = "5.1.0"
-oss-license = "17.2.1"
-appcompat = "1.7.0"
-room = "2.7.2"
+oss-license = "17.3.0"
+appcompat = "1.7.1"
+room = "2.8.3"
 json = "20250517"
 junit = "4.13.2"
 truth = "1.4.4"
-androidx-test-ext-junit = "1.2.1"
-espresso-core = "3.6.1"
+androidx-test-ext-junit = "1.3.0"
+espresso-core = "3.7.0"
 coroutines = "1.10.2"
-lifecycle = "2.9.2"
+lifecycle = "2.9.4"
 koin = "4.1.1"
 
 # Plugin versions
-agp = "8.13.0"
+agp = "8.13.1"
 kotlin-plugin = "2.1.21"
 ksp = "2.1.21-2.0.2"
 oss-license-plugin = "0.10.6" # latest safe version for oss-licenses-plugin
@@ -41,7 +41,6 @@ lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", versi
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
 koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-viewmodel = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 # koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 json = { module = "org.json:json", version.ref = "json" }

@@ -161,7 +161,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodel)
 
     implementation(libs.koin)
-    implementation(libs.koin.viewmodel)
 
     // test
     testImplementation(libs.junit)
