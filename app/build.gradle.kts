@@ -142,33 +142,41 @@ android {
 }
 
 dependencies {
+    // Standard Kotlin Libraries
     implementation(libs.kotlin.stdlib)
 
+    // UI/Google Services
     implementation(libs.material)
     implementation(libs.oss.license)
     implementation(libs.appcompat)
 
-    implementation(libs.room.ktx)
+    // Data/Persistence (Room Bundle)
+    implementation(libs.bundles.room)
     ksp(libs.room.compiler)
 
+    // Networking/Parsing
     implementation(libs.okhttp)
     implementation(libs.json)
 
-    implementation(libs.coroutines.core)
-    implementation(libs.coroutines.android)
+    // Concurrency (Coroutines Bundle)
+    implementation(libs.bundles.coroutines)
 
-    implementation(libs.lifecycle.runtime)
-    implementation(libs.lifecycle.viewmodel)
+    // Android Architecture Components (Lifecycle Bundle)
+    implementation(libs.bundles.lifecycle)
 
+    // Dependency Injection
     implementation(libs.koin)
 
-    // test
-    testImplementation(libs.junit)
-    testImplementation(libs.truth)
+    
+    // --- Testing ---
 
+    // Local Unit Testing (Unit Test Bundle)
+    testImplementation(libs.bundles.unit.test)
+
+    // Android Instrumented Testing (Android Test Bundle)
+    androidTestImplementation(libs.bundles.android.test)
     androidTestImplementation(libs.room.testing)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.coroutines.test)
-    androidTestImplementation(libs.truth)
+    androidTestImplementation(libs.truth) // Keeping truth explicit for androidTest, though it's in both bundles.
 }
+
