@@ -9,6 +9,11 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - '**.yml'
+      - 'docs/**'
 
   release:
     types:
@@ -40,6 +45,7 @@ jobs:
         with:
           distribution: "jetbrains"
           java-version: "21"
+          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -59,12 +65,12 @@ jobs:
           if [[ "${{ github.event_name }}" == "release" || "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "Triggered by release or manual dispatch. Building release variant."
             BUILD_VARIANT="release"
-            ./gradlew assembleRelease
+            ./gradlew assembleRelease --no-daemon
             APK_PATH=app/build/outputs/apk/release/app-universal-release-unsigned.apk
           else
             echo "Triggered by push to 'main' branch. Building staging variant."
             BUILD_VARIANT="staging"
-            ./gradlew assembleStaging
+            ./gradlew assembleStaging --no-daemon
             APK_PATH=app/build/outputs/apk/staging/app-universal-staging.apk
           fi
 
