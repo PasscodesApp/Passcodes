@@ -67,8 +67,6 @@ class ViewPasswordActivity : AppCompatActivity() {
             }
         }
 
-        binding.copyPasswordBtn.isEnabled = FeatureFlagManager.get(this).latestFeaturesEnabled
-
         // Add event onclick listener
         addOnClickListenerOnButton()
 
