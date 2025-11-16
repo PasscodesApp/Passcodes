@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.oss.licenses)
 }
@@ -135,6 +136,7 @@ android {
         buildFeatures {
             viewBinding = true
             buildConfig = true
+            compose = true
         }
     }
 
@@ -145,6 +147,11 @@ android {
 }
 
 dependencies {
+    // Jetpack Compose
+    implementation(libs.bundles.compose)
+    implementation(platform(libs.compose.bom))
+    debugImplementation(libs.compose.ui.tooling.debug)
+
     // Standard Kotlin Libraries
     implementation(libs.kotlin.stdlib)
 
@@ -168,7 +175,7 @@ dependencies {
     implementation(libs.bundles.lifecycle)
 
     // Dependency Injection
-    implementation(libs.koin)
+    implementation(libs.bundles.koin)
 
     
     // --- Testing ---
@@ -177,8 +184,9 @@ dependencies {
     testImplementation(libs.bundles.unit.test)
 
     // Android Instrumented Testing (Android Test Bundle)
+    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.android.test)
     androidTestImplementation(libs.room.testing)
-    androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.bundles.coroutines.test)
     androidTestImplementation(libs.truth) // Keeping truth explicit for androidTest, though it's in both bundles.
 }

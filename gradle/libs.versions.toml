@@ -13,7 +13,9 @@ espresso-core = "3.7.0"
 coroutines = "1.10.2"
 lifecycle = "2.9.4"
 koin = "4.1.1"
-
+composeBom = "2025.11.00"
+compose-activity = "1.11.0"
+compose-viewmodel = "2.9.4"
 
 # Plugin versions
 agp = "8.13.1"
@@ -22,8 +24,18 @@ ksp = "2.3.2"
 oss-license-plugin = "0.10.9" # Also update in settings.gradle.kts
 
 [libraries]
+# Kotlin Std libs
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
+# Jetpack Compose
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-ui-material = { group = "androidx.compose.material3", name = "material3" }
+compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-tooling-debug = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-activity = { group = "androidx.activity", name= "activity-compose", version.ref = "compose-activity" }
+compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "compose-viewmodel" }
+
+# Core Dependency
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 oss-license = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "oss-license" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -47,7 +59,7 @@ lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmode
 
 # Dependency Injection
 koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
-# koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 json = { group = "org.json", name = "json", version.ref = "json" }
 
@@ -59,20 +71,29 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 
 
 [bundles]
-# Grouping related Android Architecture Components
+# Grouping Jetpack Compose Dependencies
+compose = ["compose-ui-material", "compose-ui-preview", "compose-activity", "compose-viewmodel"]
+compose-debug = ["compose-ui-tooling-debug"]
+
+# Grouping Android Architecture Releated Components
 room = ["room-ktx", "room-testing"]
 lifecycle = ["lifecycle-runtime", "lifecycle-viewmodel"]
 
-# Grouping coroutines dependencies
+# Grouping Coroutines Dependencies
 coroutines = ["coroutines-core", "coroutines-android"]
-coroutines-test = ["coroutines-core", "coroutines-test"] # Core is often needed for testing
+coroutines-test = ["coroutines-core", "coroutines-test"]
 
-# Grouping general test dependencies
+# Grouping Dependency Injection Dependencies
+koin = ["koin", "koin-compose"]
+
+# Grouping General Test Dependencies
 unit-test = ["junit", "truth"]
 android-test = ["androidx-test-ext-junit", "espresso-core"]
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 oss-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "oss-license-plugin" }
