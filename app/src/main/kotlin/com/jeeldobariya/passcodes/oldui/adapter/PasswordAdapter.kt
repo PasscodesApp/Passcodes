@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.ui.adapter
+package com.jeeldobariya.passcodes.oldui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

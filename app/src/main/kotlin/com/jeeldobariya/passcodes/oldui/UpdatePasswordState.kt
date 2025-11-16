@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.ui
+package com.jeeldobariya.passcodes.oldui
 
 data class UpdatePasswordState(
     val domain: String = "",

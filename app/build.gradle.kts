@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.oss.licenses)
 }
@@ -135,7 +136,18 @@ android {
         buildFeatures {
             viewBinding = true
             buildConfig = true
+            compose = true
         }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+    buildFeatures {
+        compose = true
     }
 
     ksp {
@@ -145,6 +157,17 @@ android {
 }
 
 dependencies {
+    // Jetpack Compose
+    implementation(libs.bundles.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.bundles.compose.debug)
+
+    // Navigation 3
+    implementation(libs.bundles.navigation3)
+
     // Standard Kotlin Libraries
     implementation(libs.kotlin.stdlib)
 
@@ -155,6 +178,7 @@ dependencies {
 
     // Data/Persistence (Room Bundle)
     implementation(libs.bundles.room)
+    debugImplementation(libs.androidx.ui.test.manifest)
     ksp(libs.room.compiler)
 
     // Networking/Parsing
@@ -168,7 +192,7 @@ dependencies {
     implementation(libs.bundles.lifecycle)
 
     // Dependency Injection
-    implementation(libs.koin)
+    implementation(libs.bundles.koin)
 
     
     // --- Testing ---
@@ -177,8 +201,9 @@ dependencies {
     testImplementation(libs.bundles.unit.test)
 
     // Android Instrumented Testing (Android Test Bundle)
+    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.android.test)
     androidTestImplementation(libs.room.testing)
-    androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.bundles.coroutines.test)
     androidTestImplementation(libs.truth) // Keeping truth explicit for androidTest, though it's in both bundles.
 }

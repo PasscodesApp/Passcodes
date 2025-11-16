@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
     android:padding="16sp"
-    tools:context=".ui.LicenseActivity">
+    tools:context=".oldui.LicenseActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
