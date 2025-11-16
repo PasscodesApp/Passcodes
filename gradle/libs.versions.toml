@@ -16,6 +16,9 @@ koin = "4.1.1"
 composeBom = "2025.11.00"
 compose-activity = "1.11.0"
 compose-viewmodel = "2.9.4"
+nav3Core = "1.0.0-rc01"
+lifecycleViewmodelNav3 = "2.10.0-rc01"
+material3AdaptiveNav3 = "1.3.0-alpha03"
 
 # Plugin versions
 agp = "8.13.1"
@@ -34,6 +37,12 @@ compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 compose-ui-tooling-debug = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-activity = { group = "androidx.activity", name= "activity-compose", version.ref = "compose-activity" }
 compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "compose-viewmodel" }
+
+# Navigation 3
+androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "nav3Core" }
+androidx-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-navigation3 = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
+androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
 
 # Core Dependency
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -78,6 +87,9 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 # Grouping Jetpack Compose Dependencies
 compose = ["compose-ui-material", "compose-ui-preview", "compose-activity", "compose-viewmodel"]
 compose-debug = ["compose-ui-tooling-debug"]
+
+# Grouping Navigation 3 Dependencies
+navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "androidx-lifecycle-viewmodel-navigation3", "androidx-material3-adaptive-navigation3"]
 
 # Grouping Android Architecture Releated Components
 room = ["room-ktx", "room-testing"]

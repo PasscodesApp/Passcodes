@@ -163,7 +163,10 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.compose.ui.tooling.debug)
+    debugImplementation(libs.bundles.compose.debug)
+
+    // Navigation 3
+    implementation(libs.bundles.navigation3)
 
     // Standard Kotlin Libraries
     implementation(libs.kotlin.stdlib)
