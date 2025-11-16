@@ -139,6 +139,16 @@ android {
             compose = true
         }
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+    buildFeatures {
+        compose = true
+    }
 
     ksp {
         val location = "$projectDir/schemas"
@@ -150,6 +160,9 @@ dependencies {
     // Jetpack Compose
     implementation(libs.bundles.compose)
     implementation(platform(libs.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling.debug)
 
     // Standard Kotlin Libraries
@@ -162,6 +175,7 @@ dependencies {
 
     // Data/Persistence (Room Bundle)
     implementation(libs.bundles.room)
+    debugImplementation(libs.androidx.ui.test.manifest)
     ksp(libs.room.compiler)
 
     // Networking/Parsing

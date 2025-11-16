@@ -16,15 +16,20 @@
         android:theme="@style/PasscodesTheme.Default"
         tools:targetApi="33">
         <activity
-            android:name=".ui.MainActivity"
-            android:exported="true">
+            android:name=".newui.MainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/PasscodesTheme.Default">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true">
+        </activity>
         <activity android:name=".ui.PasswordManagerActivity" />
         <activity android:name=".ui.SavePasswordActivity" />
         <activity android:name=".ui.LoadPasswordActivity" />
@@ -46,9 +51,9 @@
 
         <service
             android:name=".autofill.PasswordAutofillService"
+            android:exported="true"
             android:label="@string/app_name"
-            android:permission="android.permission.BIND_AUTOFILL_SERVICE"
-            android:exported="true">
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
             </intent-filter>
