@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.ui
+package com.jeeldobariya.passcodes.oldui
 
 import com.jeeldobariya.passcodes.database.Password
 

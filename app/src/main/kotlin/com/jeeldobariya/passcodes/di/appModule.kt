@@ -1,9 +1,9 @@
 package com.jeeldobariya.passcodes.di
 
-import com.jeeldobariya.passcodes.ui.LoadPasswordViewModel
-import com.jeeldobariya.passcodes.ui.SavePasswordViewModel
-import com.jeeldobariya.passcodes.ui.UpdatePasswordViewModel
-import com.jeeldobariya.passcodes.ui.ViewPasswordViewModel
+import com.jeeldobariya.passcodes.oldui.LoadPasswordViewModel
+import com.jeeldobariya.passcodes.oldui.SavePasswordViewModel
+import com.jeeldobariya.passcodes.oldui.UpdatePasswordViewModel
+import com.jeeldobariya.passcodes.oldui.ViewPasswordViewModel
 import com.jeeldobariya.passcodes.utils.Controller
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel

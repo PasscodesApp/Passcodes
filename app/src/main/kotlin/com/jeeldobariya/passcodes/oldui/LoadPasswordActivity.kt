@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.ui
+package com.jeeldobariya.passcodes.oldui
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,7 @@ import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.databinding.ActivityLoadPasswordBinding
-import com.jeeldobariya.passcodes.ui.adapter.PasswordAdapter
+import com.jeeldobariya.passcodes.oldui.adapter.PasswordAdapter
 import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import org.koin.androidx.viewmodel.ext.android.viewModel

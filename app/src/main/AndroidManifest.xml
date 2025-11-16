@@ -16,7 +16,7 @@
         android:theme="@style/PasscodesTheme.Default"
         tools:targetApi="33">
         <activity
-            android:name=".newui.MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
             android:theme="@style/PasscodesTheme.Default">
@@ -27,17 +27,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".oldui.MainActivity"
             android:exported="true">
         </activity>
-        <activity android:name=".ui.PasswordManagerActivity" />
-        <activity android:name=".ui.SavePasswordActivity" />
-        <activity android:name=".ui.LoadPasswordActivity" />
-        <activity android:name=".ui.ViewPasswordActivity" />
-        <activity android:name=".ui.UpdatePasswordActivity" />
-        <activity android:name=".ui.SettingsActivity" />
-        <activity android:name=".ui.AboutUsActivity" />
-        <activity android:name=".ui.LicenseActivity" />
+        <activity android:name=".oldui.PasswordManagerActivity" />
+        <activity android:name=".oldui.SavePasswordActivity" />
+        <activity android:name=".oldui.LoadPasswordActivity" />
+        <activity android:name=".oldui.ViewPasswordActivity" />
+        <activity android:name=".oldui.UpdatePasswordActivity" />
+        <activity android:name=".oldui.SettingsActivity" />
+        <activity android:name=".oldui.AboutUsActivity" />
+        <activity android:name=".oldui.LicenseActivity" />
         <activity android:name=".autofill.AutofillSettingsActivity" />
 
         <service
