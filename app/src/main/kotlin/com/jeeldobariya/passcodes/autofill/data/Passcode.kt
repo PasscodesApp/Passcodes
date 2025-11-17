@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.data
+package com.jeeldobariya.passcodes.autofill.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

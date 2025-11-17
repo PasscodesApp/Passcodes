@@ -11,8 +11,8 @@ import android.service.autofill.SaveRequest
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import com.jeeldobariya.passcodes.R
-import com.jeeldobariya.passcodes.data.Passcode
-import com.jeeldobariya.passcodes.data.PasscodeDatabase
+import com.jeeldobariya.passcodes.autofill.data.Passcode
+import com.jeeldobariya.passcodes.autofill.data.PasscodeDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
