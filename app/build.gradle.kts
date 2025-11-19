@@ -7,7 +7,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.oss.licenses)
 }
@@ -188,6 +189,9 @@ dependencies {
 
     // Dependency Injection
     implementation(libs.bundles.koin)
+
+    // Datastore Preferences
+    implementation(libs.bundles.datastore.preferences)
 
     
     // --- Testing ---

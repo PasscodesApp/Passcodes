@@ -1,12 +1,13 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.jetbrains.kotlin.serialization) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.oss.licenses) apply false
 }
 
-// Allprojects block is common for setting up common repositories for all subprojects.
+// All projects block is common for setting up common repositories for all subprojects.
 allprojects {
     repositories {
         google()
