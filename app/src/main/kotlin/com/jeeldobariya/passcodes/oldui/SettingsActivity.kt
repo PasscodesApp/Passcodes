@@ -12,10 +12,11 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
-import com.jeeldobariya.passcodes.flags.FeatureFlagManager
+import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.Constant
 import com.jeeldobariya.passcodes.utils.Controller
+import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
@@ -40,7 +41,9 @@ class SettingsActivity : AppCompatActivity() {
 
         setInitialLangSelection()
 
-        binding.switchLatestFeatures.isChecked = FeatureFlagManager.get(this).latestFeaturesEnabled
+        collectLatestLifecycleFlow(featureFlagsDatastore.data) {
+            binding.switchLatestFeatures.isChecked = !it.isPreviewFeaturesEnabled
+        }
 
         controller = Controller(this) // Initialize the controller here
 
@@ -112,7 +115,11 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.switchLatestFeatures.setOnCheckedChangeListener { _, isChecked ->
-            FeatureFlagManager.get(this).latestFeaturesEnabled = isChecked
+            lifecycleScope.launch {
+                featureFlagsDatastore.updateData {
+                    it.copy(isPreviewLayoutEnabled = !isChecked)
+                }
+            }
             Toast.makeText(
                 this@SettingsActivity,
                 getString(R.string.future_feat_clause) + isChecked.toString(),
