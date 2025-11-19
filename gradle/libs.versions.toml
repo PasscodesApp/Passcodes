@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.2.21"
 material = "1.13.0"
-okhttp = "5.3.0"
+okhttp = "5.3.2"
 oss-license = "17.3.0"
 appcompat = "1.7.1"
 room = "2.8.3"
