@@ -14,7 +14,7 @@ plugins {
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
+        jvmTarget.set(JvmTarget.JVM_21)
     }
 }
 
@@ -90,6 +90,8 @@ android {
                     // throw GradleException("Can't Sign Release Build")
                 }
 
+                isDebuggable = false
+                isShrinkResources = true
                 isMinifyEnabled = true
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
@@ -101,10 +103,13 @@ android {
             getByName("debug") {
                 applicationIdSuffix = ".dev"
                 versionNameSuffix = "-Dev"
+
+                isDebuggable = true
+                isShrinkResources = false
                 isMinifyEnabled = false
 
-                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appLabel"] = "Passcodes Dev"
+                manifestPlaceholders["appIcon"] = "@drawable/dev_ic_launcher_foreground"
+                manifestPlaceholders["appLabel"] = "Passcodes-Dev"
             }
 
             create("staging") {
@@ -118,35 +123,25 @@ android {
                 applicationIdSuffix = ".staging"
                 versionNameSuffix = "-Staging"
 
-                isMinifyEnabled = true
-                isShrinkResources = true
                 isDebuggable = false
+                isShrinkResources = true
+                isMinifyEnabled = true
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appLabel"] = "Passcodes Staging"
+                manifestPlaceholders["appIcon"] = "@drawable/dev_ic_launcher_foreground"
+                manifestPlaceholders["appLabel"] = "Passcodes-Staging"
             }
         }
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
-        }
-
-        buildFeatures {
-            viewBinding = true
-            buildConfig = true
-            compose = true
-        }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
     buildFeatures {
+        viewBinding = true
+        buildConfig = true
         compose = true
     }
 

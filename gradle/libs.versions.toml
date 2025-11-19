@@ -22,7 +22,6 @@ material3AdaptiveNav3 = "1.3.0-alpha03"
 
 # Plugin versions
 agp = "8.13.1"
-kotlin-plugin = "2.2.21"
 ksp = "2.3.2"
 oss-license-plugin = "0.10.9" # Also update in settings.gradle.kts
 
@@ -109,7 +108,7 @@ android-test = ["androidx-test-ext-junit", "espresso-core"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 oss-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "oss-license-plugin" }
