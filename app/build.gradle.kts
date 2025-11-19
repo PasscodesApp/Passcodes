@@ -194,9 +194,6 @@ dependencies {
     // Dependency Injection
     implementation(libs.bundles.koin)
 
-    // DataStore
-    implementation(libs.bundles.android.datastore)
-
     
     // --- Testing ---
 
