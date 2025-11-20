@@ -5,15 +5,19 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.jeeldobariya.passcodes.databinding.ActivityAboutUsBinding
-import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.Constant
+import com.jeeldobariya.passcodes.utils.appDatastore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class AboutUsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAboutUsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CommonUtils.updateCurrTheme(this)
+        runBlocking {
+            setTheme(appDatastore.data.first().theme)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivityAboutUsBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -9,8 +9,10 @@ import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.databinding.ActivityLoadPasswordBinding
 import com.jeeldobariya.passcodes.oldui.adapter.PasswordAdapter
-import com.jeeldobariya.passcodes.utils.CommonUtils
+import com.jeeldobariya.passcodes.utils.appDatastore
 import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoadPasswordActivity : AppCompatActivity() {
@@ -21,7 +23,9 @@ class LoadPasswordActivity : AppCompatActivity() {
     private lateinit var passwordAdapter: PasswordAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CommonUtils.updateCurrTheme(this)
+        runBlocking {
+            setTheme(appDatastore.data.first().theme)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivityLoadPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -5,16 +5,20 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jeeldobariya.passcodes.databinding.ActivityLicenseBinding
-import com.jeeldobariya.passcodes.utils.CommonUtils
+import com.jeeldobariya.passcodes.utils.appDatastore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class LicenseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CommonUtils.updateCurrTheme(this)
+        runBlocking {
+            setTheme(appDatastore.data.first().theme)
+        }
         super.onCreate(savedInstanceState)
-        var binding = ActivityLicenseBinding.inflate(layoutInflater)
+        val binding = ActivityLicenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         try {

@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityUpdatePasswordBinding
-import com.jeeldobariya.passcodes.utils.CommonUtils
+import com.jeeldobariya.passcodes.utils.appDatastore
 import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -22,7 +24,9 @@ class UpdatePasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdatePasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CommonUtils.updateCurrTheme(this)
+        runBlocking {
+            setTheme(appDatastore.data.first().theme)
+        }
 
         super.onCreate(savedInstanceState)
         binding = ActivityUpdatePasswordBinding.inflate(layoutInflater)

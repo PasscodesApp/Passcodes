@@ -6,18 +6,18 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.edit
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.utils.CommonUtils
-import com.jeeldobariya.passcodes.utils.Constant
 import com.jeeldobariya.passcodes.utils.Controller
+import com.jeeldobariya.passcodes.utils.appDatastore
 import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -34,7 +34,9 @@ class SettingsActivity : AppCompatActivity() {
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CommonUtils.updateCurrTheme(this)
+        runBlocking {
+            setTheme(appDatastore.data.first().theme)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -66,11 +68,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.langSwitchDropdown.setSelection(0)
-        Toast.makeText(
-            this@SettingsActivity,
-            getString(R.string.something_went_wrong_msg),
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     // Added all the onclick event listeners
@@ -95,17 +92,17 @@ class SettingsActivity : AppCompatActivity() {
             }
 
         binding.toggleThemeBtn.setOnClickListener {
-            val sharedPrefs = getSharedPreferences(Constant.APP_PREFS_NAME, MODE_PRIVATE)
-            val currentThemeStyle =
-                sharedPrefs.getInt(Constant.THEME_KEY, R.style.PasscodesTheme_Default)
+            lifecycleScope.launch {
+                val currentThemeStyle = appDatastore.data.first().theme
 
-            val currentIndex = THEMES.indexOf(currentThemeStyle)
-            val nextIndex = (currentIndex + 1) % THEMES.size
-            val newThemeStyle = THEMES[nextIndex]
+                val currentIndex = THEMES.indexOf(currentThemeStyle)
+                val nextIndex = (currentIndex + 1) % THEMES.size
+                val newThemeStyle = THEMES[nextIndex]
 
-            // Save the new theme and restart the application to apply it
-            sharedPrefs.edit { putInt(Constant.THEME_KEY, newThemeStyle) }
-            recreate()
+                appDatastore.updateData { it.copy(theme = newThemeStyle) }
+
+                recreate()
+            }
 
             Toast.makeText(
                 this@SettingsActivity,
