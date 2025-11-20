@@ -2,17 +2,8 @@ package com.jeeldobariya.passcodes.flags
 
 import android.content.Context
 import androidx.datastore.dataStore
-import kotlinx.coroutines.flow.first
 
 val Context.featureFlagsDatastore by dataStore(fileName = "feature-flags-settings.json", serializer = FeatureFlagsSettingsSerializer)
-
-suspend fun Context.isPreviewFeaturesEnable(): Boolean {
-    return featureFlagsDatastore.data.first().isPreviewFeaturesEnabled
-}
-
-suspend fun Context.isPreviewLayoutEnable(): Boolean {
-    return featureFlagsDatastore.data.first().isPreviewLayoutEnabled
-}
 
 /*
 class FeatureFlagManager private constructor(context: Context) {

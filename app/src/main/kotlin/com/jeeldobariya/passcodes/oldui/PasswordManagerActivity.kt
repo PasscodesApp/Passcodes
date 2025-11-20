@@ -11,9 +11,10 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
-import com.jeeldobariya.passcodes.flags.isPreviewFeaturesEnable
+import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.Controller
+import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -98,8 +99,8 @@ class PasswordManagerActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            if (isPreviewFeaturesEnable()) {
+        collectLatestLifecycleFlow(featureFlagsDatastore.data) {
+            if (!it.isPreviewFeaturesEnabled) {
                 binding.importPasswordBtn.visibility = GONE
                 binding.exportPasswordBtn.visibility = GONE
             }
