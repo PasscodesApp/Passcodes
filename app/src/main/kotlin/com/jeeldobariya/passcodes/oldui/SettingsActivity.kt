@@ -42,7 +42,7 @@ class SettingsActivity : AppCompatActivity() {
         setInitialLangSelection()
 
         collectLatestLifecycleFlow(featureFlagsDatastore.data) {
-            binding.switchLatestFeatures.isChecked = !it.isPreviewFeaturesEnabled
+            binding.switchLatestFeatures.isChecked = it.isPreviewFeaturesEnabled
         }
 
         controller = Controller(this) // Initialize the controller here
@@ -117,7 +117,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchLatestFeatures.setOnCheckedChangeListener { _, isChecked ->
             lifecycleScope.launch {
                 featureFlagsDatastore.updateData {
-                    it.copy(isPreviewLayoutEnabled = !isChecked)
+                    it.copy(isPreviewFeaturesEnabled = isChecked)
                 }
             }
             Toast.makeText(
