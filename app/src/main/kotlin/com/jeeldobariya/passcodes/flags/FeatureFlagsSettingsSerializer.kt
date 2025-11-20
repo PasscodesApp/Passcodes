@@ -8,7 +8,7 @@ import java.io.OutputStream
 
 object FeatureFlagsSettingsSerializer: Serializer<FeatureFlagsSettings> {
     override val defaultValue: FeatureFlagsSettings
-        get() = FeatureFlagsSettings(isPreviewFeaturesEnabled = false, isPreviewLayoutEnabled = false)
+        get() = FeatureFlagsSettings()
 
     override suspend fun readFrom(input: InputStream): FeatureFlagsSettings {
         return try {

@@ -8,6 +8,6 @@ val Context.featureFlagsDatastore by dataStore(fileName = "feature-flags-setting
 
 @Serializable
 data class FeatureFlagsSettings(
-    val isPreviewFeaturesEnabled: Boolean,
-    val isPreviewLayoutEnabled: Boolean
+    val isPreviewFeaturesEnabled: Boolean = false,
+    val isPreviewLayoutEnabled: Boolean = false
 )
