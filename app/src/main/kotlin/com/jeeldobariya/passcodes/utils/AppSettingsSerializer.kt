@@ -8,7 +8,7 @@ import java.io.OutputStream
 
 object AppSettingsSerializer: Serializer<AppSettings> {
     override val defaultValue: AppSettings
-        get() = AppSettings(theme = "")
+        get() = AppSettings()
 
     override suspend fun readFrom(input: InputStream): AppSettings {
         return try {
