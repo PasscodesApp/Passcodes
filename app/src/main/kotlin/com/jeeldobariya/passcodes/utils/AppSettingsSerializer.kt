@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.flags
+package com.jeeldobariya.passcodes.utils
 
 import androidx.datastore.core.Serializer
 import kotlinx.serialization.SerializationException
@@ -6,14 +6,14 @@ import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
-object FeatureFlagsSettingsSerializer: Serializer<FeatureFlagsSettings> {
-    override val defaultValue: FeatureFlagsSettings
-        get() = FeatureFlagsSettings(isPreviewFeaturesEnabled = false, isPreviewLayoutEnabled = false)
+object AppSettingsSerializer: Serializer<AppSettings> {
+    override val defaultValue: AppSettings
+        get() = AppSettings(theme = "")
 
-    override suspend fun readFrom(input: InputStream): FeatureFlagsSettings {
+    override suspend fun readFrom(input: InputStream): AppSettings {
         return try {
             Json.decodeFromString(
-                deserializer = FeatureFlagsSettings.serializer(),
+                deserializer = AppSettings.serializer(),
                 string = input.readBytes().decodeToString(),
             )
         } catch (e: SerializationException) {
@@ -23,12 +23,12 @@ object FeatureFlagsSettingsSerializer: Serializer<FeatureFlagsSettings> {
     }
 
     override suspend fun writeTo(
-        t: FeatureFlagsSettings,
+        t: AppSettings,
         output: OutputStream
     ) {
         output.write(
             Json.encodeToString(
-                serializer = FeatureFlagsSettings.serializer(),
+                serializer = AppSettings.serializer(),
                 value = t
             ).encodeToByteArray()
         )
