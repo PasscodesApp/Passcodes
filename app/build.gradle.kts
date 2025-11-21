@@ -109,7 +109,7 @@ android {
                 isShrinkResources = false
                 isMinifyEnabled = false
 
-                manifestPlaceholders["appIcon"] = "@drawable/dev_ic_launcher_foreground"
+                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
                 manifestPlaceholders["appLabel"] = "Passcodes-Dev"
             }
 
@@ -129,7 +129,7 @@ android {
                 isMinifyEnabled = true
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
-                manifestPlaceholders["appIcon"] = "@drawable/dev_ic_launcher_foreground"
+                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
                 manifestPlaceholders["appLabel"] = "Passcodes-Staging"
             }
         }
