@@ -9,7 +9,7 @@ import androidx.datastore.dataStore
 import kotlinx.serialization.Serializable
 
 val Context.featureFlagsDatastore by dataStore(
-    fileName = "feature-flags-settings-v1.json",
+    fileName = "feature-flags-settings.json",
     serializer = FeatureFlagsSettingsSerializer,
     // produceMigrations = { listOf(DataStoreMigration1_2) }
 )
