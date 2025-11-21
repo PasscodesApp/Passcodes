@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivitySavePasswordBinding
-import com.jeeldobariya.passcodes.utils.CommonUtils
+import com.jeeldobariya.passcodes.utils.appDatastore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SavePasswordActivity : AppCompatActivity() {
@@ -15,7 +17,9 @@ class SavePasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySavePasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CommonUtils.updateCurrTheme(this)
+        runBlocking {
+            setTheme(appDatastore.data.first().theme)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivitySavePasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)

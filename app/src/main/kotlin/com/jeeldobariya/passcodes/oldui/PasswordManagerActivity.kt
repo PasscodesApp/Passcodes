@@ -11,11 +11,14 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
-import com.jeeldobariya.passcodes.flags.FeatureFlagManager
-import com.jeeldobariya.passcodes.utils.CommonUtils
+import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.Controller
+import com.jeeldobariya.passcodes.utils.appDatastore
+import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 
@@ -30,15 +33,12 @@ class PasswordManagerActivity : AppCompatActivity() {
     private lateinit var importCsvLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CommonUtils.updateCurrTheme(this)
+        runBlocking {
+            setTheme(appDatastore.data.first().theme)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivityPasswordManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        if (!FeatureFlagManager.get(this).latestFeaturesEnabled) {
-            binding.importPasswordBtn.visibility = GONE
-            binding.exportPasswordBtn.visibility = GONE
-        }
 
         controller = Controller(this) // Initialize the controller here
 
@@ -100,6 +100,13 @@ class PasswordManagerActivity : AppCompatActivity() {
                     Toast.makeText(this, getString(R.string.export_success), Toast.LENGTH_SHORT)
                         .show()
                 }
+            }
+        }
+
+        collectLatestLifecycleFlow(featureFlagsDatastore.data) {
+            if (!it.isPreviewFeaturesEnabled) {
+                binding.importPasswordBtn.visibility = GONE
+                binding.exportPasswordBtn.visibility = GONE
             }
         }
 

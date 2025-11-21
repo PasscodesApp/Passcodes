@@ -7,10 +7,12 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.BuildConfig
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
-import com.jeeldobariya.passcodes.utils.CommonUtils
 import com.jeeldobariya.passcodes.utils.UpdateChecker
+import com.jeeldobariya.passcodes.utils.appDatastore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 // import com.jeeldobariya.passcodes.utils.Permissions
 
@@ -21,7 +23,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        CommonUtils.updateCurrTheme(this)
+        runBlocking {
+            setTheme(appDatastore.data.first().theme)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

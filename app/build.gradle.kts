@@ -7,14 +7,15 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.oss.licenses)
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
+        jvmTarget.set(JvmTarget.JVM_21)
     }
 }
 
@@ -28,7 +29,7 @@ android {
             minSdk = 26
             targetSdk = 34
             versionCode = 2
-            versionName = "v1.1.2-rc.1"
+            versionName = "v1.1.2-rc.2"
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -90,6 +91,8 @@ android {
                     // throw GradleException("Can't Sign Release Build")
                 }
 
+                isDebuggable = false
+                isShrinkResources = true
                 isMinifyEnabled = true
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
@@ -101,10 +104,13 @@ android {
             getByName("debug") {
                 applicationIdSuffix = ".dev"
                 versionNameSuffix = "-Dev"
+
+                isDebuggable = true
+                isShrinkResources = false
                 isMinifyEnabled = false
 
                 manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appLabel"] = "Passcodes Dev"
+                manifestPlaceholders["appLabel"] = "Passcodes-Dev"
             }
 
             create("staging") {
@@ -118,35 +124,25 @@ android {
                 applicationIdSuffix = ".staging"
                 versionNameSuffix = "-Staging"
 
-                isMinifyEnabled = true
-                isShrinkResources = true
                 isDebuggable = false
+                isShrinkResources = true
+                isMinifyEnabled = true
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
                 manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appLabel"] = "Passcodes Staging"
+                manifestPlaceholders["appLabel"] = "Passcodes-Staging"
             }
         }
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
-        }
-
-        buildFeatures {
-            viewBinding = true
-            buildConfig = true
-            compose = true
-        }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+
     buildFeatures {
+        viewBinding = true
+        buildConfig = true
         compose = true
     }
 
@@ -193,6 +189,9 @@ dependencies {
 
     // Dependency Injection
     implementation(libs.bundles.koin)
+
+    // Datastore Preferences
+    implementation(libs.bundles.datastore.preferences)
 
     
     // --- Testing ---
