@@ -1,10 +1,9 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.presentation.save_password
 
-data class ViewPasswordState(
+data class SavePasswordState(
     val domain: String = "",
     val username: String = "",
     val password: String = "",
     val notes: String = "",
-    val lastUpdatedAt: String = "",
     val isError: Boolean = false
 )

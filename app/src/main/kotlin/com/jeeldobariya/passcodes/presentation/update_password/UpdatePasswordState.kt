@@ -1,6 +1,6 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.presentation.update_password
 
-data class SavePasswordState(
+data class UpdatePasswordState(
     val domain: String = "",
     val username: String = "",
     val password: String = "",

@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.presentation.save_password
 
 sealed interface SavePasswordAction {
     data class OnChangeDomain(val newDomain: String): SavePasswordAction

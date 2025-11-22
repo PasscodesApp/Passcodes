@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.presentation.view_password
 
 sealed interface ViewPasswordAction {
     data class LoadPassword(val passwordId: Int): ViewPasswordAction

@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.presentation.update_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
