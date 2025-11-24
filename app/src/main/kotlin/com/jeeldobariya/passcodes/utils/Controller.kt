@@ -18,9 +18,7 @@ class Controller(database: MasterDatabase, val passwordRepository: PasswordRepos
         const val CSV_HEADER = "name,url,username,password,note"
     }
 
-    suspend fun clearAllData() {
-        passwordsDao.clearAllPasswordData()
-    }
+
 
     suspend fun exportDataToCsvString(): String {
         val passwords: List<Password> = passwordRepository.getAllPasswords().first()

@@ -10,9 +10,9 @@ import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
+import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.utils.Controller
 import com.jeeldobariya.passcodes.utils.appDatastore
 import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.flow.first
@@ -23,7 +23,7 @@ import kotlin.getValue
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val controller: Controller by inject()
+    private val passwordRepository: PasswordRepository by inject()
 
     private lateinit var binding: ActivitySettingsBinding
 
@@ -127,7 +127,7 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.clearAllDataBtn.setOnClickListener { v ->
             lifecycleScope.launch {
-                controller.clearAllData()
+                passwordRepository.clearAllData()
             }
 
             Toast.makeText(this@SettingsActivity, "Delete the user data!!", Toast.LENGTH_SHORT)
