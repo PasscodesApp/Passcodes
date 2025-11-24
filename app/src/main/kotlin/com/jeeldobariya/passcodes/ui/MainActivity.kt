@@ -69,7 +69,7 @@ fun MainScreen(navigateToOldUi: () -> Unit) {
 
             Spacer(Modifier.padding(12.dp))
 
-            Text("Jetpack UI Is Under Development", fontSize = 6.sp)
+            Text("Jetpack UI Is Under Development", fontSize = 11.sp)
         }
     }
 }
@@ -78,8 +78,8 @@ fun MainScreen(navigateToOldUi: () -> Unit) {
 @Composable
 fun GreetingPreview() {
     PasscodesTheme {
-        MainScreen {
-            Unit
-        }
+        MainScreen(
+            navigateToOldUi = {  }
+        )
     }
 }

@@ -7,6 +7,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.BuildConfig
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
+import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.UpdateChecker
 import com.jeeldobariya.passcodes.utils.appDatastore
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +46,13 @@ class MainActivity : AppCompatActivity() {
             permissionsHandle = Permissions(this)
             if (!permissionsHandle.checkPermission()) permissionsHandle.requestPermission()
         */
+
+        runBlocking {
+            if (featureFlagsDatastore.data.first().isPreviewLayoutEnabled) {
+                val jetpackComposeActivity = Intent(this@MainActivity, com.jeeldobariya.passcodes.ui.MainActivity::class.java)
+                startActivity(jetpackComposeActivity)
+            }
+        }
     }
 
     /* Comment the code as permission is not need to write into app data dir.
