@@ -53,7 +53,7 @@ class ViewPasswordViewModel(
     private fun deletePasswordEntity() {
         viewModelScope.launch {
             try {
-                controller.deletePassword(passwordEntityId)
+                passwordRepository.deletePassword(passwordEntityId)
             } catch (_: Exception) {
                 _state.update { it.copy(isError = true) }
             }
