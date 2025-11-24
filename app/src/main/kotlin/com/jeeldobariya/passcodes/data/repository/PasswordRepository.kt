@@ -28,4 +28,10 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
 
         return passwordsDao.insertPassword(newPassword)
     }
+
+    suspend fun getPasswordById(id: Int): Password? {
+        return passwordsDao.getPasswordById(id)
+    }
+
+
 }

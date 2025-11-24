@@ -16,7 +16,7 @@ val appModule = module {
     }
 
     viewModel {
-        UpdatePasswordViewModel(get())
+        UpdatePasswordViewModel(get(), get())
     }
 
     viewModel {
@@ -28,7 +28,7 @@ val appModule = module {
     }
 
     viewModel {
-        ViewPasswordViewModel(get())
+        ViewPasswordViewModel(get(), get())
     }
 
 }

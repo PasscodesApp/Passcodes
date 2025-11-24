@@ -2,6 +2,7 @@ package com.jeeldobariya.passcodes.presentation.view_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.utils.Controller
 import com.jeeldobariya.passcodes.utils.DateTimeUtils
@@ -11,7 +12,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ViewPasswordViewModel(
-    val controller: Controller
+    val controller: Controller,
+    val passwordRepository: PasswordRepository
 ) : ViewModel() {
     var passwordEntityId: Int = -1
 
@@ -31,7 +33,7 @@ class ViewPasswordViewModel(
 
         viewModelScope.launch {
             try {
-                val password: Password = controller.getPasswordById(passwordId)
+                val password: Password = requireNotNull(passwordRepository.getPasswordById(passwordId))
 
                 _state.update {
                     it.copy(
