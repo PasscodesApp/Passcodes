@@ -4,8 +4,14 @@ import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
 import com.jeeldobariya.passcodes.utils.DateTimeUtils
 import com.jeeldobariya.passcodes.utils.InvalidInputException
+import kotlinx.coroutines.flow.Flow
 
 class PasswordRepository(val passwordsDao: PasswordsDao) {
+
+    fun getAllPasswords(): Flow<List<Password>> {
+        return passwordsDao.getAllPasswords()
+    }
+
     suspend fun savePasswordEntity(
         domain: String,
         username: String,

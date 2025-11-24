@@ -155,7 +155,7 @@ class Controller(database: MasterDatabase, val passwordRepository: PasswordRepos
     }
 
     suspend fun exportDataToCsvString(): String {
-        val passwords: List<Password> = getAllPasswords().first()
+        val passwords: List<Password> = passwordRepository.getAllPasswords().first()
 
         val rows = passwords.joinToString("\n") { password ->
             "${password.domain},https://local.${password.domain},${password.username},${password.password},${password.notes}"
