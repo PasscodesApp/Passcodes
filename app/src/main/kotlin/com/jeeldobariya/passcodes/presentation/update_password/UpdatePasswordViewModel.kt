@@ -70,7 +70,7 @@ class UpdatePasswordViewModel(
     private fun updatePasswordEntity() {
         viewModelScope.launch {
             try {
-                controller.updatePassword(
+                passwordRepository.updatePassword(
                     passwordEntityId,
                     _state.value.domain,
                     _state.value.username,

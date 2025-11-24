@@ -33,5 +33,28 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         return passwordsDao.getPasswordById(id)
     }
 
+    suspend fun updatePassword(
+        id: Int,
+        domain: String,
+        username: String,
+        password: String,
+        notes: String
+    ): Int {
+        if (domain.isBlank() || username.isBlank() || password.isBlank()) {
+            throw InvalidInputException()
+        }
 
+        val existingPassword = requireNotNull(passwordsDao.getPasswordById(id))
+
+        val updatedTimestamp = DateTimeUtils.getCurrDateTime()
+        val passwordToUpdate = existingPassword.copy(
+            domain = domain,
+            username = username,
+            password = password,
+            notes = notes,
+            updatedAt = updatedTimestamp
+        )
+
+        return passwordsDao.updatePassword(passwordToUpdate)
+    }
 }

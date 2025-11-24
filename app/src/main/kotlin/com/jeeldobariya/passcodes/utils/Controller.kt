@@ -193,7 +193,7 @@ class Controller(database: MasterDatabase, val passwordRepository: PasswordRepos
                 )
 
                 if (password != null) {
-                    updatePassword(
+                    passwordRepository.updatePassword(
                         id = password.id,
                         domain = password.domain,
                         username = password.username,
