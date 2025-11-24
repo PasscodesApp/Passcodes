@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class UpdatePasswordViewModel(
-    val controller: Controller,
     val passwordRepository: PasswordRepository
 ) : ViewModel() {
 

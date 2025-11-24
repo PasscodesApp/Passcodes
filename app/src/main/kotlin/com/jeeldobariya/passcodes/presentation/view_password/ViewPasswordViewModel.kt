@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ViewPasswordViewModel(
-    val controller: Controller,
     val passwordRepository: PasswordRepository
 ) : ViewModel() {
     var passwordEntityId: Int = -1
