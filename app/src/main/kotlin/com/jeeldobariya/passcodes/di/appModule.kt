@@ -12,7 +12,7 @@ import org.koin.dsl.module
 val appModule = module {
 
     single {
-        Controller(get())
+        Controller(get(), get())
     }
 
     viewModel {

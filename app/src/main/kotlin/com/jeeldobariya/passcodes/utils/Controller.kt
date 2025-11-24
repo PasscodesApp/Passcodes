@@ -1,6 +1,7 @@
 package com.jeeldobariya.passcodes.utils
 
 import android.content.Context
+import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.database.MasterDatabase
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
@@ -21,7 +22,7 @@ class PasswordNotFoundException(message: String = "Password with the given ID wa
 
 class InvalidImportFormat(message: String = "Given Data Is In Invalid Format") : Exception(message)
 
-class Controller(database: MasterDatabase) {
+class Controller(database: MasterDatabase, val passwordRepository: PasswordRepository) {
     private val passwordsDao: PasswordsDao = database.passwordsDao
 
     companion object {
@@ -200,7 +201,7 @@ class Controller(database: MasterDatabase) {
                         notes = cols[4].trim()
                     )
                 } else {
-                    savePasswordEntity(
+                    passwordRepository.savePasswordEntity(
                         domain = chosenDomain,
                         username = cols[2].trim(),
                         password = cols[3].trim(),
