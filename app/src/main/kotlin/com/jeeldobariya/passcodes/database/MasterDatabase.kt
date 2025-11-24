@@ -14,21 +14,12 @@ abstract class MasterDatabase : RoomDatabase() {
     abstract val passwordsDao: PasswordsDao
 
     companion object {
-        @Volatile
-        private var INSTANCE: MasterDatabase? = null
-
-        fun getDatabase(context: Context): MasterDatabase {
-            return INSTANCE ?: synchronized(this) {
-
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    MasterDatabase::class.java,
-                    "master"
-                )
-                    .build()
-                INSTANCE = instance
-                instance
-            }
+        fun createNewDatabase(context: Context): MasterDatabase {
+            return Room.databaseBuilder(
+                context = context,
+                klass = MasterDatabase::class.java,
+                name = "master"
+            ).build()
         }
     }
 }

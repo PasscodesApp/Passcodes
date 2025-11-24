@@ -18,11 +18,14 @@ import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.android.inject
+import kotlin.getValue
 
 class SettingsActivity : AppCompatActivity() {
 
+    private val controller: Controller by inject()
+
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var controller: Controller
 
     // List of available themes to cycle through
     private val THEMES = listOf(
@@ -46,8 +49,6 @@ class SettingsActivity : AppCompatActivity() {
         collectLatestLifecycleFlow(featureFlagsDatastore.data) {
             binding.switchLatestFeatures.isChecked = it.isPreviewFeaturesEnabled
         }
-
-        controller = Controller(this) // Initialize the controller here
 
         // Add event onclick listener
         addOnClickListenerOnButton()

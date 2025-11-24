@@ -6,6 +6,7 @@ import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import org.koin.compose.koinInject
 
 class InvalidInputException(message: String = "Input parameters cannot be blank.") :
     Exception(message)
@@ -20,14 +21,8 @@ class PasswordNotFoundException(message: String = "Password with the given ID wa
 
 class InvalidImportFormat(message: String = "Given Data Is In Invalid Format") : Exception(message)
 
-class Controller(context: Context) {
-    private val passwordsDao: PasswordsDao
-
-    init {
-        // Initialize Room database and get the DAO instance
-        val db = MasterDatabase.getDatabase(context)
-        passwordsDao = db.passwordsDao
-    }
+class Controller(database: MasterDatabase) {
+    private val passwordsDao: PasswordsDao = database.passwordsDao
 
     companion object {
         const val CSV_HEADER = "name,url,username,password,note"

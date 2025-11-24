@@ -20,12 +20,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 
 
 class PasswordManagerActivity : AppCompatActivity() {
 
+    private val controller: Controller by inject()
+
     private lateinit var binding: ActivityPasswordManagerBinding
-    private lateinit var controller: Controller
 
     private lateinit var exportCsvLauncher: ActivityResultLauncher<Intent>
     private var tmpExportCSVData: String? = null
@@ -39,8 +41,6 @@ class PasswordManagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPasswordManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        controller = Controller(this) // Initialize the controller here
 
         importCsvLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
