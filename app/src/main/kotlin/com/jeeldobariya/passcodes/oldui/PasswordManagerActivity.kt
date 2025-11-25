@@ -11,6 +11,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
+import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordUseCase
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.Controller
 import com.jeeldobariya.passcodes.utils.appDatastore
@@ -26,6 +27,8 @@ import org.koin.android.ext.android.inject
 class PasswordManagerActivity : AppCompatActivity() {
 
     private val controller: Controller by inject()
+
+    private val importPasswordUseCase: ImportPasswordUseCase by inject()
 
     private lateinit var binding: ActivityPasswordManagerBinding
 
@@ -47,43 +50,10 @@ class PasswordManagerActivity : AppCompatActivity() {
         ) { result ->
             if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data
-                if (uri != null) {
-                    val CSVData: String? =
-                        contentResolver.openInputStream(uri)?.bufferedReader()?.use {
-                            it.readText()
-                        }
+                requireNotNull(uri)
 
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        if (CSVData != null) {
-                            try {
-                                val result: IntArray = controller.importDataFromCsvString(CSVData)
-
-                                withContext(Dispatchers.Main) {
-                                    Toast.makeText(
-                                        this@PasswordManagerActivity,
-                                        getString(R.string.import_success, result[0]),
-                                        Toast.LENGTH_LONG
-                                    ).show()
-
-                                    if (result[1] != 0) {
-                                        Toast.makeText(
-                                            this@PasswordManagerActivity,
-                                            getString(R.string.import_failed, result[1]),
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
-                                }
-                            } catch (e: Exception) {
-                                withContext(Dispatchers.Main) {
-                                    Toast.makeText(
-                                        this@PasswordManagerActivity,
-                                        e.message,
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            }
-                        }
-                    }
+                lifecycleScope.launch(Dispatchers.IO) {
+                    importPasswordUseCase.run(uri)
                 }
             }
         }
