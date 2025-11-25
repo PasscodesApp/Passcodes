@@ -39,6 +39,10 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         return passwordsDao.getPasswordById(id)
     }
 
+    suspend fun getPasswordByUsernameAndDomain(username: String, domain: String): Password? {
+        return passwordsDao.getPasswordByUsernameAndDomain(username = username, domain = domain)
+    }
+
     suspend fun updatePassword(
         id: Int,
         domain: String,
