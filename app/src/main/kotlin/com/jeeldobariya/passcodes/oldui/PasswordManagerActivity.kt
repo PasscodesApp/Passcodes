@@ -11,6 +11,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
+import com.jeeldobariya.passcodes.domain.usecases.ExportPasswordUseCase
 import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordUseCase
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.Controller
@@ -29,6 +30,8 @@ class PasswordManagerActivity : AppCompatActivity() {
     private val controller: Controller by inject()
 
     private val importPasswordUseCase: ImportPasswordUseCase by inject()
+
+    private val exportPasswordUseCase: ExportPasswordUseCase by inject()
 
     private lateinit var binding: ActivityPasswordManagerBinding
 
@@ -63,12 +66,10 @@ class PasswordManagerActivity : AppCompatActivity() {
         ) { result ->
             if (result.resultCode == RESULT_OK) {
                 val uri = result.data?.data
-                if (uri != null && !tmpExportCSVData.isNullOrEmpty()) {
-                    contentResolver.openOutputStream(uri)?.use { outputStream ->
-                        outputStream.write(tmpExportCSVData!!.toByteArray())
-                    }
-                    Toast.makeText(this, getString(R.string.export_success), Toast.LENGTH_SHORT)
-                        .show()
+                requireNotNull(uri)
+
+                lifecycleScope.launch(Dispatchers.IO) {
+                    exportPasswordUseCase.run(uri)
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.jeeldobariya.passcodes.di
 
+import com.jeeldobariya.passcodes.domain.usecases.ExportPasswordUseCase
 import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordUseCase
 import com.jeeldobariya.passcodes.presentation.load_password.LoadPasswordViewModel
 import com.jeeldobariya.passcodes.presentation.save_password.SavePasswordViewModel
@@ -18,6 +19,10 @@ val appModule = module {
 
     factory {
         ImportPasswordUseCase(androidContext(), get())
+    }
+
+    factory {
+        ExportPasswordUseCase(androidContext(), get())
     }
 
     viewModel {

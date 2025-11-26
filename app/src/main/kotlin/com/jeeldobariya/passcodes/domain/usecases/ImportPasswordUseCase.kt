@@ -11,8 +11,8 @@ class ImportPasswordUseCase(
 ) {
     private val CSVHEADER = "name,url,username,password,note"
 
-    suspend fun run(csvFileUri: Uri) {
-        context.contentResolver.openInputStream(csvFileUri)?.bufferedReader().use { reader ->
+    suspend fun run(importFileUri: Uri) {
+        context.contentResolver.openInputStream(importFileUri)?.bufferedReader().use { reader ->
             requireNotNull(reader)
 
             val header = reader.readLine()
