@@ -15,12 +15,6 @@ object Constant {
     const val RELEASE_NOTE_URL = "$DOCS_REPOSITORY_URL/blob/main/user-docs/release-notes.md"
     const val SECURITY_GUIDE_URL = "$DOCS_REPOSITORY_URL/blob/main/user-docs/security-guidelines.md"
 
-
-    // Shared Preferences Constants
-    const val APP_PREFS_NAME = "app_prefs"
-    const val THEME_KEY = "selected_theme"
-
-    const val FEATURE_FLAGS_PREFS_NAME = "feature_flags_prefs"
-    const val LATEST_FEATURES_KEY = "latest_features_enabled"
+    // Other App Constants
+    const val IMPORT_EXPORT_CSV_HEADER = "name,url,username,password,note"
 }
-

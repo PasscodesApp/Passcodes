@@ -11,8 +11,8 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
-import com.jeeldobariya.passcodes.domain.usecases.ExportPasswordUseCase
-import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordUseCase
+import com.jeeldobariya.passcodes.domain.usecases.ExportPasswordCSVUseCase
+import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordCSVUseCase
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.Controller
 import com.jeeldobariya.passcodes.utils.appDatastore
@@ -29,9 +29,9 @@ class PasswordManagerActivity : AppCompatActivity() {
 
     private val controller: Controller by inject()
 
-    private val importPasswordUseCase: ImportPasswordUseCase by inject()
+    private val importPasswordUseCase: ImportPasswordCSVUseCase by inject()
 
-    private val exportPasswordUseCase: ExportPasswordUseCase by inject()
+    private val exportPasswordUseCase: ExportPasswordCSVUseCase by inject()
 
     private lateinit var binding: ActivityPasswordManagerBinding
 

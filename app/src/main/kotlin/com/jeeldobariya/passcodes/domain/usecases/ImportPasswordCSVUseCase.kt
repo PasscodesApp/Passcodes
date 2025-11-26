@@ -4,20 +4,19 @@ import android.content.Context
 import android.net.Uri
 import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.database.Password
+import com.jeeldobariya.passcodes.utils.Constant
 
-class ImportPasswordUseCase(
+class ImportPasswordCSVUseCase(
     val context: Context,
     val passwordRepository: PasswordRepository
 ) {
-    private val CSVHEADER = "name,url,username,password,note"
-
     suspend fun run(importFileUri: Uri) {
         context.contentResolver.openInputStream(importFileUri)?.bufferedReader().use { reader ->
             requireNotNull(reader)
 
             val header = reader.readLine()
-            if (header != CSVHEADER) {
-                throw Exception("The given csv file has incorrect header format. Correct Format is [$CSVHEADER]")
+            if (header != Constant.IMPORT_EXPORT_CSV_HEADER) {
+                throw Exception("The given csv file has incorrect header format. Correct Format is [${Constant.IMPORT_EXPORT_CSV_HEADER}]")
             }
 
             var line: String? = reader.readLine()
