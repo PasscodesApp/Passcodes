@@ -14,21 +14,16 @@ import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
 import com.jeeldobariya.passcodes.domain.usecases.ExportPasswordCSVUseCase
 import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordCSVUseCase
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.utils.Controller
 import com.jeeldobariya.passcodes.utils.appDatastore
 import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 
 class PasswordManagerActivity : AppCompatActivity() {
-
-    private val controller: Controller by inject()
-
     private val importPasswordUseCase: ImportPasswordCSVUseCase by inject()
 
     private val exportPasswordUseCase: ExportPasswordCSVUseCase by inject()
@@ -36,7 +31,6 @@ class PasswordManagerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPasswordManagerBinding
 
     private lateinit var exportCsvLauncher: ActivityResultLauncher<Intent>
-    private var tmpExportCSVData: String? = null
 
     private lateinit var importCsvLauncher: ActivityResultLauncher<Intent>
 
@@ -117,13 +111,8 @@ class PasswordManagerActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG
             ).show()
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                val csvDataExportBlob = controller.exportDataToCsvString()
-
-                withContext(Dispatchers.Main) {
-                    tmpExportCSVData = csvDataExportBlob
-                    exportCsvFilePicker()
-                }
+            lifecycleScope.launch(Dispatchers.Main) {
+                exportCsvFilePicker()
             }
         }
     }
