@@ -10,7 +10,6 @@ import com.jeeldobariya.passcodes.databinding.ActivityUpdatePasswordBinding
 import com.jeeldobariya.passcodes.presentation.update_password.UpdatePasswordAction
 import com.jeeldobariya.passcodes.presentation.update_password.UpdatePasswordViewModel
 import com.jeeldobariya.passcodes.utils.appDatastore
-import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel

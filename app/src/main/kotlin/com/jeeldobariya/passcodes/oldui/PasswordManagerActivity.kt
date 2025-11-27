@@ -15,7 +15,6 @@ import com.jeeldobariya.passcodes.domain.usecases.ExportPasswordCSVUseCase
 import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordCSVUseCase
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.appDatastore
-import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

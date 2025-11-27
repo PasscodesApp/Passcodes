@@ -13,7 +13,6 @@ import com.jeeldobariya.passcodes.databinding.ActivityViewPasswordBinding
 import com.jeeldobariya.passcodes.presentation.view_password.ViewPasswordAction
 import com.jeeldobariya.passcodes.presentation.view_password.ViewPasswordViewModel
 import com.jeeldobariya.passcodes.utils.appDatastore
-import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel

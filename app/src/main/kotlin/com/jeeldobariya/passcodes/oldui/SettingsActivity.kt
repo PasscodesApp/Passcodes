@@ -14,7 +14,6 @@ import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.utils.appDatastore
-import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
