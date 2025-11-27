@@ -18,7 +18,7 @@ class ExportPasswordCSVUseCase(
             writer.newLine()
 
             passwordRepository.getAllPasswords().first().forEach { password ->
-                writer.write("${password.domain},https://local.${password.domain},${password.username},${password.password},${password.notes}")
+                writer.write("${password.domain.trim()},https://local.${password.domain.trim()},${password.username.trim()},${password.password.trim()},${password.notes.trim()}")
                 writer.newLine()
             }
         }
