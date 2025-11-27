@@ -27,6 +27,14 @@ class ImportPasswordCSVUseCase(
                     cols[0].trim()
                 } else cols[1].trim()
 
+                // Skip the entity/row of csv
+                // If,
+                //     It lacks value for either, [domain, username or password]!!
+                if (chosenDomain.isBlank() || cols[2].isBlank() || cols[3].isEmpty()) {
+                    line = reader.readLine()
+                    continue
+                }
+
                 val password: Password? = passwordRepository.getPasswordByUsernameAndDomain(
                     username = cols[2].trim(),
                     domain = chosenDomain
