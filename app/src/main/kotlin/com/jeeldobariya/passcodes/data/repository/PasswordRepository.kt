@@ -3,7 +3,6 @@ package com.jeeldobariya.passcodes.data.repository
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.database.PasswordsDao
 import com.jeeldobariya.passcodes.utils.DateTimeUtils
-import com.jeeldobariya.passcodes.utils.InvalidInputException
 import kotlinx.coroutines.flow.Flow
 
 class PasswordRepository(val passwordsDao: PasswordsDao) {
@@ -18,9 +17,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         password: String,
         notes: String
     ): Long {
-        if (domain.isBlank() || username.isBlank() || password.isBlank()) {
-            throw InvalidInputException()
-        }
+        require(domain.isBlank() || username.isBlank() || password.isBlank())
 
         val currentTimestamp = DateTimeUtils.getCurrDateTime()
         val newPassword = Password(
@@ -50,9 +47,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         password: String,
         notes: String
     ): Int {
-        if (domain.isBlank() || username.isBlank() || password.isBlank()) {
-            throw InvalidInputException()
-        }
+        require(domain.isBlank() || username.isBlank() || password.isBlank())
 
         val existingPassword = requireNotNull(passwordsDao.getPasswordById(id))
 
