@@ -1,5 +1,8 @@
 package com.jeeldobariya.passcodes.utils
 
+// comment the below code as permission are not used in app.
+// currently, but we might require this later..
+/*
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
@@ -53,3 +56,4 @@ class Permissions(private val activity: Activity) {
                 grantResults[1] == PackageManager.PERMISSION_GRANTED
     }
 }
+*/
