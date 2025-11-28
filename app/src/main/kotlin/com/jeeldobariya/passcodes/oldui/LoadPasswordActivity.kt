@@ -11,7 +11,7 @@ import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.oldui.adapter.PasswordAdapter
 import com.jeeldobariya.passcodes.presentation.load_password.LoadPasswordAction
 import com.jeeldobariya.passcodes.presentation.load_password.LoadPasswordViewModel
-import com.jeeldobariya.passcodes.utils.appDatastore
+import com.jeeldobariya.passcodes.data.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel

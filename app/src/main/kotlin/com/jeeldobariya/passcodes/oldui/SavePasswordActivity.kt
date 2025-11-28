@@ -7,7 +7,7 @@ import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivitySavePasswordBinding
 import com.jeeldobariya.passcodes.presentation.save_password.SavePasswordAction
 import com.jeeldobariya.passcodes.presentation.save_password.SavePasswordViewModel
-import com.jeeldobariya.passcodes.utils.appDatastore
+import com.jeeldobariya.passcodes.data.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel

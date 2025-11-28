@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.utils
+package com.jeeldobariya.passcodes.presentation.utils
 
 // comment the below code as permission are not used in app.
 // currently, but we might require this later..

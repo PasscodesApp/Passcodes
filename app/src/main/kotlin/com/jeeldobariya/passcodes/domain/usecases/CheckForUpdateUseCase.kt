@@ -2,7 +2,7 @@ package com.jeeldobariya.passcodes.domain.usecases
 
 import android.content.Context
 import android.widget.Toast
-import com.jeeldobariya.passcodes.utils.Constant
+import com.jeeldobariya.passcodes.Constant
 import com.jeeldobariya.passcodes.domain.utils.SemVerUtils
 import okhttp3.Call
 import okhttp3.Callback

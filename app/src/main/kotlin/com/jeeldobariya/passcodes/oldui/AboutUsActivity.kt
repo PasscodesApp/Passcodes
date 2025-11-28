@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.jeeldobariya.passcodes.databinding.ActivityAboutUsBinding
-import com.jeeldobariya.passcodes.utils.Constant
-import com.jeeldobariya.passcodes.utils.appDatastore
+import com.jeeldobariya.passcodes.Constant
+import com.jeeldobariya.passcodes.data.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 

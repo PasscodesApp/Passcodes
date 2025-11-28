@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.utils
+package com.jeeldobariya.passcodes.data.datastore
 
 import androidx.datastore.core.Serializer
 import kotlinx.serialization.SerializationException
@@ -12,7 +12,7 @@ object AppSettingsSerializer: Serializer<AppSettings> {
 
     override suspend fun readFrom(input: InputStream): AppSettings {
         return try {
-            Json.decodeFromString(
+            Json.Default.decodeFromString(
                 deserializer = AppSettings.serializer(),
                 string = input.readBytes().decodeToString(),
             )
@@ -27,7 +27,7 @@ object AppSettingsSerializer: Serializer<AppSettings> {
         output: OutputStream
     ) {
         output.write(
-            Json.encodeToString(
+            Json.Default.encodeToString(
                 serializer = AppSettings.serializer(),
                 value = t
             ).encodeToByteArray()

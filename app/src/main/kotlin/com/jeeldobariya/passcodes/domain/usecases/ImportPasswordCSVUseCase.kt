@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.domain.modals.PasswordModal
-import com.jeeldobariya.passcodes.utils.Constant
+import com.jeeldobariya.passcodes.Constant
 
 class ImportPasswordCSVUseCase(
     val context: Context,

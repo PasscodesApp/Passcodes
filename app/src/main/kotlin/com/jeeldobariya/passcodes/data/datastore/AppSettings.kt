@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.utils
+package com.jeeldobariya.passcodes.data.datastore
 
 // please refer to `app/src/main/kotlin/com/jeeldobariya/passcodes/flags/FeatureFlagsSettings.kt` for Migration Guide.
 

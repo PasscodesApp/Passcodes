@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.utils
+package com.jeeldobariya.passcodes
 
 object Constant {
     const val REPOSITORY_SIGNATURE = "PasscodesApp/Passcodes"
