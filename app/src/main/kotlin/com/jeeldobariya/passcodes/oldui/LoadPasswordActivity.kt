@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
-import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.databinding.ActivityLoadPasswordBinding
 import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.oldui.adapter.PasswordAdapter

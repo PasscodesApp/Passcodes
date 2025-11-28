@@ -7,13 +7,14 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.BuildConfig
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
+import com.jeeldobariya.passcodes.domain.usecases.CheckForUpdateUseCase
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.utils.UpdateChecker
 import com.jeeldobariya.passcodes.utils.appDatastore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.android.inject
 
 // import com.jeeldobariya.passcodes.utils.Permissions
 
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     // private lateinit var permissionsHandle: Permissions
 
     private lateinit var binding: ActivityMainBinding
+
+    private val checkForUpdateUseCase: CheckForUpdateUseCase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         runBlocking {
@@ -32,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch(Dispatchers.IO) {
-            UpdateChecker.checkVersion(this@MainActivity, BuildConfig.VERSION_NAME)
+            checkForUpdateUseCase.run(BuildConfig.VERSION_NAME)
         }
 
         // Add event onclick listener

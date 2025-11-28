@@ -1,7 +1,9 @@
-package com.jeeldobariya.passcodes.utils
+package com.jeeldobariya.passcodes.domain.usecases
 
 import android.content.Context
 import android.widget.Toast
+import com.jeeldobariya.passcodes.utils.Constant
+import com.jeeldobariya.passcodes.utils.SemVerUtils
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -9,12 +11,12 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-object UpdateChecker {
-    private val client = OkHttpClient()
-
-    fun checkVersion(context: Context, currentVersion: String) {
-        val appcontext = context.applicationContext
-        val currentNormalizeVersion = SemVerUtils.normalize(currentVersion)
+class CheckForUpdateUseCase(
+    val context: Context,
+    val client: OkHttpClient
+) {
+    suspend fun run(currentVersion: String) {
+        val currNormalizedVersion = SemVerUtils.normalize(currentVersion)
 
         val request = Request.Builder()
             .url(Constant.GITHUB_RELEASE_API_URL)
@@ -26,7 +28,7 @@ object UpdateChecker {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val body = response.body?.string() ?: return
+                val body = response.body.string()
                 val releases = SemVerUtils.parseReleases(body)
 
                 var userReleaseFound = false
@@ -35,12 +37,12 @@ object UpdateChecker {
                 for (release in releases) {
                     if (release.draft) continue // ignore drafts
 
-                    if (release.tag == currentNormalizeVersion) {
+                    if (release.tag == currNormalizedVersion) {
                         userReleaseFound = true
                         if (release.prerelease) {
                             showToast(
-                                appcontext,
-                                "⚠️ You are using a PRE-RELEASE ($currentNormalizeVersion). Not safe for use!  Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
+                                context,
+                                "⚠️ You are using a PRE-RELEASE ($currNormalizedVersion). Not safe for use!  Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
                             )
                         }
                     }
@@ -55,15 +57,15 @@ object UpdateChecker {
                 }
 
                 latestStable?.let {
-                    if (SemVerUtils.compare(currentNormalizeVersion, it) < 0) {
-                        showToast(appcontext, "New Update available: $it... Vist our website...")
+                    if (SemVerUtils.compare(currNormalizedVersion, it) < 0) {
+                        showToast(context, "New Update available: $it... Vist our website...")
                     }
                 }
 
                 if (!userReleaseFound) {
                     showToast(
-                        appcontext,
-                        "⚠️ Version ($currentNormalizeVersion) not found on GitHub releases... Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
+                        context,
+                        "⚠️ Version ($currNormalizedVersion) not found on GitHub releases... Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
                     )
                 }
             }
