@@ -3,7 +3,7 @@ package com.jeeldobariya.passcodes.data.repository
 import com.jeeldobariya.passcodes.database.PasswordEntity
 import com.jeeldobariya.passcodes.database.PasswordsDao
 import com.jeeldobariya.passcodes.domain.modals.PasswordModal
-import com.jeeldobariya.passcodes.utils.DateTimeUtils
+import com.jeeldobariya.passcodes.domain.utils.DateTimeUtils
 import kotlinx.coroutines.flow.first
 import kotlin.require
 
@@ -17,7 +17,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
                 username = it.username,
                 password = it.password,
                 notes = it.notes,
-                lastUpdatedAt = "TODO()"
+                lastUpdatedAt = DateTimeUtils.getRelativeDays(it.updatedAt.orEmpty())
             )
         }
     }
@@ -52,7 +52,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
                 username = result.username,
                 password = result.password,
                 notes = result.notes,
-                lastUpdatedAt = "TODO()"
+                lastUpdatedAt =  DateTimeUtils.getRelativeDays(result.updatedAt.orEmpty())
             )
         } else {
             null
