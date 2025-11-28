@@ -2,14 +2,14 @@ package com.jeeldobariya.passcodes.presentation.load_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeeldobariya.passcodes.data.repository.PasswordRepository
+import com.jeeldobariya.passcodes.domain.usecases.RetrieveAllPasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoadPasswordViewModel(
-    var passwordRepository: PasswordRepository
+    var retrieveAllPasswordUseCase: RetrieveAllPasswordUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoadPasswordState())
@@ -25,7 +25,7 @@ class LoadPasswordViewModel(
         viewModelScope.launch {
             _state.update {
                 LoadPasswordState(
-                    passwordEntityList = passwordRepository.getAllPasswords()
+                    passwordEntityList = retrieveAllPasswordUseCase.run()
                 )
             }
         }

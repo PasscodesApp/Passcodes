@@ -1,7 +1,12 @@
 package com.jeeldobariya.passcodes.di
 
+import com.jeeldobariya.passcodes.domain.usecases.DeletePasswordUseCase
+import com.jeeldobariya.passcodes.domain.usecases.EditPasswordUseCase
 import com.jeeldobariya.passcodes.domain.usecases.ExportPasswordCSVUseCase
 import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordCSVUseCase
+import com.jeeldobariya.passcodes.domain.usecases.RetrieveAllPasswordUseCase
+import com.jeeldobariya.passcodes.domain.usecases.RetrievePasswordUseCase
+import com.jeeldobariya.passcodes.domain.usecases.StorePasswordUseCase
 import com.jeeldobariya.passcodes.presentation.load_password.LoadPasswordViewModel
 import com.jeeldobariya.passcodes.presentation.save_password.SavePasswordViewModel
 import com.jeeldobariya.passcodes.presentation.update_password.UpdatePasswordViewModel
@@ -20,8 +25,28 @@ val appModule = module {
         ExportPasswordCSVUseCase(androidContext(), get())
     }
 
+    factory {
+        StorePasswordUseCase(get())
+    }
+
+    factory {
+        RetrievePasswordUseCase(get())
+    }
+
+    factory {
+        RetrieveAllPasswordUseCase(get())
+    }
+
+    factory {
+        EditPasswordUseCase(get())
+    }
+
+    factory {
+        DeletePasswordUseCase(get())
+    }
+
     viewModel {
-        UpdatePasswordViewModel(get())
+        UpdatePasswordViewModel(get(), get())
     }
 
     viewModel {
@@ -33,7 +58,7 @@ val appModule = module {
     }
 
     viewModel {
-        ViewPasswordViewModel(get())
+        ViewPasswordViewModel(get(), get())
     }
 
 }

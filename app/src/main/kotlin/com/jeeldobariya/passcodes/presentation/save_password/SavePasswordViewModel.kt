@@ -2,14 +2,15 @@ package com.jeeldobariya.passcodes.presentation.save_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeeldobariya.passcodes.data.repository.PasswordRepository
+import com.jeeldobariya.passcodes.domain.modals.PasswordModal
+import com.jeeldobariya.passcodes.domain.usecases.StorePasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SavePasswordViewModel(
-    val passwordRepository: PasswordRepository
+    val storePasswordUseCase: StorePasswordUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SavePasswordState())
@@ -44,12 +45,12 @@ class SavePasswordViewModel(
     private fun savePasswordEntity() {
         viewModelScope.launch {
             try {
-                passwordRepository.savePasswordEntity(
-                    _state.value.domain,
-                    _state.value.username,
-                    _state.value.password,
-                    _state.value.notes
-                )
+                storePasswordUseCase.run(password = PasswordModal(
+                    domain = _state.value.domain,
+                    username = _state.value.username,
+                    password = _state.value.password,
+                    notes = _state.value.notes
+                ))
             } catch (e: Exception) {
                 _state.update { it.copy(isError = true) }
             }

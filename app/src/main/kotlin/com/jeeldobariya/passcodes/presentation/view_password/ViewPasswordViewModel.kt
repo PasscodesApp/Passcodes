@@ -2,15 +2,17 @@ package com.jeeldobariya.passcodes.presentation.view_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.domain.modals.PasswordModal
+import com.jeeldobariya.passcodes.domain.usecases.DeletePasswordUseCase
+import com.jeeldobariya.passcodes.domain.usecases.RetrievePasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ViewPasswordViewModel(
-    val passwordRepository: PasswordRepository
+    val retrievePasswordUseCase: RetrievePasswordUseCase,
+    val deletePasswordUseCase: DeletePasswordUseCase
 ) : ViewModel() {
     var passwordEntityId: Int = -1
 
@@ -30,7 +32,7 @@ class ViewPasswordViewModel(
 
         viewModelScope.launch {
             try {
-                val password: PasswordModal = requireNotNull(passwordRepository.getPasswordById(passwordId))
+                val password: PasswordModal = requireNotNull(retrievePasswordUseCase.run(passwordId))
 
                 _state.update {
                     it.copy(
@@ -50,7 +52,7 @@ class ViewPasswordViewModel(
     private fun deletePasswordEntity() {
         viewModelScope.launch {
             try {
-                passwordRepository.deletePassword(passwordEntityId)
+                deletePasswordUseCase.run(passwordEntityId)
             } catch (_: Exception) {
                 _state.update { it.copy(isError = true) }
             }
