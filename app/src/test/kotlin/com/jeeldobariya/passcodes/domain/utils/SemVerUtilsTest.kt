@@ -1,51 +1,51 @@
-package com.jeeldobariya.passcodes.utils
+package com.jeeldobariya.passcodes.domain.utils
 
+import com.google.common.truth.Truth
 import org.junit.Test
-import com.google.common.truth.Truth.assertThat
 
 class SemVerUtilsTest {
 
     @Test
     fun testCompareEqual() {
-        assertThat(SemVerUtils.compare("1.2.3", "1.2.3")).isEqualTo(0)
-        assertThat(SemVerUtils.compare("v1.0.0", "v1.0.0")).isEqualTo(0)
+        Truth.assertThat(SemVerUtils.compare("1.2.3", "1.2.3")).isEqualTo(0)
+        Truth.assertThat(SemVerUtils.compare("v1.0.0", "v1.0.0")).isEqualTo(0)
     }
 
     @Test
     fun testCompareGreater() {
-        assertThat(SemVerUtils.compare("1.2.10", "1.2.2")).isGreaterThan(0)
-        assertThat(SemVerUtils.compare("v2.0.0", "v1.9.9")).isGreaterThan(0)
+        Truth.assertThat(SemVerUtils.compare("1.2.10", "1.2.2")).isGreaterThan(0)
+        Truth.assertThat(SemVerUtils.compare("v2.0.0", "v1.9.9")).isGreaterThan(0)
     }
 
     @Test
     fun testCompareLess() {
-        assertThat(SemVerUtils.compare("1.2.2", "v1.2.10")).isLessThan(0)
-        assertThat(SemVerUtils.compare("v0.9.0", "1.0.0")).isLessThan(0)
+        Truth.assertThat(SemVerUtils.compare("1.2.2", "v1.2.10")).isLessThan(0)
+        Truth.assertThat(SemVerUtils.compare("v0.9.0", "1.0.0")).isLessThan(0)
     }
 
     @Test
     fun testPrefixV() {
-        assertThat(SemVerUtils.compare("v1.2.10", "v1.2.2")).isGreaterThan(0)
-        assertThat(SemVerUtils.compare("V2.0.0", "V1.9.9")).isGreaterThan(0)
-        assertThat(SemVerUtils.compare("1.2.2", "v1.2.10")).isLessThan(0)
-        assertThat(SemVerUtils.compare("v0.9.0", "1.0.0")).isLessThan(0)
+        Truth.assertThat(SemVerUtils.compare("v1.2.10", "v1.2.2")).isGreaterThan(0)
+        Truth.assertThat(SemVerUtils.compare("V2.0.0", "V1.9.9")).isGreaterThan(0)
+        Truth.assertThat(SemVerUtils.compare("1.2.2", "v1.2.10")).isLessThan(0)
+        Truth.assertThat(SemVerUtils.compare("v0.9.0", "1.0.0")).isLessThan(0)
     }
 
     @Test
     fun testNormalize() {
-        assertThat(SemVerUtils.normalize("v1.2.3-beta")).isEqualTo("v1.2.3")
-        assertThat(SemVerUtils.normalize("1.0.0-alpha.1+001")).isEqualTo("v1.0.0")
-        assertThat(SemVerUtils.normalize("V2.3.4-rc1")).isEqualTo("v2.3.4")
-        assertThat(SemVerUtils.normalize("1.5.0")).isEqualTo("v1.5.0")
-        assertThat(SemVerUtils.normalize("v2.5.0")).isEqualTo("v2.5.0")
-        assertThat(SemVerUtils.normalize("v1.0.0-Stable-Dev")).isEqualTo("v1.0.0")
+        Truth.assertThat(SemVerUtils.normalize("v1.2.3-beta")).isEqualTo("v1.2.3")
+        Truth.assertThat(SemVerUtils.normalize("1.0.0-alpha.1+001")).isEqualTo("v1.0.0")
+        Truth.assertThat(SemVerUtils.normalize("V2.3.4-rc1")).isEqualTo("v2.3.4")
+        Truth.assertThat(SemVerUtils.normalize("1.5.0")).isEqualTo("v1.5.0")
+        Truth.assertThat(SemVerUtils.normalize("v2.5.0")).isEqualTo("v2.5.0")
+        Truth.assertThat(SemVerUtils.normalize("v1.0.0-Stable-Dev")).isEqualTo("v1.0.0")
 
         // Note: try some invalid / wired stuff just to test
-        assertThat(SemVerUtils.normalize("v1.0-Stable-Dev")).isEqualTo("v1.0")
-        assertThat(SemVerUtils.normalize("v1.0------")).isEqualTo("v1.0")
-        assertThat(SemVerUtils.normalize("v1.0-abc")).isEqualTo("v1.0")
-        assertThat(SemVerUtils.normalize("v--1.0-abc")).isEqualTo("v")
-        assertThat(SemVerUtils.normalize("")).isEqualTo("v")
+        Truth.assertThat(SemVerUtils.normalize("v1.0-Stable-Dev")).isEqualTo("v1.0")
+        Truth.assertThat(SemVerUtils.normalize("v1.0------")).isEqualTo("v1.0")
+        Truth.assertThat(SemVerUtils.normalize("v1.0-abc")).isEqualTo("v1.0")
+        Truth.assertThat(SemVerUtils.normalize("v--1.0-abc")).isEqualTo("v")
+        Truth.assertThat(SemVerUtils.normalize("")).isEqualTo("v")
     }
 
     @Test
@@ -102,10 +102,10 @@ class SemVerUtilsTest {
         """.trimIndent()
 
         val releases = SemVerUtils.parseReleases(json)
-        
-        assertThat(releases.size).isEqualTo(2)
-        assertThat(releases[0].tag).isEqualTo("v1.0.0")
-        assertThat(releases[0].prerelease).isFalse()
-        assertThat(releases[1].prerelease).isTrue()
+
+        Truth.assertThat(releases.size).isEqualTo(2)
+        Truth.assertThat(releases[0].tag).isEqualTo("v1.0.0")
+        Truth.assertThat(releases[0].prerelease).isFalse()
+        Truth.assertThat(releases[1].prerelease).isTrue()
     }
 }

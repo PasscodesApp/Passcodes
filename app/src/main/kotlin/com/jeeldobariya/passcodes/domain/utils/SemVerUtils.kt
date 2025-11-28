@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.utils
+package com.jeeldobariya.passcodes.domain.utils
 
 import org.json.JSONArray
 
