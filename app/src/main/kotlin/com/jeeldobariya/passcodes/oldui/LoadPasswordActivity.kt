@@ -8,6 +8,7 @@ import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.database.Password
 import com.jeeldobariya.passcodes.databinding.ActivityLoadPasswordBinding
+import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.oldui.adapter.PasswordAdapter
 import com.jeeldobariya.passcodes.presentation.load_password.LoadPasswordAction
 import com.jeeldobariya.passcodes.presentation.load_password.LoadPasswordViewModel
@@ -66,7 +67,7 @@ class LoadPasswordActivity : AppCompatActivity() {
     private fun addOnClickListenerOnButton() {
         binding.passwordList.setOnItemClickListener { _, _, position, _ ->
             // getItem returns Any, so we cast it to Password
-            val selectedPassword = passwordAdapter.getItem(position) as Password
+            val selectedPassword = passwordAdapter.getItem(position) as PasswordModal
 
             // Do something with the selectedPassword
             val intent = Intent(this, ViewPasswordActivity::class.java)

@@ -3,8 +3,8 @@ package com.jeeldobariya.passcodes.domain.usecases
 import android.content.Context
 import android.net.Uri
 import com.jeeldobariya.passcodes.data.repository.PasswordRepository
+import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.utils.Constant
-import kotlinx.coroutines.flow.first
 
 class ExportPasswordCSVUseCase(
     val context: Context,
@@ -17,7 +17,7 @@ class ExportPasswordCSVUseCase(
             writer.write(Constant.IMPORT_EXPORT_CSV_HEADER)
             writer.newLine()
 
-            passwordRepository.getAllPasswords().first().forEach { password ->
+            passwordRepository.getAllPasswords().forEach { password ->
                 writer.write("${password.domain.trim()},https://local.${password.domain.trim()},${password.username.trim()},${password.password.trim()},${password.notes.trim()}")
                 writer.newLine()
             }

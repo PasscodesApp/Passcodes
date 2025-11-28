@@ -3,7 +3,7 @@ package com.jeeldobariya.passcodes.domain.usecases
 import android.content.Context
 import android.net.Uri
 import com.jeeldobariya.passcodes.data.repository.PasswordRepository
-import com.jeeldobariya.passcodes.database.Password
+import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.utils.Constant
 
 class ImportPasswordCSVUseCase(
@@ -35,7 +35,7 @@ class ImportPasswordCSVUseCase(
                     continue
                 }
 
-                val password: Password? = passwordRepository.getPasswordByUsernameAndDomain(
+                val password: PasswordModal? = passwordRepository.getPasswordByUsernameAndDomain(
                     username = cols[2].trim(),
                     domain = chosenDomain
                 )

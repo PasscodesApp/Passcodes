@@ -41,7 +41,6 @@ class SavePasswordActivity : AppCompatActivity() {
                 binding.inputUsername.setHint("")
             }
         }
-
         binding.inputPassword.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
                 binding.inputPassword.setHint(getString(R.string.placeholder_password_field))

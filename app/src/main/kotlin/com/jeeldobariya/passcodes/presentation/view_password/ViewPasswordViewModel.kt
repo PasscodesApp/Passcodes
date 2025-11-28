@@ -3,8 +3,7 @@ package com.jeeldobariya.passcodes.presentation.view_password
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jeeldobariya.passcodes.data.repository.PasswordRepository
-import com.jeeldobariya.passcodes.database.Password
-import com.jeeldobariya.passcodes.utils.DateTimeUtils
+import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -31,7 +30,7 @@ class ViewPasswordViewModel(
 
         viewModelScope.launch {
             try {
-                val password: Password = requireNotNull(passwordRepository.getPasswordById(passwordId))
+                val password: PasswordModal = requireNotNull(passwordRepository.getPasswordById(passwordId))
 
                 _state.update {
                     it.copy(
@@ -39,7 +38,7 @@ class ViewPasswordViewModel(
                         username = password.username,
                         password = password.password,
                         notes = password.notes,
-                        lastUpdatedAt = DateTimeUtils.getRelativeDays(password.updatedAt.orEmpty())
+                        lastUpdatedAt = password.lastUpdatedAt
                     )
                 }
             } catch (_: Exception) {

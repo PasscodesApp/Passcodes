@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.jeeldobariya.passcodes.database.Password // Use your Room entity directly
 import com.jeeldobariya.passcodes.databinding.PasswordListItemBinding
+import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 
 class PasswordAdapter(
     private val context: Context,
-    private var passwordList: List<Password> // Use mutable list if you need to update it
+    private var passwordList: List<PasswordModal> // Use mutable list if you need to update it
 ) : BaseAdapter() {
 
     // You might want to provide a way to update the list and notify the adapter
-    fun updateData(newList: List<Password>) {
+    fun updateData(newList: List<PasswordModal>) {
         passwordList = newList
         notifyDataSetChanged() // Notify the ListView that the data has changed
     }
