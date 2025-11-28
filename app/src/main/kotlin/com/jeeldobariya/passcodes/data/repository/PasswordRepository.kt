@@ -1,6 +1,6 @@
 package com.jeeldobariya.passcodes.data.repository
 
-import com.jeeldobariya.passcodes.database.Password
+import com.jeeldobariya.passcodes.database.PasswordEntity
 import com.jeeldobariya.passcodes.database.PasswordsDao
 import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.utils.DateTimeUtils
@@ -30,7 +30,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
     ): Int {
         require(domain.isNotBlank() || username.isNotBlank() || password.isNotBlank())
         val currentTimestamp = DateTimeUtils.getCurrDateTime()
-        val newPassword = Password(
+        val newPassword = PasswordEntity(
             domain = domain,
             username = username,
             password = password,

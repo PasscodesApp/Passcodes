@@ -11,25 +11,25 @@ import kotlinx.coroutines.flow.Flow
 interface PasswordsDao {
 
     @Insert
-    suspend fun insertPassword(password: Password): Long
+    suspend fun insertPassword(password: PasswordEntity): Long
 
     @Query("SELECT * FROM passwords ORDER BY id DESC")
-    fun getAllPasswords(): Flow<List<Password>>
+    fun getAllPasswords(): Flow<List<PasswordEntity>>
 
     @Query("SELECT * FROM passwords WHERE id = :id")
-    suspend fun getPasswordById(id: Int): Password?
+    suspend fun getPasswordById(id: Int): PasswordEntity?
 
     @Query("SELECT * FROM passwords WHERE username = :username AND domain = :domain")
-    suspend fun getPasswordByUsernameAndDomain(username: String, domain: String): Password?
+    suspend fun getPasswordByUsernameAndDomain(username: String, domain: String): PasswordEntity?
 
     @Update
-    suspend fun updatePassword(password: Password): Int
+    suspend fun updatePassword(password: PasswordEntity): Int
 
     @Query("DELETE FROM passwords WHERE id = :id")
     suspend fun deletePasswordById(id: Int): Int
 
     @Delete
-    suspend fun deletePassword(password: Password): Int
+    suspend fun deletePassword(password: PasswordEntity): Int
 
     @Query("DELETE FROM passwords")
     suspend fun clearAllPasswordData(): Int

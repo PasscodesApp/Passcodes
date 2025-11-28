@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Password::class],
+    entities = [PasswordEntity::class],
     version = 1,
     exportSchema = true
 )
