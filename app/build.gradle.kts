@@ -145,11 +145,6 @@ android {
         buildConfig = true
         compose = true
     }
-
-    ksp {
-        val location = "$projectDir/schemas"
-        arg("room.schemaLocation", location)
-    }
 }
 
 dependencies {
