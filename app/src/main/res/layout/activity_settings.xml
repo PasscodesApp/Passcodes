@@ -120,6 +120,37 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/latest_layout_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:textColor="?attr/colorPrimary"
+                android:text="Preview Layout:"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switch_latest_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:ignore="UseSwitchCompatOrMaterialXml"
+                android:layout_margin="8dp"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/clear_all_data_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

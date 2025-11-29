@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import kotlin.getValue
+import kotlin.system.exitProcess
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -47,6 +48,7 @@ class SettingsActivity : AppCompatActivity() {
 
         collectLatestLifecycleFlow(featureFlagsDatastore.data) {
             binding.switchLatestFeatures.isChecked = it.isPreviewFeaturesEnabled
+            binding.switchLatestLayout.isChecked = it.isPreviewLayoutEnabled
         }
 
         // Add event onclick listener
@@ -117,11 +119,17 @@ class SettingsActivity : AppCompatActivity() {
                     it.copy(isPreviewFeaturesEnabled = isChecked)
                 }
             }
-            Toast.makeText(
-                this@SettingsActivity,
-                getString(R.string.future_feat_clause) + isChecked.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+
+        binding.switchLatestLayout.setOnCheckedChangeListener { _, isChecked ->
+            lifecycleScope.launch {
+                featureFlagsDatastore.updateData {
+                    it.copy(isPreviewLayoutEnabled = isChecked)
+                }
+
+                finishAndRemoveTask()
+                exitProcess(0)
+            }
         }
 
         binding.clearAllDataBtn.setOnClickListener { v ->
