@@ -1,7 +1,7 @@
 package com.jeeldobariya.passcodes.data.repository
 
-import com.jeeldobariya.passcodes.database.PasswordEntity
-import com.jeeldobariya.passcodes.database.PasswordsDao
+import com.jeeldobariya.passcodes.database.master.PasswordEntity
+import com.jeeldobariya.passcodes.database.master.PasswordsDao
 import com.jeeldobariya.passcodes.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.domain.utils.DateTimeUtils
 import kotlinx.coroutines.flow.first

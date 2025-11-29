@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.database
+package com.jeeldobariya.passcodes.database.master
 
 import androidx.room.Dao
 import androidx.room.Delete

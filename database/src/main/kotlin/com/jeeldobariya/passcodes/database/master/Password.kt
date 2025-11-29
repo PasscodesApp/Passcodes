@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.database
+package com.jeeldobariya.passcodes.database.master
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
