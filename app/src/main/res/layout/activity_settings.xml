@@ -165,7 +165,7 @@
             android:padding="16dp">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/autofill_setting_card_btn"
+                android:id="@+id/autofill_setting_btn"
                 android:layout_width="wrap_content"
                 android:text="Autofill Settings"
                 android:textSize="12sp"

@@ -51,7 +51,7 @@ class SettingsActivity : AppCompatActivity() {
             binding.switchLatestFeatures.isChecked = it.isPreviewFeaturesEnabled
             binding.switchLatestLayout.isChecked = it.isPreviewLayoutEnabled
 
-            binding.autofillSettingCardBtn.visibility =
+            binding.autofillSettingCard.visibility =
                 if (it.isPreviewFeaturesEnabled) View.VISIBLE else View.GONE
         }
 
@@ -131,7 +131,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        binding.autofillSettingCardBtn.setOnClickListener { v ->
+        binding.autofillSettingBtn.setOnClickListener { v ->
             val autofillSettingsIntent = Intent(this, AutofillSettingsActivity::class.java)
             startActivity(autofillSettingsIntent)
         }
