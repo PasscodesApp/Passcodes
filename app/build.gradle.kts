@@ -155,6 +155,7 @@ android {
 dependencies {
     // In project library / feature modules
     implementation(project(":autofill"))
+    implementation(project(":database"))
 
     // Jetpack Compose
     implementation(libs.bundles.compose)
