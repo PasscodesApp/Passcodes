@@ -12,15 +12,14 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.autofill.AutofillSettingsActivity
+import com.jeeldobariya.passcodes.data.datastore.appDatastore
 import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.data.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
-import kotlin.getValue
 import kotlin.system.exitProcess
 
 class SettingsActivity : AppCompatActivity() {
@@ -51,6 +50,9 @@ class SettingsActivity : AppCompatActivity() {
         collectLatestLifecycleFlow(featureFlagsDatastore.data) {
             binding.switchLatestFeatures.isChecked = it.isPreviewFeaturesEnabled
             binding.switchLatestLayout.isChecked = it.isPreviewLayoutEnabled
+
+            binding.autofillSettingCardBtn.visibility =
+                if (it.isPreviewFeaturesEnabled) View.VISIBLE else View.GONE
         }
 
         // Add event onclick listener
