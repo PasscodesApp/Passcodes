@@ -103,14 +103,9 @@ class SettingsActivity : AppCompatActivity() {
 
                 appDatastore.updateData { it.copy(theme = newThemeStyle) }
 
-                recreate()
+                finishAndRemoveTask()
+                exitProcess(0)
             }
-
-            Toast.makeText(
-                this@SettingsActivity,
-                getString(R.string.restart_app_require),
-                Toast.LENGTH_SHORT
-            ).show()
         }
 
         binding.switchLatestFeatures.setOnCheckedChangeListener { _, isChecked ->
