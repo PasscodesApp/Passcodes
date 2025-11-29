@@ -10,7 +10,6 @@ import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
-import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.autofill.data.Passcode
 import com.jeeldobariya.passcodes.autofill.data.PasscodeDatabase
 import kotlinx.coroutines.CoroutineScope

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
-import com.jeeldobariya.passcodes.R
 
 class AutofillSettingsActivity : AppCompatActivity() {
 

@@ -153,6 +153,9 @@ android {
 }
 
 dependencies {
+    // In project library / feature modules
+    implementation(project(":autofill"))
+
     // Jetpack Compose
     implementation(libs.bundles.compose)
     implementation(platform(libs.compose.bom))
@@ -174,7 +177,6 @@ dependencies {
 
     // Data/Persistence (Room Bundle)
     implementation(libs.bundles.room)
-    debugImplementation(libs.androidx.ui.test.manifest)
     ksp(libs.room.compiler)
 
     // Networking/Parsing
@@ -195,6 +197,7 @@ dependencies {
 
     
     // --- Testing ---
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     // Local Unit Testing (Unit Test Bundle)
     testImplementation(libs.bundles.unit.test)
