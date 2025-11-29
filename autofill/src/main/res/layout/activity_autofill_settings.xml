@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="?attr/colorSecondary"
-        android:textStyle="bold"
         android:text="Passcodes Autofill is preview feature and shouldn't be use in production!!"
         android:textAlignment="center" />
 

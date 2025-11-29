@@ -1,5 +1,6 @@
 package com.jeeldobariya.passcodes.oldui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -10,6 +11,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
+import com.jeeldobariya.passcodes.autofill.AutofillSettingsActivity
 import com.jeeldobariya.passcodes.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
@@ -125,6 +127,11 @@ class SettingsActivity : AppCompatActivity() {
                 finishAndRemoveTask()
                 exitProcess(0)
             }
+        }
+
+        binding.autofillSettingCardBtn.setOnClickListener { v ->
+            val autofillSettingsIntent = Intent(this, AutofillSettingsActivity::class.java)
+            startActivity(autofillSettingsIntent)
         }
 
         binding.clearAllDataBtn.setOnClickListener { v ->

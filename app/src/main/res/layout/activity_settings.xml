@@ -151,6 +151,32 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/autofill_setting_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/autofill_setting_card_btn"
+                android:layout_width="wrap_content"
+                android:text="Autofill Settings"
+                android:textSize="12sp"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:textColor="?attr/colorSecondary"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/clear_all_data_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
