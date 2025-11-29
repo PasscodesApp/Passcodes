@@ -1,5 +1,6 @@
 [versions]
 kotlin = "2.2.21"
+coreKtx = "1.17.0"
 material = "1.13.0"
 okhttp = "5.3.2"
 oss-license = "17.3.0"
@@ -29,6 +30,7 @@ oss-license-plugin = "0.10.9" # Also update in settings.gradle.kts
 
 
 
+
 [libraries]
 # Kotlin Std libs
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -48,6 +50,7 @@ androidx-lifecycle-viewmodel-navigation3 = { group = "androidx.lifecycle", name 
 androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
 
 # Core Dependency
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 oss-license = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "oss-license" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -90,8 +93,6 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
-
-
 [bundles]
 # Jetpack Compose Dependencies
 compose = ["compose-ui-material", "compose-ui-preview", "compose-activity", "compose-viewmodel"]
@@ -122,6 +123,7 @@ android-test = ["androidx-test-ext-junit", "espresso-core"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
