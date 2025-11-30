@@ -1,12 +1,10 @@
-package com.jeeldobariya.passcodes.database
+package com.jeeldobariya.passcodes.database.master
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import com.jeeldobariya.passcodes.database.master.MasterDatabase
-import com.jeeldobariya.passcodes.database.master.PasswordsDao
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -17,49 +15,47 @@ import java.io.IOException
 
 /**
  * Instrumented test for the Room database, specifically testing the PasswordsDao.
- * This test runs on an Android device/emulator.
  */
-@RunWith(AndroidJUnit4::class) // Specifies the JUnit runner for Android instrumented tests
-class PasswordDatabaseTest {
+@RunWith(AndroidJUnit4::class)
+class MasterDatabasePasswordsDaoTest {
 
     private lateinit var passwordsDao: PasswordsDao
     private lateinit var db: MasterDatabase
 
-    // This function runs before each test method
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
+
         // Build an in-memory database for testing.
         // In-memory database ensures that tests are isolated and don't
         // interfere with the actual app database or other tests.
         db = Room.inMemoryDatabaseBuilder(
             context,
             MasterDatabase::class.java
-        ).allowMainThreadQueries() // Allow queries on the main thread for simplicity in tests
+        )
+            .allowMainThreadQueries() // Allow queries on the main thread for simplicity in tests
             .build()
-        passwordsDao = db.passwordsDao // Get the DAO instance
+
+        passwordsDao = db.passwordsDao
     }
 
-    // This function runs after each test method
     @After
     @Throws(IOException::class) // Indicates that this method might throw an IOException
     fun closeDb() {
-        db.close() // Close the database after each test to free resources
+        db.close()
     }
 
     @Test
     fun insertAndGetAllPasswords_shouldReturnCorrectPasswords() = runTest {
         // Test: Insert multiple passwords and then retrieve all to verify
-        val password1 = Password(domain = "example.com", username = "user1", password = "pass1", notes = "notes1")
-        val password2 = Password(domain = "test.org", username = "user2", password = "pass2", notes = "notes2")
+        val password1 = PasswordEntity(domain = "example.com", username = "user1", password = "pass1", notes = "notes1")
+        val password2 = PasswordEntity(domain = "test.org", username = "user2", password = "pass2", notes = "notes2")
 
-        passwordsDao.insertPassword(password1) // Insert the first password
-        passwordsDao.insertPassword(password2) // Insert the second password
+        passwordsDao.insertPassword(password1)
+        passwordsDao.insertPassword(password2)
 
-        // Collect the first emitted list from the Flow
         val allPasswords = passwordsDao.getAllPasswords().first()
 
-        // Assertions using Google Truth
         assertThat(allPasswords).hasSize(2) // Check if two passwords were retrieved
         assertThat(allPasswords[0].domain).isEqualTo("test.org") // Assuming DESC order by ID
         assertThat(allPasswords[1].domain).isEqualTo("example.com")
@@ -71,7 +67,7 @@ class PasswordDatabaseTest {
     @Test
     fun insertAndGetPasswordById_shouldReturnCorrectPassword() = runTest {
         // Test: Insert a password and retrieve it by its auto-generated ID
-        val originalPassword = Password(domain = "domain.com", username = "user", password = "pass", notes = "some notes")
+        val originalPassword = PasswordEntity(domain = "domain.com", username = "user", password = "pass", notes = "some notes")
         val insertedId = passwordsDao.insertPassword(originalPassword) // Insert and get the generated ID
 
         // Retrieve the password using the inserted ID
@@ -91,8 +87,8 @@ class PasswordDatabaseTest {
         // Test: Insert a password and retrieve it by username and domain
         val targetUsername = "specific_user"
         val targetDomain = "specific_domain.net"
-        val passwordToFind = Password(domain = targetDomain, username = targetUsername, password = "pwd", notes = "find me")
-        val otherPassword = Password(domain = "other.net", username = "other", password = "xyz", notes = "not me")
+        val passwordToFind = PasswordEntity(domain = targetDomain, username = targetUsername, password = "pwd", notes = "find me")
+        val otherPassword = PasswordEntity(domain = "other.net", username = "other", password = "xyz", notes = "not me")
 
         passwordsDao.insertPassword(otherPassword)
         passwordsDao.insertPassword(passwordToFind)
@@ -109,7 +105,7 @@ class PasswordDatabaseTest {
     @Test
     fun updatePassword_shouldUpdateCorrectly() = runTest {
         // Test: Insert a password, update it, and verify the changes
-        val originalPassword = Password(domain = "old.com", username = "old_user", password = "old_pass", notes = "old_notes")
+        val originalPassword = PasswordEntity(domain = "old.com", username = "old_user", password = "old_pass", notes = "old_notes")
         val insertedId = passwordsDao.insertPassword(originalPassword)
 
         // Create an updated password object (Room updates by primary key)
@@ -137,7 +133,7 @@ class PasswordDatabaseTest {
     @Test
     fun deletePasswordById_shouldDeleteCorrectly() = runTest {
         // Test: Insert a password, delete it by ID, and verify its absence
-        val passwordToDelete = Password(domain = "delete.me", username = "trash", password = "123", notes = "delete this")
+        val passwordToDelete = PasswordEntity(domain = "delete.me", username = "trash", password = "123", notes = "delete this")
         val insertedId = passwordsDao.insertPassword(passwordToDelete)
 
         // Delete the password by its ID
