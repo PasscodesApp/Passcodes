@@ -17,6 +17,7 @@ pluginManagement {
 include(":app")
 include(":autofill")
 include(":database")
+include(":password_manager")
 
 // If you have other modules like ':data', ':domain', etc., list them here:
 // include(":app", ":data", ":domain", ":feature:home")

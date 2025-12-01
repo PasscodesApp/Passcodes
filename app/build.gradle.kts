@@ -151,6 +151,7 @@ dependencies {
     // In project library / feature modules
     implementation(project(":autofill"))
     implementation(project(":database"))
+    implementation(project(":password_manager"))
 
     // Jetpack Compose
     implementation(libs.bundles.compose)
