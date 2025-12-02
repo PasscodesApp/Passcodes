@@ -41,9 +41,18 @@ android {
 }
 
 dependencies {
+    implementation(project(":database"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+
+    // Concurrency (Coroutines Bundle)
+    implementation(libs.bundles.coroutines)
+
+    // Android Architecture Components (Lifecycle Bundle)
+    implementation(libs.bundles.lifecycle)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.autofill.AutofillSettingsActivity
 import com.jeeldobariya.passcodes.data.datastore.appDatastore
-import com.jeeldobariya.passcodes.data.repository.PasswordRepository
+import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import kotlinx.coroutines.flow.first

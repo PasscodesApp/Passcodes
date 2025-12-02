@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityUpdatePasswordBinding
-import com.jeeldobariya.passcodes.presentation.update_password.UpdatePasswordAction
-import com.jeeldobariya.passcodes.presentation.update_password.UpdatePasswordViewModel
+import com.jeeldobariya.passcodes.password_manager.presentation.update_password.UpdatePasswordAction
+import com.jeeldobariya.passcodes.password_manager.presentation.update_password.UpdatePasswordViewModel
 import com.jeeldobariya.passcodes.data.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

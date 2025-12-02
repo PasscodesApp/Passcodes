@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.jeeldobariya.passcodes.databinding.PasswordListItemBinding
-import com.jeeldobariya.passcodes.domain.modals.PasswordModal
+import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 
 class PasswordAdapter(
     private val context: Context,

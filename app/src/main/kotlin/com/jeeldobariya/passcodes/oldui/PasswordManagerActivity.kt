@@ -11,8 +11,8 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
-import com.jeeldobariya.passcodes.domain.usecases.ExportPasswordCSVUseCase
-import com.jeeldobariya.passcodes.domain.usecases.ImportPasswordCSVUseCase
+import com.jeeldobariya.passcodes.password_manager.domain.usecases.ExportPasswordCSVUseCase
+import com.jeeldobariya.passcodes.password_manager.domain.usecases.ImportPasswordCSVUseCase
 import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.data.datastore.appDatastore
 import kotlinx.coroutines.Dispatchers

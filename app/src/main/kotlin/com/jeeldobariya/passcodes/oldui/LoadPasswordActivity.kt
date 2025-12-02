@@ -7,10 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.databinding.ActivityLoadPasswordBinding
-import com.jeeldobariya.passcodes.domain.modals.PasswordModal
+import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.oldui.adapter.PasswordAdapter
-import com.jeeldobariya.passcodes.presentation.load_password.LoadPasswordAction
-import com.jeeldobariya.passcodes.presentation.load_password.LoadPasswordViewModel
+import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordAction
+import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordViewModel
 import com.jeeldobariya.passcodes.data.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
