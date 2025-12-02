@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.password_manager.oldui
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -8,7 +8,7 @@ import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.core.R
 import com.jeeldobariya.passcodes.core.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
-import com.jeeldobariya.passcodes.databinding.ActivityUpdatePasswordBinding
+import com.jeeldobariya.passcodes.password_manager.databinding.ActivityUpdatePasswordBinding
 import com.jeeldobariya.passcodes.password_manager.presentation.update_password.UpdatePasswordAction
 import com.jeeldobariya.passcodes.password_manager.presentation.update_password.UpdatePasswordViewModel
 import kotlinx.coroutines.flow.first

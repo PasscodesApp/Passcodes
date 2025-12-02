@@ -38,6 +38,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -48,11 +52,38 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
 
+    // Jetpack Compose
+    implementation(libs.bundles.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.bundles.compose.debug)
+
+    // Navigation 3
+    implementation(libs.bundles.navigation3)
+
+    // Standard Kotlin Libraries
+    implementation(libs.kotlin.stdlib)
+
+    implementation(libs.oss.license)
+    implementation(libs.appcompat)
+
+    // Networking/Parsing
+    implementation(libs.okhttp)
+    implementation(libs.json)
+
     // Concurrency (Coroutines Bundle)
     implementation(libs.bundles.coroutines)
 
     // Android Architecture Components (Lifecycle Bundle)
     implementation(libs.bundles.lifecycle)
+
+    // Dependency Injection
+    implementation(libs.bundles.koin)
+
+    // Datastore Preferences
+    implementation(libs.bundles.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

@@ -1,11 +1,11 @@
-package com.jeeldobariya.passcodes.oldui.adapter
+package com.jeeldobariya.passcodes.password_manager.oldui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.jeeldobariya.passcodes.databinding.PasswordListItemBinding
+import com.jeeldobariya.passcodes.password_manager.databinding.PasswordListItemBinding
 import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 
 class PasswordAdapter(

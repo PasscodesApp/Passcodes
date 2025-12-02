@@ -10,6 +10,7 @@ import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
 import com.jeeldobariya.passcodes.domain.usecases.CheckForUpdateUseCase
+import com.jeeldobariya.passcodes.password_manager.oldui.PasswordManagerActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

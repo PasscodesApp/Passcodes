@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.password_manager.oldui
 
 import android.app.AlertDialog
 import android.content.ClipData
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.core.R
 import com.jeeldobariya.passcodes.core.collectLatestLifecycleFlow
-import com.jeeldobariya.passcodes.databinding.ActivityViewPasswordBinding
+import com.jeeldobariya.passcodes.password_manager.databinding.ActivityViewPasswordBinding
 import com.jeeldobariya.passcodes.password_manager.presentation.view_password.ViewPasswordAction
 import com.jeeldobariya.passcodes.password_manager.presentation.view_password.ViewPasswordViewModel
 import com.jeeldobariya.passcodes.core.datastore.appDatastore

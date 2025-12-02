@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.password_manager.oldui
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.jeeldobariya.passcodes.core.R
 import com.jeeldobariya.passcodes.core.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.databinding.ActivityPasswordManagerBinding
+import com.jeeldobariya.passcodes.password_manager.databinding.ActivityPasswordManagerBinding
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.ExportPasswordCSVUseCase
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.ImportPasswordCSVUseCase
 import kotlinx.coroutines.Dispatchers
