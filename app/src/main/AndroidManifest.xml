@@ -25,11 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".password_manager.oldui.PasswordManagerActivity" />
-        <activity android:name=".password_manager.oldui.SavePasswordActivity" />
-        <activity android:name=".password_manager.oldui.LoadPasswordActivity" />
-        <activity android:name=".password_manager.oldui.ViewPasswordActivity" />
-        <activity android:name=".password_manager.oldui.UpdatePasswordActivity" />
         <activity android:name=".oldui.SettingsActivity" />
         <activity android:name=".oldui.AboutUsActivity" />
         <activity android:name=".oldui.LicenseActivity" />
