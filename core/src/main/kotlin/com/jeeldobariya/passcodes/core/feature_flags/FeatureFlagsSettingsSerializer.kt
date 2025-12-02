@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.flags
+package com.jeeldobariya.passcodes.core.feature_flags
 
 import androidx.datastore.core.Serializer
 import kotlinx.serialization.SerializationException

@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.flags
+package com.jeeldobariya.passcodes.core.feature_flags
 
 // This file contains a solution as commented code... ignore it.. if you don't entertain it.
 

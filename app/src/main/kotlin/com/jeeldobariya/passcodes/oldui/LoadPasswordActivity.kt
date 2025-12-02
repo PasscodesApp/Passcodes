@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import com.jeeldobariya.passcodes.R
+import com.jeeldobariya.passcodes.core.R
+import com.jeeldobariya.passcodes.core.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.databinding.ActivityLoadPasswordBinding
 import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.oldui.adapter.PasswordAdapter
 import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordAction
 import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordViewModel
-import com.jeeldobariya.passcodes.data.datastore.appDatastore
+import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,7 +25,7 @@ class LoadPasswordActivity : AppCompatActivity() {
     private lateinit var passwordAdapter: PasswordAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        runBlocking {
+        runBlocking<Unit> {
             setTheme(appDatastore.data.first().theme)
         }
         super.onCreate(savedInstanceState)

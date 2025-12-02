@@ -149,6 +149,7 @@ android {
 
 dependencies {
     // In project library / feature modules
+    implementation(project(":core"))
     implementation(project(":autofill"))
     implementation(project(":database"))
     implementation(project(":password_manager"))

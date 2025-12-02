@@ -15,6 +15,7 @@ pluginManagement {
 
 // Defines all modules in your project
 include(":app")
+include(":core")
 include(":autofill")
 include(":database")
 include(":password_manager")

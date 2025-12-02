@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jeeldobariya.passcodes.databinding.ActivityLicenseBinding
-import com.jeeldobariya.passcodes.data.datastore.appDatastore
+import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.io.BufferedReader

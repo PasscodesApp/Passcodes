@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
+import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess

@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.oldui
+package com.jeeldobariya.passcodes.core
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle

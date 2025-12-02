@@ -1,10 +1,10 @@
-package com.jeeldobariya.passcodes.data.datastore
+package com.jeeldobariya.passcodes.core.datastore
 
 // please refer to `app/src/main/kotlin/com/jeeldobariya/passcodes/flags/FeatureFlagsSettings.kt` for Migration Guide.
 
 import android.content.Context
 import androidx.datastore.dataStore
-import com.jeeldobariya.passcodes.R
+import com.jeeldobariya.passcodes.core.R
 import kotlinx.serialization.Serializable
 
 val Context.appDatastore by dataStore(fileName = "app-settings.json", serializer = AppSettingsSerializer)
@@ -12,4 +12,6 @@ val Context.appDatastore by dataStore(fileName = "app-settings.json", serializer
 @Serializable
 data class AppSettings(
     val theme: Int = R.style.PasscodesTheme_Default,
-)
+) {
+    companion object
+}
