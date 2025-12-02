@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.password_manager.presentation.utils
+package com.jeeldobariya.passcodes.core.utils
 
 // comment the below code as permission are not used in app.
 // currently, but we might require this later..
