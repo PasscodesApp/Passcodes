@@ -5,7 +5,6 @@ import com.jeeldobariya.passcodes.database.master.PasswordsDao
 import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.password_manager.domain.utils.DateTimeUtils
 import kotlinx.coroutines.flow.first
-import kotlin.require
 
 class PasswordRepository(val passwordsDao: PasswordsDao) {
 

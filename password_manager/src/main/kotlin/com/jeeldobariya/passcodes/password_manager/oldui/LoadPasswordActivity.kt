@@ -6,13 +6,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.core.R
+import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.utils.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.password_manager.databinding.ActivityLoadPasswordBinding
 import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.password_manager.oldui.adapter.PasswordAdapter
 import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordAction
 import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordViewModel
-import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel

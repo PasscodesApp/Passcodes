@@ -6,8 +6,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.jeeldobariya.passcodes.core.R
-import com.jeeldobariya.passcodes.core.utils.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
+import com.jeeldobariya.passcodes.core.utils.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.password_manager.databinding.ActivityUpdatePasswordBinding
 import com.jeeldobariya.passcodes.password_manager.presentation.update_password.UpdatePasswordAction
 import com.jeeldobariya.passcodes.password_manager.presentation.update_password.UpdatePasswordViewModel
