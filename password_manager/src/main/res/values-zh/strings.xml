@@ -1,0 +1,46 @@
+<resources>
+
+    <!-- General UI Elements -->
+    <string name="hint_domain">域名</string>
+    <string name="helper_text_domain_field">对应的网站或域名</string>
+    <string name="hint_username">用户名</string>
+    <string name="hint_password">密码</string>
+    <string name="hint_notes">备注</string>
+    <string name="placeholder_domain_field">例如：Google、Instagram、WhatsApp 等</string>
+    <string name="placeholder_username_field">例如：Liam15、Noha、Olivia、Ava_25 等</string>
+    <string name="placeholder_password_field">例如：12345、abc123xyz、qwerty 等</string>
+    <string name="save_password_button_text">保存密码</string>
+    <string name="load_password_button_text">加载密码</string>
+    <string name="update_password_button_text">更新密码</string>
+    <string name="delete_password_button_text">删除密码</string>
+    <string name="import_password_button_text">导入密码</string>
+    <string name="export_password_button_text">导出密码</string>
+
+    <!-- Headline -->
+    <string name="textview_passwordmanager_headline">密码管理器</string>
+    <string name="textview_loadpassword_headline">加载密码</string>
+    <string name="textview_savepassword_headline">保存密码</string>
+    <string name="textview_viewpassword_headline">查看密码</string>
+    <string name="textview_updatepassword_headline">更新密码</string>
+
+    <!-- Prefix & Suffix -->
+    <string name="id_prefix">ID：</string>
+    <string name="domain_prefix">域名：</string>
+    <string name="username_prefix">用户名：</string>
+    <string name="password_prefix">密码：</string>
+    <string name="notes_prefix">备注：</string>
+    <string name="updatedat_prefix">更新时间：</string>
+
+    <!-- Toast Message -->
+    <string name="something_went_wrong_msg">发生错误。</string>
+    <string name="action_discard">操作已取消。</string>
+    <string name="error_invalid_password_id">错误：无效的 ID！！</string>
+
+    <!-- Dialog -->
+    <string name="update_password_dialog_title">要更新密码吗？</string>
+    <string name="delete_password_dialog_title">要删除密码吗？</string>
+    <string name="irreversible_dialog_desc">此操作无法撤销。</string>
+    <string name="confirm_dialog_button_text">确认</string>
+    <string name="discard_dialog_button_text">取消</string>
+
+</resources>

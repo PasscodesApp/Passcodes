@@ -1,0 +1,46 @@
+<resources>
+
+    <!-- General UI Elements -->
+    <string name="hint_domain">Domain</string>
+    <string name="helper_text_domain_field">Name der zugehörigen Webseite oder Domain</string>
+    <string name="hint_username">Benutzername</string>
+    <string name="hint_password">Passwort</string>
+    <string name="hint_notes">Notizen</string>
+    <string name="placeholder_domain_field">z. B. Google, Instagram, WhatsApp usw.</string>
+    <string name="placeholder_username_field">z. B. Liam15, Noha, Olivia, Ava_25 usw.</string>
+    <string name="placeholder_password_field">z. B. 12345, abc123xyz, qwerty usw.</string>
+    <string name="save_password_button_text">Speichern</string>
+    <string name="load_password_button_text">Laden</string>
+    <string name="update_password_button_text">Aktualisieren</string>
+    <string name="delete_password_button_text">Löschen</string>
+    <string name="import_password_button_text">Importieren</string>
+    <string name="export_password_button_text">Exportieren</string>
+
+    <!-- Headline -->
+    <string name="textview_passwordmanager_headline">Passwort-Manager</string>
+    <string name="textview_loadpassword_headline">Passwort laden</string>
+    <string name="textview_savepassword_headline">Passwort speichern</string>
+    <string name="textview_viewpassword_headline">Passwort anzeigen</string>
+    <string name="textview_updatepassword_headline">Passwort aktualisieren</string>
+
+    <!-- Prefix & Suffix -->
+    <string name="id_prefix">ID: </string>
+    <string name="domain_prefix">Domain: </string>
+    <string name="username_prefix">Benutzername: </string>
+    <string name="password_prefix">Passwort: </string>
+    <string name="notes_prefix">Notizen: </string>
+    <string name="updatedat_prefix">Aktualisiert am: </string>
+
+    <!-- Toast Message -->
+    <string name="something_went_wrong_msg">Etwas ist schiefgelaufen</string>
+    <string name="action_discard">Aktion abgebrochen</string>
+    <string name="error_invalid_password_id">Fehler: Ungültige ID!!</string>
+
+    <!-- Dialog -->
+    <string name="update_password_dialog_title">Passwort aktualisieren?</string>
+    <string name="delete_password_dialog_title">Passwort löschen?</string>
+    <string name="irreversible_dialog_desc">Dieser Vorgang kann nicht rückgängig gemacht werden.</string>
+    <string name="confirm_dialog_button_text">Bestätigen</string>
+    <string name="discard_dialog_button_text">Abbrechen</string>
+
+</resources>

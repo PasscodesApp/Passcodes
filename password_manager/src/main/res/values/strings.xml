@@ -1,0 +1,45 @@
+<resources>
+    <!-- Button, Textview general in all Activity -->
+    <string name="hint_domain">Domain</string>
+    <string name="helper_text_domain_field">The name of the website or domain associated</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_notes">Notes</string>
+    <string name="placeholder_domain_field">e.g. Google, Instagram, WhatsApp, etc.</string>
+    <string name="placeholder_username_field">e.g. Liam15, Noha, Olivia, Ava_25, etc.</string>
+    <string name="placeholder_password_field">e.g. 12345, abc123xyz, qwerty, etc.</string>
+    <string name="save_password_button_text">Save Password</string>
+    <string name="load_password_button_text">Load Password</string>
+    <string name="update_password_button_text">Update Password</string>
+    <string name="delete_password_button_text">Delete Password</string>
+    <string name="import_password_button_text">Import G-Password</string>
+    <string name="export_password_button_text">Export G-Password</string>
+
+    <!-- Headline of Activity -->
+    <string name="textview_passwordmanager_headline">Password Manager</string>
+    <string name="textview_loadpassword_headline">Load Password</string>
+    <string name="textview_savepassword_headline">Save Password</string>
+    <string name="textview_viewpassword_headline">View Password</string>
+    <string name="textview_updatepassword_headline">Update Password</string>
+
+    <!-- Prefix & Suffix -->
+    <string name="id_prefix">ID: </string>
+    <string name="domain_prefix">Domain: </string>
+    <string name="username_prefix">Username: </string>
+    <string name="password_prefix">Password: </string>
+    <string name="notes_prefix">Notes: </string>
+    <string name="updatedat_prefix">Last Updated: </string>
+
+
+    <!-- Toast Message -->
+    <string name="something_went_wrong_msg">Something went wrong.</string>
+    <string name="action_discard">Action discarded.</string>
+    <string name="error_invalid_password_id">Something Went Wrong: Invalid ID!!</string>
+
+    <!-- Alert Dialog Message -->
+    <string name="update_password_dialog_title">Update password?</string>
+    <string name="delete_password_dialog_title">Delete password?</string>
+    <string name="irreversible_dialog_desc">This action cannot be undone.</string>
+    <string name="confirm_dialog_button_text">Confirm</string>
+    <string name="discard_dialog_button_text">Discard</string>
+</resources>

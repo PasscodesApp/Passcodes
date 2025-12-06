@@ -1,0 +1,46 @@
+<resources>
+
+    <!-- General UI Elements -->
+    <string name="hint_domain">ドメイン</string>
+    <string name="helper_text_domain_field">関連するウェブサイトやドメインの名前</string>
+    <string name="hint_username">ユーザー名</string>
+    <string name="hint_password">パスワード</string>
+    <string name="hint_notes">メモ</string>
+    <string name="placeholder_domain_field">例：Google、Instagram、WhatsApp など</string>
+    <string name="placeholder_username_field">例：Liam15、Noha、Olivia、Ava_25 など</string>
+    <string name="placeholder_password_field">例：12345、abc123xyz、qwerty など</string>
+    <string name="save_password_button_text">保存</string>
+    <string name="load_password_button_text">読み込み</string>
+    <string name="update_password_button_text">更新</string>
+    <string name="delete_password_button_text">削除</string>
+    <string name="import_password_button_text">インポート</string>
+    <string name="export_password_button_text">エクスポート</string>
+
+    <!-- Headline -->
+    <string name="textview_passwordmanager_headline">パスワードマネージャー</string>
+    <string name="textview_loadpassword_headline">パスワード読み込み</string>
+    <string name="textview_savepassword_headline">パスワード保存</string>
+    <string name="textview_viewpassword_headline">パスワードを見る</string>
+    <string name="textview_updatepassword_headline">パスワード更新</string>
+
+    <!-- Prefix & Suffix -->
+    <string name="id_prefix">ID：</string>
+    <string name="domain_prefix">ドメイン：</string>
+    <string name="username_prefix">ユーザー名：</string>
+    <string name="password_prefix">パスワード：</string>
+    <string name="notes_prefix">メモ：</string>
+    <string name="updatedat_prefix">更新日：</string>
+
+    <!-- Toast Message -->
+    <string name="something_went_wrong_msg">問題が発生しました</string>
+    <string name="action_discard">操作がキャンセルされました</string>
+    <string name="error_invalid_password_id">エラー：無効なIDです!!</string>
+
+    <!-- Dialog -->
+    <string name="update_password_dialog_title">パスワードを更新しますか？</string>
+    <string name="delete_password_dialog_title">パスワードを削除しますか？</string>
+    <string name="irreversible_dialog_desc">この操作は元に戻せません。</string>
+    <string name="confirm_dialog_button_text">確認</string>
+    <string name="discard_dialog_button_text">キャンセル</string>
+
+</resources>
