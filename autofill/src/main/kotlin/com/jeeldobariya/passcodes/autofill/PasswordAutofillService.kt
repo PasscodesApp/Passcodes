@@ -90,7 +90,7 @@ class PasswordAutofillService : AutofillService() {
             }
             callback.onSuccess()
         } else {
-            callback.onFailure("Could not save credentials.")
+            callback.onFailure(getString(R.string.could_not_save_credentials))
         }
     }
 

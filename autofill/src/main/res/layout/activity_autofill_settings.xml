@@ -9,14 +9,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable Passcodes Autofill"
+        android:text="@string/enable_passcodes_autofill"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="To use Passcodes as your password manager, you need to enable it as an autofill service in your device settings."
+        android:text="@string/how_to_enable_passcodes_autofill_service"
         android:textAlignment="center" />
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textColor="?attr/colorSecondary"
-        android:text="Passcodes Autofill is preview feature and shouldn't be use in production!!"
+        android:text="@string/passcodes_autofill_is_preview_feature"
         android:textAlignment="center" />
 
     <com.google.android.material.button.MaterialButton
@@ -32,6 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Open Settings" />
+        android:text="@string/open_settings" />
 
 </LinearLayout>
