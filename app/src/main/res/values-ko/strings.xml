@@ -15,21 +15,7 @@
     <string name="textview_app_warning">이 앱은 현재 개발 중이며 교육 및 실험용으로만 사용해야 합니다. 중요한 정보를 저장하기엔 아직 안전하지 않을 수 있습니다. 보안 가이드를 꼭 참고해주세요.</string>
 
     <!-- General UI Elements -->
-    <string name="hint_domain">도메인</string>
-    <string name="helper_text_domain_field">사이트 또는 도메인 이름</string>
-    <string name="hint_username">사용자 이름</string>
-    <string name="hint_password">비밀번호</string>
-    <string name="hint_notes">메모</string>
-    <string name="placeholder_domain_field">예: Google, Instagram, WhatsApp 등</string>
-    <string name="placeholder_username_field">예: Liam15, Noha, Olivia, Ava_25 등</string>
-    <string name="placeholder_password_field">예: 12345, abc123xyz, qwerty 등</string>
     <string name="password_manager_button_text">비밀번호 관리자</string>
-    <string name="save_password_button_text">비밀번호 저장</string>
-    <string name="load_password_button_text">비밀번호 불러오기</string>
-    <string name="update_password_button_text">비밀번호 수정</string>
-    <string name="delete_password_button_text">비밀번호 삭제</string>
-    <string name="import_password_button_text">비밀번호 가져오기</string>
-    <string name="export_password_button_text">비밀번호 내보내기</string>
     <string name="password_security_check_button_text">보안 확인</string>
     <string name="setting_button_text">설정</string>
     <string name="toggle_theme_button_text">테마 전환</string>
@@ -43,26 +29,12 @@
     <string name="view_release_notes_button_text">변경 기록</string>
 
     <!-- Headline -->
-    <string name="textview_passwordmanager_headline">비밀번호 관리자</string>
-    <string name="textview_loadpassword_headline">비밀번호 불러오기</string>
-    <string name="textview_savepassword_headline">비밀번호 저장</string>
-    <string name="textview_viewpassword_headline">비밀번호 보기</string>
-    <string name="textview_updatepassword_headline">비밀번호 수정</string>
     <string name="textview_settings_headline">설정</string>
     <string name="textview_aboutus_headline">앱 정보</string>
 
     <!-- Prefix & Suffix -->
-    <string name="id_prefix">ID: </string>
-    <string name="domain_prefix">도메인: </string>
-    <string name="username_prefix">사용자 이름: </string>
-    <string name="password_prefix">비밀번호: </string>
-    <string name="notes_prefix">메모: </string>
-    <string name="createdat_prefix">생성일: </string>
-    <string name="updatedat_prefix">수정일: </string>
 
     <!-- Permission -->
-    <string name="permission_granted">권한 허용됨</string>
-    <string name="permission_denied">권한 거부됨</string>
 
     <!-- Toast Message -->
     <string name="restart_app_require">앱을 다시 시작해야 해요.</string>
@@ -71,17 +43,9 @@
     <string name="warn_fill_form">주의: 먼저 양식을 작성해주세요.</string>
     <string name="fail_msg">실패: 다시 시도해주세요.</string>
     <string name="success_clause">성공:</string>
-    <string name="update_success_msg">성공적으로 수정되었습니다.</string>
-    <string name="delete_success_msg">성공적으로 삭제되었습니다.</string>
     <string name="something_went_wrong_msg">문제가 발생했습니다.</string>
-    <string name="action_discard">작업이 취소되었습니다.</string>
     <string name="error_invalid_password_id">문제 발생: 잘못된 ID입니다!!</string>
 
     <!-- Dialog -->
-    <string name="update_password_dialog_title">비밀번호를 수정할까요?</string>
-    <string name="delete_password_dialog_title">비밀번호를 삭제할까요?</string>
-    <string name="irreversible_dialog_desc">이 작업은 되돌릴 수 없습니다.</string>
-    <string name="confirm_dialog_button_text">확인</string>
-    <string name="discard_dialog_button_text">취소</string>
 
 </resources>

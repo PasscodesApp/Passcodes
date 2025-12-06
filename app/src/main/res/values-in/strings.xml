@@ -15,21 +15,7 @@
     <string name="textview_app_warning">Aplikasi ini masih dalam tahap pengembangan aktif dan ditujukan untuk pembelajaran dan eksperimen. Mungkin belum aman untuk menyimpan informasi penting. Silakan baca panduan keamanan untuk info lebih lanjut.</string>
 
     <!-- General UI Elements -->
-    <string name="hint_domain">Domain</string>
-    <string name="helper_text_domain_field">Nama situs web atau domain yang digunakan</string>
-    <string name="hint_username">Nama pengguna</string>
-    <string name="hint_password">Kata sandi</string>
-    <string name="hint_notes">Catatan</string>
-    <string name="placeholder_domain_field">cth. Google, Instagram, WhatsApp, dll.</string>
-    <string name="placeholder_username_field">cth. Liam15, Noha, Olivia, Ava_25, dll.</string>
-    <string name="placeholder_password_field">cth. 12345, abc123xyz, qwerty, dll.</string>
     <string name="password_manager_button_text">Pengelola Kata Sandi</string>
-    <string name="save_password_button_text">Simpan Kata Sandi</string>
-    <string name="load_password_button_text">Muat Kata Sandi</string>
-    <string name="update_password_button_text">Perbarui Kata Sandi</string>
-    <string name="delete_password_button_text">Hapus Kata Sandi</string>
-    <string name="import_password_button_text">Impor Kata Sandi</string>
-    <string name="export_password_button_text">Ekspor Kata Sandi</string>
     <string name="password_security_check_button_text">Cek Keamanan</string>
     <string name="setting_button_text">Pengaturan</string>
     <string name="toggle_theme_button_text">Ganti Tema</string>
@@ -43,26 +29,12 @@
     <string name="view_release_notes_button_text">Lihat Changelog</string>
 
     <!-- Headline -->
-    <string name="textview_passwordmanager_headline">Pengelola Kata Sandi</string>
-    <string name="textview_loadpassword_headline">Muat Kata Sandi</string>
-    <string name="textview_savepassword_headline">Simpan Kata Sandi</string>
-    <string name="textview_viewpassword_headline">Lihat Kata Sandi</string>
-    <string name="textview_updatepassword_headline">Perbarui Kata Sandi</string>
     <string name="textview_settings_headline">Pengaturan</string>
     <string name="textview_aboutus_headline">Tentang Kami</string>
 
     <!-- Prefix & Suffix -->
-    <string name="id_prefix">ID: </string>
-    <string name="domain_prefix">Domain: </string>
-    <string name="username_prefix">Nama Pengguna: </string>
-    <string name="password_prefix">Kata Sandi: </string>
-    <string name="notes_prefix">Catatan: </string>
-    <string name="createdat_prefix">Dibuat: </string>
-    <string name="updatedat_prefix">Diperbarui: </string>
 
     <!-- Permission -->
-    <string name="permission_granted">Izin diberikan</string>
-    <string name="permission_denied">Izin ditolak</string>
 
     <!-- Toast Message -->
     <string name="restart_app_require">Aplikasi perlu dimulai ulang.</string>
@@ -71,17 +43,9 @@
     <string name="warn_fill_form">Peringatan: Harap isi formulir dulu.</string>
     <string name="fail_msg">Gagal: Coba lagi nanti.</string>
     <string name="success_clause">Berhasil:</string>
-    <string name="update_success_msg">Berhasil diperbarui.</string>
-    <string name="delete_success_msg">Berhasil dihapus.</string>
     <string name="something_went_wrong_msg">Terjadi kesalahan.</string>
-    <string name="action_discard">Aksi dibatalkan.</string>
     <string name="error_invalid_password_id">Terjadi kesalahan: ID tidak valid!!</string>
 
     <!-- Dialog -->
-    <string name="update_password_dialog_title">Perbarui kata sandi?</string>
-    <string name="delete_password_dialog_title">Hapus kata sandi?</string>
-    <string name="irreversible_dialog_desc">Tindakan ini tidak dapat dibatalkan.</string>
-    <string name="confirm_dialog_button_text">Konfirmasi</string>
-    <string name="discard_dialog_button_text">Batal</string>
 
 </resources>

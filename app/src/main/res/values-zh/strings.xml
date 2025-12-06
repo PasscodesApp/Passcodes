@@ -15,21 +15,7 @@
     <string name="textview_app_warning">该应用正在积极开发中，仅用于学习和实验目的。暂不建议用于存储敏感信息。请查看安全指南了解详情。</string>
 
     <!-- General UI Elements -->
-    <string name="hint_domain">域名</string>
-    <string name="helper_text_domain_field">对应的网站或域名</string>
-    <string name="hint_username">用户名</string>
-    <string name="hint_password">密码</string>
-    <string name="hint_notes">备注</string>
-    <string name="placeholder_domain_field">例如：Google、Instagram、WhatsApp 等</string>
-    <string name="placeholder_username_field">例如：Liam15、Noha、Olivia、Ava_25 等</string>
-    <string name="placeholder_password_field">例如：12345、abc123xyz、qwerty 等</string>
     <string name="password_manager_button_text">密码管理器</string>
-    <string name="save_password_button_text">保存密码</string>
-    <string name="load_password_button_text">加载密码</string>
-    <string name="update_password_button_text">更新密码</string>
-    <string name="delete_password_button_text">删除密码</string>
-    <string name="import_password_button_text">导入密码</string>
-    <string name="export_password_button_text">导出密码</string>
     <string name="password_security_check_button_text">安全检查</string>
     <string name="setting_button_text">设置</string>
     <string name="toggle_theme_button_text">切换主题</string>
@@ -43,26 +29,12 @@
     <string name="view_release_notes_button_text">查看更新记录</string>
 
     <!-- Headline -->
-    <string name="textview_passwordmanager_headline">密码管理器</string>
-    <string name="textview_loadpassword_headline">加载密码</string>
-    <string name="textview_savepassword_headline">保存密码</string>
-    <string name="textview_viewpassword_headline">查看密码</string>
-    <string name="textview_updatepassword_headline">更新密码</string>
     <string name="textview_settings_headline">设置</string>
     <string name="textview_aboutus_headline">关于我们</string>
 
     <!-- Prefix & Suffix -->
-    <string name="id_prefix">ID：</string>
-    <string name="domain_prefix">域名：</string>
-    <string name="username_prefix">用户名：</string>
-    <string name="password_prefix">密码：</string>
-    <string name="notes_prefix">备注：</string>
-    <string name="createdat_prefix">创建时间：</string>
-    <string name="updatedat_prefix">更新时间：</string>
 
     <!-- Permission -->
-    <string name="permission_granted">已授予权限</string>
-    <string name="permission_denied">权限被拒绝</string>
 
     <!-- Toast Message -->
     <string name="restart_app_require">需要重新启动应用。</string>
@@ -71,17 +43,9 @@
     <string name="warn_fill_form">请先填写表单。</string>
     <string name="fail_msg">失败：请重试。</string>
     <string name="success_clause">成功：</string>
-    <string name="update_success_msg">更新成功。</string>
-    <string name="delete_success_msg">删除成功。</string>
     <string name="something_went_wrong_msg">发生错误。</string>
-    <string name="action_discard">操作已取消。</string>
     <string name="error_invalid_password_id">错误：无效的 ID！！</string>
 
     <!-- Dialog -->
-    <string name="update_password_dialog_title">要更新密码吗？</string>
-    <string name="delete_password_dialog_title">要删除密码吗？</string>
-    <string name="irreversible_dialog_desc">此操作无法撤销。</string>
-    <string name="confirm_dialog_button_text">确认</string>
-    <string name="discard_dialog_button_text">取消</string>
 
 </resources>

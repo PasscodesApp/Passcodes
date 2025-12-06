@@ -14,21 +14,7 @@
     <string name="textview_app_warning">I app-eun jigeum gaebal jung-imnida. hakseup mit silheom mokjeok-euro ssie juseyo. hwaldongjeog-in seculi anjeon-eun bojangdoeji anhassseubnida.</string>
 
     <!-- Button, Textview general in all Activity -->
-    <string name="hint_domain">Domain</string>
-    <string name="helper_text_domain_field">Website name ttoneun domain</string>
-    <string name="hint_username">I-yongja</string>
-    <string name="hint_password">Bimilbeonho</string>
-    <string name="hint_notes">Bijul</string>
-    <string name="placeholder_domain_field">예: Google, Instagram, WhatsApp</string>
-    <string name="placeholder_username_field">예: Liam15, Noha, Ava_25</string>
-    <string name="placeholder_password_field">예: 12345, abc123xyz</string>
     <string name="password_manager_button_text">Bimilbeonho Gwanli</string>
-    <string name="save_password_button_text">Jeojang</string>
-    <string name="load_password_button_text">Buteowagi</string>
-    <string name="update_password_button_text">Gengsin</string>
-    <string name="delete_password_button_text">Sakje</string>
-    <string name="import_password_button_text">Import</string>
-    <string name="export_password_button_text">Export</string>
     <string name="password_security_check_button_text">Anjeon Seolmyeong</string>
     <string name="setting_button_text">Seoljeong</string>
     <string name="toggle_theme_button_text">Tema Byeongyeong</string>
@@ -42,26 +28,12 @@
     <string name="view_release_notes_button_text">Byeon-gye Nolog Bogi</string>
 
     <!-- Headline of Activity -->
-    <string name="textview_passwordmanager_headline">Bimilbeonho Gwanli</string>
-    <string name="textview_loadpassword_headline">Bimilbeonho Buteowagi</string>
-    <string name="textview_savepassword_headline">Bimilbeonho Jeojang</string>
-    <string name="textview_viewpassword_headline">Bimilbeonho Bogi</string>
-    <string name="textview_updatepassword_headline">Bimilbeonho Gengsin</string>
     <string name="textview_settings_headline">Seoljeong</string>
     <string name="textview_aboutus_headline">Ulineun Nuguinga</string>
 
     <!-- Prefix & Suffix -->
-    <string name="id_prefix">ID: </string>
-    <string name="domain_prefix">Domain: </string>
-    <string name="username_prefix">I-yongja: </string>
-    <string name="password_prefix">Bimilbeonho: </string>
-    <string name="notes_prefix">Bijul: </string>
-    <string name="createdat_prefix">Sangseong ilja: </string>
-    <string name="updatedat_prefix">Gengsin ilja: </string>
 
     <!-- Permission -->
-    <string name="permission_granted">Heung-in doem</string>
-    <string name="permission_denied">Geohwa doem</string>
 
     <!-- Toast Message -->
     <string name="restart_app_require">Aeb-eul dasi sijakhaeya haeyo.</string>
@@ -70,16 +42,8 @@
     <string name="warn_fill_form">Gyeong-go: Munsuhyeong-eul da chaeujuseyo.</string>
     <string name="fail_msg">Silpae: Dasi sihae juseyo.</string>
     <string name="success_clause">Seong-gong:</string>
-    <string name="update_success_msg">Seong-gongjeog-eulo gengsin!</string>
-    <string name="delete_success_msg">Jeong sangjeongdoe-eossseubnida.</string>
     <string name="something_went_wrong_msg">Mueonga jalmosdoeeossseubnida.</string>
-    <string name="action_discard">Haengdong jeohwa</string>
     <string name="error_invalid_password_id">Jalmosdoe-eossseubnida: ID Mubeon!</string>
 
     <!-- Alert Dialog Message -->
-    <string name="update_password_dialog_title">Gengsin haneun geos-eulo hal-kka?</string>
-    <string name="delete_password_dialog_title">Jeongmal sangjehal-kka?</string>
-    <string name="irreversible_dialog_desc">I haengdong-eun dora gal su eobs-seubnida.</string>
-    <string name="confirm_dialog_button_text">Hwagin</string>
-    <string name="discard_dialog_button_text">Jeohwa</string>
 </resources>

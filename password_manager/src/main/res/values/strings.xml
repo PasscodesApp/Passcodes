@@ -8,6 +8,7 @@
     <string name="placeholder_domain_field">e.g. Google, Instagram, WhatsApp, etc.</string>
     <string name="placeholder_username_field">e.g. Liam15, Noha, Olivia, Ava_25, etc.</string>
     <string name="placeholder_password_field">e.g. 12345, abc123xyz, qwerty, etc.</string>
+    <string name="copy_password_button_text">Copy Password</string>
     <string name="save_password_button_text">Save Password</string>
     <string name="load_password_button_text">Load Password</string>
     <string name="update_password_button_text">Update Password</string>
@@ -32,13 +33,17 @@
 
 
     <!-- Toast Message -->
+    <string name="copy_success">Copied Successfully</string>
+    <string name="preview_feature">This is preview feature.. Might have Bugs...</string>
     <string name="something_went_wrong_msg">Something went wrong.</string>
     <string name="action_discard">Action discarded.</string>
     <string name="error_invalid_password_id">Something Went Wrong: Invalid ID!!</string>
 
     <!-- Alert Dialog Message -->
+    <string name="copy_password_dialog_title">Copy to Clipboard?</string>
     <string name="update_password_dialog_title">Update password?</string>
     <string name="delete_password_dialog_title">Delete password?</string>
+    <string name="danger_copy_to_clipboard_desc">Copying sensitive data like passwords to clipboard is not so good for security!!!</string>
     <string name="irreversible_dialog_desc">This action cannot be undone.</string>
     <string name="confirm_dialog_button_text">Confirm</string>
     <string name="discard_dialog_button_text">Discard</string>

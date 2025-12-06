@@ -15,21 +15,7 @@
     <string name="textview_app_warning">このアプリは開発中で、教育・実験目的のみでの使用を想定しています。機密情報の保存には安全でない可能性があります。セキュリティガイドラインをご確認ください。</string>
 
     <!-- General UI Elements -->
-    <string name="hint_domain">ドメイン</string>
-    <string name="helper_text_domain_field">関連するウェブサイトやドメインの名前</string>
-    <string name="hint_username">ユーザー名</string>
-    <string name="hint_password">パスワード</string>
-    <string name="hint_notes">メモ</string>
-    <string name="placeholder_domain_field">例：Google、Instagram、WhatsApp など</string>
-    <string name="placeholder_username_field">例：Liam15、Noha、Olivia、Ava_25 など</string>
-    <string name="placeholder_password_field">例：12345、abc123xyz、qwerty など</string>
     <string name="password_manager_button_text">パスワードマネージャー</string>
-    <string name="save_password_button_text">保存</string>
-    <string name="load_password_button_text">読み込み</string>
-    <string name="update_password_button_text">更新</string>
-    <string name="delete_password_button_text">削除</string>
-    <string name="import_password_button_text">インポート</string>
-    <string name="export_password_button_text">エクスポート</string>
     <string name="password_security_check_button_text">セキュリティチェック</string>
     <string name="setting_button_text">設定</string>
     <string name="toggle_theme_button_text">テーマ切替</string>
@@ -43,26 +29,12 @@
     <string name="view_release_notes_button_text">更新履歴</string>
 
     <!-- Headline -->
-    <string name="textview_passwordmanager_headline">パスワードマネージャー</string>
-    <string name="textview_loadpassword_headline">パスワード読み込み</string>
-    <string name="textview_savepassword_headline">パスワード保存</string>
-    <string name="textview_viewpassword_headline">パスワードを見る</string>
-    <string name="textview_updatepassword_headline">パスワード更新</string>
     <string name="textview_settings_headline">設定</string>
     <string name="textview_aboutus_headline">アプリについて</string>
 
     <!-- Prefix & Suffix -->
-    <string name="id_prefix">ID：</string>
-    <string name="domain_prefix">ドメイン：</string>
-    <string name="username_prefix">ユーザー名：</string>
-    <string name="password_prefix">パスワード：</string>
-    <string name="notes_prefix">メモ：</string>
-    <string name="createdat_prefix">作成日：</string>
-    <string name="updatedat_prefix">更新日：</string>
 
     <!-- Permission -->
-    <string name="permission_granted">許可されました</string>
-    <string name="permission_denied">許可されませんでした</string>
 
     <!-- Toast Message -->
     <string name="restart_app_require">アプリを再起動する必要があります。</string>
@@ -71,17 +43,9 @@
     <string name="warn_fill_form">警告：フォームを入力してください</string>
     <string name="fail_msg">失敗しました：もう一度お試しください</string>
     <string name="success_clause">成功：</string>
-    <string name="update_success_msg">更新に成功しました</string>
-    <string name="delete_success_msg">削除に成功しました</string>
     <string name="something_went_wrong_msg">問題が発生しました</string>
-    <string name="action_discard">操作がキャンセルされました</string>
     <string name="error_invalid_password_id">エラー：無効なIDです!!</string>
 
     <!-- Dialog -->
-    <string name="update_password_dialog_title">パスワードを更新しますか？</string>
-    <string name="delete_password_dialog_title">パスワードを削除しますか？</string>
-    <string name="irreversible_dialog_desc">この操作は元に戻せません。</string>
-    <string name="confirm_dialog_button_text">確認</string>
-    <string name="discard_dialog_button_text">キャンセル</string>
 
 </resources>

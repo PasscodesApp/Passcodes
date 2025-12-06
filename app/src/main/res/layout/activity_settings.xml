@@ -135,7 +135,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:textColor="?attr/colorPrimary"
-                android:text="Preview Layout:"
+                android:text="@string/preview_layout"
                 android:textSize="16sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/autofill_setting_btn"
                 android:layout_width="wrap_content"
-                android:text="Autofill Settings"
+                android:text="@string/autofill_settings"
                 android:textSize="12sp"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:textColor="?attr/colorSecondary"
