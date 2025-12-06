@@ -49,35 +49,15 @@ dependencies {
     // Standard Kotlin Libraries
     implementation(libs.kotlin.stdlib)
 
-    // UI/Google Services
-    implementation(libs.material)
-    implementation(libs.oss.license)
-    implementation(libs.appcompat)
-
-    // Networking/Parsing
-    implementation(libs.okhttp)
-    implementation(libs.json)
-
     // Concurrency (Coroutines Bundle)
     implementation(libs.bundles.coroutines)
 
     // Android Architecture Components (Lifecycle Bundle)
     implementation(libs.bundles.lifecycle)
 
-    // Dependency Injection
-    implementation(libs.bundles.koin)
-
     // Datastore Preferences
     implementation(libs.bundles.datastore.preferences)
 
-
-    // --- Testing ---
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    // Local Unit Testing (Unit Test Bundle)
-    testImplementation(libs.bundles.unit.test)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }
