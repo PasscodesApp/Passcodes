@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":database"))
 
+    // Android Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -59,19 +60,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.bundles.compose.debug)
-
-    // Navigation 3
-    implementation(libs.bundles.navigation3)
-
-    // Standard Kotlin Libraries
-    implementation(libs.kotlin.stdlib)
-
-    implementation(libs.oss.license)
-    implementation(libs.appcompat)
-
-    // Networking/Parsing
-    implementation(libs.okhttp)
-    implementation(libs.json)
 
     // Concurrency (Coroutines Bundle)
     implementation(libs.bundles.coroutines)
@@ -85,7 +73,7 @@ dependencies {
     // Datastore Preferences
     implementation(libs.bundles.datastore.preferences)
 
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }
