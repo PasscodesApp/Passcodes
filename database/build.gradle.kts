@@ -53,6 +53,9 @@ dependencies {
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
 
+    // Dependency Injection
+    implementation(libs.bundles.koin)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.room.testing)

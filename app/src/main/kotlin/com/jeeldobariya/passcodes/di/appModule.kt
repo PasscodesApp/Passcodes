@@ -1,6 +1,8 @@
 package com.jeeldobariya.passcodes.di
 
+import com.jeeldobariya.passcodes.database.master.MasterDatabase
 import com.jeeldobariya.passcodes.domain.usecases.CheckForUpdateUseCase
+import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.DeletePasswordUseCase
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.EditPasswordUseCase
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.ExportPasswordCSVUseCase
@@ -18,6 +20,10 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
+
+    single {
+        PasswordRepository(get())
+    }
 
     factory {
         OkHttpClient()

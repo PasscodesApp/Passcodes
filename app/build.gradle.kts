@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.oss.licenses)
 }
@@ -154,6 +153,10 @@ dependencies {
     implementation(project(":database"))
     implementation(project(":password_manager"))
 
+    // Android Core
+    implementation(libs.appcompat)
+    implementation(libs.material)
+
     // Jetpack Compose
     implementation(libs.bundles.compose)
     implementation(platform(libs.compose.bom))
@@ -162,20 +165,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.bundles.compose.debug)
 
-    // Navigation 3
-    implementation(libs.bundles.navigation3)
-
-    // Standard Kotlin Libraries
-    implementation(libs.kotlin.stdlib)
-
-    // UI/Google Services
-    implementation(libs.material)
+    // Google Play License Services
     implementation(libs.oss.license)
-    implementation(libs.appcompat)
-
-    // Data/Persistence (Room Bundle)
-    implementation(libs.bundles.room)
-    ksp(libs.room.compiler)
 
     // Networking/Parsing
     implementation(libs.okhttp)
@@ -193,17 +184,6 @@ dependencies {
     // Datastore Preferences
     implementation(libs.bundles.datastore.preferences)
 
-    
-    // --- Testing ---
-    debugImplementation(libs.androidx.ui.test.manifest)
-
     // Local Unit Testing (Unit Test Bundle)
     testImplementation(libs.bundles.unit.test)
-
-    // Android Instrumented Testing (Android Test Bundle)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.bundles.android.test)
-    androidTestImplementation(libs.room.testing)
-    androidTestImplementation(libs.bundles.coroutines.test)
-    androidTestImplementation(libs.truth) // Keeping truth explicit for androidTest, though it's in both bundles.
 }
