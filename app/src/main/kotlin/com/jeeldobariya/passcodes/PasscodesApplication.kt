@@ -1,6 +1,7 @@
 package com.jeeldobariya.passcodes
 
 import android.app.Application
+import com.jeeldobariya.passcodes.core.di.coreModule
 import com.jeeldobariya.passcodes.di.appModule
 import com.jeeldobariya.passcodes.database.di.databaseModule
 import org.koin.android.ext.koin.androidContext
@@ -12,6 +13,7 @@ class PasscodesApplication : Application() {
         startKoin {
             androidContext(this@PasscodesApplication)
             modules(appModule)
+            modules(coreModule)
             modules(databaseModule)
         }
     }

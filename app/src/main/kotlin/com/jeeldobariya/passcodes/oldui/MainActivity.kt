@@ -6,10 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.BuildConfig
+import com.jeeldobariya.passcodes.Constant
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
-import com.jeeldobariya.passcodes.domain.usecases.CheckForUpdateUseCase
+import com.jeeldobariya.passcodes.core.domain.usecases.CheckForUpdateUseCase
 import com.jeeldobariya.passcodes.password_manager.oldui.PasswordManagerActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -36,7 +37,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch(Dispatchers.IO) {
-            checkForUpdateUseCase.run(BuildConfig.VERSION_NAME)
+            checkForUpdateUseCase.run(BuildConfig.VERSION_NAME, Constant.GITHUB_RELEASE_API_URL,
+                Constant.TELEGRAM_COMMUNITY_URL)
         }
 
         // Add event onclick listener

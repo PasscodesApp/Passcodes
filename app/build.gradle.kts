@@ -167,10 +167,6 @@ dependencies {
     // Google Play License Services
     implementation(libs.oss.license)
 
-    // Networking/Parsing
-    implementation(libs.okhttp)
-    implementation(libs.json)
-
     // Concurrency (Coroutines Bundle)
     implementation(libs.bundles.coroutines)
 

@@ -1,7 +1,5 @@
 package com.jeeldobariya.passcodes.di
 
-import com.jeeldobariya.passcodes.database.master.MasterDatabase
-import com.jeeldobariya.passcodes.domain.usecases.CheckForUpdateUseCase
 import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.DeletePasswordUseCase
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.EditPasswordUseCase
@@ -14,7 +12,6 @@ import com.jeeldobariya.passcodes.password_manager.presentation.load_password.Lo
 import com.jeeldobariya.passcodes.password_manager.presentation.save_password.SavePasswordViewModel
 import com.jeeldobariya.passcodes.password_manager.presentation.update_password.UpdatePasswordViewModel
 import com.jeeldobariya.passcodes.password_manager.presentation.view_password.ViewPasswordViewModel
-import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -23,14 +20,6 @@ val appModule = module {
 
     single {
         PasswordRepository(get())
-    }
-
-    factory {
-        OkHttpClient()
-    }
-
-    factory {
-        CheckForUpdateUseCase(androidContext(), get())
     }
 
     factory {

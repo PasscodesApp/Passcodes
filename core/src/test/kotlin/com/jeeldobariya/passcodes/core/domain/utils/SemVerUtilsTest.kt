@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.domain.utils
+package com.jeeldobariya.passcodes.core.domain.utils
 
 import com.google.common.truth.Truth
 import org.junit.Test

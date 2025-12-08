@@ -1,9 +1,9 @@
-package com.jeeldobariya.passcodes.domain.usecases
+package com.jeeldobariya.passcodes.core.domain.usecases
 
 import android.content.Context
+import android.os.Handler
 import android.widget.Toast
-import com.jeeldobariya.passcodes.Constant
-import com.jeeldobariya.passcodes.domain.utils.SemVerUtils
+import com.jeeldobariya.passcodes.core.domain.utils.SemVerUtils
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -15,11 +15,11 @@ class CheckForUpdateUseCase(
     val context: Context,
     val client: OkHttpClient
 ) {
-    suspend fun run(currentVersion: String) {
+    suspend fun run(currentVersion: String, githubReleaseApiUrl: String, telegramCommunityUrl: String) {
         val currNormalizedVersion = SemVerUtils.normalize(currentVersion)
 
         val request = Request.Builder()
-            .url(Constant.GITHUB_RELEASE_API_URL)
+            .url(githubReleaseApiUrl)
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -42,7 +42,7 @@ class CheckForUpdateUseCase(
                         if (release.prerelease) {
                             showToast(
                                 context,
-                                "⚠️ You are using a PRE-RELEASE ($currNormalizedVersion). Not safe for use!  Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
+                                "⚠️ You are using a PRE-RELEASE ($currNormalizedVersion). Not safe for use!  Join telegram community ($telegramCommunityUrl)"
                             )
                         }
                     }
@@ -65,7 +65,7 @@ class CheckForUpdateUseCase(
                 if (!userReleaseFound) {
                     showToast(
                         context,
-                        "⚠️ Version ($currNormalizedVersion) not found on GitHub releases... Join telegram community (${Constant.TELEGRAM_COMMUNITY_URL})"
+                        "⚠️ Version ($currNormalizedVersion) not found on GitHub releases... Join telegram community ($telegramCommunityUrl)"
                     )
                 }
             }
@@ -73,7 +73,7 @@ class CheckForUpdateUseCase(
     }
 
     private fun showToast(context: Context, message: String) {
-        android.os.Handler(context.mainLooper).post {
+        Handler(context.mainLooper).post {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
     }
