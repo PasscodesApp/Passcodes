@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.di
+package com.jeeldobariya.passcodes.password_manager.di
 
 import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.DeletePasswordUseCase
@@ -16,7 +16,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule = module {
+val passwordManagerModule = module {
 
     single {
         PasswordRepository(get())
