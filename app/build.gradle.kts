@@ -162,7 +162,6 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.bundles.compose.debug)
 
     // Google Play License Services
@@ -186,4 +185,5 @@ dependencies {
 
     // Local Unit Testing (Unit Test Bundle)
     testImplementation(libs.bundles.unit.test)
+    androidTestImplementation(libs.bundles.android.test)
 }
