@@ -47,27 +47,24 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
-
-    // Standard Kotlin Libraries
-    implementation(libs.kotlin.stdlib)
 
     // Networking/Parsing
     implementation(libs.okhttp)
     implementation(libs.json)
 
     // Concurrency (Coroutines Bundle)
-    implementation(libs.bundles.coroutines)
+    implementation(libs.coroutines.core)
 
     // Android Architecture Components (Lifecycle Bundle)
-    implementation(libs.bundles.lifecycle)
+    implementation(libs.lifecycle.runtime)
 
     // Dependency Injection
-    implementation(libs.bundles.koin)
+    implementation(libs.koin)
 
     // Datastore Preferences
-    implementation(libs.bundles.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
 
-    testImplementation(libs.bundles.unit.test)
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
 }
