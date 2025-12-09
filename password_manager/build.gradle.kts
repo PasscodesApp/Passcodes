@@ -14,11 +14,11 @@ kotlin {
 android {
     namespace = "com.jeeldobariya.passcodes.password_manager"
     compileSdk {
-        version = release(36)
+        version = release(libs.versions.androidCompileSdk.get().toInt())
     }
 
     defaultConfig {
-        minSdk = 26
+        minSdk = libs.versions.androidMinSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

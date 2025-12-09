@@ -20,13 +20,13 @@ kotlin {
 
 android {
     (this as ApplicationExtension).apply {
-        compileSdk = 36
+        compileSdk = libs.versions.androidCompileSdk.get().toInt()
         namespace = "com.jeeldobariya.passcodes"
 
         defaultConfig {
             applicationId = "com.jeeldobariya.passcodes"
-            minSdk = 26
-            targetSdk = 34
+            minSdk = libs.versions.androidMinSdk.get().toInt()
+            targetSdk = libs.versions.androidTargetSdk.get().toInt()
             versionCode = 2
             versionName = "v1.1.2-rc.2"
 
