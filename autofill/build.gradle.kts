@@ -52,9 +52,6 @@ dependencies {
     implementation(libs.material)
 
     // Data/Persistence (Room Bundle)
-    implementation(libs.bundles.room)
     ksp(libs.room.compiler)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
+    implementation(libs.room.ktx)
 }
