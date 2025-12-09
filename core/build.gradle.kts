@@ -47,6 +47,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.material)
 
     // Networking/Parsing
     implementation(libs.okhttp)
