@@ -26,7 +26,6 @@ A android app that take down the headache of remembering passwords. It is open s
 ## Screen Shots
 
 <details>
-  <summary>View Here</summary>
   <img style="width: 40%; height: 100%; padding-right: 10px" src="https://github.com/user-attachments/assets/b6407ba3-be7f-4a5b-9e17-8e201ecf2ff3" />
   <img style="width: 40%; height: 100%; padding-right: 10px" src="https://github.com/user-attachments/assets/930c18aa-7e38-4a56-a8e4-f5f1d2ee6e38" />
   <img style="width: 40%; height: 100%; padding-right: 10px" src="https://github.com/user-attachments/assets/135f29cb-97ed-4cc3-acd6-4a606e9d8844" />
@@ -46,24 +45,24 @@ Note: high version can still run, but are not guaranteed offically.
 
 ## Features
 
-- [x] Intuitive UI.
+- [ ] Intuitive UI.
 - [ ] Update Checkers & Manager.
 - [x] Password Management. (Current Priority)
 - [ ] Secure File. (Least Priority, Because it include permission. Which, I am as developer not familar with 😂)
     - Could be Image. (JPG. PNG ....)
-    - Could be Vidoe.
+    - Could be Video.
     - Could any Binary File. (more like won't be a text file)
 - [ ] Other Secret Info Management.
     - Could be note. (txt file)
     - Could be any info that can encode as key & value.
-```json
-{
-  "key": "SECRET API KEY",
-  "content": "qwerty-let-say",
-  "createdat": "...",
-  "updatedat": "..."
-}
-```
+    ```json
+    {
+      "key": "SECRET API KEY",
+      "content": "qwerty-let-say",
+      "created-at": "...",
+      "updated-at": "..."
+    }
+    ```
 - [ ] NON Secret Info Store.
 - [ ] Encryption and Decryption.
 - [ ] Backup Manager.
@@ -82,7 +81,7 @@ Note: high version can still run, but are not guaranteed offically.
 
 3. Install the apk and you are ready to use the app.
 
-It was most shortest and sweetest description (I have ever crafted), For more detailed description, Vist the file [installing.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/installing.md) in `PasscodesApp/Passcodes-Docs`.
+It was most shortest and sweetest description (I have ever crafted), For more detailed description, See the file [installing.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/installing.md) in `PasscodesApp/Passcodes-Docs`.
 
 ## Building The App
 
@@ -92,7 +91,7 @@ It was most shortest and sweetest description (I have ever crafted), For more de
 
 3. Follow the general step and build the app.
 
-4. For code documention and support docs, check the `docs/` folder in our repository.
+4. For code documentation and support docs, check the `docs/` folder in our repository.
 
 It was general, intuitive, short and sweet description, For more detailed description, Vist the file [building.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/dev-docs/building.md) in `PasscodesApp/Passcodes-Docs`.
 
@@ -111,9 +110,9 @@ You can checkout support docs, provided in [PasscodesApp/Passcodes-Docs](https:/
 > Currently the project (more or less also me) is not ready for (code) contributions.
 > This project is currently limited by my expertise & I am beginner. Meaning I don;t want others code in my codebase, that I don't understand, I am learning android and will surely learn basic off by start of 2026.. then i will allow the contibution to this repo... But as of now i don't admire code contribution. As I am beginner in android and might have difficuly understand code that not written by me...
 >
-> There are still other ways to contribute to project.. like by testing app, by contributing to documenation or more or less just by spreading the word around.. about the app. but, code contribution is limited from my side.... & I hope you can understand...
+> There are still other ways to contribute to project.. like by testing app, by contributing to documentation or more or less just by spreading the word around.. about the app. but, code contribution is limited from my side.... & I hope you can understand...
 >
-> For more, infomation on what kind of contribtuion we approve or allow, please open a issue in our repo. that way you avoid wasteing your time...
+> For more, information on what kind of contribution we approve or allow, please open a issue in our repo. that way you avoid wasting your time...
 >
 > [Read More](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/open-contributing-timeline.md)
 
