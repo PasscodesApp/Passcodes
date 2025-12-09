@@ -1,9 +1,4 @@
 [versions]
-# Main versions
-androidMinSdk = "26"
-androidTargetSdk = "34"
-androidCompileSdk = "36"
-
 # Library versions
 coreKtx = "1.17.0"
 material = "1.13.0"
