@@ -65,6 +65,5 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
 
-    testImplementation(libs.junit)
-    testImplementation(libs.truth)
+    testImplementation(libs.bundles.unit.test)
 }

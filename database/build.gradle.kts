@@ -63,9 +63,8 @@ dependencies {
     // Dependency Injection
     implementation(libs.koin)
 
-    testImplementation(libs.junit)
+    androidTestImplementation(libs.bundles.unit.test)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.room.testing)
-    androidTestImplementation(libs.truth)
 }
