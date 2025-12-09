@@ -32,7 +32,7 @@ class ViewPasswordViewModel(
 
         viewModelScope.launch {
             try {
-                val password: PasswordModal = requireNotNull(retrievePasswordUseCase.run(passwordId))
+                val password: PasswordModal = requireNotNull(retrievePasswordUseCase(passwordId))
 
                 _state.update {
                     it.copy(
@@ -52,7 +52,7 @@ class ViewPasswordViewModel(
     private fun deletePasswordEntity() {
         viewModelScope.launch {
             try {
-                deletePasswordUseCase.run(passwordEntityId)
+                deletePasswordUseCase(passwordEntityId)
             } catch (_: Exception) {
                 _state.update { it.copy(isError = true) }
             }

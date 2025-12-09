@@ -10,7 +10,7 @@ class ImportPasswordCSVUseCase(
     val context: Context,
     val passwordRepository: PasswordRepository
 ) {
-    suspend fun run(importFileUri: Uri) {
+    suspend operator fun invoke(importFileUri: Uri) {
         context.contentResolver.openInputStream(importFileUri)?.bufferedReader().use { reader ->
             requireNotNull(reader)
 

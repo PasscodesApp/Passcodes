@@ -50,7 +50,7 @@ class PasswordManagerActivity : AppCompatActivity() {
                 requireNotNull(uri)
 
                 lifecycleScope.launch(Dispatchers.IO) {
-                    importPasswordUseCase.run(uri)
+                    importPasswordUseCase(uri)
                 }
             }
         }
@@ -63,7 +63,7 @@ class PasswordManagerActivity : AppCompatActivity() {
                 requireNotNull(uri)
 
                 lifecycleScope.launch(Dispatchers.IO) {
-                    exportPasswordUseCase.run(uri)
+                    exportPasswordUseCase(uri)
                 }
             }
         }

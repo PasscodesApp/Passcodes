@@ -45,12 +45,14 @@ class SavePasswordViewModel(
     private fun savePasswordEntity() {
         viewModelScope.launch {
             try {
-                storePasswordUseCase.run(password = PasswordModal(
-                    domain = _state.value.domain,
-                    username = _state.value.username,
-                    password = _state.value.password,
-                    notes = _state.value.notes
-                ))
+                storePasswordUseCase(
+                    PasswordModal(
+                        domain = _state.value.domain,
+                        username = _state.value.username,
+                        password = _state.value.password,
+                        notes = _state.value.notes
+                    )
+                )
             } catch (e: Exception) {
                 _state.update { it.copy(isError = true) }
             }

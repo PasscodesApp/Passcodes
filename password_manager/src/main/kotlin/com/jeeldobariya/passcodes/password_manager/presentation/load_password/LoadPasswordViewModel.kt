@@ -25,7 +25,7 @@ class LoadPasswordViewModel(
         viewModelScope.launch {
             _state.update {
                 LoadPasswordState(
-                    passwordEntityList = retrieveAllPasswordUseCase.run()
+                    passwordEntityList = retrieveAllPasswordUseCase()
                 )
             }
         }

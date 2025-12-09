@@ -25,7 +25,7 @@ class UpdatePasswordViewModel(
 
         viewModelScope.launch {
             try {
-                val password: PasswordModal = requireNotNull(retrievePasswordUseCase.run(passwordId))
+                val password: PasswordModal = requireNotNull(retrievePasswordUseCase(passwordId))
 
                 _state.update {
                     it.copy(
@@ -70,8 +70,8 @@ class UpdatePasswordViewModel(
     private fun updatePasswordEntity() {
         viewModelScope.launch {
             try {
-                editPasswordUseCase.run(
-                    password = PasswordModal(
+                editPasswordUseCase(
+                    PasswordModal(
                         id = passwordEntityId,
                         domain = _state.value.domain,
                         username = _state.value.username,

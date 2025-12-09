@@ -15,7 +15,11 @@ class CheckForUpdateUseCase(
     val context: Context,
     val client: OkHttpClient
 ) {
-     suspend operator fun invoke(currentVersion: String, githubReleaseApiUrl: String, telegramCommunityUrl: String) {
+    suspend operator fun invoke(
+        currentVersion: String,
+        githubReleaseApiUrl: String,
+        telegramCommunityUrl: String
+    ) {
         val currNormalizedVersion = SemVerUtils.normalize(currentVersion)
 
         val request = Request.Builder()

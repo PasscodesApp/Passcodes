@@ -10,7 +10,7 @@ class ExportPasswordCSVUseCase(
     val context: Context,
     val passwordRepository: PasswordRepository
 ) {
-    suspend fun run(exportFileUri: Uri) {
+    suspend operator fun invoke(exportFileUri: Uri) {
         context.contentResolver.openOutputStream(exportFileUri)?.bufferedWriter().use { writer ->
             requireNotNull(writer)
 

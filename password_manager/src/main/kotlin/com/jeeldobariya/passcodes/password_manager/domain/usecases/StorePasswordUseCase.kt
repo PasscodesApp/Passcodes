@@ -6,7 +6,7 @@ import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 class StorePasswordUseCase(
     val passwordRepository: PasswordRepository
 ) {
-    suspend fun run(password: PasswordModal) {
+    suspend operator fun invoke(password: PasswordModal) {
         passwordRepository.savePasswordEntity(
             domain = password.domain,
             username = password.username,

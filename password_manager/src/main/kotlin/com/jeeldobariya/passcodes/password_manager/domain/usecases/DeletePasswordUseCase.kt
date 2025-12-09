@@ -5,7 +5,7 @@ import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepos
 class DeletePasswordUseCase(
     val passwordRepository: PasswordRepository
 ) {
-    suspend fun run(id: Int) {
+    suspend operator fun invoke(id: Int) {
         passwordRepository.deletePassword(id = id)
     }
 }

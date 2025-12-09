@@ -6,7 +6,7 @@ import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 class RetrievePasswordUseCase(
     val passwordRepository: PasswordRepository
 ) {
-    suspend fun run(id: Int): PasswordModal? {
+    suspend operator fun invoke(id: Int): PasswordModal? {
         return passwordRepository.getPasswordById(id)
     }
 }
