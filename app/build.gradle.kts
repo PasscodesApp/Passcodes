@@ -95,21 +95,12 @@ android {
                 isMinifyEnabled = true
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
+                resValue("string", "app_name", "Passcodes")
+                resValue("string", "app_version", "v1.1.2 - Beta")
+
                 // Use manifestPlaceholders.put() for key-value pairs
                 manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
-                manifestPlaceholders["appLabel"] = "@string/app_name"
-            }
-
-            getByName("debug") {
-                applicationIdSuffix = ".dev"
-                versionNameSuffix = "-Dev"
-
-                isDebuggable = true
-                isShrinkResources = false
-                isMinifyEnabled = false
-
-                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appLabel"] = "Passcodes-Dev"
+                manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_round"
             }
 
             create("staging") {
@@ -128,8 +119,28 @@ android {
                 isMinifyEnabled = true
                 proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
 
+                resValue("string", "app_name", "Passcodes Staging")
+                resValue("string", "app_version", "v1.1.2 - staging")
+
+                // Use manifestPlaceholders.put() for key-value pairs
                 manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appLabel"] = "Passcodes-Staging"
+                manifestPlaceholders["appRoundIcon"] = "@mipmap/dev_ic_launcher_round"
+            }
+
+            getByName("debug") {
+                applicationIdSuffix = ".dev"
+                versionNameSuffix = "-Dev"
+
+                isDebuggable = true
+                isShrinkResources = false
+                isMinifyEnabled = false
+
+                resValue("string", "app_name", "Passcodes Debug")
+                resValue("string", "app_version", "v1.1.2 - debug")
+
+                // Use manifestPlaceholders.put() for key-value pairs
+                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
+                manifestPlaceholders["appRoundIcon"] = "@mipmap/dev_ic_launcher_round"
             }
         }
     }
