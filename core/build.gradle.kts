@@ -53,7 +53,7 @@ dependencies {
     implementation(libs.json)
 
     // Concurrency (Coroutines Bundle)
-    implementation(libs.coroutines.core)
+    implementation(libs.bundles.coroutines)
 
     // Android Architecture Components (Lifecycle Bundle)
     implementation(libs.lifecycle.runtime)

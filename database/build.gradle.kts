@@ -57,12 +57,15 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 
+    // Concurrency (Coroutines Bundle)
+    implementation(libs.bundles.coroutines)
+
     // Dependency Injection
     implementation(libs.koin)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.bundles.coroutines.test)
+    androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.room.testing)
     androidTestImplementation(libs.truth)
 }
