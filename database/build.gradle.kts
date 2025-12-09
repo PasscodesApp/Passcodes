@@ -54,15 +54,15 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     // Data/Persistence (Room Bundle)
-    implementation(libs.bundles.room)
     ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     // Dependency Injection
-    implementation(libs.bundles.koin)
+    implementation(libs.koin)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.bundles.coroutines.test)
     androidTestImplementation(libs.room.testing)
     androidTestImplementation(libs.truth)
-    androidTestImplementation(libs.bundles.coroutines.test)
 }
