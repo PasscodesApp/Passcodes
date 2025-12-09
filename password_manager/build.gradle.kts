@@ -58,26 +58,20 @@ dependencies {
     implementation(libs.material)
 
     // Jetpack Compose
-    implementation(libs.bundles.compose)
     implementation(platform(libs.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.bundles.compose.debug)
 
     // Concurrency (Coroutines Bundle)
-    implementation(libs.bundles.coroutines)
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
 
     // Android Architecture Components (Lifecycle Bundle)
-    implementation(libs.bundles.lifecycle)
+    implementation(libs.lifecycle.runtime)
+    implementation(libs.lifecycle.viewmodel)
 
     // Dependency Injection
-    implementation(libs.bundles.koin)
+    implementation(libs.koin)
+    implementation(libs.koin.compose)
 
     // Datastore Preferences
-    implementation(libs.bundles.datastore.preferences)
-
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
+    implementation(libs.androidx.datastore.preferences)
 }
