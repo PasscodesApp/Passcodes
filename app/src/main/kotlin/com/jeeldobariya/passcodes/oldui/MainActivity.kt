@@ -37,8 +37,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch(Dispatchers.IO) {
-            checkForUpdateUseCase.run(BuildConfig.VERSION_NAME, Constant.GITHUB_RELEASE_API_URL,
-                Constant.TELEGRAM_COMMUNITY_URL)
+            checkForUpdateUseCase(
+                currentVersion = BuildConfig.VERSION_NAME,
+                githubReleaseApiUrl = Constant.GITHUB_RELEASE_API_URL,
+                telegramCommunityUrl = Constant.TELEGRAM_COMMUNITY_URL
+            )
         }
 
         // Add event onclick listener
