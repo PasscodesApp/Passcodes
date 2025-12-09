@@ -149,19 +149,18 @@ android {
 dependencies {
     // In project library / feature modules
     implementation(project(":core"))
-    implementation(project(":autofill"))
     implementation(project(":database"))
     implementation(project(":password_manager"))
+    implementation(project(":autofill"))
 
     // Android Core
     implementation(libs.appcompat)
     implementation(libs.material)
 
     // Jetpack Compose
+    val composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
     implementation(libs.bundles.compose)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
     debugImplementation(libs.bundles.compose.debug)
 
     // Google Play License Services
@@ -170,16 +169,10 @@ dependencies {
     // Concurrency (Coroutines Bundle)
     implementation(libs.bundles.coroutines)
 
-    // Android Architecture Components (Lifecycle Bundle)
-    implementation(libs.bundles.lifecycle)
-
     // Dependency Injection
-    implementation(libs.bundles.koin)
+    implementation(libs.koin)
+    implementation(libs.koin.compose)
 
     // Datastore Preferences
-    implementation(libs.bundles.datastore.preferences)
-
-    // Local Unit Testing (Unit Test Bundle)
-    testImplementation(libs.bundles.unit.test)
-    androidTestImplementation(libs.bundles.android.test)
+    implementation(libs.androidx.datastore.preferences)
 }
