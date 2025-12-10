@@ -65,7 +65,7 @@ release notes.
   is potential threat to security, made it a preview feature. Contributed by [@JeelDobariya]
 - **G-Passwords Import/Export (preview feature)**: add a import/export feature. which also
   compatible with google passwords. I have test it with my google password setup. but, I am not sure
-  wether this will run in every edge case or not. So, it a preview feature. Contributed
+  weather this will run in every edge case or not. So, it a preview feature. Contributed
   by [@JeelDobariya]
 
 ### Changed

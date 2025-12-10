@@ -4,7 +4,7 @@
 - summary 2.
 - ...
 
-> Summary here, should be in one line (write consise so that reviewer without take look at code, can
+> Summary here, should be in one line (write concisely so that reviewer without take look at code, can
 > say/determine what changed)..
 > summary above should provide structure overview that one can read and understand what changed.
 > summary should not be a detail guide, just short description.
