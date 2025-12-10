@@ -4,19 +4,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">開発者：Jeel Dobariya</string>
-    <string name="designer_name">UI/UXデザイン：Hamada Issas（Native）</string>
     <string name="code_maintainer">コード管理・テスト：Achmad Daniel（Kudanill）</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">終了</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">パスワードを覚える手間をなくす、オープンソースのパスワードマネージャーです。</string>
     <string name="textview_app_warning">このアプリは開発中で、教育・実験目的のみでの使用を想定しています。機密情報の保存には安全でない可能性があります。セキュリティガイドラインをご確認ください。</string>
 
     <!-- General UI Elements -->
     <string name="password_manager_button_text">パスワードマネージャー</string>
-    <string name="password_security_check_button_text">セキュリティチェック</string>
     <string name="setting_button_text">設定</string>
     <string name="toggle_theme_button_text">テーマ切替</string>
     <string name="label_language_setting">言語：</string>
@@ -37,12 +33,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">アプリを再起動する必要があります。</string>
-    <string name="future_feat_clause">この機能は現在開発中です。</string>
-    <string name="not_found_error_message">404：見つかりませんでした</string>
-    <string name="warn_fill_form">警告：フォームを入力してください</string>
-    <string name="fail_msg">失敗しました：もう一度お試しください</string>
-    <string name="success_clause">成功：</string>
     <string name="something_went_wrong_msg">問題が発生しました</string>
     <string name="error_invalid_password_id">エラー：無効なIDです!!</string>
 

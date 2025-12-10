@@ -4,19 +4,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">Phát triển bởi: Jeel Dobariya</string>
-    <string name="designer_name">Thiết kế UI/UX: Hamada Issas (Native)</string>
     <string name="code_maintainer">Bảo trì &amp; Kiểm thử mã: Achmad Daniel (Kudanill)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">Thoát</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">Trình quản lý mật khẩu mã nguồn mở giúp bạn không cần nhớ mật khẩu nữa.</string>
     <string name="textview_app_warning">Ứng dụng này đang được phát triển và chỉ dùng cho mục đích học tập hoặc thử nghiệm. Có thể chưa đủ an toàn để lưu thông tin nhạy cảm. Vui lòng xem hướng dẫn bảo mật để biết thêm chi tiết.</string>
 
     <!-- General UI Elements -->
     <string name="password_manager_button_text">Quản lý Mật khẩu</string>
-    <string name="password_security_check_button_text">Kiểm tra bảo mật</string>
     <string name="setting_button_text">Cài đặt</string>
     <string name="toggle_theme_button_text">Chuyển giao diện</string>
     <string name="label_language_setting">Ngôn ngữ: </string>
@@ -37,12 +33,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">Cần khởi động lại ứng dụng.</string>
-    <string name="future_feat_clause">Tính năng đang được phát triển.</string>
-    <string name="not_found_error_message">404: Không tìm thấy</string>
-    <string name="warn_fill_form">Vui lòng điền vào biểu mẫu trước.</string>
-    <string name="fail_msg">Thất bại: Vui lòng thử lại.</string>
-    <string name="success_clause">Thành công:</string>
     <string name="something_went_wrong_msg">Đã xảy ra lỗi.</string>
     <string name="error_invalid_password_id">Lỗi: ID không hợp lệ!!</string>
 

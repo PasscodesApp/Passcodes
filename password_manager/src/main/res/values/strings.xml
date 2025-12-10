@@ -34,7 +34,7 @@
 
     <!-- Toast Message -->
     <string name="copy_success">Copied Successfully</string>
-    <string name="preview_feature">This is preview feature.. Might have Bugs...</string>
+    <string name="preview_feature">This is preview feature… Might have Bugs…</string>
     <string name="something_went_wrong_msg">Something went wrong.</string>
     <string name="action_discard">Action discarded.</string>
     <string name="error_invalid_password_id">Something Went Wrong: Invalid ID!!</string>

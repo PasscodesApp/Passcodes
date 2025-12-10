@@ -5,11 +5,7 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">Developed by: Dobariya Jeel</string>
-    <string name="designer_name">UI/UX Design by: Hamada Issas (Native)</string>
     <string name="code_maintainer">Code Maintenance &amp; Testing: Achmad Daniel (Kudanill)</string>
-
-    <!-- Main Activity -->
-    <string name="quit_button_text">Quit</string>
 
     <!-- About Us Activity -->
     <string name="textview_app_description">An open-source password manager that helps eliminate the headache of remembering your passwords.</string>
@@ -18,7 +14,6 @@
     <!-- Button, Textview general in all Activity -->
     <string name="password_manager_button_text">Password Manager</string>
     <string name="clear_all_data_button_text">Clear Data</string>
-    <string name="password_security_check_button_text">Check Security</string>
     <string name="setting_button_text">Settings</string>
     <string name="toggle_theme_button_text">Toggle Theme</string>
     <string name="label_language_setting">Language: </string>
@@ -42,13 +37,7 @@
     <string name="textview_aboutus_headline">About Us</string>
 
     <!-- Toast Message -->
-    <string name="restart_app_require">Restart App Require.</string>
-    <string name="future_feat_clause">This feature is currently under development.</string>
-    <string name="preview_feature">This is preview feature.. Might have Bugs...</string>
-    <string name="not_found_error_message">404: Not found.</string>
-    <string name="warn_fill_form">Warning: Please fill out the form first.</string>
-    <string name="fail_msg">Failed: Please try again.</string>
-    <string name="success_clause">Success:</string>
+    <string name="preview_feature">This is preview feature… Might have Bugs…</string>
     <string name="something_went_wrong_msg">Something went wrong.</string>
     <string name="error_invalid_password_id">Something Went Wrong: Invalid ID!!</string>
 

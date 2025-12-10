@@ -4,19 +4,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">개발자: Jeel Dobariya</string>
-    <string name="designer_name">UI/UX 디자인: Hamada Issas (Native)</string>
     <string name="code_maintainer">코드 유지보수 및 테스트: Achmad Daniel (Kudanill)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">종료</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">비밀번호 기억하기 귀찮을 때 사용하는 오픈소스 비밀번호 관리자입니다.</string>
     <string name="textview_app_warning">이 앱은 현재 개발 중이며 교육 및 실험용으로만 사용해야 합니다. 중요한 정보를 저장하기엔 아직 안전하지 않을 수 있습니다. 보안 가이드를 꼭 참고해주세요.</string>
 
     <!-- General UI Elements -->
     <string name="password_manager_button_text">비밀번호 관리자</string>
-    <string name="password_security_check_button_text">보안 확인</string>
     <string name="setting_button_text">설정</string>
     <string name="toggle_theme_button_text">테마 전환</string>
     <string name="label_language_setting">언어: </string>
@@ -37,12 +33,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">앱을 다시 시작해야 해요.</string>
-    <string name="future_feat_clause">이 기능은 아직 개발 중입니다.</string>
-    <string name="not_found_error_message">404: 찾을 수 없음</string>
-    <string name="warn_fill_form">주의: 먼저 양식을 작성해주세요.</string>
-    <string name="fail_msg">실패: 다시 시도해주세요.</string>
-    <string name="success_clause">성공:</string>
     <string name="something_went_wrong_msg">문제가 발생했습니다.</string>
     <string name="error_invalid_password_id">문제 발생: 잘못된 ID입니다!!</string>
 

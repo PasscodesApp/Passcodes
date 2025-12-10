@@ -4,19 +4,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">डेवलप किया गया: जीत डोबरिया</string>
-    <string name="designer_name">यूआई/यूएक्स डिजाइन: हामदा इस्सास (नेटिव)</string>
     <string name="code_maintainer">कोड मेंटेनेंस और टेस्टिंग: अहमद डेनियल (कुडानिल)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">बंद करें</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">ओपन-सोर्स पासवर्ड मैनेजर जो पासवर्ड याद रखने की झंझट को खत्म करता है।</string>
     <string name="textview_app_warning">यह ऐप अभी डेवलपमेंट में है और सिर्फ एजुकेशनल और एक्सपेरिमेंटल यूज़ के लिए है। जरूरी डेटा स्टोर करने के लिए यह सिक्योर नहीं हो सकता। कृपया सिक्योरिटी गाइडलाइंस देखें।</string>
 
     <!-- Button, Textview general in all Activity -->
     <string name="password_manager_button_text">पासवर्ड मैनेजर</string>
-    <string name="password_security_check_button_text">सिक्योरिटी चेक</string>
     <string name="setting_button_text">सेटिंग्स</string>
     <string name="toggle_theme_button_text">थीम बदलें</string>
     <string name="label_language_setting">भाषा: </string>
@@ -37,12 +33,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">ऐप को फिर से शुरू करना जरूरी है।</string>
-    <string name="future_feat_clause">यह फीचर अभी बन रहा है।</string>
-    <string name="not_found_error_message">404: नहीं मिला।</string>
-    <string name="warn_fill_form">चेतावनी: पहले फॉर्म भरें।</string>
-    <string name="fail_msg">फेल हुआ: फिर से कोशिश करें।</string>
-    <string name="success_clause">सफलता:</string>
     <string name="something_went_wrong_msg">कुछ गलत हो गया।</string>
     <string name="error_invalid_password_id">कुछ गलत हुआ: ID सही नहीं है!!</string>
 

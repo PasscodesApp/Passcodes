@@ -4,19 +4,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">开发者：Jeel Dobariya</string>
-    <string name="designer_name">UI/UX 设计：Hamada Issas（Native）</string>
     <string name="code_maintainer">代码维护与测试：Achmad Daniel（Kudanill）</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">退出</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">一个开源的密码管理器，帮你省去记密码的烦恼。</string>
     <string name="textview_app_warning">该应用正在积极开发中，仅用于学习和实验目的。暂不建议用于存储敏感信息。请查看安全指南了解详情。</string>
 
     <!-- General UI Elements -->
     <string name="password_manager_button_text">密码管理器</string>
-    <string name="password_security_check_button_text">安全检查</string>
     <string name="setting_button_text">设置</string>
     <string name="toggle_theme_button_text">切换主题</string>
     <string name="label_language_setting">语言：</string>
@@ -37,12 +33,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">需要重新启动应用。</string>
-    <string name="future_feat_clause">该功能正在开发中。</string>
-    <string name="not_found_error_message">404：未找到</string>
-    <string name="warn_fill_form">请先填写表单。</string>
-    <string name="fail_msg">失败：请重试。</string>
-    <string name="success_clause">成功：</string>
     <string name="something_went_wrong_msg">发生错误。</string>
     <string name="error_invalid_password_id">错误：无效的 ID！！</string>
 

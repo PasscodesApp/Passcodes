@@ -4,19 +4,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">Entwickelt von: Jeel Dobariya</string>
-    <string name="designer_name">UI/UX Design von: Hamada Issas (Native)</string>
     <string name="code_maintainer">Codepflege &amp; Tests: Achmad Daniel (Kudanill)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">Beenden</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">Ein Open-Source-Passwort-Manager, der dir hilft, Passwörter nicht mehr selbst merken zu müssen.</string>
     <string name="textview_app_warning">Diese App befindet sich noch in der Entwicklung und ist nur für Lern- und Testzwecke gedacht. Sie ist möglicherweise nicht sicher für sensible Daten. Bitte lies die Sicherheitshinweise.</string>
 
     <!-- General UI Elements -->
     <string name="password_manager_button_text">Passwort-Manager</string>
-    <string name="password_security_check_button_text">Sicherheitsprüfung</string>
     <string name="setting_button_text">Einstellungen</string>
     <string name="toggle_theme_button_text">Design wechseln</string>
     <string name="label_language_setting">Sprache: </string>
@@ -37,12 +33,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">App muss neu gestartet werden.</string>
-    <string name="future_feat_clause">Diese Funktion ist in Arbeit.</string>
-    <string name="not_found_error_message">404: Nicht gefunden</string>
-    <string name="warn_fill_form">Bitte zuerst das Formular ausfüllen.</string>
-    <string name="fail_msg">Fehler: Bitte versuche es erneut.</string>
-    <string name="success_clause">Erfolg:</string>
     <string name="something_went_wrong_msg">Etwas ist schiefgelaufen</string>
     <string name="error_invalid_password_id">Fehler: Ungültige ID!!</string>
 

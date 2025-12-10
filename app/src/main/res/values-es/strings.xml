@@ -3,19 +3,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">Desarrollado por: Dobariya Jeel</string>
-    <string name="designer_name">Diseño UI/UX por: Hamada Issas (Native)</string>
     <string name="code_maintainer">Mantenimiento de código y pruebas: Achmad Daniel (Kudanill)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">Salir</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">Un gestor de contraseñas de código abierto que te ayuda a no tener que recordar tus contraseñas.</string>
     <string name="textview_app_warning">Esta app está en desarrollo activo y es solo para fines educativos y experimentales. Puede que no sea segura para guardar información sensible. Consulta las directrices de seguridad para más detalles.</string>
 
     <!-- Button, Textview general in all Activity -->
     <string name="password_manager_button_text">Gestor de Contraseñas</string>
-    <string name="password_security_check_button_text">Revisar Seguridad</string>
     <string name="setting_button_text">Ajustes</string>
     <string name="toggle_theme_button_text">Cambiar Tema</string>
     <string name="label_language_setting">Idioma: </string>
@@ -36,12 +32,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">Es necesario reiniciar la app.</string>
-    <string name="future_feat_clause">Esta función está en desarrollo.</string>
-    <string name="not_found_error_message">404: No encontrado.</string>
-    <string name="warn_fill_form">Aviso: Por favor, completa el formulario primero.</string>
-    <string name="fail_msg">Falló: Intenta de nuevo.</string>
-    <string name="success_clause">Éxito:</string>
     <string name="something_went_wrong_msg">Algo salió mal.</string>
     <string name="error_invalid_password_id">Algo salió mal: ¡ID inválido!</string>
 

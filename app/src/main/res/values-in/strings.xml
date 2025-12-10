@@ -4,19 +4,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">Dikembangkan oleh: Jeel Dobariya</string>
-    <string name="designer_name">Desain UI/UX oleh: Hamada Issas (Native)</string>
     <string name="code_maintainer">Tester: Achmad Daniel (Kudanill)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">Keluar</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">Pengelola kata sandi open-source yang bantu kamu bebas dari repotnya mengingat password.</string>
     <string name="textview_app_warning">Aplikasi ini masih dalam tahap pengembangan aktif dan ditujukan untuk pembelajaran dan eksperimen. Mungkin belum aman untuk menyimpan informasi penting. Silakan baca panduan keamanan untuk info lebih lanjut.</string>
 
     <!-- General UI Elements -->
     <string name="password_manager_button_text">Pengelola Kata Sandi</string>
-    <string name="password_security_check_button_text">Cek Keamanan</string>
     <string name="setting_button_text">Pengaturan</string>
     <string name="toggle_theme_button_text">Ganti Tema</string>
     <string name="label_language_setting">Bahasa: </string>
@@ -37,12 +33,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">Aplikasi perlu dimulai ulang.</string>
-    <string name="future_feat_clause">Fitur ini sedang dikembangkan.</string>
-    <string name="not_found_error_message">404: Tidak ditemukan.</string>
-    <string name="warn_fill_form">Peringatan: Harap isi formulir dulu.</string>
-    <string name="fail_msg">Gagal: Coba lagi nanti.</string>
-    <string name="success_clause">Berhasil:</string>
     <string name="something_went_wrong_msg">Terjadi kesalahan.</string>
     <string name="error_invalid_password_id">Terjadi kesalahan: ID tidak valid!!</string>
 

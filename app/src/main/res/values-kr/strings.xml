@@ -3,19 +3,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">Jaejak: Dobariya Jeel</string>
-    <string name="designer_name">UI/UX Design: Hamada Issas (Native)</string>
     <string name="code_maintainer">Code Maintenance &amp; Test: Achmad Daniel (Kudanill)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">Jeolryo</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">Gieokhagi himdeun byeol-ui bimilbeonho jeongnihae juseyo. I app-eun open-source-imnida!</string>
     <string name="textview_app_warning">I app-eun jigeum gaebal jung-imnida. hakseup mit silheom mokjeok-euro ssie juseyo. hwaldongjeog-in seculi anjeon-eun bojangdoeji anhassseubnida.</string>
 
     <!-- Button, Textview general in all Activity -->
     <string name="password_manager_button_text">Bimilbeonho Gwanli</string>
-    <string name="password_security_check_button_text">Anjeon Seolmyeong</string>
     <string name="setting_button_text">Seoljeong</string>
     <string name="toggle_theme_button_text">Tema Byeongyeong</string>
     <string name="label_language_setting">Eon-eo: </string>
@@ -36,12 +32,6 @@
     <!-- Permission -->
 
     <!-- Toast Message -->
-    <string name="restart_app_require">Aeb-eul dasi sijakhaeya haeyo.</string>
-    <string name="future_feat_clause">I gineung-eun majimag junbi jung-imnida.</string>
-    <string name="not_found_error_message">404: Chal su eobs-eum</string>
-    <string name="warn_fill_form">Gyeong-go: Munsuhyeong-eul da chaeujuseyo.</string>
-    <string name="fail_msg">Silpae: Dasi sihae juseyo.</string>
-    <string name="success_clause">Seong-gong:</string>
     <string name="something_went_wrong_msg">Mueonga jalmosdoeeossseubnida.</string>
     <string name="error_invalid_password_id">Jalmosdoe-eossseubnida: ID Mubeon!</string>
 
