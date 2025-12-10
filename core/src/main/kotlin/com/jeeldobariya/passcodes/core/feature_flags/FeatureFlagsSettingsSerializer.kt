@@ -6,7 +6,7 @@ import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
-object FeatureFlagsSettingsSerializer: Serializer<FeatureFlagsSettings> {
+object FeatureFlagsSettingsSerializer : Serializer<FeatureFlagsSettings> {
     override val defaultValue: FeatureFlagsSettings
         get() = FeatureFlagsSettings()
 

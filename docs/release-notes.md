@@ -5,14 +5,15 @@ For more details and more professional tone, see [changelog.md](/changelog.md).
 
 > [!NOTE]
 > This is a raw version of the file..
->  
-> Final version is over on [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/release-notes.md)
+>
+> Final version is over
+> on [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/release-notes.md)
 
 ## v1.1.1-Alpha (Sept 11, 2025)
 
 <details>
   <summary>View Internal Details</summary>
-  
+
   ```
   Pacakage Name = "com.jeeldobariya.passcodes"
   Min Android = 8.0 (API level 26)
@@ -21,20 +22,21 @@ For more details and more professional tone, see [changelog.md](/changelog.md).
   Version Name = "v1.1.1-Alpha"
   Master Database Version = "v1"
   ```
+
 </details>
 
 `TL;DR`: Sorry for delay, but we have fix import files feature...
 
-We are very sorry for the delay.. we have offically fix the import password csv file selection bug...
+We are very sorry for the delay.. we have offically fix the import password csv file selection
+bug...
 
 In big project, such small mistakes/things happens.. so, ignore it please...
-
 
 ## v1.1.0-Alpha (Sept 1, 2025)
 
 <details>
   <summary>View Internal Details</summary>
-  
+
   ```
   Pacakage Name = "com.jeeldobariya.passcodes"
   Min Android = 8.0 (API level 26)
@@ -43,24 +45,34 @@ In big project, such small mistakes/things happens.. so, ignore it please...
   Version Name = "v1.1.0-Alpha"
   Master Database Version = "v1"
   ```
+
 </details>
 
-`TL;DR`: Design Improvement.. | Will work with google passwords.... | We are offically an organization on Github from `Aug 31, 2025`.... 
+`TL;DR`: Design Improvement.. | Will work with google passwords.... | We are offically an
+organization on Github from `Aug 31, 2025`....
 
-This our first **offically release after migrating to the github organization...** this release has feature like import & export passwords from google passwords app... this is also a alpha release and both features (copy password & import export password) are disable by defualt due to security threats... they can be turn on if you wish...
+This our first **offically release after migrating to the github organization...** this release has
+feature like import & export passwords from google passwords app... this is also a alpha release and
+both features (copy password & import export password) are disable by defualt due to security
+threats... they can be turn on if you wish...
 
-Also as the passcodes have change from just my personal hobby project to offical organization.. this release is step for us to move to open source and open to contribute... and more importantly it reflect, my long term vision with passcodes as a project... what it means? upcoming things will be more fascinating to view and to be part of... and also the app will have more long term support... (if you ignore, the fact that I am not verified developer as of "1/9/25 by google"... but will do it in near time...)
+Also as the passcodes have change from just my personal hobby project to offical organization.. this
+release is step for us to move to open source and open to contribute... and more importantly it
+reflect, my long term vision with passcodes as a project... what it means? upcoming things will be
+more fascinating to view and to be part of... and also the app will have more long term support... (
+if you ignore, the fact that I am not verified developer as of "1/9/25 by google"... but will do it
+in near time...)
 
 Organization is name **PasscodesApp and not Passcodes. Because, it not avaliable on github.......**
 
-Stick to watch and observe passcodes upcoming progress... [Telegram](https://t.me/passcodescommunity)
-
+Stick to watch and observe passcodes upcoming
+progress... [Telegram](https://t.me/passcodescommunity)
 
 ## v1.0.0-Stable (Aug 16, 2025)
 
 <details>
   <summary>View Internal Details</summary>
-  
+
   ```
   Pacakage Name = "com.jeeldobariya.passcodes"
   Min Android = 8.0 (API level 26)
@@ -69,21 +81,26 @@ Stick to watch and observe passcodes upcoming progress... [Telegram](https://t.m
   Version Name = "v1.0.0-Stable"
   Master Database Version = "v1"
   ```
+
 </details>
 
-`TL;DR`: Our first stable release.. | Not much has change in terms of look and feature.. | Name of project has changed to "Passcodes"..
+`TL;DR`: Our first stable release.. | Not much has change in terms of look and feature.. | Name of
+project has changed to "Passcodes"..
 
 This is our first stable release, even though it look and behave same as prototype release.
-it now more stable and more realiable as the data storage part is now tested and optimised and uses more mordern apporach (room libaray)..
-things have change internally also... like app was first build using java.. but, now it is build using kotlin.
+it now more stable and more realiable as the data storage part is now tested and optimised and uses
+more mordern apporach (room libaray)..
+things have change internally also... like app was first build using java.. but, now it is build
+using kotlin.
 now, you can also switch theme and languages in app..
-also improve UI/UX by providing help text.. especially as you all have question like "what is domain?" "what can i write in domain?" and so on.....
+also improve UI/UX by providing help text.. especially as you all have question like "what is
+domain?" "what can i write in domain?" and so on.....
 
 ## v0.1.0-Alpha (Aug 26, 2024)
 
 <details>
   <summary>View Internal Details</summary>
-  
+
   ```
   Pacakage Name = "com.passwordmanager"
   Min Android = 8.0 (API level 26)
@@ -92,6 +109,7 @@ also improve UI/UX by providing help text.. especially as you all have question 
   Version Name = "0.1.0-Alpha"
   Master Database Version = "v1"
   ```
+
 </details>
 
 `TL;DR`: Our first initial release.. | Prototype release..
@@ -99,4 +117,5 @@ also improve UI/UX by providing help text.. especially as you all have question 
 It a prototype release which mean it can have bugs...
 It has all core features, like create, read, update and delete passwords...
 It has basic ui that allow you do do things, really intuitively and more structure...
-But structure and intuitively doesn;t necessary means mordern ui... ui is now so cool but has structure...
+But structure and intuitively doesn;t necessary means mordern ui... ui is now so cool but has
+structure...

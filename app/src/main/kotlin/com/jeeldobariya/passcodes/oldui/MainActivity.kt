@@ -8,9 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.BuildConfig
 import com.jeeldobariya.passcodes.Constant
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
+import com.jeeldobariya.passcodes.core.domain.usecases.CheckForUpdateUseCase
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
-import com.jeeldobariya.passcodes.core.domain.usecases.CheckForUpdateUseCase
 import com.jeeldobariya.passcodes.password_manager.oldui.PasswordManagerActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -58,7 +58,10 @@ class MainActivity : AppCompatActivity() {
 
         runBlocking {
             if (featureFlagsDatastore.data.first().isPreviewLayoutEnabled) {
-                val jetpackComposeActivity = Intent(this@MainActivity, com.jeeldobariya.passcodes.ui.MainActivity::class.java)
+                val jetpackComposeActivity = Intent(
+                    this@MainActivity,
+                    com.jeeldobariya.passcodes.ui.MainActivity::class.java
+                )
                 startActivity(jetpackComposeActivity)
             }
         }

@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="PasscodesTheme.Default" parent="Theme.Material3.Dark.NoActionBar">
-	    <!-- Base Colors -->
+        <!-- Base Colors -->
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
@@ -48,11 +48,13 @@
         <item name="colorSecondary">@color/md_theme_trusted_dark_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_trusted_dark_onSecondary</item>
         <item name="colorSecondaryContainer">@color/md_theme_trusted_dark_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_trusted_dark_onSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_trusted_dark_onSecondaryContainer
+        </item>
         <item name="colorTertiary">@color/md_theme_trusted_dark_tertiary</item>
         <item name="colorOnTertiary">@color/md_theme_trusted_dark_onTertiary</item>
         <item name="colorTertiaryContainer">@color/md_theme_trusted_dark_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/md_theme_trusted_dark_onTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_trusted_dark_onTertiaryContainer
+        </item>
         <item name="colorError">@color/md_theme_trusted_dark_error</item>
         <item name="colorOnError">@color/md_theme_trusted_dark_onError</item>
         <item name="colorErrorContainer">@color/md_theme_trusted_dark_errorContainer</item>
@@ -157,15 +159,20 @@
         <item name="colorPrimary">@color/md_theme_green_safe_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_green_safe_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_green_safe_dark_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/md_theme_green_safe_dark_onPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_green_safe_dark_onPrimaryContainer
+        </item>
         <item name="colorSecondary">@color/md_theme_green_safe_dark_secondary</item>
         <item name="colorOnSecondary">@color/md_theme_green_safe_dark_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/md_theme_green_safe_dark_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_green_safe_dark_onSecondaryContainer</item>
+        <item name="colorSecondaryContainer">@color/md_theme_green_safe_dark_secondaryContainer
+        </item>
+        <item name="colorOnSecondaryContainer">
+            @color/md_theme_green_safe_dark_onSecondaryContainer
+        </item>
         <item name="colorTertiary">@color/md_theme_green_safe_dark_tertiary</item>
         <item name="colorOnTertiary">@color/md_theme_green_safe_dark_onTertiary</item>
         <item name="colorTertiaryContainer">@color/md_theme_green_safe_dark_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/md_theme_green_safe_dark_onTertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_green_safe_dark_onTertiaryContainer
+        </item>
         <item name="colorError">@color/md_theme_green_safe_dark_error</item>
         <item name="colorOnError">@color/md_theme_green_safe_dark_onError</item>
         <item name="colorErrorContainer">@color/md_theme_green_safe_dark_errorContainer</item>

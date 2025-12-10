@@ -23,9 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?attr/colorSecondary"
         android:text="@string/passcodes_autofill_is_preview_feature"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textColor="?attr/colorSecondary" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/enable_autofill_button"

@@ -6,7 +6,7 @@ import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
-object AppSettingsSerializer: Serializer<AppSettings> {
+object AppSettingsSerializer : Serializer<AppSettings> {
     override val defaultValue: AppSettings
         get() = AppSettings()
 

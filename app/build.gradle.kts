@@ -1,8 +1,8 @@
-import java.io.FileInputStream
-import java.util.Properties
 // import org.gradle.api.GradleException
 import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -93,7 +93,10 @@ android {
                 isDebuggable = false
                 isShrinkResources = true
                 isMinifyEnabled = true
-                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
 
                 resValue("string", "app_name", "Passcodes")
                 resValue("string", "app_version", "v1.1.2 - Beta")
@@ -117,7 +120,10 @@ android {
                 isDebuggable = false
                 isShrinkResources = true
                 isMinifyEnabled = true
-                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
 
                 resValue("string", "app_name", "Passcodes Staging")
                 resValue("string", "app_version", "v1.1.2 - staging")

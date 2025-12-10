@@ -96,7 +96,7 @@ fun MainScreen(navigateToOldUi: suspend () -> Unit) {
 fun GreetingPreview() {
     PasscodesTheme {
         MainScreen(
-            navigateToOldUi = {  }
+            navigateToOldUi = { }
         )
     }
 }

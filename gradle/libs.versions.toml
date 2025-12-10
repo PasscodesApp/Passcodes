@@ -55,7 +55,7 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
 # Networking
-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp"}
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 
 # Coroutines
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }

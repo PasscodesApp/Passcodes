@@ -10,13 +10,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import com.jeeldobariya.passcodes.core.R
 import com.jeeldobariya.passcodes.autofill.AutofillSettingsActivity
-import com.jeeldobariya.passcodes.core.utils.collectLatestLifecycleFlow
+import com.jeeldobariya.passcodes.core.R
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
+import com.jeeldobariya.passcodes.core.utils.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
+import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

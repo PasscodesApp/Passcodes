@@ -7,7 +7,10 @@ import androidx.datastore.dataStore
 import com.jeeldobariya.passcodes.core.R
 import kotlinx.serialization.Serializable
 
-val Context.appDatastore by dataStore(fileName = "app-settings.json", serializer = AppSettingsSerializer)
+val Context.appDatastore by dataStore(
+    fileName = "app-settings.json",
+    serializer = AppSettingsSerializer
+)
 
 @Serializable
 data class AppSettings(

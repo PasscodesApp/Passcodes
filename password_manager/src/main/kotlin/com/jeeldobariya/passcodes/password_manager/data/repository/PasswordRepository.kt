@@ -51,7 +51,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
                 username = result.username,
                 password = result.password,
                 notes = result.notes,
-                lastUpdatedAt =  DateTimeUtils.getRelativeDays(result.updatedAt.orEmpty())
+                lastUpdatedAt = DateTimeUtils.getRelativeDays(result.updatedAt.orEmpty())
             )
         } else {
             null
@@ -59,7 +59,8 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
     }
 
     suspend fun getPasswordByUsernameAndDomain(username: String, domain: String): PasswordModal? {
-        val result = passwordsDao.getPasswordByUsernameAndDomain(username = username, domain = domain)
+        val result =
+            passwordsDao.getPasswordByUsernameAndDomain(username = username, domain = domain)
 
         return if (result != null) {
             PasswordModal(

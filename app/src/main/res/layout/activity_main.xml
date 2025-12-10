@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".oldui.MainActivity"
-    android:padding="4sp" >
+    android:padding="4sp"
+    tools:context=".oldui.MainActivity">
 
     <ImageView
         android:layout_width="128dp"
@@ -16,9 +16,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16sp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_margin="16sp">
+        android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
@@ -40,9 +40,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16sp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_margin="16sp">
+        android:orientation="vertical">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/password_manager_btn"

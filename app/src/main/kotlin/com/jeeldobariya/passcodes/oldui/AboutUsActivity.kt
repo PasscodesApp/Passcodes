@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import com.jeeldobariya.passcodes.databinding.ActivityAboutUsBinding
 import com.jeeldobariya.passcodes.Constant
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
+import com.jeeldobariya.passcodes.databinding.ActivityAboutUsBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
