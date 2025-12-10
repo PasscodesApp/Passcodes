@@ -55,8 +55,8 @@ release notes.
 
 - **Improve UI/UX**: improve view password screen, also adjust the button colors.. Contributed
   by [@JeelDobariya]
-- **Add Feature Flaging**: give user a control on whether they wanna latest exprience or stable
-  exprience. add a way for launching preview features without worry about their stablity.
+- **Add Feature Flagging**: give user a control on whether they wanna latest experience or stable
+  experience. add a way for launching preview features without worry about their stability.
   Contributed by [@JeelDobariya]
 - **Update Checker**: made a basic update checker that help users stay out to date with latest
   release & also notify user about already reported security vulnerability. Contributed
@@ -70,7 +70,7 @@ release notes.
 
 ### Changed
 
-- **Mirgated Project**: Migrate project from `JeelDobariya38 (personal)` to
+- **Migrated Project**: Migrate project from `JeelDobariya38 (personal)` to
   `PasscodesApp (my organization)` account. To reflect my long term vision. Contributed
   by [@JeelDobariya].
 
@@ -95,16 +95,16 @@ release notes.
 - **Localized App**: add language support for English, Chinese, Hindi, Indonesian, Japanese, Korean,
   German, Spanish, Vietnamese. Contributed by [@JeelDobariya].
 - **Improved UI/UX**: add confirmation dialogs, support for light & dark theme with additional minor
-  changes. Contributed by [@JeelDobariya & @kudanilll].
+  changes. Contributed by [@JeelDobariya & @kudanill].
 - **New Icon**: add new icons to app. Contributed by [@JeelDobariya].
 
 ### Changed
 
-- **Mirgated Package Name**: Migrate package name from `com.passwordmanager` to
+- **Migrated Package Name**: Migrate package name from `com.passwordmanager` to
   `com.jeeldobariya.passcodes`. Contributed by [@JeelDobariya].
-- **Improve Safety By Kotlin Implementaion**: Move from `Java` to `Kotlin` Language. Contributed
+- **Improve Safety By Kotlin Implementation**: Move from `Java` to `Kotlin` Language. Contributed
   by [@JeelDobariya].
-- **Improve Data Storing Process**: Move from `SqliteDatabase` to `Room` Libaray for better
+- **Improve Data Storing Process**: Move from `SqliteDatabase` to `Room` Library for better
   datastorage. Contributed by [@JeelDobariya].
 
 ## v0.1.0 - Alpha (Aug 26, 2024)

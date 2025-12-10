@@ -63,7 +63,7 @@ class CheckForUpdateUseCase(
 
                 latestStable?.let {
                     if (SemVerUtils.compare(currNormalizedVersion, it) < 0) {
-                        showToast(context, "New Update available: $it... Vist our website...")
+                        showToast(context, "New Update available: $it... Visit our website...")
                     }
                 }
 

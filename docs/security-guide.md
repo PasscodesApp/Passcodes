@@ -12,7 +12,7 @@ password with passcodes app.
 
 > [!warning]
 > Firstly, The passcodes is open source project and is currently under active development. So, one
-> is soley responsible for share there information with passcodes application.
+> is solely responsible for share there information with passcodes application.
 
 We as developers, recommended you to wait, for its stable release. before full trusting passcodes
 with yous your passwords data.
@@ -38,5 +38,5 @@ Here, are the thing we recommend.
 - if you lock the app, then use a different password, then the one you have on your lock screen. it
   make it even more safe.
 
-- also, if you don't use the app often, itrecommended, to hide the app using your phone settings. (
+- also, if you don't use the app often, it's recommended to hide the app using your phone settings. (
   it is bit inconvenient but at the end of day it pays off as safety)

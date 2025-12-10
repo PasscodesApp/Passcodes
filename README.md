@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > It is just a open source project. An is current under active development.
-> Please, consider using it for fun, and not for real password managment. (untill, we offically
+> Please, consider using it for fun, and not for real password management. (until, we officially
 > release a stable release)
 
 <div align="center">
@@ -27,7 +27,7 @@ to push them to cloud.
 
 ## Website
 
-[Vist Website](https://jeeldobariya38.github.io/Passcodes-Website/)
+[Visit Website](https://jeeldobariya38.github.io/Passcodes-Website/)
 
 ## Screen Shots
 
@@ -55,7 +55,7 @@ Note: high version can still run, but are not guaranteed offically.
 - [ ] Update Checkers & Manager.
 - [x] Password Management. (Current Priority)
 - [ ] Secure File. (Least Priority, Because it include permission. Which, I am as developer not
-  familar with 😂)
+  familiar with 😂)
     - Could be Image. (JPG. PNG ....)
     - Could be Video.
     - Could any Binary File. (more like won't be a text file)
@@ -105,7 +105,7 @@ in `PasscodesApp/Passcodes-Docs`.
 
 4. For code documentation and support docs, check the `docs/` folder in our repository.
 
-It was general, intuitive, short and sweet description, For more detailed description, Vist the
+It was general, intuitive, short and sweet description, For more detailed description, Visit the
 file [building.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/dev-docs/building.md) in
 `PasscodesApp/Passcodes-Docs`.
 
@@ -127,10 +127,10 @@ seek help on our [telegram community](https://t.me/passcodescommunity)
 > [!IMPORTANT]
 > Currently the project (more or less also me) is not ready for (code) contributions.
 > This project is currently limited by my expertise & I am beginner. Meaning I don;t want others
-> code in my codebase, that I don't understand, I am learning android and will surely learn basic off
-> by start of 2026.. then i will allow the contibution to this repo... But as of now i don't admire
-> code contribution. As I am beginner in android and might have difficuly understand code that not
-> written by me...
+> code in my codebase, that I don't understand, I am learning android and will surely learn basic
+> off by start of 2026.. then i will allow the contribution to this repo... But as of now i don't
+> admire code contribution. As I am beginner in android and might have difficultly in understanding
+> code that not written by me...
 >
 > There are still other ways to contribute to project.. like by testing app, by contributing to
 > documentation or more or less just by spreading the word around.. about the app. but, code
@@ -149,7 +149,7 @@ at [Open Contributing Timeline](https://github.com/PasscodesApp/Passcodes-Docs/b
 
 ## Security Policy
 
-Avaliable here
+Available here
 in [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/SECURITY.md).
 
 ## License
