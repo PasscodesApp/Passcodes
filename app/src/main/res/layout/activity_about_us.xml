@@ -55,7 +55,8 @@
                 android:layout_height="wrap_content"
                 android:columnCount="2"
                 android:rowCount="2"
-                android:useDefaultMargins="true">
+                android:useDefaultMargins="true"
+                tools:ignore="UseCompoundDrawables">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_security_guidelines"
