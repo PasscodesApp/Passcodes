@@ -25,7 +25,7 @@ class LoadPasswordActivity : AppCompatActivity() {
     private lateinit var passwordAdapter: PasswordAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        runBlocking<Unit> {
+        runBlocking {
             setTheme(appDatastore.data.first().theme)
         }
         super.onCreate(savedInstanceState)
