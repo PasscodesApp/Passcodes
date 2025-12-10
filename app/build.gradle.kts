@@ -4,6 +4,40 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
+
+// --------------------------------------------------------------------------------
+// | 🚀 BUILD CONFIGURATION PROPERTIES: UPDATE VERSIONS AND NAMES HERE ONLY      |
+// --------------------------------------------------------------------------------
+
+
+// Core Versioning
+val appVersionCode = 3
+val appVersionName = "v1.1.2-Alpha"
+val appLabel = "v1.1.2 - Alpha"
+val appStagingLabel = "v1.1.2 - Staging"
+val appDebugLabel = "v1.1.2 - Debug"
+
+// SDK Versions
+val appCompileSdk = 36
+val appMinSdk = 26
+val appTargetSdk = 34
+
+// Naming & Identification
+val appNamespace = "com.jeeldobariya.passcodes"
+val appBaseName = "Passcodes"
+
+// Icon Configuration
+val mainIcon = "@mipmap/ic_launcher"
+val mainRoundIcon = "@mipmap/ic_launcher_round"
+val devIcon = "@mipmap/dev_ic_launcher"
+val devRoundIcon = "@mipmap/dev_ic_launcher_round"
+
+
+// --------------------------------------------------------------------------------
+// | ⚙️ PLUGINS AND CONFIGURATION                                                  |
+// --------------------------------------------------------------------------------
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,17 +54,17 @@ kotlin {
 
 android {
     (this as ApplicationExtension).apply {
-        compileSdk = 36
-        namespace = "com.jeeldobariya.passcodes"
+        compileSdk = appCompileSdk
+        namespace = appNamespace
 
         defaultConfig {
-            applicationId = "com.jeeldobariya.passcodes"
-            minSdk = 26
-            targetSdk = 34
-            versionCode = 3
+            applicationId = appNamespace
+            minSdk = appMinSdk
+            targetSdk = appTargetSdk
+            versionCode = appVersionCode
 
             // WARN: Keep it consistent with the res value property in build variants below...
-            versionName = "v1.1.2-Alpha"
+            versionName = appVersionName
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -100,12 +134,11 @@ android {
                     "proguard-rules.pro"
                 )
 
-                resValue("string", "app_name", "Passcodes")
-                resValue("string", "app_version", "v1.1.2 - Alpha")
+                resValue("string", "app_name", appBaseName)
+                resValue("string", "app_version", appLabel)
 
-                // Use manifestPlaceholders.put() for key-value pairs
-                manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
-                manifestPlaceholders["appRoundIcon"] = "@mipmap/ic_launcher_round"
+                manifestPlaceholders["appIcon"] = mainIcon
+                manifestPlaceholders["appRoundIcon"] = mainRoundIcon
             }
 
             create("staging") {
@@ -127,12 +160,11 @@ android {
                     "proguard-rules.pro"
                 )
 
-                resValue("string", "app_name", "Passcodes Staging")
-                resValue("string", "app_version", "v1.1.2 - Staging")
+                resValue("string", "app_name", "$appBaseName Staging")
+                resValue("string", "app_version", appStagingLabel)
 
-                // Use manifestPlaceholders.put() for key-value pairs
-                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appRoundIcon"] = "@mipmap/dev_ic_launcher_round"
+                manifestPlaceholders["appIcon"] = devIcon
+                manifestPlaceholders["appRoundIcon"] = devRoundIcon
             }
 
             getByName("debug") {
@@ -143,12 +175,11 @@ android {
                 isShrinkResources = false
                 isMinifyEnabled = false
 
-                resValue("string", "app_name", "Passcodes Debug")
-                resValue("string", "app_version", "v1.1.2 - Debug")
+                resValue("string", "app_name", "$appBaseName Debug")
+                resValue("string", "app_version", appDebugLabel)
 
-                // Use manifestPlaceholders.put() for key-value pairs
-                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appRoundIcon"] = "@mipmap/dev_ic_launcher_round"
+                manifestPlaceholders["appIcon"] = devIcon
+                manifestPlaceholders["appRoundIcon"] = devRoundIcon
             }
         }
     }
