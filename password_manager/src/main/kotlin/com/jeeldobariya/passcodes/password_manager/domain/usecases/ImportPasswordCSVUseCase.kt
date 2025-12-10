@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
-import com.jeeldobariya.passcodes.password_manager.domain.utils.IMPORT_EXPORT_CSV_HEADER
+import com.jeeldobariya.passcodes.password_manager.domain.utils.GOGGLE_IMPORT_EXPORT_CSV_HEADER
 
 class ImportPasswordCSVUseCase(
     val context: Context,
@@ -15,8 +15,8 @@ class ImportPasswordCSVUseCase(
             requireNotNull(reader)
 
             val header = reader.readLine()
-            if (header != IMPORT_EXPORT_CSV_HEADER) {
-                throw Exception("The given csv file has incorrect header format. Correct Format is [$IMPORT_EXPORT_CSV_HEADER]")
+            if (header != GOGGLE_IMPORT_EXPORT_CSV_HEADER) {
+                throw Exception("The given csv file has incorrect header format. Correct Format is [$GOGGLE_IMPORT_EXPORT_CSV_HEADER]")
             }
 
             var line: String? = reader.readLine()
