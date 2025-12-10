@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    // implementation(project(":password_manager"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
