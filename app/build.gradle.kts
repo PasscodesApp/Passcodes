@@ -27,8 +27,10 @@ android {
             applicationId = "com.jeeldobariya.passcodes"
             minSdk = 26
             targetSdk = 34
-            versionCode = 2
-            versionName = "v1.1.2-rc.2"
+            versionCode = 3
+
+            // WARN: Keep it consistent with the res value property in build variants below...
+            versionName = "v1.1.2-Alpha"
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -99,7 +101,7 @@ android {
                 )
 
                 resValue("string", "app_name", "Passcodes")
-                resValue("string", "app_version", "v1.1.2 - Beta")
+                resValue("string", "app_version", "v1.1.2 - Alpha")
 
                 // Use manifestPlaceholders.put() for key-value pairs
                 manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
@@ -126,7 +128,7 @@ android {
                 )
 
                 resValue("string", "app_name", "Passcodes Staging")
-                resValue("string", "app_version", "v1.1.2 - staging")
+                resValue("string", "app_version", "v1.1.2 - Staging")
 
                 // Use manifestPlaceholders.put() for key-value pairs
                 manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
@@ -142,7 +144,7 @@ android {
                 isMinifyEnabled = false
 
                 resValue("string", "app_name", "Passcodes Debug")
-                resValue("string", "app_version", "v1.1.2 - debug")
+                resValue("string", "app_version", "v1.1.2 - Debug")
 
                 // Use manifestPlaceholders.put() for key-value pairs
                 manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
