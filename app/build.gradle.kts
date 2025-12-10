@@ -2,8 +2,18 @@
 import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.Properties
 
+/**
+ * Gets the current system time formatted as 'yy-mm-dd : hh-mm-ss'.
+ */
+fun getCurrentTimeLabel(): String {
+    val formatter = SimpleDateFormat("yy-MM-dd : HH-mm-ss", Locale.getDefault())
+    return formatter.format(Date())
+}
 
 // --------------------------------------------------------------------------------
 // | 🚀 BUILD CONFIGURATION PROPERTIES: UPDATE VERSIONS AND NAMES HERE ONLY      |
@@ -14,8 +24,7 @@ import java.util.Properties
 val appVersionCode = 3
 val appVersionName = "v1.1.2-Alpha"
 val appLabel = "v1.1.2 - Alpha"
-val appStagingLabel = "v1.1.2 - Staging"
-val appDebugLabel = "v1.1.2 - Debug"
+val appDevLabel = "v1.1.2 - ${getCurrentTimeLabel()}"
 
 // SDK Versions
 val appCompileSdk = 36
@@ -161,7 +170,7 @@ android {
                 )
 
                 resValue("string", "app_name", "$appBaseName Staging")
-                resValue("string", "app_version", appStagingLabel)
+                resValue("string", "app_version", appDevLabel)
 
                 manifestPlaceholders["appIcon"] = devIcon
                 manifestPlaceholders["appRoundIcon"] = devRoundIcon
@@ -176,7 +185,7 @@ android {
                 isMinifyEnabled = false
 
                 resValue("string", "app_name", "$appBaseName Debug")
-                resValue("string", "app_version", appDebugLabel)
+                resValue("string", "app_version", appDevLabel)
 
                 manifestPlaceholders["appIcon"] = devIcon
                 manifestPlaceholders["appRoundIcon"] = devRoundIcon
