@@ -51,7 +51,7 @@ object SemVerUtils {
         // Cut off pre-release (-...) or build metadata (+...)
         val cutIndex = clean.indexOfAny(charArrayOf('-', '+'))
         return if (cutIndex != -1) {
-            "v" + clean.substring(0, cutIndex)
+            "v" + clean.take(cutIndex)
         } else {
             "v$clean"
         }

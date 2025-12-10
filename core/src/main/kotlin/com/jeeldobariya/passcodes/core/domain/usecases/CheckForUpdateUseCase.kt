@@ -11,6 +11,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
+@Suppress("RedundantSuspendModifier")
 class CheckForUpdateUseCase(
     val context: Context,
     val client: OkHttpClient

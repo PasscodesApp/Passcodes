@@ -103,7 +103,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         return passwordsDao.deletePasswordById(id)
     }
 
-    suspend fun clearAllData(): Unit {
+    suspend fun clearAllData() {
         passwordsDao.clearAllPasswordData()
     }
 }

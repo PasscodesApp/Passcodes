@@ -13,18 +13,6 @@ class DateTimeUtils {
                 .format(Date())
         }
 
-        /** Returns current date in `yyyy-MM-dd` format */
-        fun getCurrDate(): String {
-            return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .format(Date())
-        }
-
-        /** Returns current time in `HH:mm:ss` format */
-        fun getCurrTime(): String {
-            return SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-                .format(Date())
-        }
-
         /** Parse a String into a Date with a given pattern */
         fun parseDate(dateStr: String, pattern: String = "yyyy-MM-dd HH:mm:ss"): Date? {
             return try {

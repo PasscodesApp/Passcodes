@@ -30,6 +30,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
 
     // List of available themes to cycle through
+    @Suppress("PrivatePropertyName")
     private val THEMES = listOf(
         R.style.PasscodesTheme_Default,
         R.style.PasscodesTheme_Trusted,
