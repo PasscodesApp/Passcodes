@@ -14,6 +14,21 @@ release notes.
 > Final version is over
 > on [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/changelog.md)
 
+## v1.1.2 - Alpha (Nov 15, 2025)
+
+<details>
+  <summary>View Internal Details</summary>
+  
+  ```
+  Pacakage Name = "com.jeeldobariya.passcodes"
+  Min Android = 8.0 (API level 26)
+  Max Android = 14 (API level 34)
+  Version Code = 3
+  Version Name = "v1.1.2-Alpha"
+  Master Database Version = "v1"
+  ```
+</details>
+
 ## v1.1.1 - Alpha (Sept 11, 2025)
 
 <details>
