@@ -29,6 +29,17 @@ release notes.
   ```
 </details>
 
+### Added
+
+- **Autofill System (Preview Feature)**: App has a autofill service to autofill the password and username...
+- **Jetpack Compose (Preview Feature)**: App now has a feature to activate jetpack compose UI.. even that it would be worthless to do that, because it just has a one screen... It mainly for eariler testing..
+
+### Changed
+
+- **MVI Flavored - Clean Architecture**: Migrated the codebase to  make it more scaleable, extendable & readable. This will enable us to create better features faster..
+- **Java 21**: We have migrate to codebase to use java 21...
+- **Improve Performance**: Improve performance.. and fixed UI to make it more responsive..
+
 ## v1.1.1 - Alpha (Sept 11, 2025)
 
 <details>
