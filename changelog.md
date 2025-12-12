@@ -4,15 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-Release Notes: [docs/release-notes.md](docs/release-notes.md), there you will find short and sweet
-release notes.
+We don't complete follow them. but the exception are very less, very intuitive & obvious 
+and well documented in our release workflow docs.
 
 > [!NOTE]
 > This is a raw version of the file..
 >
-> Final version is over
-> on [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/changelog.md)
+> Final version can be found over
+> at [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/changelog.md)
+
 
 ## v1.1.2 - Alpha (Nov 15, 2025)
 
@@ -29,16 +29,34 @@ release notes.
   ```
 </details>
 
+
+### Breaking Changes
+
+- **Migrate to DataStore**: changed the way how setting and feature flag were been storage. previously we use shared preferences but
+  now we use datastore which will be more morden way to store such data... but this will also mean that your previous setting will be
+  not avaliable anymore. we have decide this break changes, because app settings can be restored again (in like few minutes).
+
+
 ### Added
 
-- **Autofill System (Preview Feature)**: App has a autofill service to autofill the password and username...
-- **Jetpack Compose (Preview Feature)**: App now has a feature to activate jetpack compose UI.. even that it would be worthless to do that, because it just has a one screen... It mainly for eariler testing..
+#### Preview Features
+
+- **Autofill System (Preview Feature)**: added a autofill service to autofill user's credentials on the fly.
+
+- **Jetpack Compose (Preview Feature)**: added jetpack compose UI & even added a toggle to switch to this new UI.
+  but it would be worthless to do so, because it just has a single screen.. *this feature is mainly for very eariler testing*. [@JeelDobariya38]
+
 
 ### Changed
 
-- **MVI Flavored - Clean Architecture**: Migrated the codebase to  make it more scaleable, extendable & readable. This will enable us to create better features faster..
-- **Java 21**: We have migrate to codebase to use java 21...
-- **Improve Performance**: Improve performance.. and fixed UI to make it more responsive..
+- **MVI Flavored - Clean Architecture**: migrated the codebase to make it more scaleable, extendable & readable. 
+  This will enable us to create better features faster & make a strong base for faster iteration. [@JeelDobariya38]
+
+- **Java 21**: code for passcodes app now compile to java 21. previously it was compiling to java 11.
+  This should improve performance & efficiency a bit. [@JeelDobariya38]
+
+- **Improved Performance**: Improve performance & better responsiveness of UI (less of density pixel, more of scalable pixel mesurements). [@JeelDobariya38]
+
 
 ## v1.1.1 - Alpha (Sept 11, 2025)
 
@@ -56,10 +74,12 @@ release notes.
 
 </details>
 
+
 ### Fixed
 
-- **Fixed Import Passwords**: fix the bug, that was not let user select csv files from file picker.
-  due to incorrect mimetype in code.. Contributed by [@JeelDobariya]
+- **Fixed Import Passwords**: fixed the bug that was not allowing user to select csv files 
+  from file picker. due to incorrect mimetype in code.. [@JeelDobariya]
+
 
 ## v1.1.0 - Alpha (Sept 1, 2025)
 
@@ -77,28 +97,32 @@ release notes.
 
 </details>
 
+
 ### Added
 
-- **Improve UI/UX**: improve view password screen, also adjust the button colors.. Contributed
-  by [@JeelDobariya]
-- **Add Feature Flagging**: give user a control on whether they wanna latest experience or stable
-  experience. add a way for launching preview features without worry about their stability.
-  Contributed by [@JeelDobariya]
-- **Update Checker**: made a basic update checker that help users stay out to date with latest
-  release & also notify user about already reported security vulnerability. Contributed
-  by [@JeelDobariya]
-- **Copy Button (preview feature)**: add copy button for copy passwords for easy of use. but as it
-  is potential threat to security, made it a preview feature. Contributed by [@JeelDobariya]
-- **G-Passwords Import/Export (preview feature)**: add a import/export feature. which also
+- **Improved UI/UX**: improved view password screen's visual feel, also adjust the button colors a bit. [@JeelDobariya]
+
+- **Added Feature Flagging**: gived user a control on whether they wanna latest experience or stable
+  experience. added a way for launching preview features without worry about their stability. [@JeelDobariya]
+
+- **Update Checking**: maded a basic update checker that help users to stay up to date with latest
+  release & also notify user about already reported security vulnerability using pre-release mechanism. [@JeelDobariya]
+
+#### Preview Features
+
+- **Copy Button (preview feature)**: added a copy button for copying passwords for easy of use. but as it
+  is potential threat to security, so maded it as a preview feature. [@JeelDobariya]
+
+- **G-Passwords Import/Export (preview feature)**: added a import/export feature. which is also
   compatible with google passwords. I have test it with my google password setup. but, I am not sure
-  weather this will run in every edge case or not. So, it a preview feature. Contributed
-  by [@JeelDobariya]
+  weather this will run in every edge case or not. So, it is a preview feature for now. [@JeelDobariya]
 
-### Changed
 
-- **Migrated Project**: Migrate project from `JeelDobariya38 (personal)` to
-  `PasscodesApp (my organization)` account. To reflect my long term vision. Contributed
-  by [@JeelDobariya].
+### Notes
+
+- **Offical Github Organization (Aug 31, 2025)**: migrate project & repository from `JeelDobariya38 (personal account)` 
+  to `PasscodesApp (my organization)` for better development and governance of the project.
+
 
 ## v1.0.0 - Stable (Aug 16, 2025)
 
@@ -116,24 +140,30 @@ release notes.
 
 </details>
 
+
 ### Added
 
-- **Localized App**: add language support for English, Chinese, Hindi, Indonesian, Japanese, Korean,
-  German, Spanish, Vietnamese. Contributed by [@JeelDobariya].
-- **Improved UI/UX**: add confirmation dialogs, support for light & dark theme with additional minor
-  changes. Contributed by [@JeelDobariya & @kudanill].
-- **New Icon**: add new icons to app. Contributed by [@JeelDobariya].
+- **Localized App**: added language translation for English, Chinese, Hindi, Indonesian, Japanese, Korean,
+  German, Spanish, Vietnamese. [@JeelDobariya].
+
+- **Improved UI/UX**: added confirmation dialogs for destructive actions, improved support for light & dark 
+  theme with additional minor changes. [@JeelDobariya & @kudanilll].
+
+- **New Icon**: rebanded the app as passcodes with a new visual app icon. [@JeelDobariya].
+
 
 ### Changed
 
-- **Migrated Package Name**: Migrate package name from `com.passwordmanager` to
-  `com.jeeldobariya.passcodes`. Contributed by [@JeelDobariya].
-- **Improve Safety By Kotlin Implementation**: Move from `Java` to `Kotlin` Language. Contributed
-  by [@JeelDobariya].
-- **Improve Data Storing Process**: Move from `SqliteDatabase` to `Room` Library for better
-  datastorage. Contributed by [@JeelDobariya].
+- **Migrated Package Name**: migrate package name from `com.passwordmanager` to
+  `com.jeeldobariya.passcodes`. [@JeelDobariya].
 
-## v0.1.0 - Alpha (Aug 26, 2024)
+- **Improve Safety By Kotlin Implementation**: move away from `Java` to `Kotlin` Language. [@JeelDobariya].
+
+- **Improve Data Storing Process**: move away from `SqliteDatabase` to `Room` Library for better
+  datastorage & security. [@JeelDobariya].
+
+
+## v0.1.0 - Alpha (Aug 26, 2024) [YANKED RELEASE]
 
 <details>
   <summary>View Internal Details</summary>
@@ -149,16 +179,26 @@ release notes.
 
 </details>
 
+
 ### Added
 
-- **App Icon Creation**: Designed and implemented the initial app icon, providing the application
-  with a recognizable visual identity. Contributed by [@HamadaNative].
-- **Basic App Structure**: Established the foundational architecture of the app, including the main
-  entry point and initial setup. Contributed by [@JeelDobariya].
-- **Main Page Development**: Developed the main page of the app, including basic UI components and
-  initial layout. Contributed by [@HamadaNative].
+- **App Icon Creation**: designed and implemented the initial app icon, providing the application
+  with a recognizable visual identity. [@HamadaNative].
+
+- **Basic App Structure**: established the foundational architecture of the app, including the main
+  entry point and initial setup. [@JeelDobariya].
+
+- **Main Page Development**: developed the main page of the app, including basic UI components and
+  initial layout. [@JeelDobariya38].
+
+- **Basic Password Store**: developed a database to store the passwords data. [@kudanilll].
+
+- **Basic Design System**: developed a basic material 2 design system for consistency in app's 
+  feel & look. [@HamadaNative].
+
 
 ### Notes
 
-- This is the initial alpha release, focused on setting up the basic structure and key visual
-  elements of the app.
+- This was the initial alpha pre-release, focusing more on setting up the basic structure and key visual
+  elements of the app. (`Proof Of Concept`).
+
