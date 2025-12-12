@@ -3,6 +3,6 @@
     <string name="enable_passcodes_autofill">Enable Passcodes Autofill</string>
     <string name="how_to_enable_passcodes_autofill_service">To use Passcodes as your password manager, you need to enable it as an autofill service in your device settings.</string>
     <string name="open_settings">Open Settings</string>
-    <string name="passcodes_autofill_is_preview_feature">Passcodes Autofill is preview feature and shouldn\'t be use in production!!</string>
+    <string name="passcodes_autofill_is_preview_feature">Passcodes Autofill is preview feature and shouldn&apos;t be use in production!!</string>
     <string name="could_not_save_credentials">Could not save credentials.</string>
 </resources>
