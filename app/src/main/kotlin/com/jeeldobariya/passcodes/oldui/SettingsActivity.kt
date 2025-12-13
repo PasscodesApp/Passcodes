@@ -64,6 +64,7 @@ class SettingsActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
+    // TODO: Shift the language switching logic to viewmodel in core module.
     private fun setInitialLangSelection() {
         val currentAppLocales: String = AppCompatDelegate.getApplicationLocales().toLanguageTags()
 
@@ -101,6 +102,8 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.toggleThemeBtn.setOnClickListener {
             lifecycleScope.launch {
+                // TODO: Shift the theme switching logic to viewmodel in core module.
+                // INFO: logic here will change with jetpack compose.
                 val currentThemeStyle = appDatastore.data.first().theme
 
                 val currentIndex = THEMES.indexOf(currentThemeStyle)

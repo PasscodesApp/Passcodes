@@ -11,6 +11,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
+// TODO: Refactor the code to use ktor client.
 @Suppress("RedundantSuspendModifier")
 class CheckForUpdateUseCase(
     val context: Context,
