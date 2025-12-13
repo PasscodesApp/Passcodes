@@ -66,4 +66,4 @@ echo Build and installation completed successfully!
 
 pause
 
-echo "Thanks for using installondevice.bat!!!"
+echo "Thanks for using this script!!!"

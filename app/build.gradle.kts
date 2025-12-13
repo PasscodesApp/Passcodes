@@ -1,14 +1,56 @@
-import java.io.FileInputStream
-import java.util.Properties
 // import org.gradle.api.GradleException
 import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.Properties
+
+/**
+ * Gets the current system time formatted as 'yy-mm-dd : hh-mm-ss'.
+ */
+fun getCurrentTimeLabel(): String {
+    val formatter = SimpleDateFormat("yy-MM-dd : HH-mm-ss", Locale.getDefault())
+    return formatter.format(Date())
+}
+
+// --------------------------------------------------------------------------------
+// | 🚀 BUILD CONFIGURATION PROPERTIES: UPDATE VERSIONS AND NAMES HERE ONLY      |
+// --------------------------------------------------------------------------------
+
+
+// Core Versioning
+val appVersionCode = 3
+val appVersionName = "v1.1.2-Alpha"
+val appLabel = "v1.1.2 - Alpha"
+val appDevLabel = "v1.1.2 - ${getCurrentTimeLabel()}"
+
+// SDK Versions
+val appCompileSdk = 36
+val appMinSdk = 26
+val appTargetSdk = 34
+
+// Naming & Identification
+val appNamespace = "com.jeeldobariya.passcodes"
+val appBaseName = "Passcodes"
+
+// Icon Configuration
+val mainIcon = "@mipmap/ic_launcher"
+val mainRoundIcon = "@mipmap/ic_launcher_round"
+val devIcon = "@mipmap/dev_ic_launcher"
+val devRoundIcon = "@mipmap/dev_ic_launcher_round"
+
+
+// --------------------------------------------------------------------------------
+// | ⚙️ PLUGINS AND CONFIGURATION                                                  |
+// --------------------------------------------------------------------------------
+
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.oss.licenses)
 }
@@ -21,15 +63,17 @@ kotlin {
 
 android {
     (this as ApplicationExtension).apply {
-        compileSdk = 36
-        namespace = "com.jeeldobariya.passcodes"
+        compileSdk = appCompileSdk
+        namespace = appNamespace
 
         defaultConfig {
-            applicationId = "com.jeeldobariya.passcodes"
-            minSdk = 26
-            targetSdk = 34
-            versionCode = 2
-            versionName = "v1.1.2-rc.2"
+            applicationId = appNamespace
+            minSdk = appMinSdk
+            targetSdk = appTargetSdk
+            versionCode = appVersionCode
+
+            // WARN: Keep it consistent with the res value property in build variants below...
+            versionName = appVersionName
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
@@ -94,23 +138,16 @@ android {
                 isDebuggable = false
                 isShrinkResources = true
                 isMinifyEnabled = true
-                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
 
-                // Use manifestPlaceholders.put() for key-value pairs
-                manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
-                manifestPlaceholders["appLabel"] = "@string/app_name"
-            }
+                resValue("string", "app_name", appBaseName)
+                resValue("string", "app_version", appLabel)
 
-            getByName("debug") {
-                applicationIdSuffix = ".dev"
-                versionNameSuffix = "-Dev"
-
-                isDebuggable = true
-                isShrinkResources = false
-                isMinifyEnabled = false
-
-                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appLabel"] = "Passcodes-Dev"
+                manifestPlaceholders["appIcon"] = mainIcon
+                manifestPlaceholders["appRoundIcon"] = mainRoundIcon
             }
 
             create("staging") {
@@ -127,10 +164,31 @@ android {
                 isDebuggable = false
                 isShrinkResources = true
                 isMinifyEnabled = true
-                proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
 
-                manifestPlaceholders["appIcon"] = "@mipmap/dev_ic_launcher"
-                manifestPlaceholders["appLabel"] = "Passcodes-Staging"
+                resValue("string", "app_name", "$appBaseName Staging")
+                resValue("string", "app_version", appDevLabel)
+
+                manifestPlaceholders["appIcon"] = devIcon
+                manifestPlaceholders["appRoundIcon"] = devRoundIcon
+            }
+
+            getByName("debug") {
+                applicationIdSuffix = ".dev"
+                versionNameSuffix = "-Dev"
+
+                isDebuggable = true
+                isShrinkResources = false
+                isMinifyEnabled = false
+
+                resValue("string", "app_name", "$appBaseName Debug")
+                resValue("string", "app_version", appDevLabel)
+
+                manifestPlaceholders["appIcon"] = devIcon
+                manifestPlaceholders["appRoundIcon"] = devRoundIcon
             }
         }
     }
@@ -145,64 +203,35 @@ android {
         buildConfig = true
         compose = true
     }
-
-    ksp {
-        val location = "$projectDir/schemas"
-        arg("room.schemaLocation", location)
-    }
 }
 
 dependencies {
+    // In project library / feature modules
+    implementation(project(":core"))
+    implementation(project(":database"))
+    implementation(project(":password_manager"))
+    implementation(project(":autofill"))
+
+    // Android Core
+    implementation(libs.appcompat)
+    implementation(libs.material)
+
     // Jetpack Compose
+    val composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
     implementation(libs.bundles.compose)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.bundles.compose.debug)
 
-    // Navigation 3
-    implementation(libs.bundles.navigation3)
-
-    // Standard Kotlin Libraries
-    implementation(libs.kotlin.stdlib)
-
-    // UI/Google Services
-    implementation(libs.material)
+    // Google Play License Services
     implementation(libs.oss.license)
-    implementation(libs.appcompat)
-
-    // Data/Persistence (Room Bundle)
-    implementation(libs.bundles.room)
-    debugImplementation(libs.androidx.ui.test.manifest)
-    ksp(libs.room.compiler)
-
-    // Networking/Parsing
-    implementation(libs.okhttp)
-    implementation(libs.json)
 
     // Concurrency (Coroutines Bundle)
     implementation(libs.bundles.coroutines)
 
-    // Android Architecture Components (Lifecycle Bundle)
-    implementation(libs.bundles.lifecycle)
-
     // Dependency Injection
-    implementation(libs.bundles.koin)
+    implementation(libs.koin)
+    implementation(libs.koin.compose)
 
     // Datastore Preferences
-    implementation(libs.bundles.datastore.preferences)
-
-    
-    // --- Testing ---
-
-    // Local Unit Testing (Unit Test Bundle)
-    testImplementation(libs.bundles.unit.test)
-
-    // Android Instrumented Testing (Android Test Bundle)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.bundles.android.test)
-    androidTestImplementation(libs.room.testing)
-    androidTestImplementation(libs.bundles.coroutines.test)
-    androidTestImplementation(libs.truth) // Keeping truth explicit for androidTest, though it's in both bundles.
+    implementation(libs.androidx.datastore.preferences)
 }

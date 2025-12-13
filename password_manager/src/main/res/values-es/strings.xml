@@ -1,0 +1,45 @@
+<resources>
+
+    <!-- Button, Textview general in all Activity -->
+    <string name="hint_domain">Dominio</string>
+    <string name="helper_text_domain_field">Nombre del sitio web o dominio</string>
+    <string name="hint_username">Usuario</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="hint_notes">Notas</string>
+    <string name="placeholder_domain_field">Ej: Google, Instagram, WhatsApp, etc.</string>
+    <string name="placeholder_username_field">Ej: Liam15, Noha, Olivia, Ava_25, etc.</string>
+    <string name="placeholder_password_field">Ej: 12345, abc123xyz, qwerty, etc.</string>
+    <string name="save_password_button_text">Guardar Contraseña</string>
+    <string name="load_password_button_text">Cargar Contraseña</string>
+    <string name="update_password_button_text">Actualizar Contraseña</string>
+    <string name="delete_password_button_text">Eliminar Contraseña</string>
+    <string name="import_password_button_text">Importar Contraseña</string>
+    <string name="export_password_button_text">Exportar Contraseña</string>
+
+    <!-- Headline of Activity -->
+    <string name="textview_passwordmanager_headline">Gestor de Contraseñas</string>
+    <string name="textview_loadpassword_headline">Cargar Contraseña</string>
+    <string name="textview_savepassword_headline">Guardar Contraseña</string>
+    <string name="textview_viewpassword_headline">Ver Contraseña</string>
+    <string name="textview_updatepassword_headline">Actualizar Contraseña</string>
+
+    <!-- Prefix & Suffix -->
+    <string name="id_prefix">ID: </string>
+    <string name="domain_prefix">Dominio: </string>
+    <string name="username_prefix">Usuario: </string>
+    <string name="password_prefix">Contraseña: </string>
+    <string name="notes_prefix">Notas: </string>
+    <string name="updatedat_prefix">Actualizado el: </string>
+
+    <!-- Toast Message -->
+    <string name="something_went_wrong_msg">Algo salió mal.</string>
+    <string name="action_discard">Acción descartada.</string>
+    <string name="error_invalid_password_id">Algo salió mal: ¡ID inválido!</string>
+
+    <!-- Alert Dialog Message -->
+    <string name="update_password_dialog_title">¿Actualizar contraseña?</string>
+    <string name="delete_password_dialog_title">¿Eliminar contraseña?</string>
+    <string name="irreversible_dialog_desc">Esta acción no se puede deshacer.</string>
+    <string name="confirm_dialog_button_text">Confirmar</string>
+    <string name="discard_dialog_button_text">Cancelar</string>
+</resources>

@@ -6,13 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.BuildConfig
+import com.jeeldobariya.passcodes.Constant
+import com.jeeldobariya.passcodes.core.datastore.appDatastore
+import com.jeeldobariya.passcodes.core.domain.usecases.CheckForUpdateUseCase
+import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
-import com.jeeldobariya.passcodes.utils.UpdateChecker
-import com.jeeldobariya.passcodes.utils.appDatastore
+import com.jeeldobariya.passcodes.password_manager.oldui.PasswordManagerActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.android.inject
 
 // import com.jeeldobariya.passcodes.utils.Permissions
 
@@ -21,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     // private lateinit var permissionsHandle: Permissions
 
     private lateinit var binding: ActivityMainBinding
+
+    private val checkForUpdateUseCase: CheckForUpdateUseCase by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         runBlocking {
@@ -31,7 +37,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch(Dispatchers.IO) {
-            UpdateChecker.checkVersion(this@MainActivity, BuildConfig.VERSION_NAME)
+            checkForUpdateUseCase(
+                currentVersion = BuildConfig.VERSION_NAME,
+                githubReleaseApiUrl = Constant.GITHUB_RELEASE_API_URL,
+                telegramCommunityUrl = Constant.TELEGRAM_COMMUNITY_URL
+            )
         }
 
         // Add event onclick listener
@@ -45,6 +55,16 @@ class MainActivity : AppCompatActivity() {
             permissionsHandle = Permissions(this)
             if (!permissionsHandle.checkPermission()) permissionsHandle.requestPermission()
         */
+
+        runBlocking {
+            if (featureFlagsDatastore.data.first().isPreviewLayoutEnabled) {
+                val jetpackComposeActivity = Intent(
+                    this@MainActivity,
+                    com.jeeldobariya.passcodes.ui.MainActivity::class.java
+                )
+                startActivity(jetpackComposeActivity)
+            }
+        }
     }
 
     /* Comment the code as permission is not need to write into app data dir.

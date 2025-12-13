@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity android:name=".oldui.PasswordManagerActivity" />
+        <activity android:name=".oldui.SavePasswordActivity" />
+        <activity android:name=".oldui.LoadPasswordActivity" />
+        <activity android:name=".oldui.ViewPasswordActivity" />
+        <activity android:name=".oldui.UpdatePasswordActivity" />
+    </application>
+</manifest>

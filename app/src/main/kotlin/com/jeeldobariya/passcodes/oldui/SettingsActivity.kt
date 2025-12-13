@@ -1,5 +1,6 @@
 package com.jeeldobariya.passcodes.oldui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -9,22 +10,27 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import com.jeeldobariya.passcodes.R
+import com.jeeldobariya.passcodes.autofill.AutofillSettingsActivity
+import com.jeeldobariya.passcodes.core.R
+import com.jeeldobariya.passcodes.core.datastore.appDatastore
+import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
+import com.jeeldobariya.passcodes.core.utils.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.databinding.ActivitySettingsBinding
-import com.jeeldobariya.passcodes.flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.utils.Controller
-import com.jeeldobariya.passcodes.utils.appDatastore
-import com.jeeldobariya.passcodes.utils.collectLatestLifecycleFlow
+import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.android.inject
+import kotlin.system.exitProcess
 
 class SettingsActivity : AppCompatActivity() {
 
+    private val passwordRepository: PasswordRepository by inject()
+
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var controller: Controller
 
     // List of available themes to cycle through
+    @Suppress("PrivatePropertyName")
     private val THEMES = listOf(
         R.style.PasscodesTheme_Default,
         R.style.PasscodesTheme_Trusted,
@@ -45,9 +51,11 @@ class SettingsActivity : AppCompatActivity() {
 
         collectLatestLifecycleFlow(featureFlagsDatastore.data) {
             binding.switchLatestFeatures.isChecked = it.isPreviewFeaturesEnabled
-        }
+            binding.switchLatestLayout.isChecked = it.isPreviewLayoutEnabled
 
-        controller = Controller(this) // Initialize the controller here
+            binding.autofillSettingCard.visibility =
+                if (it.isPreviewFeaturesEnabled) View.VISIBLE else View.GONE
+        }
 
         // Add event onclick listener
         addOnClickListenerOnButton()
@@ -56,6 +64,7 @@ class SettingsActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
+    // TODO: Shift the language switching logic to viewmodel in core module.
     private fun setInitialLangSelection() {
         val currentAppLocales: String = AppCompatDelegate.getApplicationLocales().toLanguageTags()
 
@@ -93,6 +102,8 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.toggleThemeBtn.setOnClickListener {
             lifecycleScope.launch {
+                // TODO: Shift the theme switching logic to viewmodel in core module.
+                // INFO: logic here will change with jetpack compose.
                 val currentThemeStyle = appDatastore.data.first().theme
 
                 val currentIndex = THEMES.indexOf(currentThemeStyle)
@@ -101,14 +112,9 @@ class SettingsActivity : AppCompatActivity() {
 
                 appDatastore.updateData { it.copy(theme = newThemeStyle) }
 
-                recreate()
+                finishAndRemoveTask()
+                exitProcess(0)
             }
-
-            Toast.makeText(
-                this@SettingsActivity,
-                getString(R.string.restart_app_require),
-                Toast.LENGTH_SHORT
-            ).show()
         }
 
         binding.switchLatestFeatures.setOnCheckedChangeListener { _, isChecked ->
@@ -117,16 +123,27 @@ class SettingsActivity : AppCompatActivity() {
                     it.copy(isPreviewFeaturesEnabled = isChecked)
                 }
             }
-            Toast.makeText(
-                this@SettingsActivity,
-                getString(R.string.future_feat_clause) + isChecked.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
+        }
+
+        binding.switchLatestLayout.setOnCheckedChangeListener { _, isChecked ->
+            lifecycleScope.launch {
+                featureFlagsDatastore.updateData {
+                    it.copy(isPreviewLayoutEnabled = isChecked)
+                }
+
+                finishAndRemoveTask()
+                exitProcess(0)
+            }
+        }
+
+        binding.autofillSettingBtn.setOnClickListener { v ->
+            val autofillSettingsIntent = Intent(this, AutofillSettingsActivity::class.java)
+            startActivity(autofillSettingsIntent)
         }
 
         binding.clearAllDataBtn.setOnClickListener { v ->
             lifecycleScope.launch {
-                controller.clearAllData()
+                passwordRepository.clearAllData()
             }
 
             Toast.makeText(this@SettingsActivity, "Delete the user data!!", Toast.LENGTH_SHORT)
