@@ -4,8 +4,9 @@
     <string name="app_version" translatable="false">v0.0.0 - Latest</string>
 
     <!-- Contributor Names -->
-    <string name="developer_name">Developed by: Dobariya Jeel</string>
-    <string name="code_maintainer">Code Maintenance &amp; Testing: Achmad Daniel (Kudanill)</string>
+    <string name="developer_name">Developed by: Dobariya Jeel (@JeelDobariya38)</string>
+    <string name="code_maintainer">Code Maintenance &amp; Testing: Achmad Daniel (@kudanilll)</string>
+    <string name="co_developer">Co-Developer: Hex-Code (@hexCode63)</string>
 
     <!-- About Us Activity -->
     <string name="textview_app_description">An open-source password manager that helps eliminate the headache of remembering your passwords.</string>

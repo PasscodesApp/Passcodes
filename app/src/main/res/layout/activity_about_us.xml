@@ -32,15 +32,6 @@
             android:padding="16dp">
 
             <com.google.android.material.textview.MaterialTextView
-                style="@style/TextAppearance.Material3.TitleMedium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/textview_app_description"
-                android:textAlignment="viewStart"
-                android:textColor="?attr/colorOnSurface" />
-
-            <com.google.android.material.textview.MaterialTextView
                 style="@style/TextAppearance.Material3.BodyMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,6 +39,15 @@
                 android:text="@string/textview_app_warning"
                 android:textAlignment="viewStart"
                 android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/textview_app_description"
+                android:textAlignment="viewStart"
+                android:textColor="?attr/colorOnSurface" />
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -238,12 +238,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:backgroundTint="?attr/colorTertiaryContainer"
                 app:cardCornerRadius="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
+                    android:textColor="?attr/colorTertiary"
                     android:text="@string/developer_name"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
             </com.google.android.material.card.MaterialCardView>
@@ -251,13 +253,32 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="?attr/colorTertiaryContainer"
                 app:cardCornerRadius="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
+                    android:textColor="?attr/colorTertiary"
                     android:text="@string/code_maintainer"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="?attr/colorTertiaryContainer"
+                app:cardCornerRadius="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:textColor="?attr/colorTertiary"
+                    android:text="@string/co_developer"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
