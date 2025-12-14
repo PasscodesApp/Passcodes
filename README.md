@@ -31,7 +31,7 @@ to push them to cloud.
 
 ## Screen Shots
 
-<details>
+<details open>
   <img style="width: 40%; height: 100%; padding-right: 10px" src="https://github.com/user-attachments/assets/b6407ba3-be7f-4a5b-9e17-8e201ecf2ff3" />
   <img style="width: 40%; height: 100%; padding-right: 10px" src="https://github.com/user-attachments/assets/930c18aa-7e38-4a56-a8e4-f5f1d2ee6e38" />
   <img style="width: 40%; height: 100%; padding-right: 10px" src="https://github.com/user-attachments/assets/135f29cb-97ed-4cc3-acd6-4a606e9d8844" />
