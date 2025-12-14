@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+// TODO: currently the code here serves as a foundation for autofill features..
 class PasswordAutofillService : AutofillService() {
 
     private val serviceScope = CoroutineScope(Dispatchers.IO)
@@ -48,6 +49,7 @@ class PasswordAutofillService : AutofillService() {
         }
 
         serviceScope.launch {
+            // TODO: use the database module instead of separate database
             val passcodes =
                 PasscodeDatabase.getDatabase(applicationContext).passcodeDao().getAllPasscodes()
                     .first()
