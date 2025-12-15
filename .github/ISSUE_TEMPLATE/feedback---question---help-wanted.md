@@ -21,7 +21,8 @@ describe in short paragraph, what you are write or what question or concern you 
 
 ## Thoughts
 
-describe your thought and feedback related to app. if you have question then delete this section and fill the question section...
+describe your thought and feedback related to app. if you have question then delete this section and
+fill the question section...
 
 ## Question
 

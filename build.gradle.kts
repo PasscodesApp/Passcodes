@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.oss.licenses) apply false
+    alias(libs.plugins.android.library) apply false
 }
 
 // All projects block is common for setting up common repositories for all subprojects.

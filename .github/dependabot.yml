@@ -9,6 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       day: "sunday"
+      interval: "weekly"
     target-branch: "jeel-dev"
     assignees:
       - "JeelDobariya38"

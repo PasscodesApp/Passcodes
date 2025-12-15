@@ -22,7 +22,7 @@ on:
       - 'docs/**'
   
   release:
-    types: [created, published]
+    types: [ created, published ]
 
 jobs:
   analyze:

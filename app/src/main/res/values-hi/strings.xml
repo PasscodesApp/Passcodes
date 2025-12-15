@@ -4,33 +4,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">डेवलप किया गया: जीत डोबरिया</string>
-    <string name="designer_name">यूआई/यूएक्स डिजाइन: हामदा इस्सास (नेटिव)</string>
     <string name="code_maintainer">कोड मेंटेनेंस और टेस्टिंग: अहमद डेनियल (कुडानिल)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">बंद करें</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">ओपन-सोर्स पासवर्ड मैनेजर जो पासवर्ड याद रखने की झंझट को खत्म करता है।</string>
     <string name="textview_app_warning">यह ऐप अभी डेवलपमेंट में है और सिर्फ एजुकेशनल और एक्सपेरिमेंटल यूज़ के लिए है। जरूरी डेटा स्टोर करने के लिए यह सिक्योर नहीं हो सकता। कृपया सिक्योरिटी गाइडलाइंस देखें।</string>
 
     <!-- Button, Textview general in all Activity -->
-    <string name="hint_domain">डोमेन</string>
-    <string name="helper_text_domain_field">वेबसाइट या डोमेन का नाम</string>
-    <string name="hint_username">यूज़रनेम</string>
-    <string name="hint_password">पासवर्ड</string>
-    <string name="hint_notes">नोट्स</string>
-    <string name="placeholder_domain_field">जैसे Google, Instagram, WhatsApp वगैरह</string>
-    <string name="placeholder_username_field">जैसे Liam15, Noha, Olivia, Ava_25 वगैरह</string>
-    <string name="placeholder_password_field">जैसे 12345, abc123xyz, qwerty वगैरह</string>
     <string name="password_manager_button_text">पासवर्ड मैनेजर</string>
-    <string name="save_password_button_text">पासवर्ड सेव करें</string>
-    <string name="load_password_button_text">पासवर्ड लोड करें</string>
-    <string name="update_password_button_text">पासवर्ड अपडेट करें</string>
-    <string name="delete_password_button_text">पासवर्ड हटाएं</string>
-    <string name="import_password_button_text">पासवर्ड इंपोर्ट करें</string>
-    <string name="export_password_button_text">पासवर्ड एक्सपोर्ट करें</string>
-    <string name="password_security_check_button_text">सिक्योरिटी चेक</string>
     <string name="setting_button_text">सेटिंग्स</string>
     <string name="toggle_theme_button_text">थीम बदलें</string>
     <string name="label_language_setting">भाषा: </string>
@@ -43,45 +25,17 @@
     <string name="view_release_notes_button_text">चेंजलॉग देखें</string>
 
     <!-- Headline of Activity -->
-    <string name="textview_passwordmanager_headline">पासवर्ड मैनेजर</string>
-    <string name="textview_loadpassword_headline">पासवर्ड लोड करें</string>
-    <string name="textview_savepassword_headline">पासवर्ड सेव करें</string>
-    <string name="textview_viewpassword_headline">पासवर्ड देखें</string>
-    <string name="textview_updatepassword_headline">पासवर्ड अपडेट करें</string>
     <string name="textview_settings_headline">सेटिंग्स</string>
     <string name="textview_aboutus_headline">हमारे बारे में</string>
 
     <!-- Prefix & Suffix -->
-    <string name="id_prefix">आईडी: </string>
-    <string name="domain_prefix">डोमेन: </string>
-    <string name="username_prefix">यूज़रनेम: </string>
-    <string name="password_prefix">पासवर्ड: </string>
-    <string name="notes_prefix">नोट्स: </string>
-    <string name="createdat_prefix">बनाया गया: </string>
-    <string name="updatedat_prefix">अपडेट किया गया: </string>
 
     <!-- Permission -->
-    <string name="permission_granted">परमिशन मिल गई</string>
-    <string name="permission_denied">परमिशन नहीं मिली</string>
 
     <!-- Toast Message -->
-    <string name="restart_app_require">ऐप को फिर से शुरू करना जरूरी है।</string>
-    <string name="future_feat_clause">यह फीचर अभी बन रहा है।</string>
-    <string name="not_found_error_message">404: नहीं मिला।</string>
-    <string name="warn_fill_form">चेतावनी: पहले फॉर्म भरें।</string>
-    <string name="fail_msg">फेल हुआ: फिर से कोशिश करें।</string>
-    <string name="success_clause">सफलता:</string>
-    <string name="update_success_msg">सफलतापूर्वक अपडेट हुआ।</string>
-    <string name="delete_success_msg">सफलतापूर्वक हटाया गया।</string>
     <string name="something_went_wrong_msg">कुछ गलत हो गया।</string>
-    <string name="action_discard">कार्रवाई रद्द की गई।</string>
     <string name="error_invalid_password_id">कुछ गलत हुआ: ID सही नहीं है!!</string>
 
     <!-- Alert Dialog Message -->
-    <string name="update_password_dialog_title">पासवर्ड अपडेट करें?</string>
-    <string name="delete_password_dialog_title">पासवर्ड हटाएं?</string>
-    <string name="irreversible_dialog_desc">यह काम वापस नहीं लिया जा सकता।</string>
-    <string name="confirm_dialog_button_text">पक्का करें</string>
-    <string name="discard_dialog_button_text">रद्द करें</string>
 
 </resources>

@@ -3,33 +3,15 @@
 
     <!-- Contributor Names -->
     <string name="developer_name">Desarrollado por: Dobariya Jeel</string>
-    <string name="designer_name">Diseño UI/UX por: Hamada Issas (Native)</string>
     <string name="code_maintainer">Mantenimiento de código y pruebas: Achmad Daniel (Kudanill)</string>
 
     <!-- Main Activity -->
-    <string name="quit_button_text">Salir</string>
-
     <!-- About Us Activity -->
     <string name="textview_app_description">Un gestor de contraseñas de código abierto que te ayuda a no tener que recordar tus contraseñas.</string>
     <string name="textview_app_warning">Esta app está en desarrollo activo y es solo para fines educativos y experimentales. Puede que no sea segura para guardar información sensible. Consulta las directrices de seguridad para más detalles.</string>
 
     <!-- Button, Textview general in all Activity -->
-    <string name="hint_domain">Dominio</string>
-    <string name="helper_text_domain_field">Nombre del sitio web o dominio</string>
-    <string name="hint_username">Usuario</string>
-    <string name="hint_password">Contraseña</string>
-    <string name="hint_notes">Notas</string>
-    <string name="placeholder_domain_field">Ej: Google, Instagram, WhatsApp, etc.</string>
-    <string name="placeholder_username_field">Ej: Liam15, Noha, Olivia, Ava_25, etc.</string>
-    <string name="placeholder_password_field">Ej: 12345, abc123xyz, qwerty, etc.</string>
     <string name="password_manager_button_text">Gestor de Contraseñas</string>
-    <string name="save_password_button_text">Guardar Contraseña</string>
-    <string name="load_password_button_text">Cargar Contraseña</string>
-    <string name="update_password_button_text">Actualizar Contraseña</string>
-    <string name="delete_password_button_text">Eliminar Contraseña</string>
-    <string name="import_password_button_text">Importar Contraseña</string>
-    <string name="export_password_button_text">Exportar Contraseña</string>
-    <string name="password_security_check_button_text">Revisar Seguridad</string>
     <string name="setting_button_text">Ajustes</string>
     <string name="toggle_theme_button_text">Cambiar Tema</string>
     <string name="label_language_setting">Idioma: </string>
@@ -42,44 +24,16 @@
     <string name="view_release_notes_button_text">Ver Cambios</string>
 
     <!-- Headline of Activity -->
-    <string name="textview_passwordmanager_headline">Gestor de Contraseñas</string>
-    <string name="textview_loadpassword_headline">Cargar Contraseña</string>
-    <string name="textview_savepassword_headline">Guardar Contraseña</string>
-    <string name="textview_viewpassword_headline">Ver Contraseña</string>
-    <string name="textview_updatepassword_headline">Actualizar Contraseña</string>
     <string name="textview_settings_headline">Ajustes</string>
     <string name="textview_aboutus_headline">Sobre Nosotros</string>
 
     <!-- Prefix & Suffix -->
-    <string name="id_prefix">ID: </string>
-    <string name="domain_prefix">Dominio: </string>
-    <string name="username_prefix">Usuario: </string>
-    <string name="password_prefix">Contraseña: </string>
-    <string name="notes_prefix">Notas: </string>
-    <string name="createdat_prefix">Creado el: </string>
-    <string name="updatedat_prefix">Actualizado el: </string>
 
     <!-- Permission -->
-    <string name="permission_granted">Permiso concedido</string>
-    <string name="permission_denied">Permiso denegado</string>
 
     <!-- Toast Message -->
-    <string name="restart_app_require">Es necesario reiniciar la app.</string>
-    <string name="future_feat_clause">Esta función está en desarrollo.</string>
-    <string name="not_found_error_message">404: No encontrado.</string>
-    <string name="warn_fill_form">Aviso: Por favor, completa el formulario primero.</string>
-    <string name="fail_msg">Falló: Intenta de nuevo.</string>
-    <string name="success_clause">Éxito:</string>
-    <string name="update_success_msg">Actualizado correctamente.</string>
-    <string name="delete_success_msg">Eliminado correctamente.</string>
     <string name="something_went_wrong_msg">Algo salió mal.</string>
-    <string name="action_discard">Acción descartada.</string>
     <string name="error_invalid_password_id">Algo salió mal: ¡ID inválido!</string>
 
     <!-- Alert Dialog Message -->
-    <string name="update_password_dialog_title">¿Actualizar contraseña?</string>
-    <string name="delete_password_dialog_title">¿Eliminar contraseña?</string>
-    <string name="irreversible_dialog_desc">Esta acción no se puede deshacer.</string>
-    <string name="confirm_dialog_button_text">Confirmar</string>
-    <string name="discard_dialog_button_text">Cancelar</string>
 </resources>
