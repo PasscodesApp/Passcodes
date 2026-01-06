@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -59,6 +60,14 @@ dependencies {
 
     // Jetpack Compose
     implementation(platform(libs.compose.bom))
+
+    // Navigation 3
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.json)
+
+    // Google Play License Services
+    implementation(libs.oss.license)
 
     // Concurrency (Coroutines Bundle)
     implementation(libs.coroutines.core)

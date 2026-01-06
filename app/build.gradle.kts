@@ -52,6 +52,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.oss.licenses)
 }
 
@@ -221,6 +222,11 @@ dependencies {
     implementation(composeBom)
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
+
+    // Navigation 3
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.json)
 
     // Google Play License Services
     implementation(libs.oss.license)
