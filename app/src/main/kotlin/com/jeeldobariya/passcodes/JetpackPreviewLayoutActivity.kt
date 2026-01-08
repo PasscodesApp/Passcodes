@@ -1,5 +1,6 @@
-package com.jeeldobariya.passcodes.ui
+package com.jeeldobariya.passcodes
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -52,9 +53,9 @@ class JetpackPreviewLayoutActivity : ComponentActivity() {
     }
 
     fun navigateToJetpackComposeNavigation() {
-//        Intent(this@MainActivity, MainActivity::class.java).also {
-//            startActivity(it)
-//        }
+        Intent(this@JetpackPreviewLayoutActivity, com.jeeldobariya.passcodes.ui.MainActivity::class.java).also {
+            startActivity(it)
+        }
     }
 }
 

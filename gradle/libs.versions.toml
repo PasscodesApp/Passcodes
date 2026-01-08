@@ -32,6 +32,12 @@ oss-license-plugin = "0.10.10" # Also update in settings.gradle.kts
 
 
 [libraries]
+# Android jetpack compose defualt
+# androidx-ui = { module = "androidx.compose.ui:ui" }
+# androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+# androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+# androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+
 # Jetpack Compose
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-ui-material = { module = "androidx.compose.material3:material3" }
