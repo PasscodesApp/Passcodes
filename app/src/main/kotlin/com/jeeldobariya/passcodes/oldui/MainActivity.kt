@@ -12,6 +12,7 @@ import com.jeeldobariya.passcodes.core.domain.usecases.CheckForUpdateUseCase
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
 import com.jeeldobariya.passcodes.password_manager.oldui.PasswordManagerActivity
+import com.jeeldobariya.passcodes.ui.JetpackPreviewLayoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -58,11 +59,9 @@ class MainActivity : AppCompatActivity() {
 
         runBlocking {
             if (featureFlagsDatastore.data.first().isPreviewLayoutEnabled) {
-                val jetpackComposeActivity = Intent(
-                    this@MainActivity,
-                    com.jeeldobariya.passcodes.ui.MainActivity::class.java
-                )
-                startActivity(jetpackComposeActivity)
+                Intent(this@MainActivity, JetpackPreviewLayoutActivity::class.java).also {
+                    startActivity(it)
+                }
             }
         }
     }

@@ -26,7 +26,7 @@ import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
-class MainActivity : ComponentActivity() {
+class JetpackPreviewLayoutActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -35,6 +35,7 @@ class MainActivity : ComponentActivity() {
                 val composableScope = rememberCoroutineScope()
 
                 JetpackComposeNewUIRoot(
+                    navigateToNewUi = ::navigateToJetpackComposeNavigation,
                     navigateToOldUi = {
                         composableScope.launch {
                             featureFlagsDatastore.updateData {
@@ -44,8 +45,7 @@ class MainActivity : ComponentActivity() {
                             finishAndRemoveTask()
                             exitProcess(0)
                         }
-                    },
-                    navigateToNewUi = ::navigateToJetpackComposeNavigation
+                    }
                 )
             }
         }
@@ -58,9 +58,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// The below written is temporary code it will be removed once we have full jetpack-compose support.
 @Composable
-fun JetpackComposeNewUIRoot(navigateToOldUi: () -> Unit, navigateToNewUi: () -> Unit) {
+fun JetpackComposeNewUIRoot(navigateToNewUi: () -> Unit, navigateToOldUi: () -> Unit) {
     Surface(
         color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxSize(),
