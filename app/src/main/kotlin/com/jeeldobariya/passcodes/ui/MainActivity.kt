@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,23 +32,35 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PasscodesTheme {
-                MainScreen {
-                    featureFlagsDatastore.updateData {
-                        it.copy(isPreviewLayoutEnabled = false)
-                    }
+                val composableScope = rememberCoroutineScope()
 
-                    finishAndRemoveTask()
-                    exitProcess(0)
-                }
+                JetpackComposeNewUIRoot(
+                    navigateToOldUi = {
+                        composableScope.launch {
+                            featureFlagsDatastore.updateData {
+                                it.copy(isPreviewLayoutEnabled = false)
+                            }
+
+                            finishAndRemoveTask()
+                            exitProcess(0)
+                        }
+                    },
+                    navigateToNewUi = ::navigateToJetpackComposeNavigation
+                )
             }
         }
     }
+
+    fun navigateToJetpackComposeNavigation() {
+//        Intent(this@MainActivity, MainActivity::class.java).also {
+//            startActivity(it)
+//        }
+    }
 }
 
+// The below written is temporary code it will be removed once we have full jetpack-compose support.
 @Composable
-fun MainScreen(navigateToOldUi: suspend () -> Unit) {
-    val scope = rememberCoroutineScope()
-
+fun JetpackComposeNewUIRoot(navigateToOldUi: () -> Unit, navigateToNewUi: () -> Unit) {
     Surface(
         color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxSize(),
@@ -60,43 +73,31 @@ fun MainScreen(navigateToOldUi: suspend () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Passcodes", fontSize = 24.sp)
+            Text("Passcodes", fontSize = 40.sp)
             Text("You are on New Jetpack UI")
 
-            Spacer(Modifier.padding(12.dp))
+            Spacer(Modifier.padding(32.dp))
 
-            Button(
-                onClick = {
-                    scope.launch {
-                        navigateToOldUi()
-                    }
-                }
-            ) {
+            Button(onClick = navigateToOldUi) {
                 Text("Back To Old UI", fontSize = 20.sp)
             }
-            Button(
-                onClick = {
-                    scope.launch {
-                        navigateToOldUi()
-                    }
-                }
-            ) {
-                Text("Continue New UI", fontSize = 20.sp)
+
+            OutlinedButton(onClick = navigateToNewUi) {
+                Text("Continue To New UI", fontSize = 20.sp)
             }
 
             Spacer(Modifier.padding(12.dp))
 
-            Text("Jetpack UI Is Under Development", fontSize = 11.sp)
+            Text("This UI is Under Active Development", fontSize = 12.sp)
+            Text("So, There might be small issues!!", fontSize = 12.sp)
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun BasePreview() {
     PasscodesTheme {
-        MainScreen(
-            navigateToOldUi = { }
-        )
+        JetpackComposeNewUIRoot(navigateToOldUi = { }, navigateToNewUi = { })
     }
 }
