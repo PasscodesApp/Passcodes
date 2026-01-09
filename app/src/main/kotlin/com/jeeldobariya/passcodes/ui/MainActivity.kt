@@ -8,9 +8,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
@@ -38,32 +41,68 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
-    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+    Scaffold { padding ->
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.SpaceAround,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(stringResource(R.string.app_name), fontSize = 32.sp)
+            // Top section
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.height(32.dp))
 
-            Text(stringResource(R.string.app_version), fontSize = 12.sp)
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.displaySmall
+                )
 
-            Spacer(Modifier.padding(48.dp))
-
-            Button(onClick = { /* TODO */ }) {
-                Text(stringResource(R.string.password_manager_button_text))
+                Text(
+                    text = stringResource(R.string.app_version),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
 
-            FilledTonalButton(onClick = { /* TODO */ }) {
-                Text(stringResource(R.string.setting_button_text))
-            }
+            // Middle actions (primary content)
+            Card(
+                modifier = Modifier.fillMaxWidth(0.70f),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = { /* TODO */ },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.password_manager_button_text))
+                    }
 
-            FilledTonalButton(onClick = { /* TODO */ }) {
-                Text(stringResource(R.string.about_us_button_text))
+                    FilledTonalButton(
+                        onClick = { /* TODO */ },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.setting_button_text))
+                    }
+
+                    FilledTonalButton(
+                        onClick = { /* TODO */ },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.about_us_button_text))
+                    }
+                }
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @PreviewLightDark
