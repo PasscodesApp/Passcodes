@@ -224,8 +224,7 @@ dependencies {
     debugImplementation(libs.bundles.compose.debug)
 
     // Navigation 3
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.bundles.navigation3)
     implementation(libs.kotlinx.serialization.json)
 
     // Google Play License Services

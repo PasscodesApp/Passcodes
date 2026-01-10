@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.jeeldobariya.passcodes.navigation.NavigationRoot
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PasscodesTheme {
-                MainScreen()
+                NavigationRoot()
             }
         }
     }

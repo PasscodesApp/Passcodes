@@ -3,6 +3,7 @@
 coreKtx = "1.17.0"
 material = "1.13.0"
 nav3Core = "1.0.0"
+lifecycleViewmodelNav3 = "2.10.0"
 okhttp = "5.3.2"
 oss-license = "17.3.0"
 appcompat = "1.7.1"
@@ -55,6 +56,7 @@ appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat"
 # Core Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
 
 # DataStore Preference
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -98,6 +100,9 @@ androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "a
 # Jetpack Compose Dependencies
 compose = ["compose-ui-material", "compose-ui-preview", "compose-activity", "compose-viewmodel"]
 compose-debug = ["compose-ui-tooling-debug"]
+
+# Navigation 3
+navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "androidx-lifecycle-viewmodel-navigation3"]
 
 # Coroutines Dependencies
 coroutines = ["coroutines-core", "coroutines-android"]
