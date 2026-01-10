@@ -6,7 +6,9 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.jeeldobariya.passcodes.ui.AboutScreen
 import com.jeeldobariya.passcodes.ui.MainScreen
+import com.jeeldobariya.passcodes.ui.SettingsScreen
 
 @Composable
 fun NavigationRoot() {
@@ -27,7 +29,15 @@ fun NavigationRoot() {
         ),
         entryProvider = entryProvider {
             entry<Route.Home> {
-                MainScreen(navigateTo = ::navigateTo)
+                MainScreen(::navigateTo)
+            }
+
+            entry<Route.Settings> {
+                SettingsScreen()
+            }
+
+            entry<Route.AboutUs> {
+                AboutScreen()
             }
         }
     )
