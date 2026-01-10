@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -46,14 +48,19 @@ fun MainScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 24.dp),
-            verticalArrangement = Arrangement.SpaceAround,
+                .padding(horizontal = 24.dp, vertical = 64.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Top section
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_passcodes),
+                    contentDescription = "Passcodes Icon"
+                )
+
                 Spacer(Modifier.height(32.dp))
 
                 Text(
@@ -70,7 +77,7 @@ fun MainScreen() {
 
             // Middle actions (primary content)
             Card(
-                modifier = Modifier.fillMaxWidth(0.70f),
+                modifier = Modifier.fillMaxWidth(0.80f),
                 shape = MaterialTheme.shapes.extraLarge
             ) {
                 Column(
@@ -81,21 +88,21 @@ fun MainScreen() {
                         onClick = { /* TODO */ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.password_manager_button_text))
+                        Text(stringResource(R.string.password_manager_button_text), style = MaterialTheme.typography.bodyLarge)
                     }
 
                     FilledTonalButton(
                         onClick = { /* TODO */ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.setting_button_text))
+                        Text(stringResource(R.string.setting_button_text), style = MaterialTheme.typography.bodyLarge)
                     }
 
                     FilledTonalButton(
                         onClick = { /* TODO */ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.about_us_button_text))
+                        Text(stringResource(R.string.about_us_button_text), style = MaterialTheme.typography.bodyLarge)
                     }
                 }
             }
