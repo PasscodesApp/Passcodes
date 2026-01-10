@@ -12,6 +12,10 @@ import com.jeeldobariya.passcodes.ui.MainScreen
 fun NavigationRoot() {
     val backStack = rememberNavBackStack(Route.Home)
 
+    fun navigateTo(route: Route): Unit {
+        backStack.addLast(route)
+    }
+
     NavDisplay(
         backStack = backStack,
         onBack = {
@@ -23,7 +27,7 @@ fun NavigationRoot() {
         ),
         entryProvider = entryProvider {
             entry<Route.Home> {
-                MainScreen()
+                MainScreen(navigateTo = ::navigateTo)
             }
         }
     )

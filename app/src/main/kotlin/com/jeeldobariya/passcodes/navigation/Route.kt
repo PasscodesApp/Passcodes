@@ -8,4 +8,10 @@ sealed interface Route: NavKey {
 
     @Serializable
     data object Home: Route, NavKey
+
+    @Serializable
+    data object AboutUs: Route, NavKey
+
+    @Serializable
+    data object Settings: Route, NavKey
 }

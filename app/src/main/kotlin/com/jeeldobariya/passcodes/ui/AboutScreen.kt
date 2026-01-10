@@ -22,13 +22,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import com.jeeldobariya.passcodes.R
-import com.jeeldobariya.passcodes.navigation.Route
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
 @Composable
-fun MainScreen(navigateTo: (Route) -> Unit) {
+fun AboutScreen() {
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -50,7 +48,7 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
                 Spacer(Modifier.height(32.dp))
 
                 Text(
-                    text = stringResource(R.string.app_name),
+                    text = stringResource(R.string.textview_aboutus_headline),
                     style = MaterialTheme.typography.displaySmall
                 )
 
@@ -78,14 +76,14 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
                     }
 
                     FilledTonalButton(
-                        onClick = { navigateTo(Route.Settings) },
+                        onClick = { /* TODO */ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(stringResource(R.string.setting_button_text), style = MaterialTheme.typography.bodyLarge)
                     }
 
                     FilledTonalButton(
-                        onClick = { navigateTo(Route.AboutUs) },
+                        onClick = { /* TODO */ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(stringResource(R.string.about_us_button_text), style = MaterialTheme.typography.bodyLarge)
@@ -100,8 +98,8 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
 @Preview(showBackground = true)
 @PreviewLightDark
 @Composable
-fun MainScreenPreview() {
+fun AboutScreenPreview() {
     PasscodesTheme {
-        MainScreen(navigateTo = { })
+        AboutScreen()
     }
 }
