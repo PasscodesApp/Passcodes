@@ -41,11 +41,12 @@ oss-license-plugin = "0.10.10" # Also update in settings.gradle.kts
 
 # Jetpack Compose
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
-compose-ui-material = { module = "androidx.compose.material3:material3" }
+compose-ui-material3 = { module = "androidx.compose.material3:material3" }
 compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui-tooling-debug = { module = "androidx.compose.ui:ui-tooling" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "compose-activity" }
 compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "compose-viewmodel" }
+material-icons = { module = "androidx.compose.material:material-icons-core" }
 
 # Core Dependency
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -98,7 +99,7 @@ androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "a
 
 [bundles]
 # Jetpack Compose Dependencies
-compose = ["compose-ui-material", "compose-ui-preview", "compose-activity", "compose-viewmodel"]
+compose = ["compose-ui-material3", "compose-ui-preview", "compose-activity", "compose-viewmodel", "material-icons"]
 compose-debug = ["compose-ui-tooling-debug"]
 
 # Navigation 3

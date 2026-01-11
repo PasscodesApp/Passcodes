@@ -3,26 +3,33 @@ package com.jeeldobariya.passcodes.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.navigation.Route
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
@@ -63,7 +70,9 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
 
             // Middle actions (primary content)
             Card(
-                modifier = Modifier.fillMaxWidth(0.80f),
+                modifier = Modifier
+                    .scale(1.25f)
+                    .width(IntrinsicSize.Max),
                 shape = MaterialTheme.shapes.extraLarge
             ) {
                 Column(
@@ -74,13 +83,17 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
                         onClick = { /* TODO */ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(stringResource(R.string.password_manager_button_text), style = MaterialTheme.typography.bodyLarge)
+                        Icon(imageVector = Icons.Default.Lock, contentDescription = "lock")
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(text = stringResource(R.string.password_manager_button_text), style = MaterialTheme.typography.bodyLarge)
                     }
 
                     FilledTonalButton(
                         onClick = { navigateTo(Route.Settings) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        Icon(imageVector = Icons.Default.Settings, contentDescription = "lock")
+                        Spacer(modifier = Modifier.padding(4.dp))
                         Text(stringResource(R.string.setting_button_text), style = MaterialTheme.typography.bodyLarge)
                     }
 
@@ -88,6 +101,8 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
                         onClick = { navigateTo(Route.AboutUs) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        Icon(imageVector = Icons.Default.Info, contentDescription = "lock")
+                        Spacer(modifier = Modifier.padding(4.dp))
                         Text(stringResource(R.string.about_us_button_text), style = MaterialTheme.typography.bodyLarge)
                     }
                 }

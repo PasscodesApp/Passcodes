@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalButton
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,31 +35,34 @@ fun AboutScreen() {
                 .fillMaxSize()
                 .padding(padding)
                 .padding(horizontal = 24.dp, vertical = 64.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Top section
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_passcodes),
-                    contentDescription = "Passcodes Icon"
-                )
+            Image(
+                painter = painterResource(R.drawable.ic_passcodes),
+                contentDescription = "Passcodes Icon",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(10.dp)
+            )
 
-                Spacer(Modifier.height(32.dp))
+            Text(
+                text = stringResource(R.string.textview_aboutus_headline),
+                style = MaterialTheme.typography.titleLarge
+            )
 
-                Text(
-                    text = stringResource(R.string.textview_aboutus_headline),
-                    style = MaterialTheme.typography.displaySmall
-                )
+            Text(
+                text = stringResource(R.string.textview_app_description),
+                style = MaterialTheme.typography.bodyMedium
+            )
 
-                Text(
-                    text = stringResource(R.string.app_version),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+            Text(
+                text = stringResource(R.string.textview_app_warning),
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Red
+            )
+
+            Spacer(modifier = Modifier.padding(16.dp))
 
             // Middle actions (primary content)
             Card(
