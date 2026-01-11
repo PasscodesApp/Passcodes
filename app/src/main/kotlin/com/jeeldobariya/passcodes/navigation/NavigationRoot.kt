@@ -15,7 +15,7 @@ fun NavigationRoot() {
     val backStack = rememberNavBackStack(Route.Home)
 
     fun navigateTo(route: Route): Unit {
-        backStack.addLast(route)
+        backStack.add(route)
     }
 
     NavDisplay(
