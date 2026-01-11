@@ -11,7 +11,7 @@ import java.util.Properties
  * Gets the current system time formatted as 'yy-mm-dd : hh-mm-ss'.
  */
 fun getCurrentTimeLabel(): String {
-    val formatter = SimpleDateFormat("yy-MM-dd : HH-mm-ss", Locale.getDefault())
+    val formatter = SimpleDateFormat("yy-MM-dd - HH:mm:ss", Locale.getDefault())
     return formatter.format(Date())
 }
 
