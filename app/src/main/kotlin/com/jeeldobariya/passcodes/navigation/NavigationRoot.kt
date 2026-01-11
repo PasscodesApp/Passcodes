@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.jeeldobariya.passcodes.password_manager.ui.PasswordManagerScreen
 import com.jeeldobariya.passcodes.ui.AboutScreen
 import com.jeeldobariya.passcodes.ui.MainScreen
 import com.jeeldobariya.passcodes.ui.SettingsScreen
@@ -38,6 +39,10 @@ fun NavigationRoot() {
 
             entry<Route.AboutUs> {
                 AboutScreen()
+            }
+
+            entry<Route.PasswordManager> {
+                PasswordManagerScreen()
             }
         }
     )

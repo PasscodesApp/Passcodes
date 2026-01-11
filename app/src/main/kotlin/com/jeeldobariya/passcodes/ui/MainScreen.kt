@@ -80,7 +80,7 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Button(
-                        onClick = { /* TODO */ },
+                        onClick = { navigateTo(Route.PasswordManager) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(imageVector = Icons.Default.Lock, contentDescription = "lock")
