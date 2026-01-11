@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -140,9 +141,9 @@ fun SettingsScreen() {
                         modifier = Modifier.align(Alignment.TopEnd),
                         onClick = { }
                     ) {
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "delete")
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "delete", tint = Color.Red)
                         Spacer(modifier = Modifier.padding(2.dp))
-                        Text(text = stringResource(R.string.clear_all_data_button_text))
+                        Text(text = stringResource(R.string.clear_all_data_button_text), color = Color.Red)
                     }
                 }
             }
