@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,11 +40,13 @@ import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen() {
-    val context = LocalContext.current
-    val flagDatastoreState by context.featureFlagsDatastore.data.collectAsState(
+    val scope = rememberCoroutineScope()
+    val flagDataStore = LocalContext.current.featureFlagsDatastore
+    val flagDatastoreState by flagDataStore.data.collectAsState(
         FeatureFlagsSettings(
             version = 0,
             isPreviewFeaturesEnabled = false,
@@ -111,7 +114,11 @@ fun SettingsScreen() {
                     Switch(
                         checked = flagDatastoreState.isPreviewLayoutEnabled,
                         onCheckedChange = {
-
+                            scope.launch {
+                                flagDataStore.updateData {
+                                    it.copy(isPreviewLayoutEnabled = !it.isPreviewLayoutEnabled)
+                                }
+                            }
                         }
                     )
                 }
@@ -130,7 +137,11 @@ fun SettingsScreen() {
                     Switch(
                         checked = flagDatastoreState.isPreviewFeaturesEnabled,
                         onCheckedChange = {
-
+                            scope.launch {
+                                flagDataStore.updateData {
+                                    it.copy(isPreviewFeaturesEnabled = !it.isPreviewFeaturesEnabled)
+                                }
+                            }
                         }
                     )
                 }
