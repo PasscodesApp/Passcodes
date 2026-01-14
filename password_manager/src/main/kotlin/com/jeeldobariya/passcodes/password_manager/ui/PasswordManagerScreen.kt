@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.jeeldobariya.passcodes.core.navigation.Route
 import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordAction
 import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordViewModel
 import kotlinx.coroutines.launch
@@ -32,7 +33,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordManagerScreen(viewmodel: LoadPasswordViewModel = koinViewModel()) {
+fun PasswordManagerScreen(navigateTo: (Route) -> Unit, viewmodel: LoadPasswordViewModel = koinViewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -53,11 +54,7 @@ fun PasswordManagerScreen(viewmodel: LoadPasswordViewModel = koinViewModel()) {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                scope.launch {
-                    snackbarHostState.showSnackbar("Coming Soon")
-                }
-            }) {
+            FloatingActionButton(onClick = { navigateTo(Route.SavePassword) }) {
                 Icon(imageVector = Icons.Default.AddCircle, contentDescription = "")
             }
         }
@@ -87,5 +84,5 @@ fun PasswordManagerScreen(viewmodel: LoadPasswordViewModel = koinViewModel()) {
 @PreviewLightDark
 @Composable
 fun PasswordManagerScreenPreview() {
-    PasswordManagerScreen()
+    PasswordManagerScreen({ })
 }

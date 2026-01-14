@@ -17,4 +17,7 @@ sealed interface Route: NavKey {
 
     @Serializable
     data object PasswordManager: Route, NavKey
+
+    @Serializable
+    data object SavePassword: Route, NavKey
 }
