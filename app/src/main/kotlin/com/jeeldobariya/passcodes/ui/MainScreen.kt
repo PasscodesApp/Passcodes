@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.jeeldobariya.passcodes.R
-import com.jeeldobariya.passcodes.navigation.Route
+import com.jeeldobariya.passcodes.core.navigation.Route
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
 @Composable

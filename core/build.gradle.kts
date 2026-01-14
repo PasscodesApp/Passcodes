@@ -49,6 +49,10 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
 
+    // Navigation 3
+    implementation(libs.bundles.navigation3)
+    implementation(libs.kotlinx.serialization.json)
+
     // Networking/Parsing
     implementation(libs.okhttp)
     implementation(libs.json)

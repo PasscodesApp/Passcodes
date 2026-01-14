@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.navigation
+package com.jeeldobariya.passcodes.core.navigation
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

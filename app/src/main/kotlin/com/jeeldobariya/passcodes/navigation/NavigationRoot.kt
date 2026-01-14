@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.jeeldobariya.passcodes.core.navigation.Route
 import com.jeeldobariya.passcodes.password_manager.ui.PasswordManagerScreen
 import com.jeeldobariya.passcodes.ui.AboutScreen
 import com.jeeldobariya.passcodes.ui.MainScreen
