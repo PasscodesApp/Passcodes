@@ -10,6 +10,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -27,22 +28,22 @@ fun SavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel()) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { paddingValues ->
-        val state = viewmodel.state.collectAsState()
+        val state by viewmodel.state.collectAsState()
 
         Column(modifier = Modifier.padding(paddingValues)) {
-            OutlinedTextField(value = state.value.domain,
+            OutlinedTextField(value = state.domain,
                 onValueChange = {
                     viewmodel.onAction(action = SavePasswordAction.OnChangeDomain(it))
                 })
-            OutlinedTextField(value = state.value.username,
+            OutlinedTextField(value = state.username,
                 onValueChange = {
                     viewmodel.onAction(action = SavePasswordAction.OnChangeUsername(it))
                 })
-            OutlinedTextField(value = state.value.password,
+            OutlinedTextField(value = state.password,
                 onValueChange = {
                     viewmodel.onAction(action = SavePasswordAction.OnChangePassword(it))
                 })
-            OutlinedTextField(value = state.value.notes,
+            OutlinedTextField(value = state.notes,
                 onValueChange = {
                     viewmodel.onAction(action = SavePasswordAction.OnChangeNotes(it))
                 })
