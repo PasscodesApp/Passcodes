@@ -51,50 +51,22 @@ fun AboutScreen() {
                 style = MaterialTheme.typography.titleLarge
             )
 
+            Spacer(modifier = Modifier.padding(vertical = 12.dp))
+
             Text(
                 text = stringResource(R.string.textview_app_description),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyLarge
             )
+
+            Spacer(modifier = Modifier.padding(vertical = 16.dp))
 
             Text(
                 text = stringResource(R.string.textview_app_warning),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelSmall,
                 color = Color.Red
             )
 
             Spacer(modifier = Modifier.padding(16.dp))
-
-            // Middle actions (primary content)
-            Card(
-                modifier = Modifier.fillMaxWidth(0.80f),
-                shape = MaterialTheme.shapes.extraLarge
-            ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Button(
-                        onClick = { /* TODO */ },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(stringResource(R.string.password_manager_button_text), style = MaterialTheme.typography.bodyLarge)
-                    }
-
-                    FilledTonalButton(
-                        onClick = { /* TODO */ },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(stringResource(R.string.setting_button_text), style = MaterialTheme.typography.bodyLarge)
-                    }
-
-                    FilledTonalButton(
-                        onClick = { /* TODO */ },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(stringResource(R.string.about_us_button_text), style = MaterialTheme.typography.bodyLarge)
-                    }
-                }
-            }
         }
     }
 }
