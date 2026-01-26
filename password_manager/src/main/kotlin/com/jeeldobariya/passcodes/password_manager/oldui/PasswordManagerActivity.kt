@@ -130,7 +130,6 @@ class PasswordManagerActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             setType("text/comma-separated-values")
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("text/csv", "application/csv"))
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
 
