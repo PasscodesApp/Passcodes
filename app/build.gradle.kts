@@ -49,7 +49,6 @@ val devRoundIcon = "@mipmap/dev_ic_launcher_round"
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.jetbrains.kotlin.serialization)
@@ -202,6 +201,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        resValues = true
         compose = true
     }
 }
