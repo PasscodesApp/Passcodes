@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -35,9 +34,13 @@ class PasswordManagerActivity : AppCompatActivity() {
             val uri = result.data?.data
             requireNotNull(uri)
 
+            Toast.makeText(this@PasswordManagerActivity, "Exporting...", Toast.LENGTH_SHORT).show()
+
             lifecycleScope.launch(Dispatchers.IO) {
                 exportPasswordUseCase(uri)
             }
+        } else {
+            Toast.makeText(this@PasswordManagerActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -46,9 +49,13 @@ class PasswordManagerActivity : AppCompatActivity() {
             val uri = result.data?.data
             requireNotNull(uri)
 
+            Toast.makeText(this@PasswordManagerActivity, "Importing...", Toast.LENGTH_SHORT).show()
+
             lifecycleScope.launch(Dispatchers.IO) {
                 importPasswordUseCase(uri)
             }
+        } else {
+            Toast.makeText(this@PasswordManagerActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
         }
     }
 
