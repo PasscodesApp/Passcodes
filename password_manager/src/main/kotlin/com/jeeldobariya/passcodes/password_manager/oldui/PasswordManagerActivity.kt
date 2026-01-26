@@ -30,9 +30,27 @@ class PasswordManagerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPasswordManagerBinding
 
-    private lateinit var exportCsvLauncher: ActivityResultLauncher<Intent>
+    private val exportCsvLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val uri = result.data?.data
+            requireNotNull(uri)
 
-    private lateinit var importCsvLauncher: ActivityResultLauncher<Intent>
+            lifecycleScope.launch(Dispatchers.IO) {
+                exportPasswordUseCase(uri)
+            }
+        }
+    }
+
+    private val importCsvLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val uri = result.data?.data
+            requireNotNull(uri)
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                importPasswordUseCase(uri)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         runBlocking {
@@ -41,32 +59,6 @@ class PasswordManagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPasswordManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        importCsvLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val uri = result.data?.data
-                requireNotNull(uri)
-
-                lifecycleScope.launch(Dispatchers.IO) {
-                    importPasswordUseCase(uri)
-                }
-            }
-        }
-
-        exportCsvLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val uri = result.data?.data
-                requireNotNull(uri)
-
-                lifecycleScope.launch(Dispatchers.IO) {
-                    exportPasswordUseCase(uri)
-                }
-            }
-        }
 
         collectLatestLifecycleFlow(featureFlagsDatastore.data) {
             if (!it.isPreviewFeaturesEnabled) {
