@@ -1,9 +1,14 @@
 package com.jeeldobariya.passcodes.password_manager.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
@@ -62,20 +67,32 @@ fun PasswordManagerScreen(navigateTo: (Route) -> Unit, viewmodel: LoadPasswordVi
         viewmodel.onAction(LoadPasswordAction.RefreshPassword)
         val state = viewmodel.state.collectAsState()
 
-        LazyColumn(modifier = Modifier.padding(paddingValue)) {
-            (state.value.passwordEntityList).forEach {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .fillMaxSize()
-                    ) {
-                        Text(text = it.domain, style = MaterialTheme.typography.titleLarge)
-                        Text(text = it.username, style = MaterialTheme.typography.bodySmall)
-                    }
-
-                    HorizontalDivider(thickness = 2.dp)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(paddingValue),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            items(
+                items = state.value.passwordEntityList,
+                key = { it.id }
+            ) { passwordItem ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = { navigateTo(Route.UpdatePassword(passwordItem.id)) })
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = passwordItem.domain,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = passwordItem.username,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
+
+                HorizontalDivider(thickness = 2.dp)
             }
         }
     }

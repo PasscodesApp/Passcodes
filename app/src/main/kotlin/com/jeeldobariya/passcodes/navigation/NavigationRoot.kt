@@ -9,6 +9,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.jeeldobariya.passcodes.core.navigation.Route
 import com.jeeldobariya.passcodes.password_manager.ui.PasswordManagerScreen
 import com.jeeldobariya.passcodes.password_manager.ui.SavePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.UpdatePasswordScreen
 import com.jeeldobariya.passcodes.ui.AboutScreen
 import com.jeeldobariya.passcodes.ui.MainScreen
 import com.jeeldobariya.passcodes.ui.SettingsScreen
@@ -49,6 +50,10 @@ fun NavigationRoot() {
 
             entry<Route.SavePassword> {
                 SavePasswordScreen()
+            }
+
+            entry<Route.UpdatePassword> {
+                UpdatePasswordScreen(it.id)
             }
         }
     )
