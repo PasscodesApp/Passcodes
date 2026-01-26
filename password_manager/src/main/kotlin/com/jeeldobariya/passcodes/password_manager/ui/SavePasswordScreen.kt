@@ -43,6 +43,10 @@ fun SavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel()) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text("Save Password")
+
+            Spacer(modifier = Modifier.padding(16.dp))
+
             OutlinedTextField(
                 value = state.domain,
                 onValueChange = {
@@ -52,6 +56,7 @@ fun SavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel()) {
                     Text("Domain")
                 }
             )
+
             OutlinedTextField(
                 value = state.username,
                 onValueChange = {
@@ -61,6 +66,7 @@ fun SavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel()) {
                     Text("Username")
                 }
             )
+
             OutlinedTextField(
                 value = state.password,
                 onValueChange = {
@@ -71,6 +77,7 @@ fun SavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel()) {
                 },
                 visualTransformation = PasswordVisualTransformation()
             )
+
             OutlinedTextField(
                 value = state.notes,
                 onValueChange = {
@@ -81,7 +88,7 @@ fun SavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel()) {
                 }
             )
 
-            Spacer(modifier = Modifier.padding(4.dp))
+            Spacer(modifier = Modifier.padding(8.dp))
 
             Button(onClick = {
                 viewmodel.onAction(action = SavePasswordAction.OnSavePasswordButtonClick)
