@@ -120,7 +120,7 @@ class PasswordManagerActivity : AppCompatActivity() {
     private fun exportCsvFilePicker() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/csv"
+            setType("text/csv")
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
 
@@ -130,7 +130,7 @@ class PasswordManagerActivity : AppCompatActivity() {
     private fun importCsvFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/*"
+            setTypeAndNormalize("text/csv|text/comma-separated-values|application/csv")
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
 
