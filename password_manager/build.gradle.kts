@@ -69,9 +69,6 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.kotlinx.serialization.json)
 
-    // Google Play License Services
-    implementation(libs.oss.license)
-
     // Concurrency (Coroutines Bundle)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
