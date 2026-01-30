@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -30,9 +29,35 @@ class PasswordManagerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPasswordManagerBinding
 
-    private lateinit var exportCsvLauncher: ActivityResultLauncher<Intent>
+    private val exportCsvLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val uri = result.data?.data
+            requireNotNull(uri)
 
-    private lateinit var importCsvLauncher: ActivityResultLauncher<Intent>
+            Toast.makeText(this@PasswordManagerActivity, "Exporting...", Toast.LENGTH_SHORT).show()
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                exportPasswordUseCase(uri)
+            }
+        } else {
+            Toast.makeText(this@PasswordManagerActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val importCsvLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val uri = result.data?.data
+            requireNotNull(uri)
+
+            Toast.makeText(this@PasswordManagerActivity, "Importing...", Toast.LENGTH_SHORT).show()
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                importPasswordUseCase(uri)
+            }
+        } else {
+            Toast.makeText(this@PasswordManagerActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         runBlocking {
@@ -41,32 +66,6 @@ class PasswordManagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPasswordManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        importCsvLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val uri = result.data?.data
-                requireNotNull(uri)
-
-                lifecycleScope.launch(Dispatchers.IO) {
-                    importPasswordUseCase(uri)
-                }
-            }
-        }
-
-        exportCsvLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val uri = result.data?.data
-                requireNotNull(uri)
-
-                lifecycleScope.launch(Dispatchers.IO) {
-                    exportPasswordUseCase(uri)
-                }
-            }
-        }
 
         collectLatestLifecycleFlow(featureFlagsDatastore.data) {
             if (!it.isPreviewFeaturesEnabled) {
@@ -120,7 +119,7 @@ class PasswordManagerActivity : AppCompatActivity() {
     private fun exportCsvFilePicker() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/csv"
+            setType("text/comma-separated-values")
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
 
@@ -130,7 +129,7 @@ class PasswordManagerActivity : AppCompatActivity() {
     private fun importCsvFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/*"
+            setType("text/comma-separated-values")
             putExtra(Intent.EXTRA_TITLE, "passwords.csv")
         }
 
