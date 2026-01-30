@@ -11,7 +11,7 @@ import java.util.Properties
  * Gets the current system time formatted as 'yy-mm-dd : hh-mm-ss'.
  */
 fun getCurrentTimeLabel(): String {
-    val formatter = SimpleDateFormat("yy-MM-dd : HH-mm-ss", Locale.getDefault())
+    val formatter = SimpleDateFormat("yy-MM-dd - HH:mm:ss", Locale.getDefault())
     return formatter.format(Date())
 }
 
@@ -49,9 +49,9 @@ val devRoundIcon = "@mipmap/dev_ic_launcher_round"
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.oss.licenses)
 }
 
@@ -201,6 +201,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        resValues = true
         compose = true
     }
 }
@@ -221,6 +222,10 @@ dependencies {
     implementation(composeBom)
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
+
+    // Navigation 3
+    implementation(libs.bundles.navigation3)
+    implementation(libs.kotlinx.serialization.json)
 
     // Google Play License Services
     implementation(libs.oss.license)

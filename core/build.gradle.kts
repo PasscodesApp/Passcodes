@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
@@ -48,6 +47,10 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
+
+    // Navigation 3
+    implementation(libs.bundles.navigation3)
+    implementation(libs.kotlinx.serialization.json)
 
     // Networking/Parsing
     implementation(libs.okhttp)
