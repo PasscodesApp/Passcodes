@@ -2,6 +2,8 @@ package com.jeeldobariya.passcodes.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
@@ -14,14 +16,9 @@ import com.jeeldobariya.passcodes.ui.AboutScreen
 import com.jeeldobariya.passcodes.ui.MainScreen
 import com.jeeldobariya.passcodes.ui.SettingsScreen
 
+
 @Composable
-fun NavigationRoot() {
-    val backStack = rememberNavBackStack(Route.Home)
-
-    fun navigateTo(route: Route): Unit {
-        backStack.add(route)
-    }
-
+private fun ModernNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (Route) -> Unit) {
     NavDisplay(
         backStack = backStack,
         onBack = {
@@ -33,7 +30,7 @@ fun NavigationRoot() {
         ),
         entryProvider = entryProvider {
             entry<Route.Home> {
-                MainScreen(::navigateTo)
+                MainScreen(navigateTo)
             }
 
             entry<Route.Settings> {
@@ -45,7 +42,7 @@ fun NavigationRoot() {
             }
 
             entry<Route.PasswordManager> {
-                PasswordManagerScreen(::navigateTo)
+                PasswordManagerScreen(navigateTo)
             }
 
             entry<Route.SavePassword> {
@@ -57,4 +54,55 @@ fun NavigationRoot() {
             }
         }
     )
+}
+
+@Composable
+private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (Route) -> Unit) {
+    NavDisplay(
+        backStack = backStack,
+        onBack = {
+            backStack.removeLastOrNull()
+        },
+        entryDecorators = mutableListOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator()
+        ),
+        entryProvider = entryProvider {
+            entry<Route.Home> {
+                MainScreen(navigateTo)
+            }
+
+            entry<Route.Settings> {
+                SettingsScreen()
+            }
+
+            entry<Route.AboutUs> {
+                AboutScreen()
+            }
+
+            entry<Route.PasswordManager> {
+                PasswordManagerScreen(navigateTo)
+            }
+
+            entry<Route.SavePassword> {
+                SavePasswordScreen()
+            }
+
+            entry<Route.UpdatePassword> {
+                UpdatePasswordScreen(it.id)
+            }
+        }
+    )
+}
+
+@Composable
+fun NavigationRoot(modernLayout: Boolean) {
+    val backStack = rememberNavBackStack(Route.Home)
+
+    fun navigateTo(route: Route): Unit {
+        backStack.add(route)
+    }
+
+    if (modernLayout) ModernNavigationRoot(backStack, ::navigateTo)
+    else ClassicNavigationRoot(backStack, ::navigateTo)
 }
