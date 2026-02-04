@@ -16,6 +16,14 @@ allprojects {
     }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "io.netty") useVersion("4.2.9.Final")
+        if (requested.group == "com.google.protobuf") useVersion("3.25.5")
+        if (requested.group == "org.jdom") useVersion("2.0.6.1")
+    }
+}
+
 // Task to clean the build directory, now registered using tasks.register
 tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
