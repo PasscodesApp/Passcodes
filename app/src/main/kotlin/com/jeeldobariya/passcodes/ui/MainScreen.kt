@@ -19,6 +19,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -102,6 +103,83 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Icon(imageVector = Icons.Default.Info, contentDescription = "lock")
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(stringResource(R.string.about_us_button_text), style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ClassicalMainScreen(navigateTo: (Route) -> Unit) {
+    Scaffold { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 24.dp, vertical = 64.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Top section
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_passcodes),
+                    contentDescription = "Passcodes Icon"
+                )
+
+                Spacer(Modifier.height(32.dp))
+
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.displaySmall
+                )
+
+                Text(
+                    text = stringResource(R.string.app_version),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            // Middle actions (primary content)
+            Card(
+                modifier = Modifier
+                    .scale(1.25f)
+                    .width(IntrinsicSize.Max),
+                shape = MaterialTheme.shapes.extraLarge
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = { navigateTo(Route.PasswordManager) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(imageVector = Icons.Default.Lock, contentDescription = "lock")
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(text = stringResource(R.string.password_manager_button_text), style = MaterialTheme.typography.bodyLarge)
+                    }
+
+                    OutlinedButton(
+                        onClick = { navigateTo(Route.Settings) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(imageVector = Icons.Default.Settings, contentDescription = "settings")
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(stringResource(R.string.setting_button_text), style = MaterialTheme.typography.bodyLarge)
+                    }
+
+                    OutlinedButton(
+                        onClick = { navigateTo(Route.AboutUs) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(imageVector = Icons.Default.Info, contentDescription = "info")
                         Spacer(modifier = Modifier.padding(4.dp))
                         Text(stringResource(R.string.about_us_button_text), style = MaterialTheme.typography.bodyLarge)
                     }
