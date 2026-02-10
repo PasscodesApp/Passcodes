@@ -18,6 +18,7 @@ import com.jeeldobariya.passcodes.password_manager.ui.PasswordManagerScreen
 import com.jeeldobariya.passcodes.password_manager.ui.SavePasswordScreen
 import com.jeeldobariya.passcodes.password_manager.ui.UpdatePasswordScreen
 import com.jeeldobariya.passcodes.ui.AboutScreen
+import com.jeeldobariya.passcodes.ui.ClassicalMainScreen
 import com.jeeldobariya.passcodes.ui.MainScreen
 import com.jeeldobariya.passcodes.ui.SettingsScreen
 
@@ -39,7 +40,7 @@ private fun ModernNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (R
             }
 
             entry<Route.Settings> {
-                PasswordManagerScreen(navigateTo)
+                SettingsScreen()
             }
 
             entry<Route.AboutUs> {
@@ -47,7 +48,7 @@ private fun ModernNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (R
             }
 
             entry<Route.PasswordManager> {
-                SettingsScreen()
+                PasswordManagerScreen(navigateTo)
             }
 
             entry<Route.SavePassword> {
@@ -74,7 +75,7 @@ private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (
         ),
         entryProvider = entryProvider {
             entry<Route.Home> {
-                MainScreen(navigateTo)
+                ClassicalMainScreen(navigateTo)
             }
 
             entry<Route.Settings> {
