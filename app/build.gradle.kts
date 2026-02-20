@@ -62,134 +62,132 @@ kotlin {
 }
 
 android {
-    (this as ApplicationExtension).apply {
-        compileSdk = appCompileSdk
-        namespace = appNamespace
+    compileSdk = appCompileSdk
+    namespace = appNamespace
 
-        defaultConfig {
-            applicationId = appNamespace
-            minSdk = appMinSdk
-            targetSdk = appTargetSdk
-            versionCode = appVersionCode
+    defaultConfig {
+        applicationId = appNamespace
+        minSdk = appMinSdk
+        targetSdk = appTargetSdk
+        versionCode = appVersionCode
 
-            // WARN: Keep it consistent with the res value property in build variants below...
-            versionName = appVersionName
+        // WARN: Keep it consistent with the res value property in build variants below...
+        versionName = appVersionName
 
-            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
-        signingConfigs {
-            create("release") {
-                val keystorePropertiesFile = rootProject.file("keystore.properties")
-                if (keystorePropertiesFile.exists()) {
-                    val keystoreProperties = Properties()
-                    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    signingConfigs {
+        create("release") {
+            val keystorePropertiesFile = rootProject.file("keystore.properties")
+            if (keystorePropertiesFile.exists()) {
+                val keystoreProperties = Properties()
+                keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
-                    keyAlias = keystoreProperties.getProperty("keyAlias")
-                    keyPassword = keystoreProperties.getProperty("keyPassword")
-                    storeFile = file(keystoreProperties.getProperty("storeFile"))
-                    storePassword = keystoreProperties.getProperty("storePassword")
-                } else {
-                    logger.warn("WARNING: keystore.properties not found for release signing config.")
-                    // throw GradleException("keystore.properties not found!")
-                }
-            }
-
-            create("staging") {
-                val keystorePropertiesFile = rootProject.file("staging-keystore.properties")
-                if (keystorePropertiesFile.exists()) {
-                    val keystoreProperties = Properties()
-                    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-
-                    keyAlias = keystoreProperties.getProperty("stagingKeyAlias")
-                    keyPassword = keystoreProperties.getProperty("stagingKeyPassword")
-                    storeFile = file(keystoreProperties.getProperty("stagingStoreFile"))
-                    storePassword = keystoreProperties.getProperty("stagingStorePassword")
-                } else {
-                    logger.warn("WARNING: keystore.properties not found for release signing config.")
-                    // throw GradleException("keystore.properties not found!")
-                }
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+            } else {
+                logger.warn("WARNING: keystore.properties not found for release signing config.")
+                // throw GradleException("keystore.properties not found!")
             }
         }
 
-        splits {
-            abi {
-                isEnable = true
-                reset()
-                include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-                isUniversalApk = true
+        create("staging") {
+            val keystorePropertiesFile = rootProject.file("staging-keystore.properties")
+            if (keystorePropertiesFile.exists()) {
+                val keystoreProperties = Properties()
+                keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+                keyAlias = keystoreProperties.getProperty("stagingKeyAlias")
+                keyPassword = keystoreProperties.getProperty("stagingKeyPassword")
+                storeFile = file(keystoreProperties.getProperty("stagingStoreFile"))
+                storePassword = keystoreProperties.getProperty("stagingStorePassword")
+            } else {
+                logger.warn("WARNING: keystore.properties not found for release signing config.")
+                // throw GradleException("keystore.properties not found!")
             }
         }
+    }
 
-        lint {
-            // baseline = rootProject.file("lint-baseline.xml") // If you use a baseline
-            lintConfig = rootProject.file("lint.xml")
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            isUniversalApk = true
+        }
+    }
+
+    lint {
+        // baseline = rootProject.file("lint-baseline.xml") // If you use a baseline
+        lintConfig = rootProject.file("lint.xml")
+    }
+
+    buildTypes {
+        getByName("release") {
+            if (rootProject.file("keystore.properties").exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            } else {
+                logger.warn("WARNING: Release build will not be signed as keystore.properties is missing.")
+                // throw GradleException("Can't Sign Release Build")
+            }
+
+            isDebuggable = false
+            isShrinkResources = true
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            resValue("string", "app_name", appBaseName)
+            resValue("string", "app_version", appLabel)
+
+            manifestPlaceholders["appIcon"] = mainIcon
+            manifestPlaceholders["appRoundIcon"] = mainRoundIcon
         }
 
-        buildTypes {
-            getByName("release") {
-                if (rootProject.file("keystore.properties").exists()) {
-                    signingConfig = signingConfigs.getByName("release")
-                } else {
-                    logger.warn("WARNING: Release build will not be signed as keystore.properties is missing.")
-                    // throw GradleException("Can't Sign Release Build")
-                }
-
-                isDebuggable = false
-                isShrinkResources = true
-                isMinifyEnabled = true
-                proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
-
-                resValue("string", "app_name", appBaseName)
-                resValue("string", "app_version", appLabel)
-
-                manifestPlaceholders["appIcon"] = mainIcon
-                manifestPlaceholders["appRoundIcon"] = mainRoundIcon
+        create("staging") {
+            if (rootProject.file("staging-keystore.properties").exists()) {
+                signingConfig = signingConfigs.getByName("staging")
+            } else {
+                logger.warn("WARNING: Staging build will not be signed as staging-keystore.properties is missing.")
+                // throw GradleException("Can't Sign Staging Build")
             }
 
-            create("staging") {
-                if (rootProject.file("staging-keystore.properties").exists()) {
-                    signingConfig = signingConfigs.getByName("staging")
-                } else {
-                    logger.warn("WARNING: Staging build will not be signed as staging-keystore.properties is missing.")
-                    // throw GradleException("Can't Sign Staging Build")
-                }
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-Staging"
 
-                applicationIdSuffix = ".staging"
-                versionNameSuffix = "-Staging"
+            isDebuggable = false
+            isShrinkResources = true
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
 
-                isDebuggable = false
-                isShrinkResources = true
-                isMinifyEnabled = true
-                proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
+            resValue("string", "app_name", "$appBaseName Staging")
+            resValue("string", "app_version", appDevLabel)
 
-                resValue("string", "app_name", "$appBaseName Staging")
-                resValue("string", "app_version", appDevLabel)
+            manifestPlaceholders["appIcon"] = devIcon
+            manifestPlaceholders["appRoundIcon"] = devRoundIcon
+        }
 
-                manifestPlaceholders["appIcon"] = devIcon
-                manifestPlaceholders["appRoundIcon"] = devRoundIcon
-            }
+        getByName("debug") {
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-Dev"
 
-            getByName("debug") {
-                applicationIdSuffix = ".dev"
-                versionNameSuffix = "-Dev"
+            isDebuggable = true
+            isShrinkResources = false
+            isMinifyEnabled = false
 
-                isDebuggable = true
-                isShrinkResources = false
-                isMinifyEnabled = false
+            resValue("string", "app_name", "$appBaseName Debug")
+            resValue("string", "app_version", appDevLabel)
 
-                resValue("string", "app_name", "$appBaseName Debug")
-                resValue("string", "app_version", appDevLabel)
-
-                manifestPlaceholders["appIcon"] = devIcon
-                manifestPlaceholders["appRoundIcon"] = devRoundIcon
-            }
+            manifestPlaceholders["appIcon"] = devIcon
+            manifestPlaceholders["appRoundIcon"] = devRoundIcon
         }
     }
 

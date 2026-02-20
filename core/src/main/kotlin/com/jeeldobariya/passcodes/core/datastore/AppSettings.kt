@@ -15,4 +15,5 @@ val Context.appDatastore by dataStore(
 @Serializable
 data class AppSettings(
     val theme: Int = R.style.PasscodesTheme_Default,
+    val isModernLayoutEnable: Boolean = true
 )
