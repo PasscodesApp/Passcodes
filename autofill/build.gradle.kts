@@ -46,7 +46,7 @@ android {
 }
 
 dependencies {
-    // implementation(project(":password_manager"))
+    implementation(project(":database"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
@@ -55,4 +55,7 @@ dependencies {
     // Data/Persistence (Room Bundle)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
+
+    implementation(libs.coroutines.core)
+    implementation(libs.koin.compose)
 }

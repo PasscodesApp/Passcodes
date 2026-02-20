@@ -12,10 +12,12 @@ import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import com.jeeldobariya.passcodes.autofill.data.Passcode
 import com.jeeldobariya.passcodes.autofill.data.PasscodeDatabase
+import com.jeeldobariya.passcodes.database.master.PasswordsDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 // TODO: currently the code here serves as a foundation for autofill features..
 class PasswordAutofillService : AutofillService() {
@@ -49,24 +51,25 @@ class PasswordAutofillService : AutofillService() {
         }
 
         serviceScope.launch {
-            // TODO: use the database module instead of separate database
-            val passcodes =
-                PasscodeDatabase.getDatabase(applicationContext).passcodeDao().getAllPasscodes()
-                    .first()
+            val passwordsDao by inject<PasswordsDao>()
+            val passwords = passwordsDao.getAllPasswords().first()
             val responseBuilder = FillResponse.Builder()
 
-            if (passcodes.isEmpty()) {
+            if (passwords.isEmpty()) {
                 callback.onSuccess(null)
             }
 
-            for (passcode in passcodes) {
+            for (password in passwords) {
                 val presentation = RemoteViews(packageName, R.layout.autofill_list_item).apply {
-                    setTextViewText(R.id.autofill_username, passcode.name)
+                    setTextViewText(
+                        R.id.autofill_username,
+                        "${password.domain}(${password.username})"
+                    )
                 }
 
                 val dataset = android.service.autofill.Dataset.Builder(presentation)
-                    .setValue(usernameId, AutofillValue.forText(passcode.name))
-                    .setValue(passwordId, AutofillValue.forText(passcode.value))
+                    .setValue(usernameId, AutofillValue.forText(password.username))
+                    .setValue(passwordId, AutofillValue.forText(password.password))
                     .build()
                 responseBuilder.addDataset(dataset)
             }
