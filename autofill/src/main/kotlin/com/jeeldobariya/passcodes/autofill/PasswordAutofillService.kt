@@ -10,12 +10,14 @@ import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
-import com.jeeldobariya.passcodes.autofill.data.Passcode
-import com.jeeldobariya.passcodes.autofill.data.PasscodeDatabase
+import android.widget.Toast
+import com.jeeldobariya.passcodes.database.master.PasswordEntity
+import com.jeeldobariya.passcodes.database.master.PasswordsDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 // TODO: currently the code here serves as a foundation for autofill features..
 class PasswordAutofillService : AutofillService() {
@@ -49,20 +51,31 @@ class PasswordAutofillService : AutofillService() {
         }
 
         serviceScope.launch {
-            // TODO: use the database module instead of separate database
-            val passcodes =
-                PasscodeDatabase.getDatabase(applicationContext).passcodeDao().getAllPasscodes()
-                    .first()
+            Toast.makeText(
+                applicationContext,
+                "Passcodes autofill is preview feature!!!",
+                Toast.LENGTH_LONG
+            ).show()
+
+            val passwordsDao by inject<PasswordsDao>()
+            val passwords = passwordsDao.getAllPasswords().first()
             val responseBuilder = FillResponse.Builder()
 
-            for (passcode in passcodes) {
+            if (passwords.isEmpty()) {
+                callback.onSuccess(null)
+            }
+
+            for (password in passwords) {
                 val presentation = RemoteViews(packageName, R.layout.autofill_list_item).apply {
-                    setTextViewText(R.id.autofill_username, passcode.name)
+                    setTextViewText(
+                        R.id.autofill_username,
+                        "${password.domain}(${password.username})"
+                    )
                 }
 
                 val dataset = android.service.autofill.Dataset.Builder(presentation)
-                    .setValue(usernameId, AutofillValue.forText(passcode.name))
-                    .setValue(passwordId, AutofillValue.forText(passcode.value))
+                    .setValue(usernameId, AutofillValue.forText(password.username))
+                    .setValue(passwordId, AutofillValue.forText(password.password))
                     .build()
                 responseBuilder.addDataset(dataset)
             }
@@ -86,10 +99,22 @@ class PasswordAutofillService : AutofillService() {
 
         if (!username.isNullOrEmpty() && !password.isNullOrEmpty()) {
             serviceScope.launch {
-                PasscodeDatabase.getDatabase(applicationContext).passcodeDao().insert(
-                    Passcode(name = username, value = password)
+                val passwordsDao by inject<PasswordsDao>()
+                passwordsDao.insertPassword(
+                    PasswordEntity(
+                        domain = "Autofill",
+                        username = username,
+                        password = password,
+                        notes = "Save using autofill service..."
+                    )
                 )
+                Toast.makeText(
+                    applicationContext,
+                    "Open passcodes app and configure the saved password!!!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
+
             callback.onSuccess()
         } else {
             callback.onFailure(getString(R.string.could_not_save_credentials))
