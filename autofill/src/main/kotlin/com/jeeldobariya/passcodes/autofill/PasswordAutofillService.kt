@@ -55,6 +55,10 @@ class PasswordAutofillService : AutofillService() {
                     .first()
             val responseBuilder = FillResponse.Builder()
 
+            if (passcodes.isEmpty()) {
+                callback.onSuccess(null)
+            }
+
             for (passcode in passcodes) {
                 val presentation = RemoteViews(packageName, R.layout.autofill_list_item).apply {
                     setTextViewText(R.id.autofill_username, passcode.name)
