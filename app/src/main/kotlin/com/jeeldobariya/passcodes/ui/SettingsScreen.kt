@@ -37,6 +37,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.jeeldobariya.passcodes.R
+import com.jeeldobariya.passcodes.core.datastore.AppSettings
+import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
@@ -45,6 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen() {
     val scope = rememberCoroutineScope()
+
     val flagDataStore = LocalContext.current.featureFlagsDatastore
     val flagDatastoreState by flagDataStore.data.collectAsState(
         FeatureFlagsSettings(
@@ -53,6 +56,8 @@ fun SettingsScreen() {
             isPreviewLayoutEnabled = false
         )
     )
+    val appDataStore = LocalContext.current.appDatastore
+    val appDatastoreState by appDataStore.data.collectAsState(initial = AppSettings())
 
     Scaffold { padding ->
         Column(
@@ -140,6 +145,30 @@ fun SettingsScreen() {
                             scope.launch {
                                 flagDataStore.updateData {
                                     it.copy(isPreviewFeaturesEnabled = !it.isPreviewFeaturesEnabled)
+                                }
+                            }
+                        }
+                    )
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 2.dp)
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(text = "Modern Layout", style = MaterialTheme.typography.bodyLarge)
+
+                    Switch(
+                        enabled = flagDatastoreState.isPreviewLayoutEnabled,
+                        checked = appDatastoreState.isModernLayoutEnable,
+                        onCheckedChange = {
+                            scope.launch {
+                                appDataStore.updateData {
+                                    it.copy(isModernLayoutEnable = !it.isModernLayoutEnable)
                                 }
                             }
                         }
