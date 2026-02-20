@@ -2,7 +2,7 @@
 # Library versions
 coreKtx = "1.17.0"
 material = "1.13.0"
-nav3Core = "1.0.0"
+nav3Core = "1.0.1"
 lifecycleViewmodelNav3 = "2.10.0"
 okhttp = "5.3.2"
 oss-license = "17.4.0"
