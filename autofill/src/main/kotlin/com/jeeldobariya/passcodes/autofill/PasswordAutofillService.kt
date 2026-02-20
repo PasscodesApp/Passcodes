@@ -6,8 +6,12 @@ import android.service.autofill.AutofillService
 import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
+import android.service.autofill.SaveCallback
+import android.service.autofill.SaveRequest
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
+import android.widget.Toast
+import com.jeeldobariya.passcodes.database.master.PasswordEntity
 import com.jeeldobariya.passcodes.database.master.PasswordsDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +51,12 @@ class PasswordAutofillService : AutofillService() {
         }
 
         serviceScope.launch {
+            Toast.makeText(
+                applicationContext,
+                "Passcodes autofill is preview feature!!!",
+                Toast.LENGTH_LONG
+            ).show()
+
             val passwordsDao by inject<PasswordsDao>()
             val passwords = passwordsDao.getAllPasswords().first()
             val responseBuilder = FillResponse.Builder()
@@ -74,30 +84,42 @@ class PasswordAutofillService : AutofillService() {
         }
     }
 
-//    override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
-//        val context = request.fillContexts
-//        val structure = context.last().structure
-//
-//        val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
-//        parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
-//
-//        val usernameNode = viewNodes["username"] ?: viewNodes["emailAddress"]
-//        val passwordNode = viewNodes["password"]
-//
-//        val username = usernameNode?.text?.toString()
-//        val password = passwordNode?.text?.toString()
-//
-//        if (!username.isNullOrEmpty() && !password.isNullOrEmpty()) {
-//            serviceScope.launch {
-//                PasscodeDatabase.getDatabase(applicationContext).passcodeDao().insert(
-//                    Passcode(name = username, value = password)
-//                )
-//            }
-//            callback.onSuccess()
-//        } else {
-//            callback.onFailure(getString(R.string.could_not_save_credentials))
-//        }
-//    }
+    override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
+        val context = request.fillContexts
+        val structure = context.last().structure
+
+        val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
+        parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
+
+        val usernameNode = viewNodes["username"] ?: viewNodes["emailAddress"]
+        val passwordNode = viewNodes["password"]
+
+        val username = usernameNode?.text?.toString()
+        val password = passwordNode?.text?.toString()
+
+        if (!username.isNullOrEmpty() && !password.isNullOrEmpty()) {
+            serviceScope.launch {
+                val passwordsDao by inject<PasswordsDao>()
+                passwordsDao.insertPassword(
+                    PasswordEntity(
+                        domain = "Autofill",
+                        username = username,
+                        password = password,
+                        notes = "Save using autofill service..."
+                    )
+                )
+                Toast.makeText(
+                    applicationContext,
+                    "Open passcodes app and configure the saved password!!!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            callback.onSuccess()
+        } else {
+            callback.onFailure(getString(R.string.could_not_save_credentials))
+        }
+    }
 
     private fun parseStructure(
         node: AssistStructure.ViewNode,
