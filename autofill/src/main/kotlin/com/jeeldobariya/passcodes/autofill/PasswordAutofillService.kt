@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-// TODO: currently the code here serves as a foundation for autofill features..
+// TODO: Docs for this autofill is need in @github:PasscodesApp/Passcodes-Docs
 class PasswordAutofillService : AutofillService() {
 
     private val serviceScope = CoroutineScope(Dispatchers.IO)
@@ -35,6 +35,8 @@ class PasswordAutofillService : AutofillService() {
         val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
         parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
 
+        // TODO: Add support for newUsername & newPassword autofill hints.
+        // https://developer.android.com/reference/androidx/autofill/HintConstants#AUTOFILL_HINT_NEW_USERNAME()
         val usernameNode = viewNodes["username"] ?: viewNodes["emailAddress"]
         val passwordNode = viewNodes["password"]
 
@@ -47,7 +49,7 @@ class PasswordAutofillService : AutofillService() {
         val passwordId = passwordNode.autofillId!!
 
         cancellationSignal.setOnCancelListener {
-            // Handle cancellation
+            // TODO: Handle cancellation
         }
 
         serviceScope.launch {
@@ -67,6 +69,8 @@ class PasswordAutofillService : AutofillService() {
                     )
                 }
 
+                // TODO: Migrate to Presentations
+                // @docs:developer.android.com/reference/android/service/autofill/Presentations.Builder
                 val dataset = android.service.autofill.Dataset.Builder(presentation)
                     .setValue(usernameId, AutofillValue.forText(password.username))
                     .setValue(passwordId, AutofillValue.forText(password.password))
@@ -92,6 +96,7 @@ class PasswordAutofillService : AutofillService() {
         val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
         parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
 
+        // TODO: Add support for newUsername & newPassword autofill hints.
         val usernameNode = viewNodes["username"] ?: viewNodes["emailAddress"]
         val passwordNode = viewNodes["password"]
 
