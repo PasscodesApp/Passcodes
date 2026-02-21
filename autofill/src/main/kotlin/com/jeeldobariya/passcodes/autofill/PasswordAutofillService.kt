@@ -10,7 +10,6 @@ import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
-import android.widget.Toast
 import com.jeeldobariya.passcodes.database.master.PasswordEntity
 import com.jeeldobariya.passcodes.database.master.PasswordsDao
 import kotlinx.coroutines.CoroutineScope
@@ -51,12 +50,6 @@ class PasswordAutofillService : AutofillService() {
         }
 
         serviceScope.launch {
-            Toast.makeText(
-                applicationContext,
-                "Passcodes autofill is preview feature!!!",
-                Toast.LENGTH_LONG
-            ).show()
-
             val passwordsDao by inject<PasswordsDao>()
             val passwords = passwordsDao.getAllPasswords().first()
             val responseBuilder = FillResponse.Builder()
@@ -108,11 +101,6 @@ class PasswordAutofillService : AutofillService() {
                         notes = "Save using autofill service..."
                     )
                 )
-                Toast.makeText(
-                    applicationContext,
-                    "Open passcodes app and configure the saved password!!!",
-                    Toast.LENGTH_LONG
-                ).show()
             }
 
             callback.onSuccess()
