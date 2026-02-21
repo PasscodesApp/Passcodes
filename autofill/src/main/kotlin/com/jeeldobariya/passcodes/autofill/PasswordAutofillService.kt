@@ -7,6 +7,7 @@ import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveCallback
+import android.service.autofill.SaveInfo
 import android.service.autofill.SaveRequest
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
@@ -72,6 +73,13 @@ class PasswordAutofillService : AutofillService() {
                     .build()
                 responseBuilder.addDataset(dataset)
             }
+
+            responseBuilder.setSaveInfo(
+                SaveInfo.Builder(
+                    SaveInfo.SAVE_DATA_TYPE_EMAIL_ADDRESS or SaveInfo.SAVE_DATA_TYPE_USERNAME or SaveInfo.SAVE_DATA_TYPE_PASSWORD,
+                    arrayOf(usernameId, passwordId)
+                ).build()
+            )
 
             callback.onSuccess(responseBuilder.build())
         }
