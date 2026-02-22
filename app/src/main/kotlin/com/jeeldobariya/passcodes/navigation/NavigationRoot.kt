@@ -13,16 +13,16 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.jeeldobariya.passcodes.core.datastore.AppSettings
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
-import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
-import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.core.navigation.Route
 import com.jeeldobariya.passcodes.password_manager.ui.PasswordManagerScreen
 import com.jeeldobariya.passcodes.password_manager.ui.SavePasswordScreen
 import com.jeeldobariya.passcodes.password_manager.ui.UpdatePasswordScreen
-import com.jeeldobariya.passcodes.ui.AboutScreen
+import com.jeeldobariya.passcodes.ui.ClassicalAboutScreen
 import com.jeeldobariya.passcodes.ui.ClassicalMainScreen
-import com.jeeldobariya.passcodes.ui.MainScreen
-import com.jeeldobariya.passcodes.ui.SettingsScreen
+import com.jeeldobariya.passcodes.ui.ModernMainScreen
+import com.jeeldobariya.passcodes.ui.ClassicalSettingsScreen
+import com.jeeldobariya.passcodes.ui.ModernAboutScreen
+import com.jeeldobariya.passcodes.ui.ModernSettingsScreen
 
 
 @Composable
@@ -38,15 +38,15 @@ private fun ModernNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (R
         ),
         entryProvider = entryProvider {
             entry<Route.Home> {
-                MainScreen(navigateTo)
+                ModernMainScreen(navigateTo)
             }
 
             entry<Route.Settings> {
-                SettingsScreen()
+                ModernSettingsScreen()
             }
 
             entry<Route.AboutUs> {
-                AboutScreen()
+                ModernAboutScreen()
             }
 
             entry<Route.PasswordManager> {
@@ -81,11 +81,11 @@ private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (
             }
 
             entry<Route.Settings> {
-                SettingsScreen()
+                ClassicalSettingsScreen()
             }
 
             entry<Route.AboutUs> {
-                AboutScreen()
+                ClassicalAboutScreen()
             }
 
             entry<Route.PasswordManager> {

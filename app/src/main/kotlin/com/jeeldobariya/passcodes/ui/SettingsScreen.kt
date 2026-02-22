@@ -45,7 +45,7 @@ import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsScreen() {
+fun ModernSettingsScreen() {
     val scope = rememberCoroutineScope()
 
     val flagDataStore = LocalContext.current.featureFlagsDatastore
@@ -205,12 +205,23 @@ fun SettingsScreen() {
     }
 }
 
+@Composable
+fun ClassicalSettingsScreen() {
 
-@Preview(showBackground = true)
+}
+
 @PreviewLightDark
 @Composable
-fun SettingsScreenPreview() {
+fun ModernSettingsScreenPreview() {
     PasscodesTheme {
-        SettingsScreen()
+        ModernSettingsScreen()
+    }
+}
+
+@PreviewLightDark
+@Composable
+fun ClassicalSettingsScreenPreview() {
+    PasscodesTheme {
+        ClassicalSettingsScreen()
     }
 }
