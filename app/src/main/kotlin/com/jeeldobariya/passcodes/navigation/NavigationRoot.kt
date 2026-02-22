@@ -116,7 +116,7 @@ fun NavigationRoot() {
     val appDataStore = LocalContext.current.appDatastore
     val appDatastoreState by appDataStore.data.collectAsState(AppSettings())
 
-    fun navigateTo(route: Route): Unit {
+    fun navigateTo(route: Route) {
         backStack.add(route)
     }
 
