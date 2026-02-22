@@ -19,9 +19,9 @@ import com.jeeldobariya.passcodes.password_manager.ui.SavePasswordScreen
 import com.jeeldobariya.passcodes.password_manager.ui.UpdatePasswordScreen
 import com.jeeldobariya.passcodes.ui.ClassicalAboutScreen
 import com.jeeldobariya.passcodes.ui.ClassicalMainScreen
-import com.jeeldobariya.passcodes.ui.ModernMainScreen
 import com.jeeldobariya.passcodes.ui.ClassicalSettingsScreen
 import com.jeeldobariya.passcodes.ui.ModernAboutScreen
+import com.jeeldobariya.passcodes.ui.ModernMainScreen
 import com.jeeldobariya.passcodes.ui.ModernSettingsScreen
 
 
@@ -81,7 +81,13 @@ private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (
             }
 
             entry<Route.Settings> {
-                ClassicalSettingsScreen()
+                ClassicalSettingsScreen(
+                    selectedLanguage = "Under Development",
+                    languageOptions = listOf("English", "Korean"),
+                    onLanguageSelected = { /* TODO */ },
+                    onToggleTheme = { /* TODO */ },
+                    onClearAllDataClick = { /* TODO */ }
+                )
             }
 
             entry<Route.AboutUs> {
