@@ -1,5 +1,6 @@
 package com.jeeldobariya.passcodes.ui
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,11 +30,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import com.jeeldobariya.passcodes.Constant
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
@@ -167,6 +171,8 @@ private fun AboutGridSection(
     onReportBugClick: () -> Unit,
     onTelegramClick: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -178,14 +184,22 @@ private fun AboutGridSection(
                 modifier = Modifier.weight(1f),
                 icon = painterResource(R.drawable.ic_security),
                 text = stringResource(R.string.view_security_guidelines_button_text),
-                onClick = onSecurityClick
+                onClick = {
+                    Intent(Intent.ACTION_VIEW, Constant.SECURITY_GUIDE_URL.toUri()).also {
+                        context.startActivity(it)
+                    }
+                }
             )
 
             AboutCard(
                 modifier = Modifier.weight(1f),
                 icon = painterResource(R.drawable.ic_history),
                 text = stringResource(R.string.view_release_notes_button_text),
-                onClick = onReleaseNotesClick
+                onClick = {
+                    Intent(Intent.ACTION_VIEW, Constant.RELEASE_NOTE_URL.toUri()).also {
+                        context.startActivity(it)
+                    }
+                }
             )
         }
 
@@ -196,20 +210,37 @@ private fun AboutGridSection(
                 modifier = Modifier.weight(1f),
                 icon = painterResource(R.drawable.ic_article),
                 text = stringResource(R.string.view_license_button_text),
-                onClick = onLicenseClick
+                onClick = {
+                    /* TODO: Add License Activity Link */
+
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        "https://passcodesapp.github.io/Passcodes-Docs/LICENSE/".toUri()
+                    ).also {
+                        context.startActivity(it)
+                    }
+                }
             )
 
             AboutCard(
                 modifier = Modifier.weight(1f),
                 icon = painterResource(R.drawable.ic_bug_report),
                 text = stringResource(R.string.view_report_bug_text),
-                onClick = onReportBugClick
+                onClick = {
+                    Intent(Intent.ACTION_VIEW, Constant.REPORT_BUG_URL.toUri()).also {
+                        context.startActivity(it)
+                    }
+                }
             )
         }
 
         TelegramCard(
             text = stringResource(R.string.view_telegram_community_text),
-            onClick = onTelegramClick
+            onClick = {
+                Intent(Intent.ACTION_VIEW, Constant.TELEGRAM_COMMUNITY_URL.toUri()).also {
+                    context.startActivity(it)
+                }
+            }
         )
     }
 }
