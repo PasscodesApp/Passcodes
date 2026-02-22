@@ -142,10 +142,10 @@ fun ModernSettingsScreen() {
                                 flagDataStore.updateData {
                                     it.copy(isPreviewLayoutEnabled = !it.isPreviewLayoutEnabled)
                                 }
-                            }
 
-                            activity?.finishAndRemoveTask()
-                            exitProcess(0)
+                                activity?.finishAndRemoveTask()
+                                exitProcess(0)
+                            }
                         }
                     )
                 }

@@ -1,6 +1,8 @@
 package com.jeeldobariya.passcodes.core.feature_flags
 
 import androidx.datastore.core.Serializer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.io.InputStream
@@ -25,7 +27,7 @@ object FeatureFlagsSettingsSerializer : Serializer<FeatureFlagsSettings> {
     override suspend fun writeTo(
         t: FeatureFlagsSettings,
         output: OutputStream
-    ) {
+    ) = withContext(Dispatchers.IO) {
         output.write(
             Json.encodeToString(
                 serializer = FeatureFlagsSettings.serializer(),
