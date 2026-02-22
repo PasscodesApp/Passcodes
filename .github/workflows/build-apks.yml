@@ -41,7 +41,7 @@ jobs:
           KEYSTORE_PROPERTIES_BASE64: ${{ secrets.STAGING_KEYSTORE_PROPERTIES_BASE64 }}
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "jetbrains"
           java-version: "21"
