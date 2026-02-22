@@ -127,13 +127,7 @@ fun ClassicalAboutScreen() {
 
             // Grid Section
             item {
-                AboutGridSection(
-                    {},
-                    {},
-                    {},
-                    {},
-                    {}
-                )
+                AboutGridSection()
             }
 
             item {
@@ -164,13 +158,7 @@ fun ClassicalAboutScreen() {
 }
 
 @Composable
-private fun AboutGridSection(
-    onSecurityClick: () -> Unit,
-    onReleaseNotesClick: () -> Unit,
-    onLicenseClick: () -> Unit,
-    onReportBugClick: () -> Unit,
-    onTelegramClick: () -> Unit
-) {
+private fun AboutGridSection() {
     val context = LocalContext.current
 
     Column(
