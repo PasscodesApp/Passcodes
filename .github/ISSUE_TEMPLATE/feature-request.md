@@ -1,7 +1,7 @@
 ---
 name: Feature Request
 about: Suggest an idea for this project
-title: "Feature Request: [Your feature name]"
+title: "Feat Req: [Your feature name]"
 labels: ""
 assignees: JeelDobariya38
 ---
