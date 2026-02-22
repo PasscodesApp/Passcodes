@@ -12,14 +12,18 @@
 name: "CodeQL"
 
 on:
+  workflow_dispatch:
+  
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
-      - '**.yml'
-      - 'docs/**'
+    paths:
+      - '**'
+      - '!**.md'
+      - '!**.txt'
+      - '!**.yml'
+      - '!docs/**'
+      - '.github/workflows/**.yml'
   
   release:
     types: [ created, published ]
@@ -72,7 +76,7 @@ jobs:
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@latest
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
@@ -100,6 +104,6 @@ jobs:
           exit 1
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@latest
+        uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{matrix.language}}"
