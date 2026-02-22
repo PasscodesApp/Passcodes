@@ -4,6 +4,8 @@
 > It is just a open source project. An is current under active development.
 > Please, consider using it for fun, and not for real password management. (until, we officially
 > release a stable release)
+>
+> Cuz, **`data is stored unencrypted`.. we planning to add encryption soon.**
 
 <div align="center">
 
@@ -20,15 +22,13 @@ A android app that take down the headache of remembering passwords. It is open s
 help you in keeping your passwords safe and secure, in your own local storage without ever needing
 to push them to cloud.
 
+[Visit Website](https://jeeldobariya38.github.io/Passcodes-Website/)
+
 > What we think of passcodes?
 > Password management is one such thing that is as simple as remember a password yet, it very
 > important topic in term of security. So, we as developer of passcodes think to streamline and
 > securing the process as much as
-> possible. [Read more](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/project-overview.md)
-
-## Website
-
-[Visit Website](https://jeeldobariya38.github.io/Passcodes-Website/)
+> possible. [Read more](https://passcodesapp.github.io/Passcodes-Docs/other-docs/project-overview/)
 
 ## Screen Shots
 
@@ -41,36 +41,35 @@ to push them to cloud.
 
 ## Compatibility
 
-**Compile Sdk**: `Android 16 (API level 36)`
+- **Compile Sdk**: `Android 16 (API level 36)`
+- **Recommend**: `Android 14`
 
-```
-Android 8+ (Minimum) [API level 26+]
-Android 14 [API level 34] (we support offically)
+`Android 8+` [API level 26+] -> `Android 14` [API level 34] (we support offically)
 
-Note: high version can still run, but are not guaranteed offically.
-```
+Note: high versions can still run, but we are not guaranteed offically.
 
 ## Features
 
 - [ ] Intuitive UI.
 - [ ] Update Checkers & Manager.
 - [x] Password Management. (Current Priority)
+- [x] Autofill.
 - [ ] Secure File. (Least Priority, Because it include permission. Which, I am as developer not
-  familiar with 😂)
-    - Could be Image. (JPG. PNG ....)
-    - Could be Video.
-    - Could any Binary File. (more like won't be a text file)
+      familiar with 😂)
+  - Could be Image. (JPG. PNG ....)
+  - Could be Video.
+  - Could any Binary File. (more like won't be a text file)
 - [ ] Other Secret Info Management.
-    - Could be note. (txt file)
-    - Could be any info that can encode as key & value.
-    ```json
-    {
-      "key": "SECRET API KEY",
-      "content": "qwerty-let-say",
-      "created-at": "...",
-      "updated-at": "..."
-    }
-    ```
+  - Could be note. (txt file)
+  - Could be any info that can encode as key & value.
+  ```json
+  {
+    "key": "SECRET API KEY",
+    "content": "qwerty-let-say",
+    "created-at": "...",
+    "updated-at": "..."
+  }
+  ```
 - [ ] NON Secret Info Store.
 - [ ] Encryption and Decryption.
 - [ ] Backup Manager.
@@ -93,7 +92,7 @@ Note: high version can still run, but are not guaranteed offically.
 
 It was most shortest and sweetest description (I have ever crafted), For more detailed description,
 See the
-file [installing.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/installing.md)
+file [installing.md](https://passcodesapp.github.io/Passcodes-Docs/user-docs/installing/)
 in `PasscodesApp/Passcodes-Docs`.
 
 ## Building The App
@@ -107,21 +106,21 @@ in `PasscodesApp/Passcodes-Docs`.
 4. For code documentation and support docs, check the `docs/` folder in our repository.
 
 It was general, intuitive, short and sweet description, For more detailed description, Visit the
-file [building.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/dev-docs/building.md) in
+file [building.md](https://passcodesapp.github.io/Passcodes-Docs/dev-docs/building/) in
 `PasscodesApp/Passcodes-Docs`.
 
 ## Support Docs
 
 You can checkout support docs, provided
-in [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs) Or You can even
+in [@github:PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/Passcodes-Docs) Or You can even
 seek help on our [telegram community](https://t.me/passcodescommunity)
 
 ## Changelog & Release Notes
 
 - Professional
-  ChangeLog: [here](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/changelog.md)
+  ChangeLog: [here](https://passcodesapp.github.io/Passcodes-Docs/user-docs/changelog/)
 - Casual Release
-  Notes: [here](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/user-docs/release-notes.md)
+  Notes: [here](https://passcodesapp.github.io/Passcodes-Docs/user-docs/release-notes/)
 
 ## Contribution Are Appreciated!!!
 
@@ -140,22 +139,22 @@ seek help on our [telegram community](https://t.me/passcodescommunity)
 > For more, information on what kind of contribution we approve or allow, please open a issue in our
 > repo. that way you avoid wasting your time...
 >
-> [Read More](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/open-contributing-timeline.md)
+> [Read More](https://passcodesapp.github.io/Passcodes-Docs/other-docs/open-contributing-timeline/)
 
 By, contributing to project you accept
-the [Terms For Contributions](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/terms-for-contributions.md), [CONTRIBUTING.md](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/CONTRIBUTING.md) & [MIT License](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/LICENSE.txt).
+the [Terms For Contributions](https://passcodesapp.github.io/Passcodes-Docs/other-docs/terms-for-contributions/), [CONTRIBUTING.md](https://passcodesapp.github.io/Passcodes-Docs/CONTRIBUTING/) & [MIT License](https://passcodesapp.github.io/Passcodes-Docs/LICENSE/).
 
 And also have look
-at [Open Contributing Timeline](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/other-docs/open-contributing-timeline.md).
+at [Open Contributing Timeline](https://passcodesapp.github.io/Passcodes-Docs/other-docs/open-contributing-timeline/).
 
 ## Security Policy
 
 Available here
-in [PasscodesApp/Passcodes-Docs](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/SECURITY.md).
+in [PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/Passcodes-Docs/SECURITY/).
 
 ## License
 
 Passcodes Project is license
-under [MIT](https://github.com/PasscodesApp/Passcodes-Docs/blob/main/LICENSE.txt) License.
+under [MIT](https://passcodesapp.github.io/Passcodes-Docs/LICENSE/) License.
 Downloading Or Use the app or any associated stuff would mean, you are okay and have accepted the
 license terms.
