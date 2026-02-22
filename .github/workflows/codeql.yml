@@ -17,11 +17,13 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
-      - '**.yml'
-      - 'docs/**'
+    paths:
+      - '**'
+      - '!**.md'
+      - '!**.txt'
+      - '!**.yml'
+      - '!docs/**'
+      - '.github/workflows/**.yml'
   
   release:
     types: [ created, published ]
