@@ -11,6 +11,7 @@
 
 ![Static Badge](https://img.shields.io/badge/Release-Prototype-blue)
 [![Android CI/CD](https://github.com/PasscodesApp/Passcodes/actions/workflows/build-apks.yml/badge.svg)](https://github.com/PasscodesApp/Passcodes/actions/workflows/build-apks.yml)
+[![CodeQL](https://github.com/PasscodesApp/Passcodes/actions/workflows/codeql.yml/badge.svg)](https://github.com/PasscodesApp/Passcodes/actions/workflows/codeql.yml)
 ![Visitor Counter (@hehuapei/visitor-badge)](https://visitor-badge.laobi.icu/badge?page_id=JeelDobariya38.Passcodes&format=true)
 
 </div>
