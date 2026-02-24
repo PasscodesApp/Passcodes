@@ -1,7 +1,6 @@
 package com.jeeldobariya.passcodes.ui
 
 import android.content.Intent
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,7 +57,6 @@ import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 import kotlinx.coroutines.launch
-import kotlin.system.exitProcess
 
 @Composable
 fun ModernSettingsScreen() {
@@ -131,8 +129,6 @@ fun ModernSettingsScreen() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val activity = LocalActivity.current
-
                     Text(text = stringResource(R.string.preview_layout), style = MaterialTheme.typography.bodyLarge)
 
                     Switch(
@@ -142,9 +138,6 @@ fun ModernSettingsScreen() {
                                 flagDataStore.updateData {
                                     it.copy(isPreviewLayoutEnabled = !it.isPreviewLayoutEnabled)
                                 }
-
-                                activity?.finishAndRemoveTask()
-                                exitProcess(0)
                             }
                         }
                     )
@@ -372,8 +365,6 @@ fun ClassicalSettingsScreen(
 
             // Latest Layout Switch
             item {
-                val activity = LocalActivity.current
-
                 SwitchCard(
                     text = stringResource(R.string.preview_layout),
                     checked = flagDatastoreState.isPreviewLayoutEnabled,
@@ -382,9 +373,6 @@ fun ClassicalSettingsScreen(
                             flagDataStore.updateData {
                                 it.copy(isPreviewLayoutEnabled = !it.isPreviewLayoutEnabled)
                             }
-
-                            activity?.finishAndRemoveTask()
-                            exitProcess(0)
                         }
                     }
                 )
