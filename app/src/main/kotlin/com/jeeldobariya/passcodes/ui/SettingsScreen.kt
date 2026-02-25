@@ -223,13 +223,13 @@ fun ModernSettingsScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClassicalSettingsScreen(
-    selectedLanguage: String,
-    languageOptions: List<String>,
-    onLanguageSelected: (String) -> Unit,
-    onToggleTheme: () -> Unit,
-    onClearAllDataClick: () -> Unit
-) {
+fun ClassicalSettingsScreen() {
+    // TODO: Language & Theme need to be done.
+
+    val selectedLanguage = "Under Development"
+    val languageOptions: List<String> = listOf("English", "Korean")
+    val onLanguageSelected: (String) -> Unit = { /* TODO */ }
+
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -338,7 +338,7 @@ fun ClassicalSettingsScreen(
                             color = MaterialTheme.colorScheme.primary
                         )
 
-                        Button(onClick = onToggleTheme) {
+                        Button(onClick = { /* TODO */ }) {
                             Text(
                                 text = stringResource(R.string.toggle_theme_button_text),
                                 style = MaterialTheme.typography.labelMedium
@@ -427,7 +427,7 @@ fun ClassicalSettingsScreen(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         OutlinedButton(
-                            onClick = onClearAllDataClick,
+                            onClick = { /* TODO */ },
                             colors = ButtonDefaults.outlinedButtonColors(
                                 contentColor = MaterialTheme.colorScheme.error
                             )
@@ -484,12 +484,6 @@ fun ModernSettingsScreenPreview() {
 @Composable
 fun ClassicalSettingsScreenPreview() {
     PasscodesTheme {
-        ClassicalSettingsScreen(
-            selectedLanguage = "korean",
-            languageOptions = listOf("eng", "korean"),
-            onLanguageSelected = {},
-            onToggleTheme = {},
-            onClearAllDataClick = {}
-        )
+        ClassicalSettingsScreen()
     }
 }

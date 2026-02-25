@@ -94,13 +94,7 @@ private fun ClassicalNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo:
             }
 
             entry<Route.Settings> {
-                ClassicalSettingsScreen(
-                    selectedLanguage = "Under Development",
-                    languageOptions = listOf("English", "Korean"),
-                    onLanguageSelected = { /* TODO */ },
-                    onToggleTheme = { /* TODO */ },
-                    onClearAllDataClick = { /* TODO */ }
-                )
+                ClassicalSettingsScreen()
             }
 
             entry<Route.AboutUs> {
