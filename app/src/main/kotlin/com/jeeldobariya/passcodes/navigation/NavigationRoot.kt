@@ -14,9 +14,14 @@ import androidx.navigation3.ui.NavDisplay
 import com.jeeldobariya.passcodes.core.datastore.AppSettings
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.navigation.Route
-import com.jeeldobariya.passcodes.password_manager.ui.PasswordManagerScreen
-import com.jeeldobariya.passcodes.password_manager.ui.SavePasswordScreen
-import com.jeeldobariya.passcodes.password_manager.ui.UpdatePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalLoadPasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalPasswordManagerScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalSavePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalUpdatePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalViewPasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ModernPasswordManagerScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ModernSavePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ModernUpdatePasswordScreen
 import com.jeeldobariya.passcodes.ui.ClassicalAboutScreen
 import com.jeeldobariya.passcodes.ui.ClassicalMainScreen
 import com.jeeldobariya.passcodes.ui.ClassicalSettingsScreen
@@ -50,22 +55,30 @@ private fun ModernNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (R
             }
 
             entry<Route.PasswordManager> {
-                PasswordManagerScreen(navigateTo)
+                ModernPasswordManagerScreen(navigateTo)
+            }
+
+            entry<Route.LoadPassword> {
+                ModernPasswordManagerScreen(navigateTo)
             }
 
             entry<Route.SavePassword> {
-                SavePasswordScreen()
+                ModernSavePasswordScreen()
+            }
+
+            entry<Route.ViewPassword> { // Theoretically, Should be treated as `UpdatePassword` Route in Modern Layout...
+                ModernUpdatePasswordScreen(it.id)
             }
 
             entry<Route.UpdatePassword> {
-                UpdatePasswordScreen(it.id)
+                ModernUpdatePasswordScreen(it.id)
             }
         }
     )
 }
 
 @Composable
-private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (Route) -> Unit) {
+private fun ClassicalNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (Route) -> Unit) {
     NavDisplay(
         backStack = backStack,
         onBack = {
@@ -77,7 +90,7 @@ private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (
         ),
         entryProvider = entryProvider {
             entry<Route.Home> {
-                ClassicalMainScreen(navigateTo)
+                ClassicalMainScreen(navigateTo = navigateTo)
             }
 
             entry<Route.Settings> {
@@ -95,15 +108,23 @@ private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (
             }
 
             entry<Route.PasswordManager> {
-                PasswordManagerScreen(navigateTo)
+                ClassicalPasswordManagerScreen(navigateTo = navigateTo)
+            }
+
+            entry<Route.LoadPassword> {
+                ClassicalLoadPasswordScreen(navigateTo = navigateTo)
             }
 
             entry<Route.SavePassword> {
-                SavePasswordScreen()
+                ClassicalSavePasswordScreen()
+            }
+
+            entry<Route.ViewPassword> {
+                ClassicalViewPasswordScreen(passwordId = it.id, navigateTo = navigateTo)
             }
 
             entry<Route.UpdatePassword> {
-                UpdatePasswordScreen(it.id)
+                ClassicalUpdatePasswordScreen(passwordId = it.id)
             }
         }
     )
@@ -120,6 +141,7 @@ fun NavigationRoot() {
         backStack.add(route)
     }
 
-    if (appDatastoreState.isModernLayoutEnable) { ModernNavigationRoot(backStack, ::navigateTo) }
-    else { ClassicNavigationRoot(backStack, ::navigateTo) }
+    if (appDatastoreState.isModernLayoutEnable) { ModernNavigationRoot(backStack, ::navigateTo) } else {
+        ClassicalNavigationRoot(backStack, ::navigateTo)
+    }
 }

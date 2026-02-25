@@ -25,7 +25,10 @@ import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun UpdatePasswordScreen(passwordId: Int, viewmodel: UpdatePasswordViewModel = koinViewModel()) {
+fun ModernUpdatePasswordScreen(
+    passwordId: Int,
+    viewmodel: UpdatePasswordViewModel = koinViewModel()
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -84,6 +87,87 @@ fun UpdatePasswordScreen(passwordId: Int, viewmodel: UpdatePasswordViewModel = k
                 },
                 label = {
                     Text("Notes")
+                }
+            )
+
+            Spacer(modifier = Modifier.padding(8.dp))
+
+            Button(onClick = {
+                viewmodel.onAction(action = UpdatePasswordAction.OnUpdatePasswordButtonClick)
+                scope.launch {
+                    snackbarHostState.showSnackbar("Update Successfully!!")
+                }
+            }) {
+                Text("Update Password")
+            }
+        }
+    }
+}
+
+
+@Composable
+fun ClassicalUpdatePasswordScreen(
+    passwordId: Int,
+    viewmodel: UpdatePasswordViewModel = koinViewModel()
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    viewmodel.loadInitialData(passwordId)
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+    ) { paddingValues ->
+        val state by viewmodel.state.collectAsState()
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Update Password")
+
+            Spacer(modifier = Modifier.padding(16.dp))
+
+            OutlinedTextField(
+                value = state.domain,
+                onValueChange = {
+                    viewmodel.onAction(action = UpdatePasswordAction.OnChangeDomain(it))
+                },
+                label = {
+                    Text("Domain:")
+                }
+            )
+
+            OutlinedTextField(
+                value = state.username,
+                onValueChange = {
+                    viewmodel.onAction(action = UpdatePasswordAction.OnChangeUsername(it))
+                },
+                label = {
+                    Text("Username:")
+                }
+            )
+
+            OutlinedTextField(
+                value = state.password,
+                onValueChange = {
+                    viewmodel.onAction(action = UpdatePasswordAction.OnChangePassword(it))
+                },
+                label = {
+                    Text("Password:")
+                }
+            )
+
+            OutlinedTextField(
+                value = state.notes,
+                onValueChange = {
+                    viewmodel.onAction(action = UpdatePasswordAction.OnChangeNotes(it))
+                },
+                label = {
+                    Text("Notes:")
                 }
             )
 
