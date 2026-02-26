@@ -9,6 +9,7 @@ import com.jeeldobariya.passcodes.password_manager.domain.usecases.RetrieveAllPa
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.RetrievePasswordUseCase
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.StorePasswordUseCase
 import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordViewModel
+import com.jeeldobariya.passcodes.password_manager.presentation.password_manager.PasswordManagerViewModel
 import com.jeeldobariya.passcodes.password_manager.presentation.save_password.SavePasswordViewModel
 import com.jeeldobariya.passcodes.password_manager.presentation.update_password.UpdatePasswordViewModel
 import com.jeeldobariya.passcodes.password_manager.presentation.view_password.ViewPasswordViewModel
@@ -51,7 +52,7 @@ val passwordManagerModule = module {
     }
 
     viewModel {
-        UpdatePasswordViewModel(get(), get())
+        PasswordManagerViewModel(get())
     }
 
     viewModel {
@@ -66,4 +67,7 @@ val passwordManagerModule = module {
         ViewPasswordViewModel(get(), get())
     }
 
+    viewModel {
+        UpdatePasswordViewModel(get(), get())
+    }
 }

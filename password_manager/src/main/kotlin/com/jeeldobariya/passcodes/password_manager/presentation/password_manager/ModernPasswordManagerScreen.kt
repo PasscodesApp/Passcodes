@@ -1,10 +1,9 @@
-package com.jeeldobariya.passcodes.password_manager.ui
+package com.jeeldobariya.passcodes.password_manager.presentation.password_manager
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -29,14 +27,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jeeldobariya.passcodes.core.navigation.Route
-import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordAction
-import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -44,7 +38,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun ModernPasswordManagerScreen(
     navigateTo: (Route) -> Unit,
-    viewmodel: LoadPasswordViewModel = koinViewModel()
+    viewmodel: PasswordManagerViewModel = koinViewModel()
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -71,7 +65,7 @@ fun ModernPasswordManagerScreen(
             }
         }
     ) { paddingValue ->
-        viewmodel.onAction(LoadPasswordAction.RefreshPassword)
+        viewmodel.onAction(PasswordManagerAction.RefreshPassword)
         val state = viewmodel.state.collectAsState()
 
         LazyColumn(
@@ -107,35 +101,8 @@ fun ModernPasswordManagerScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Preview
 @Composable
-fun ClassicalPasswordManagerScreen(navigateTo: (Route) -> Unit) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { paddingValue ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValue)
-                .padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text("Password Manager", fontSize = 36.sp, textAlign = TextAlign.Center)
-
-            Spacer(modifier = Modifier.padding(8.dp))
-
-            Button(onClick = {
-                navigateTo(Route.SavePassword)
-            }) {
-                Text("Save Password")
-            }
-
-            Button(onClick = {
-                navigateTo(Route.LoadPassword)
-            }) {
-                Text("Load Password")
-            }
-        }
-    }
+fun ModernPasswordManagerScreenPreview() {
+    ModernPasswordManagerScreen(navigateTo = {})
 }

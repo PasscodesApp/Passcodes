@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.password_manager.ui
+package com.jeeldobariya.passcodes.password_manager.presentation.load_password
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,10 +18,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeeldobariya.passcodes.core.navigation.Route
-import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordAction
-import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,4 +73,10 @@ fun ClassicalLoadPasswordScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ClassicalLoadPasswordScreenPreview() {
+    ClassicalLoadPasswordScreen(navigateTo = {})
 }
