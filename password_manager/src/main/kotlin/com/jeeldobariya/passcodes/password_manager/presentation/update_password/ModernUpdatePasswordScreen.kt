@@ -105,6 +105,6 @@ fun ModernUpdatePasswordScreen(
 
 @Preview
 @Composable
-fun ModernUpdatePasswordScreenPreview() {
+private fun ModernUpdatePasswordScreenPreview() {
     ModernUpdatePasswordScreen(passwordId = 0)
 }

@@ -106,6 +106,6 @@ fun ClassicalUpdatePasswordScreen(
 
 @Preview
 @Composable
-fun ClassicalUpdatePasswordScreenPreview() {
+private fun ClassicalUpdatePasswordScreenPreview() {
     ClassicalUpdatePasswordScreen(passwordId = 0)
 }

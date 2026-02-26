@@ -103,6 +103,6 @@ fun ModernPasswordManagerScreen(
 
 @Preview
 @Composable
-fun ModernPasswordManagerScreenPreview() {
+private fun ModernPasswordManagerScreenPreview() {
     ModernPasswordManagerScreen(navigateTo = {})
 }

@@ -77,6 +77,6 @@ fun ClassicalLoadPasswordScreen(
 
 @Preview
 @Composable
-fun ClassicalLoadPasswordScreenPreview() {
+private fun ClassicalLoadPasswordScreenPreview() {
     ClassicalLoadPasswordScreen(navigateTo = {})
 }

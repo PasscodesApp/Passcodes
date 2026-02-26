@@ -111,6 +111,6 @@ fun ClassicalSavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel
 
 @Preview
 @Composable
-fun ClassicalSavePasswordScreenPreview() {
+private fun ClassicalSavePasswordScreenPreview() {
     ClassicalSavePasswordScreen()
 }

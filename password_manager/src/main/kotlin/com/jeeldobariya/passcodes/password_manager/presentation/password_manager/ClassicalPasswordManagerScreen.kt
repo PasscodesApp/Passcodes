@@ -54,6 +54,6 @@ fun ClassicalPasswordManagerScreen(navigateTo: (Route) -> Unit) {
 
 @Preview
 @Composable
-fun ClassicalPasswordManagerScreenPreview() {
+private fun ClassicalPasswordManagerScreenPreview() {
     ClassicalPasswordManagerScreen(navigateTo = {})
 }
