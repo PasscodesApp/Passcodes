@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.jeeldobariya.passcodes.core.navigation.Route
 import org.koin.compose.viewmodel.koinViewModel
 
+
 @Composable
 fun ClassicalViewPasswordScreen(
     passwordId: Int,
@@ -27,9 +28,20 @@ fun ClassicalViewPasswordScreen(
 ) {
     viewmodel.onAction(ViewPasswordAction.LoadPassword(passwordId))
 
-    Scaffold { paddingValues ->
-        val state by viewmodel.state.collectAsState()
+    val state by viewmodel.state.collectAsState()
 
+    // TODO: make independent from passwordId & navigateTo
+    ClassicalViewPasswordScreenContent(passwordId, state, viewmodel::onAction, navigateTo)
+}
+
+@Composable
+private fun ClassicalViewPasswordScreenContent(
+    passwordId: Int,
+    state: ViewPasswordState,
+    onAction: (ViewPasswordAction) -> Unit,
+    navigateTo: (Route) -> Unit
+) {
+    Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -64,7 +76,7 @@ fun ClassicalViewPasswordScreen(
 
             Button(
                 onClick = {
-                    viewmodel.onAction(ViewPasswordAction.DeletePasswordAction)
+                    onAction(ViewPasswordAction.DeletePasswordAction)
                     /* TODO: Navigate Back */
                 }
             ) {
@@ -83,5 +95,10 @@ fun ClassicalViewPasswordScreen(
 @Preview
 @Composable
 private fun ClassicalViewPasswordScreenPreview() {
-    ClassicalViewPasswordScreen(passwordId = 0, navigateTo = {})
+    ClassicalViewPasswordScreenContent(
+        passwordId = 0,
+        state = ViewPasswordState(),
+        onAction = {},
+        navigateTo = {}
+    )
 }

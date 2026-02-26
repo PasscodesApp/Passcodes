@@ -28,16 +28,27 @@ fun ClassicalUpdatePasswordScreen(
     passwordId: Int,
     viewmodel: UpdatePasswordViewModel = koinViewModel()
 ) {
+    viewmodel.loadInitialData(passwordId)
+
+    val state by viewmodel.state.collectAsState()
+
+    ClassicalUpdatePasswordScreenContent(
+        state = state,
+        onAction = viewmodel::onAction
+    )
+}
+
+@Composable
+private fun ClassicalUpdatePasswordScreenContent(
+    state: UpdatePasswordState,
+    onAction: (UpdatePasswordAction) -> Unit
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-
-    viewmodel.loadInitialData(passwordId)
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { paddingValues ->
-        val state by viewmodel.state.collectAsState()
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -52,7 +63,7 @@ fun ClassicalUpdatePasswordScreen(
             OutlinedTextField(
                 value = state.domain,
                 onValueChange = {
-                    viewmodel.onAction(action = UpdatePasswordAction.OnChangeDomain(it))
+                    onAction(UpdatePasswordAction.OnChangeDomain(it))
                 },
                 label = {
                     Text("Domain:")
@@ -62,7 +73,7 @@ fun ClassicalUpdatePasswordScreen(
             OutlinedTextField(
                 value = state.username,
                 onValueChange = {
-                    viewmodel.onAction(action = UpdatePasswordAction.OnChangeUsername(it))
+                    onAction(UpdatePasswordAction.OnChangeUsername(it))
                 },
                 label = {
                     Text("Username:")
@@ -72,7 +83,7 @@ fun ClassicalUpdatePasswordScreen(
             OutlinedTextField(
                 value = state.password,
                 onValueChange = {
-                    viewmodel.onAction(action = UpdatePasswordAction.OnChangePassword(it))
+                    onAction(UpdatePasswordAction.OnChangePassword(it))
                 },
                 label = {
                     Text("Password:")
@@ -82,7 +93,7 @@ fun ClassicalUpdatePasswordScreen(
             OutlinedTextField(
                 value = state.notes,
                 onValueChange = {
-                    viewmodel.onAction(action = UpdatePasswordAction.OnChangeNotes(it))
+                    onAction(UpdatePasswordAction.OnChangeNotes(it))
                 },
                 label = {
                     Text("Notes:")
@@ -92,7 +103,7 @@ fun ClassicalUpdatePasswordScreen(
             Spacer(modifier = Modifier.padding(8.dp))
 
             Button(onClick = {
-                viewmodel.onAction(action = UpdatePasswordAction.OnUpdatePasswordButtonClick)
+                onAction(UpdatePasswordAction.OnUpdatePasswordButtonClick)
                 scope.launch {
                     snackbarHostState.showSnackbar("Update Successfully!!")
                 }
@@ -103,9 +114,8 @@ fun ClassicalUpdatePasswordScreen(
     }
 }
 
-
 @Preview
 @Composable
 private fun ClassicalUpdatePasswordScreenPreview() {
-    ClassicalUpdatePasswordScreen(passwordId = 0)
+    ClassicalUpdatePasswordScreenContent(state = UpdatePasswordState(), onAction = {})
 }

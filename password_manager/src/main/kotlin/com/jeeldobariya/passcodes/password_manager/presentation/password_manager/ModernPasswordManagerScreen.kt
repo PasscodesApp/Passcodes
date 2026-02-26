@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -34,11 +35,22 @@ import com.jeeldobariya.passcodes.core.navigation.Route
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModernPasswordManagerScreen(
     navigateTo: (Route) -> Unit,
     viewmodel: PasswordManagerViewModel = koinViewModel()
+) {
+    viewmodel.onAction(PasswordManagerAction.RefreshPassword)
+    val state by viewmodel.state.collectAsState()
+
+    ModernPasswordManagerScreenContent(state = state, navigateTo = navigateTo)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ModernPasswordManagerScreenContent(
+    state: PasswordManagerState,
+    navigateTo: (Route) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -65,9 +77,6 @@ fun ModernPasswordManagerScreen(
             }
         }
     ) { paddingValue ->
-        viewmodel.onAction(PasswordManagerAction.RefreshPassword)
-        val state = viewmodel.state.collectAsState()
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,7 +85,7 @@ fun ModernPasswordManagerScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             items(
-                items = state.value.passwordEntityList,
+                items = state.passwordEntityList,
                 key = { it.id }
             ) { passwordItem ->
                 Column(
@@ -104,5 +113,8 @@ fun ModernPasswordManagerScreen(
 @Preview
 @Composable
 private fun ModernPasswordManagerScreenPreview() {
-    ModernPasswordManagerScreen(navigateTo = {})
+    ModernPasswordManagerScreenContent(
+        state = PasswordManagerState(),
+        navigateTo = {}
+    )
 }

@@ -27,14 +27,22 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ModernSavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel()) {
+    val state by viewmodel.state.collectAsState()
+
+    ModernSavePasswordScreenContent(state = state, onAction = viewmodel::onAction)
+}
+
+@Composable
+private fun ModernSavePasswordScreenContent(
+    state: SavePasswordState,
+    onAction: (SavePasswordAction) -> Unit
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { paddingValues ->
-        val state by viewmodel.state.collectAsState()
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -49,7 +57,7 @@ fun ModernSavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel())
             OutlinedTextField(
                 value = state.domain,
                 onValueChange = {
-                    viewmodel.onAction(action = SavePasswordAction.OnChangeDomain(it))
+                    onAction(SavePasswordAction.OnChangeDomain(it))
                 },
                 label = {
                     Text("Domain")
@@ -59,7 +67,7 @@ fun ModernSavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel())
             OutlinedTextField(
                 value = state.username,
                 onValueChange = {
-                    viewmodel.onAction(action = SavePasswordAction.OnChangeUsername(it))
+                    onAction(SavePasswordAction.OnChangeUsername(it))
                 },
                 label = {
                     Text("Username")
@@ -69,7 +77,7 @@ fun ModernSavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel())
             OutlinedTextField(
                 value = state.password,
                 onValueChange = {
-                    viewmodel.onAction(action = SavePasswordAction.OnChangePassword(it))
+                    onAction(SavePasswordAction.OnChangePassword(it))
                 },
                 label = {
                     Text("Password")
@@ -80,7 +88,7 @@ fun ModernSavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel())
             OutlinedTextField(
                 value = state.notes,
                 onValueChange = {
-                    viewmodel.onAction(action = SavePasswordAction.OnChangeNotes(it))
+                    onAction(SavePasswordAction.OnChangeNotes(it))
                 },
                 label = {
                     Text("Notes")
@@ -90,7 +98,7 @@ fun ModernSavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel())
             Spacer(modifier = Modifier.padding(8.dp))
 
             Button(onClick = {
-                viewmodel.onAction(action = SavePasswordAction.OnSavePasswordButtonClick)
+                onAction(SavePasswordAction.OnSavePasswordButtonClick)
                 scope.launch {
                     snackbarHostState.showSnackbar("Saved Successfully!!")
                 }
@@ -104,5 +112,5 @@ fun ModernSavePasswordScreen(viewmodel: SavePasswordViewModel = koinViewModel())
 @Preview
 @Composable
 private fun ModernSavePasswordScreenPreview() {
-    ModernSavePasswordScreen()
+    ModernSavePasswordScreenContent(state = SavePasswordState(), onAction = {})
 }

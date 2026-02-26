@@ -21,6 +21,13 @@ import com.jeeldobariya.passcodes.core.navigation.Route
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClassicalPasswordManagerScreen(navigateTo: (Route) -> Unit) {
+    ClassicalPasswordManagerScreenContent(navigateTo)
+}
+
+@Composable
+private fun ClassicalPasswordManagerScreenContent(
+    navigateTo: (Route) -> Unit
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { paddingValue ->
@@ -51,9 +58,8 @@ fun ClassicalPasswordManagerScreen(navigateTo: (Route) -> Unit) {
     }
 }
 
-
 @Preview
 @Composable
 private fun ClassicalPasswordManagerScreenPreview() {
-    ClassicalPasswordManagerScreen(navigateTo = {})
+    ClassicalPasswordManagerScreenContent(navigateTo = {})
 }
