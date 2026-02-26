@@ -28,15 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.core.navigation.Route
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
+
 @Composable
-fun MainScreen(navigateTo: (Route) -> Unit) {
+fun ModernMainScreen(navigateTo: (Route) -> Unit) {
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -111,6 +111,7 @@ fun MainScreen(navigateTo: (Route) -> Unit) {
         }
     }
 }
+
 
 @Composable
 fun ClassicalMainScreen(navigateTo: (Route) -> Unit) {
@@ -190,11 +191,19 @@ fun ClassicalMainScreen(navigateTo: (Route) -> Unit) {
 }
 
 
-@Preview(showBackground = true)
 @PreviewLightDark
 @Composable
-fun MainScreenPreview() {
+fun ModernMainScreenPreview() {
     PasscodesTheme {
-        MainScreen(navigateTo = { })
+        ModernMainScreen(navigateTo = { })
+    }
+}
+
+
+@PreviewLightDark
+@Composable
+fun ClassicalMainScreenPreview() {
+    PasscodesTheme {
+        ClassicalMainScreen(navigateTo = { })
     }
 }

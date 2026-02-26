@@ -13,16 +13,21 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.jeeldobariya.passcodes.core.datastore.AppSettings
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
-import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
-import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.core.navigation.Route
-import com.jeeldobariya.passcodes.password_manager.ui.PasswordManagerScreen
-import com.jeeldobariya.passcodes.password_manager.ui.SavePasswordScreen
-import com.jeeldobariya.passcodes.password_manager.ui.UpdatePasswordScreen
-import com.jeeldobariya.passcodes.ui.AboutScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalLoadPasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalPasswordManagerScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalSavePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalUpdatePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ClassicalViewPasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ModernPasswordManagerScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ModernSavePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.ui.ModernUpdatePasswordScreen
+import com.jeeldobariya.passcodes.ui.ClassicalAboutScreen
 import com.jeeldobariya.passcodes.ui.ClassicalMainScreen
-import com.jeeldobariya.passcodes.ui.MainScreen
-import com.jeeldobariya.passcodes.ui.SettingsScreen
+import com.jeeldobariya.passcodes.ui.ClassicalSettingsScreen
+import com.jeeldobariya.passcodes.ui.ModernAboutScreen
+import com.jeeldobariya.passcodes.ui.ModernMainScreen
+import com.jeeldobariya.passcodes.ui.ModernSettingsScreen
 
 
 @Composable
@@ -38,34 +43,42 @@ private fun ModernNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (R
         ),
         entryProvider = entryProvider {
             entry<Route.Home> {
-                MainScreen(navigateTo)
+                ModernMainScreen(navigateTo)
             }
 
             entry<Route.Settings> {
-                SettingsScreen()
+                ModernSettingsScreen()
             }
 
             entry<Route.AboutUs> {
-                AboutScreen()
+                ModernAboutScreen()
             }
 
             entry<Route.PasswordManager> {
-                PasswordManagerScreen(navigateTo)
+                ModernPasswordManagerScreen(navigateTo)
+            }
+
+            entry<Route.LoadPassword> {
+                ModernPasswordManagerScreen(navigateTo)
             }
 
             entry<Route.SavePassword> {
-                SavePasswordScreen()
+                ModernSavePasswordScreen()
+            }
+
+            entry<Route.ViewPassword> { // Theoretically, Should be treated as `UpdatePassword` Route in Modern Layout...
+                ModernUpdatePasswordScreen(it.id)
             }
 
             entry<Route.UpdatePassword> {
-                UpdatePasswordScreen(it.id)
+                ModernUpdatePasswordScreen(it.id)
             }
         }
     )
 }
 
 @Composable
-private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (Route) -> Unit) {
+private fun ClassicalNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (Route) -> Unit) {
     NavDisplay(
         backStack = backStack,
         onBack = {
@@ -77,27 +90,35 @@ private fun ClassicNavigationRoot(backStack: NavBackStack<NavKey>, navigateTo: (
         ),
         entryProvider = entryProvider {
             entry<Route.Home> {
-                ClassicalMainScreen(navigateTo)
+                ClassicalMainScreen(navigateTo = navigateTo)
             }
 
             entry<Route.Settings> {
-                SettingsScreen()
+                ClassicalSettingsScreen()
             }
 
             entry<Route.AboutUs> {
-                AboutScreen()
+                ClassicalAboutScreen()
             }
 
             entry<Route.PasswordManager> {
-                PasswordManagerScreen(navigateTo)
+                ClassicalPasswordManagerScreen(navigateTo = navigateTo)
+            }
+
+            entry<Route.LoadPassword> {
+                ClassicalLoadPasswordScreen(navigateTo = navigateTo)
             }
 
             entry<Route.SavePassword> {
-                SavePasswordScreen()
+                ClassicalSavePasswordScreen()
+            }
+
+            entry<Route.ViewPassword> {
+                ClassicalViewPasswordScreen(passwordId = it.id, navigateTo = navigateTo)
             }
 
             entry<Route.UpdatePassword> {
-                UpdatePasswordScreen(it.id)
+                ClassicalUpdatePasswordScreen(passwordId = it.id)
             }
         }
     )
@@ -110,10 +131,11 @@ fun NavigationRoot() {
     val appDataStore = LocalContext.current.appDatastore
     val appDatastoreState by appDataStore.data.collectAsState(AppSettings())
 
-    fun navigateTo(route: Route): Unit {
+    fun navigateTo(route: Route) {
         backStack.add(route)
     }
 
-    if (appDatastoreState.isModernLayoutEnable) { ModernNavigationRoot(backStack, ::navigateTo) }
-    else { ClassicNavigationRoot(backStack, ::navigateTo) }
+    if (appDatastoreState.isModernLayoutEnable) { ModernNavigationRoot(backStack, ::navigateTo) } else {
+        ClassicalNavigationRoot(backStack, ::navigateTo)
+    }
 }

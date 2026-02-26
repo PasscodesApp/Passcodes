@@ -1,5 +1,4 @@
 // import org.gradle.api.GradleException
-import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.text.SimpleDateFormat
