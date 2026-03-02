@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.password_manager.ui
+package com.jeeldobariya.passcodes.password_manager.presentation.load_password
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,18 +17,33 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeeldobariya.passcodes.core.navigation.Route
-import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordAction
-import com.jeeldobariya.passcodes.password_manager.presentation.load_password.LoadPasswordViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun ClassicalLoadPasswordScreen(
     navigateTo: (Route) -> Unit,
     viewmodel: LoadPasswordViewModel = koinViewModel()
+) {
+    viewmodel.onAction(LoadPasswordAction.RefreshPassword)
+    val state by viewmodel.state.collectAsState()
+
+    ClassicalLoadPasswordScreenContent(
+        state = state,
+        navigateTo = navigateTo
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ClassicalLoadPasswordScreenContent(
+    state: LoadPasswordState,
+    navigateTo: (Route) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -40,9 +55,6 @@ fun ClassicalLoadPasswordScreen(
         }
     ) { paddingValue ->
 
-        viewmodel.onAction(LoadPasswordAction.RefreshPassword)
-        val state = viewmodel.state.collectAsState()
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -51,7 +63,7 @@ fun ClassicalLoadPasswordScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             items(
-                items = state.value.passwordEntityList,
+                items = state.passwordEntityList,
                 key = { it.id }
             ) { passwordItem ->
                 Column(
@@ -74,4 +86,13 @@ fun ClassicalLoadPasswordScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun ClassicalLoadPasswordScreenPreview() {
+    ClassicalLoadPasswordScreenContent(
+        state = LoadPasswordState(),
+        navigateTo = {}
+    )
 }

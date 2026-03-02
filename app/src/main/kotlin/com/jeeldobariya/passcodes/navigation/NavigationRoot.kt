@@ -14,20 +14,20 @@ import androidx.navigation3.ui.NavDisplay
 import com.jeeldobariya.passcodes.core.datastore.AppSettings
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.navigation.Route
-import com.jeeldobariya.passcodes.password_manager.ui.ClassicalLoadPasswordScreen
-import com.jeeldobariya.passcodes.password_manager.ui.ClassicalPasswordManagerScreen
-import com.jeeldobariya.passcodes.password_manager.ui.ClassicalSavePasswordScreen
-import com.jeeldobariya.passcodes.password_manager.ui.ClassicalUpdatePasswordScreen
-import com.jeeldobariya.passcodes.password_manager.ui.ClassicalViewPasswordScreen
-import com.jeeldobariya.passcodes.password_manager.ui.ModernPasswordManagerScreen
-import com.jeeldobariya.passcodes.password_manager.ui.ModernSavePasswordScreen
-import com.jeeldobariya.passcodes.password_manager.ui.ModernUpdatePasswordScreen
-import com.jeeldobariya.passcodes.ui.ClassicalAboutScreen
-import com.jeeldobariya.passcodes.ui.ClassicalMainScreen
-import com.jeeldobariya.passcodes.ui.ClassicalSettingsScreen
-import com.jeeldobariya.passcodes.ui.ModernAboutScreen
-import com.jeeldobariya.passcodes.ui.ModernMainScreen
-import com.jeeldobariya.passcodes.ui.ModernSettingsScreen
+import com.jeeldobariya.passcodes.password_manager.presentation.load_password.ClassicalLoadPasswordScreen
+import com.jeeldobariya.passcodes.password_manager.presentation.password_manager.ClassicalPasswordManagerScreen
+import com.jeeldobariya.passcodes.password_manager.presentation.password_manager.ModernPasswordManagerScreen
+import com.jeeldobariya.passcodes.password_manager.presentation.save_password.ClassicalSavePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.presentation.save_password.ModernSavePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.presentation.update_password.ClassicalUpdatePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.presentation.update_password.ModernUpdatePasswordScreen
+import com.jeeldobariya.passcodes.password_manager.presentation.view_password.ClassicalViewPasswordScreen
+import com.jeeldobariya.passcodes.presentation.about_screen.ClassicalAboutScreen
+import com.jeeldobariya.passcodes.presentation.main_screen.ClassicalMainScreen
+import com.jeeldobariya.passcodes.presentation.setting_screen.ClassicalSettingsScreen
+import com.jeeldobariya.passcodes.presentation.about_screen.ModernAboutScreen
+import com.jeeldobariya.passcodes.presentation.main_screen.ModernMainScreen
+import com.jeeldobariya.passcodes.presentation.setting_screen.ModernSettingsScreen
 
 
 @Composable

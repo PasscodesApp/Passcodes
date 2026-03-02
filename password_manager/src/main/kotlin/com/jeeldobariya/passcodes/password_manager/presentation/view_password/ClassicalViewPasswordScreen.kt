@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.password_manager.ui
+package com.jeeldobariya.passcodes.password_manager.presentation.view_password
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,12 +13,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jeeldobariya.passcodes.core.navigation.Route
-import com.jeeldobariya.passcodes.password_manager.presentation.view_password.ViewPasswordAction
-import com.jeeldobariya.passcodes.password_manager.presentation.view_password.ViewPasswordViewModel
 import org.koin.compose.viewmodel.koinViewModel
+
 
 @Composable
 fun ClassicalViewPasswordScreen(
@@ -28,9 +28,20 @@ fun ClassicalViewPasswordScreen(
 ) {
     viewmodel.onAction(ViewPasswordAction.LoadPassword(passwordId))
 
-    Scaffold { paddingValues ->
-        val state by viewmodel.state.collectAsState()
+    val state by viewmodel.state.collectAsState()
 
+    // TODO: make independent from passwordId & navigateTo
+    ClassicalViewPasswordScreenContent(passwordId, state, viewmodel::onAction, navigateTo)
+}
+
+@Composable
+private fun ClassicalViewPasswordScreenContent(
+    passwordId: Int,
+    state: ViewPasswordState,
+    onAction: (ViewPasswordAction) -> Unit,
+    navigateTo: (Route) -> Unit
+) {
+    Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -65,7 +76,7 @@ fun ClassicalViewPasswordScreen(
 
             Button(
                 onClick = {
-                    viewmodel.onAction(ViewPasswordAction.DeletePasswordAction)
+                    onAction(ViewPasswordAction.DeletePasswordAction)
                     /* TODO: Navigate Back */
                 }
             ) {
@@ -79,4 +90,15 @@ fun ClassicalViewPasswordScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun ClassicalViewPasswordScreenPreview() {
+    ClassicalViewPasswordScreenContent(
+        passwordId = 0,
+        state = ViewPasswordState(),
+        onAction = {},
+        navigateTo = {}
+    )
 }
