@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.ui
+package com.jeeldobariya.passcodes.presentation.about_screen
 
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -28,67 +28,27 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.jeeldobariya.passcodes.Constant
 import com.jeeldobariya.passcodes.R
 import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
+
 @Composable
-fun ModernAboutScreen() {
-    Scaffold { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 24.dp, vertical = 64.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_passcodes),
-                contentDescription = "Passcodes Icon",
-                modifier = Modifier
-                    .size(100.dp)
-                    .padding(10.dp)
-            )
-
-            Text(
-                text = stringResource(R.string.textview_aboutus_headline),
-                style = MaterialTheme.typography.titleLarge
-            )
-
-            Spacer(modifier = Modifier.padding(vertical = 12.dp))
-
-            Text(
-                text = stringResource(R.string.textview_app_description),
-                style = MaterialTheme.typography.bodyLarge
-            )
-
-            Spacer(modifier = Modifier.padding(vertical = 16.dp))
-
-            Text(
-                text = stringResource(R.string.textview_app_warning),
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.Red
-            )
-
-            Spacer(modifier = Modifier.padding(16.dp))
-        }
-    }
+fun ClassicalAboutScreen() {
+    ClassicalAboutScreenContent()
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClassicalAboutScreen() {
+private fun ClassicalAboutScreenContent() {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -233,7 +193,6 @@ private fun AboutGridSection() {
     }
 }
 
-
 @Composable
 private fun AboutCard(
     modifier: Modifier = Modifier,
@@ -324,19 +283,10 @@ private fun ContributorCard(text: String) {
     }
 }
 
-
-@PreviewLightDark
+@Preview
 @Composable
-fun ModernAboutScreenPreview() {
+private fun ClassicalAboutScreenPreview() {
     PasscodesTheme {
-        ModernAboutScreen()
-    }
-}
-
-@PreviewLightDark
-@Composable
-fun ClassicalAboutScreenPreview() {
-    PasscodesTheme {
-        ClassicalAboutScreen()
+        ClassicalAboutScreenContent()
     }
 }
