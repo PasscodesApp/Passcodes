@@ -35,7 +35,7 @@ import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
 @Composable
 fun ClassicalMainScreen(navigateTo: (Route) -> Unit) {
-    ClassicalMainScreen(navigateTo)
+    ClassicalMainScreenContent(navigateTo)
 }
 
 @Composable
