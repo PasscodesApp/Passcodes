@@ -17,7 +17,6 @@
         tools:targetApi="33" >
 
         <activity android:name=".ui.MainActivity" />
-        <activity android:name=".JetpackPreviewLayoutActivity" />
 
         <activity
             android:name=".oldui.MainActivity"

@@ -63,7 +63,7 @@ private fun ClassicalSettingsScreenContent() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val flagDataStore = LocalContext.current.featureFlagsDatastore
+    val flagDataStore = context.featureFlagsDatastore
     val flagDatastoreState by flagDataStore.data.collectAsState(
         FeatureFlagsSettings(
             version = 0,
@@ -71,7 +71,7 @@ private fun ClassicalSettingsScreenContent() {
             isPreviewLayoutEnabled = false
         )
     )
-    val appDataStore = LocalContext.current.appDatastore
+    val appDataStore = context.appDatastore
     val appDatastoreState by appDataStore.data.collectAsState(initial = AppSettings())
 
     var expanded by remember { mutableStateOf(false) }
