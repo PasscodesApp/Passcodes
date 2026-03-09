@@ -47,11 +47,11 @@ val devRoundIcon = "@mipmap/dev_ic_launcher_round"
 
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
-    alias(libs.plugins.oss.licenses)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ossLicenses)
 }
 
 kotlin {
