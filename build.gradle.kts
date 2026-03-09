@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.androidKmpLibrary) apply false
+    alias(libs.plugins.composeMultiplatform) apply false
 }
 
 // All projects block is common for setting up common repositories for all subprojects.
