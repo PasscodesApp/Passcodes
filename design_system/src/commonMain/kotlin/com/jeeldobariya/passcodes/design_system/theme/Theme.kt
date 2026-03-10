@@ -6,26 +6,28 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-private val LightColorScheme = lightColorScheme(
-    primary = primaryLight,
-    secondary = secondaryLight,
-    tertiary = tertiaryLight,
-    background = BackgroundLight,
-    surface = SurfaceLight,
-    error = ErrorLight
-)
-
-private val DarkColorScheme = darkColorScheme(
-    primary = primaryDark,
-    secondary = secondaryDark,
-    tertiary = tertiaryDark,
-    background = BackgroundDark,
-    surface = SurfaceDark,
-    error = ErrorDark
+private val PasscodesColorScheme = ColorTheme(
+    lightColorScheme = lightColorScheme(
+        primary = primaryLight,
+        secondary = secondaryLight,
+        tertiary = tertiaryLight,
+        background = BackgroundLight,
+        surface = SurfaceLight,
+        error = ErrorLight
+    ),
+    darkColorScheme = darkColorScheme(
+        primary = primaryDark,
+        secondary = secondaryDark,
+        tertiary = tertiaryDark,
+        background = BackgroundDark,
+        surface = SurfaceDark,
+        error = ErrorDark
+    )
 )
 
 @Composable
 fun PasscodesTheme(
+    colorTheme: ColorTheme = PasscodesColorScheme,
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     // dynamicColor: Boolean = true,
@@ -37,8 +39,8 @@ fun PasscodesTheme(
 //            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
 //        }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> colorTheme.darkColorScheme
+        else -> colorTheme.lightColorScheme
     }
 
     MaterialTheme(
