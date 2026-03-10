@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -120,8 +121,10 @@ private fun ClassicalSavePasswordScreenContent(
 @Preview
 @Composable
 private fun ClassicalSavePasswordScreenPreview() {
-    ClassicalSavePasswordScreenContent(
-        state = SavePasswordState(),
-        onAction = {}
-    )
+    PasscodesTheme {
+        ClassicalSavePasswordScreenContent(
+            state = SavePasswordState(),
+            onAction = {}
+        )
+    }
 }

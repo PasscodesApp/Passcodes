@@ -16,7 +16,7 @@
         android:theme="@style/PasscodesTheme.Default"
         tools:targetApi="33" >
 
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".MainActivity" />
 
         <activity
             android:name=".oldui.MainActivity"

@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             if (featureFlagsDatastore.data.first().isPreviewLayoutEnabled) {
                 Intent(
                     this@MainActivity,
-                    com.jeeldobariya.passcodes.ui.MainActivity::class.java
+                    com.jeeldobariya.passcodes.MainActivity::class.java
                 ).also {
                     startActivity(it)
                 }

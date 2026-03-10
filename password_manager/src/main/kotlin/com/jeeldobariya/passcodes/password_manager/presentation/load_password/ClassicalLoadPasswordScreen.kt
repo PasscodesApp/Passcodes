@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeeldobariya.passcodes.core.navigation.Route
+import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -91,8 +92,10 @@ private fun ClassicalLoadPasswordScreenContent(
 @Preview
 @Composable
 private fun ClassicalLoadPasswordScreenPreview() {
-    ClassicalLoadPasswordScreenContent(
-        state = LoadPasswordState(),
-        navigateTo = {}
-    )
+    PasscodesTheme {
+        ClassicalLoadPasswordScreenContent(
+            state = LoadPasswordState(),
+            navigateTo = {}
+        )
+    }
 }

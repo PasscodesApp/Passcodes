@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.jeeldobariya.passcodes.Constant
 import com.jeeldobariya.passcodes.R
-import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
+import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 
 
 @Composable

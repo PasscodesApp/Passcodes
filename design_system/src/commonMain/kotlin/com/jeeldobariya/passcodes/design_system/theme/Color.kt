@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.ui.ui.theme
+package com.jeeldobariya.passcodes.design_system.theme
 
 import androidx.compose.ui.graphics.Color
 

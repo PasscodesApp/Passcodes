@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":design_system"))
     implementation(project(":core"))
     implementation(project(":database"))
 
