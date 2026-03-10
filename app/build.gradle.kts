@@ -205,6 +205,7 @@ android {
 
 dependencies {
     // In project library / feature modules
+    implementation(project(":design_system"))
     implementation(project(":core"))
     implementation(project(":database"))
     implementation(project(":password_manager"))
