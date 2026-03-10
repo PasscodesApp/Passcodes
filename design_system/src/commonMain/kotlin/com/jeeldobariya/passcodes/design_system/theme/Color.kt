@@ -3,16 +3,16 @@ package com.jeeldobariya.passcodes.design_system.theme
 import androidx.compose.ui.graphics.Color
 
 // Primary
-val Purple40 = Color(0xFF6750A4)
-val Purple80 = Color(0xFFD0BCFF)
+val primaryLight = Color(0xFF6750A4)
+val primaryDark = Color(0xFFD0BCFF)
 
 // Secondary
-val PurpleGrey40 = Color(0xFF625B71)
-val PurpleGrey80 = Color(0xFFCCC2DC)
+val secondaryLight = Color(0xFF625B71)
+val secondaryDark = Color(0xFFCCC2DC)
 
 // Tertiary
-val Pink40 = Color(0xFF7D5260)
-val Pink80 = Color(0xFFEFB8C8)
+val tertiaryLight = Color(0xFF7D5260)
+val tertiaryDark = Color(0xFFEFB8C8)
 
 // Background
 val BackgroundLight = Color(0xFFFFFBFE)
