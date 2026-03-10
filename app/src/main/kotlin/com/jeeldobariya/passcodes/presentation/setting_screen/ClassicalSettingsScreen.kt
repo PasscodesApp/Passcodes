@@ -2,11 +2,13 @@ package com.jeeldobariya.passcodes.presentation.setting_screen
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -56,10 +58,6 @@ fun ClassicalSettingsScreen() {
 private fun ClassicalSettingsScreenContent() {
     // TODO: Language & Theme need to be done.
 
-    val selectedLanguage = "Under Development"
-    val languageOptions: List<String> = listOf("English", "Korean")
-    val onLanguageSelected: (String) -> Unit = { /* TODO */ }
-
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -73,8 +71,6 @@ private fun ClassicalSettingsScreenContent() {
     )
     val appDataStore = context.appDatastore
     val appDatastoreState by appDataStore.data.collectAsState(initial = AppSettings())
-
-    var expanded by remember { mutableStateOf(false) }
 
     Scaffold { padding ->
 
@@ -97,85 +93,32 @@ private fun ClassicalSettingsScreenContent() {
                 )
             }
 
-            // Language Card
-            item {
-                Card(shape = RoundedCornerShape(16.dp)) {
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        Text(
-                            modifier = Modifier.padding(4.dp),
-                            text = stringResource(R.string.label_language_setting),
-                            color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-
-                        ExposedDropdownMenuBox(
-                            expanded = expanded,
-                            onExpandedChange = { expanded = !expanded }
+            if (!flagDatastoreState.isPreviewFeaturesEnabled) {
+                item {
+                    Card(shape = RoundedCornerShape(16.dp)) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            OutlinedTextField(
-                                value = selectedLanguage,
-                                onValueChange = {},
-                                readOnly = true,
-                                trailingIcon = {
-                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded)
-                                },
-                                modifier = Modifier.menuAnchor(
-                                    ExposedDropdownMenuAnchorType.PrimaryNotEditable,
-                                    enabled = true
-                                )
-                            )
-
-                            ExposedDropdownMenu(
-                                expanded = expanded,
-                                onDismissRequest = { expanded = false }
-                            ) {
-                                languageOptions.forEach { lang ->
-                                    DropdownMenuItem(
-                                        text = { Text(lang) },
-                                        onClick = {
-                                            onLanguageSelected(lang)
-                                            expanded = false
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Theme Card
-            item {
-                Card(shape = RoundedCornerShape(16.dp)) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        Text(
-                            text = stringResource(R.string.label_theme_setting),
-                            color = MaterialTheme.colorScheme.primary
-                        )
-
-                        Button(onClick = { /* TODO */ }) {
+                            Text(text = "Coming Soon", style = MaterialTheme.typography.titleLarge)
                             Text(
-                                text = stringResource(R.string.toggle_theme_button_text),
-                                style = MaterialTheme.typography.labelMedium
+                                text = "Language & Theme features are currently under development",
+                                style = MaterialTheme.typography.labelSmall,
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
                 }
+            } else {
+                // Language Card
+                item {
+                    PreviewLanguageFeatures()
+                }
+
+                previewThemeFeatures()
             }
 
             // Latest Features Switch
@@ -270,6 +213,97 @@ private fun ClassicalSettingsScreenContent() {
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PreviewLanguageFeatures() {
+    val selectedLanguage = "Under Development"
+    val languageOptions: List<String> = listOf("English", "Korean")
+    val onLanguageSelected: (String) -> Unit = { /* TODO */ }
+
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(shape = RoundedCornerShape(16.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            Text(
+                modifier = Modifier.padding(4.dp),
+                text = stringResource(R.string.label_language_setting),
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded }
+            ) {
+                OutlinedTextField(
+                    value = selectedLanguage,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded)
+                    },
+                    modifier = Modifier.menuAnchor(
+                        ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+                        enabled = true
+                    )
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    languageOptions.forEach { lang ->
+                        DropdownMenuItem(
+                            text = { Text(lang) },
+                            onClick = {
+                                onLanguageSelected(lang)
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+private fun LazyListScope.previewThemeFeatures() {
+    // Theme Card
+    item {
+        Card(shape = RoundedCornerShape(16.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Text(
+                    text = stringResource(R.string.label_theme_setting),
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Button(onClick = { /* TODO */ }) {
+                    Text(
+                        text = stringResource(R.string.toggle_theme_button_text),
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 private fun SwitchCard(
