@@ -15,7 +15,8 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
                 domain = it.domain,
                 username = it.username,
                 password = it.password,
-                notes = it.notes,
+                notes = it.notes ?: "",
+                url = it.url ?: "",
                 lastUpdatedAt = DateTimeUtils.getRelativeDays(it.updatedAt.orEmpty())
             )
         }
@@ -25,15 +26,19 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         domain: String,
         username: String,
         password: String,
-        notes: String
+        notes: String,
     ): Int {
         require(domain.isNotBlank() || username.isNotBlank() || password.isNotBlank())
+
+        val url = "https://local.${domain.trim().lowercase()}"
+
         val currentTimestamp = DateTimeUtils.getCurrDateTime()
         val newPassword = PasswordEntity(
             domain = domain,
             username = username,
             password = password,
             notes = notes,
+            url = url,
             createdAt = currentTimestamp,
             updatedAt = currentTimestamp
         )
@@ -50,7 +55,8 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
                 domain = result.domain,
                 username = result.username,
                 password = result.password,
-                notes = result.notes,
+                notes = result.notes ?: "",
+                url = result.url ?: "",
                 lastUpdatedAt = DateTimeUtils.getRelativeDays(result.updatedAt.orEmpty())
             )
         } else {
@@ -68,8 +74,9 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
                 domain = result.domain,
                 username = result.username,
                 password = result.password,
-                notes = result.notes,
-                lastUpdatedAt = "TODO()"
+                notes = result.notes ?: "",
+                url = result.url ?: "",
+                lastUpdatedAt = DateTimeUtils.getRelativeDays(result.updatedAt.orEmpty())
             )
         } else {
             null

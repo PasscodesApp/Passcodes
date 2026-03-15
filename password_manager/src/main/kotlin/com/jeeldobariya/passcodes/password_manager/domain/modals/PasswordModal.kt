@@ -5,6 +5,7 @@ data class PasswordModal(
     val domain: String,
     val username: String,
     val password: String,
-    val notes: String,
+    val notes: String = "",
+    val url: String = "",
     val lastUpdatedAt: String = ""
 )
