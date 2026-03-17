@@ -63,7 +63,8 @@ dependencies {
     implementation(libs.koin)
 
     androidTestImplementation(libs.bundles.unit.test)
-    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.room.testing)
 }
