@@ -27,7 +27,7 @@ kotlinSerializationJson = "1.10.0"
 agp = "9.1.0"
 ksp = "2.3.6"
 kotlin = "2.3.10"
-oss-license-plugin = "0.10.10" # Also update in settings.gradle.kts
+oss-license-plugin = "0.10.10" # Always update also in settings.gradle.kts
 
 
 
@@ -94,6 +94,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidx-junit" }
 
 
 
