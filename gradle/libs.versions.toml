@@ -1,6 +1,6 @@
 [versions]
 # Library versions
-coreKtx = "1.17.0"
+coreKtx = "1.18.0"
 material = "1.13.0"
 nav3Core = "1.0.1"
 lifecycleViewmodelNav3 = "2.10.0"
@@ -17,17 +17,17 @@ coroutines = "1.10.2"
 lifecycle = "2.10.0"
 koin = "4.1.1"
 composeMultiplatform = "1.10.2"
-composeBom = "2026.02.01"
-compose-activity = "1.12.4"
+composeBom = "2026.03.00"
+compose-activity = "1.13.0"
 compose-viewmodel = "2.10.0"
-datastorePreferences = "1.2.0"
+datastorePreferences = "1.2.1"
 kotlinSerializationJson = "1.10.0"
 
 # Plugin versions
 agp = "9.1.0"
 ksp = "2.3.6"
 kotlin = "2.3.10"
-oss-license-plugin = "0.10.10" # Also update in settings.gradle.kts
+oss-license-plugin = "0.10.10" # Always update also in settings.gradle.kts
 
 
 
@@ -94,6 +94,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidx-junit" }
 
 
 

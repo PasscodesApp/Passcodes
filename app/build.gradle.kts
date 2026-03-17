@@ -205,11 +205,11 @@ android {
 
 dependencies {
     // In project library / feature modules
-    implementation(project(":design_system"))
-    implementation(project(":core"))
-    implementation(project(":database"))
-    implementation(project(":password_manager"))
-    implementation(project(":autofill"))
+    implementation(projects.designSystem)
+    implementation(projects.core)
+    implementation(projects.database)
+    implementation(projects.passwordManager)
+    implementation(projects.autofill)
 
     // Android Core
     implementation(libs.appcompat)

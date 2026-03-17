@@ -24,6 +24,12 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    sourceSets {
+        getByName("androidTest") {
+            assets.directories += "$projectDir/schemas"
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -64,6 +70,7 @@ dependencies {
 
     androidTestImplementation(libs.bundles.unit.test)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.junit.ktx)
     androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.room.testing)

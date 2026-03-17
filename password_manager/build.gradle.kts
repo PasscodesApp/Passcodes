@@ -51,9 +51,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":design_system"))
-    implementation(project(":core"))
-    implementation(project(":database"))
+    implementation(projects.designSystem)
+    implementation(projects.core)
+    implementation(projects.database)
 
     // Android Core
     implementation(libs.androidx.core.ktx)
