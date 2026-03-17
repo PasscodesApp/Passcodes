@@ -42,7 +42,7 @@ import com.jeeldobariya.passcodes.core.datastore.AppSettings
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
+import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 import kotlinx.coroutines.launch
 
 @Composable

@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.jeeldobariya.passcodes.database.master.migration.MIGRATION_1_2
 
 @Database(
     entities = [PasswordEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class MasterDatabase : RoomDatabase() {
@@ -19,7 +20,9 @@ abstract class MasterDatabase : RoomDatabase() {
                 context = context,
                 klass = MasterDatabase::class.java,
                 name = "master"
-            ).build()
+            )
+                .addMigrations(MIGRATION_1_2)
+                .build()
         }
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jeeldobariya.passcodes.core.navigation.Route
+import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,5 +62,7 @@ private fun ClassicalPasswordManagerScreenContent(
 @Preview
 @Composable
 private fun ClassicalPasswordManagerScreenPreview() {
-    ClassicalPasswordManagerScreenContent(navigateTo = {})
+    PasscodesTheme {
+        ClassicalPasswordManagerScreenContent(navigateTo = {})
+    }
 }

@@ -18,6 +18,7 @@ plugins {
 
 // Defines all modules in your project
 include(":app")
+include(":design_system")
 include(":core")
 include(":autofill")
 include(":database")

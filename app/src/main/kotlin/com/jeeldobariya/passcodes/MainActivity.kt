@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.ui
+package com.jeeldobariya.passcodes
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
+import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 import com.jeeldobariya.passcodes.navigation.NavigationRoot
 import com.jeeldobariya.passcodes.oldui.MainActivity
-import com.jeeldobariya.passcodes.ui.ui.theme.PasscodesTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
