@@ -20,7 +20,7 @@ composeMultiplatform = "1.10.2"
 composeBom = "2026.02.01"
 compose-activity = "1.13.0"
 compose-viewmodel = "2.10.0"
-datastorePreferences = "1.2.0"
+datastorePreferences = "1.2.1"
 kotlinSerializationJson = "1.10.0"
 
 # Plugin versions
