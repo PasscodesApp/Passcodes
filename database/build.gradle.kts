@@ -26,7 +26,7 @@ android {
 
     sourceSets {
         getByName("androidTest") {
-            assets.srcDir("$projectDir/schemas")
+            assets.directories += "$projectDir/schemas"
         }
     }
 
@@ -57,7 +57,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.junit.ktx)
 
     // Data/Persistence (Room Bundle)
     ksp(libs.room.compiler)
@@ -71,6 +70,7 @@ dependencies {
 
     androidTestImplementation(libs.bundles.unit.test)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.junit.ktx)
     androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.room.testing)
