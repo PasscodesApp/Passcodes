@@ -53,7 +53,7 @@ android {
 dependencies {
     implementation(projects.designSystem)
     implementation(projects.core)
-    implementation(projects.database)
+    implementation(projects.androiddatabase)
 
     // Android Core
     implementation(libs.androidx.core.ktx)

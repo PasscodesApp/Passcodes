@@ -31,3 +31,4 @@ include(":password_manager")
 
 // Define root project name
 rootProject.name = "Passcodes"
+

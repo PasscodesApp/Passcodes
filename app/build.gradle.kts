@@ -207,7 +207,7 @@ dependencies {
     // In project library / feature modules
     implementation(projects.designSystem)
     implementation(projects.core)
-    implementation(projects.database)
+    implementation(projects.androiddatabase)
     implementation(projects.passwordManager)
     implementation(projects.autofill)
 

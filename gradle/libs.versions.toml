@@ -25,10 +25,9 @@ kotlinSerializationJson = "1.10.0"
 
 # Plugin versions
 agp = "9.1.0"
-ksp = "2.3.6"
+ksp = "2.3.10"
 kotlin = "2.3.20"
 oss-license-plugin = "0.11.0" # Always update also in settings.gradle.kts
-
 
 
 
@@ -130,3 +129,4 @@ androidKmpLibrary = { id = "com.android.kotlin.multiplatform.library", version.r
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ossLicenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "oss-license-plugin" }
+
