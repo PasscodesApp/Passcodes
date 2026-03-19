@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidKmpLibrary) apply false
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.ksp) apply false
+    alias (libs.plugins.androidx.room) apply false
     alias(libs.plugins.ossLicenses) apply false
 }
 

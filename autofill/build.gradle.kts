@@ -46,14 +46,13 @@ android {
 }
 
 dependencies {
-    implementation(projects.androiddatabase)
+    implementation(projects.database)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
 
     // Data/Persistence (Room Bundle)
-    ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 
     implementation(libs.coroutines.core)
