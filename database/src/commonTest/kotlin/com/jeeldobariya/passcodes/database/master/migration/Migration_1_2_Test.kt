@@ -1,5 +1,7 @@
 package com.jeeldobariya.passcodes.database.master.migration
 
+// TODO: Migrate to kmp friendly testing.
+
 //import androidx.room.testing.MigrationTestHelper
 //import androidx.test.ext.junit.runners.AndroidJUnit4
 //import androidx.test.platform.app.InstrumentationRegistry
