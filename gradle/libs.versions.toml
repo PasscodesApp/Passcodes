@@ -26,7 +26,7 @@ kotlinSerializationJson = "1.10.0"
 # Plugin versions
 agp = "9.1.0"
 ksp = "2.3.6"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 oss-license-plugin = "0.11.0" # Always update also in settings.gradle.kts
 
 
