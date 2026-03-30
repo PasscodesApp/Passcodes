@@ -46,11 +46,15 @@ android {
 }
 
 dependencies {
+    implementation(projects.core)
     implementation(projects.database)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+
+    // Datastore Preferences
+    implementation(libs.androidx.datastore.preferences)
 
     // Data/Persistence (Room Bundle)
     ksp(libs.room.compiler)

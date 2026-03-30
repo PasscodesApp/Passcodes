@@ -5,4 +5,5 @@
     <string name="open_settings">Open Settings</string>
     <string name="passcodes_autofill_is_preview_feature">Passcodes Autofill is preview feature and shouldn\'t be use in production!!</string>
     <string name="could_not_save_credentials">Could not save credentials.</string>
+    <string name="autofill_feature_are_not_enabled">Autofill feature are not enabled!!</string>
 </resources>

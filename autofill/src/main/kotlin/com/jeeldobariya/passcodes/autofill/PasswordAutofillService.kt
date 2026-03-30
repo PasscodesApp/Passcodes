@@ -1,6 +1,7 @@
 package com.jeeldobariya.passcodes.autofill
 
 import android.app.assist.AssistStructure
+import android.content.Context
 import android.os.CancellationSignal
 import android.service.autofill.AutofillService
 import android.service.autofill.FillCallback
@@ -11,6 +12,7 @@ import android.service.autofill.SaveInfo
 import android.service.autofill.SaveRequest
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
+import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.database.master.PasswordEntity
 import com.jeeldobariya.passcodes.database.master.PasswordsDao
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+
 
 // TODO: Docs for this autofill is need in @github:PasscodesApp/Passcodes-Docs
 class PasswordAutofillService : AutofillService() {
@@ -29,30 +32,36 @@ class PasswordAutofillService : AutofillService() {
         cancellationSignal: CancellationSignal,
         callback: FillCallback
     ) {
-        val context = request.fillContexts
-        val structure = context.last().structure
-
-        val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
-        parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
-
-        // TODO: Add support for newUsername & newPassword autofill hints.
-        // https://developer.android.com/reference/androidx/autofill/HintConstants#AUTOFILL_HINT_NEW_USERNAME()
-        val usernameNode = viewNodes["username"] ?: viewNodes["emailAddress"]
-        val passwordNode = viewNodes["password"]
-
-        if (usernameNode?.autofillId == null || passwordNode?.autofillId == null) {
-            callback.onSuccess(null)
-            return
-        }
-
-        val usernameId = usernameNode.autofillId!!
-        val passwordId = passwordNode.autofillId!!
-
         cancellationSignal.setOnCancelListener {
             // TODO: Handle cancellation
         }
 
         serviceScope.launch {
+            if (!isAutofillFeaturesEnabled()) {
+                callback.onSuccess(null)
+                return@launch
+            }
+
+            val context = request.fillContexts
+            val structure = context.last().structure
+
+            val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
+            parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
+
+            // TODO: Add support for newUsername & newPassword autofill hints.
+            // https://developer.android.com/reference/androidx/autofill/HintConstants#AUTOFILL_HINT_NEW_USERNAME()
+            val usernameNode = viewNodes["username"] ?: viewNodes["emailAddress"]
+            val passwordNode = viewNodes["password"]
+
+            if (usernameNode?.autofillId == null || passwordNode?.autofillId == null) {
+                callback.onSuccess(null)
+                return@launch
+            }
+
+            val usernameId = usernameNode.autofillId!!
+            val passwordId = passwordNode.autofillId!!
+
+
             val passwordsDao by inject<PasswordsDao>()
             val passwords = passwordsDao.getAllPasswords().first()
             val responseBuilder = FillResponse.Builder()
@@ -90,35 +99,44 @@ class PasswordAutofillService : AutofillService() {
     }
 
     override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
-        val context = request.fillContexts
-        val structure = context.last().structure
+        serviceScope.launch {
+            if (!isAutofillFeaturesEnabled()) {
+                // developer note: failure is sent cuz, we are not saving the incoming credentials. so, android can let user know something is off...
+                callback.onFailure(getString(R.string.autofill_feature_are_not_enabled))
+                return@launch
+            }
 
-        val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
-        parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
+            val context = request.fillContexts
+            val structure = context.last().structure
+            val packageName = structure.activityComponent.packageName
 
-        // TODO: Add support for newUsername & newPassword autofill hints.
-        val usernameNode = viewNodes["username"] ?: viewNodes["emailAddress"]
-        val passwordNode = viewNodes["password"]
 
-        val username = usernameNode?.text?.toString()
-        val password = passwordNode?.text?.toString()
+            val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
+            parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
 
-        if (!username.isNullOrEmpty() && !password.isNullOrEmpty()) {
-            serviceScope.launch {
+            // TODO: Add support for newUsername & newPassword autofill hints.
+            val usernameNode = viewNodes["username"] ?: viewNodes["emailAddress"]
+            val passwordNode = viewNodes["password"]
+
+            val username = usernameNode?.text?.toString()
+            val password = passwordNode?.text?.toString()
+
+            if (!username.isNullOrEmpty() && !password.isNullOrEmpty()) {
+
                 val passwordsDao by inject<PasswordsDao>()
                 passwordsDao.insertPassword(
                     PasswordEntity(
                         domain = "Autofill",
                         username = username,
                         password = password,
-                        notes = "Save using autofill service..."
+                        notes = "Save using autofill service...\nIdentifier(maybe): $packageName"
                     )
                 )
-            }
 
-            callback.onSuccess()
-        } else {
-            callback.onFailure(getString(R.string.could_not_save_credentials))
+                callback.onSuccess()
+            } else {
+                callback.onFailure(getString(R.string.could_not_save_credentials))
+            }
         }
     }
 
@@ -135,5 +153,9 @@ class PasswordAutofillService : AutofillService() {
         for (i in 0 until node.childCount) {
             parseStructure(node.getChildAt(i), viewNodes)
         }
+    }
+
+    private suspend fun Context.isAutofillFeaturesEnabled(): Boolean {
+        return this.featureFlagsDatastore.data.first().isPreviewFeaturesEnabled
     }
 }
