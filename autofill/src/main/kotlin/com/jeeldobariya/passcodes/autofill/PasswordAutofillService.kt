@@ -108,6 +108,8 @@ class PasswordAutofillService : AutofillService() {
 
             val context = request.fillContexts
             val structure = context.last().structure
+            val packageName = structure.activityComponent.packageName
+
 
             val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
             parseStructure(structure.getWindowNodeAt(0).rootViewNode, viewNodes)
@@ -127,7 +129,7 @@ class PasswordAutofillService : AutofillService() {
                         domain = "Autofill",
                         username = username,
                         password = password,
-                        notes = "Save using autofill service..."
+                        notes = "Save using autofill service...\nIdentifier(maybe): $packageName"
                     )
                 )
 
