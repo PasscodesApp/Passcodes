@@ -12,12 +12,12 @@ import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 import com.jeeldobariya.passcodes.navigation.NavigationRoot
-import com.jeeldobariya.passcodes.oldui.MainActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             PasscodesTheme {
                 val featureFlagState by featureFlagsDatastore.data.collectAsState(
@@ -25,10 +25,10 @@ class MainActivity : ComponentActivity() {
                 )
 
                 if (!featureFlagState.isPreviewLayoutEnabled) {
-                    val content = LocalContext.current
+                    val context = LocalContext.current
 
-                    Intent(content, MainActivity::class.java).also {
-                        content.startActivity(it)
+                    Intent(context, com.jeeldobariya.passcodes.oldui.MainActivity::class.java).also {
+                        context.startActivity(it)
                     }
                 }
 
