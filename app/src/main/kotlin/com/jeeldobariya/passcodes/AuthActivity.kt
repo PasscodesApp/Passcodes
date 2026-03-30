@@ -10,8 +10,6 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import java.util.concurrent.Executor
 
 class AuthActivity : AppCompatActivity() {
 
@@ -36,9 +34,7 @@ class AuthActivity : AppCompatActivity() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     // SUCCESS: Go to MainActivity
-                    val intent = Intent(this@AuthActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    onAuthenticateSuccess()
                 }
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
@@ -80,12 +76,16 @@ class AuthActivity : AppCompatActivity() {
             }
             else -> {
                 Toast.makeText(this, "Fatal Warning: Biometric Authentication Skipped!!", Toast.LENGTH_LONG).show()
-
-                // If hardware is missing, you might skip auth or use a custom password
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+                // If hardware is missing, we skip auth
+                onAuthenticateSuccess()
             }
         }
+    }
+
+    private fun onAuthenticateSuccess() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun openEnrollmentSettings() {
