@@ -15,37 +15,33 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.core.widget.TextViewCompat
 import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 
 class AuthActivity : AppCompatActivity() {
 
-    // private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // You can set a simple splash layout here if you want
-        // setContentView(R.layout.activity_auth)
-
-        // executor = ContextCompat.getMainExecutor(this)
-
         setContent {
             PasscodesTheme {
                 AuthScreenContent()
@@ -82,10 +78,31 @@ class AuthActivity : AppCompatActivity() {
                     "Nice face. Can I see some ID? 📸",
                     "I hope you are genuine"
                 ).random()
-                Text(punchline, autoSize = TextAutoSize.StepBased(minFontSize = 16.sp, maxFontSize = 36.sp), style = LocalTextStyle.current.copy(lineHeight = 1.2.em), textAlign = TextAlign.Center)
-                Text("Preview Feature", fontSize = 16.sp)
+                Text(
+                    text = punchline,
+                    // Auto-sizing works best when you give it a clear constraint
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 18.sp,
+                        maxFontSize = 40.sp
+                    ),
+                    style = LocalTextStyle.current.copy(
+                        // 1.1em to 1.2em is the "sweet spot" for auto-sized text with emojis
+                        lineHeight = 1.15.em,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = (-0.5).sp // Adds a modern, "tight" look to large headers
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-                Spacer(modifier = Modifier.padding(24.dp))
+                Text(
+                    text = "Preview Feature 🛠️",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                )
+
+                Spacer(modifier = Modifier.padding(36.dp))
 
                 Button(
                     onClick = {
@@ -96,7 +113,15 @@ class AuthActivity : AppCompatActivity() {
                     Text("Unlock")
                 }
 
-                Spacer(modifier = Modifier.padding(12.dp))
+                TextButton(
+                    onClick = {
+                        finish()
+                    }
+                ) {
+                    Text("Oops, I come here, by mistakenly!!", fontSize = 11.sp)
+                }
+
+                Spacer(modifier = Modifier.padding(16.dp))
 
                 Text("(disable by toggle of preview features from settings)", fontSize = 11.sp)
             }
