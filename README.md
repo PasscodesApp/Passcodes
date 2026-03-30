@@ -22,7 +22,7 @@ A android app that take down the headache of remembering passwords. It is open s
 help you in keeping your passwords safe and secure, in your own local storage without ever needing
 to push them to cloud.
 
-[Visit Website](https://jeeldobariya38.github.io/Passcodes-Website/)
+[Visit Website](https://passcodesapp.github.io/Passcodes-Website/)
 
 > What we think of passcodes?
 > Password management is one such thing that is as simple as remember a password yet, it very
@@ -53,7 +53,7 @@ Note: high versions can still run, but we are not guaranteed offically.
 - [ ] Intuitive UI.
 - [ ] Update Checkers & Manager.
 - [x] Password Management. (Current Priority)
-- [x] Autofill.
+- [x] Autofill. (as preview feature)
 - [ ] Secure File. (Least Priority, Because it include permission. Which, I am as developer not
       familiar with 😂)
   - Could be Image. (JPG. PNG ....)
