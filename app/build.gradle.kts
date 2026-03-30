@@ -204,6 +204,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
+
     // In project library / feature modules
     implementation(projects.designSystem)
     implementation(projects.core)
