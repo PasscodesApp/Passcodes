@@ -33,13 +33,12 @@ class AuthActivity : AppCompatActivity() {
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    // SUCCESS: Go to MainActivity
                     onAuthenticateSuccess()
                 }
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
-                    // If user cancels or error occurs, you might want to show a "Retry" button
+                    // TODO: If user cancels or error occurs, "Retry" option must be there.
                     Toast.makeText(applicationContext, errString, Toast.LENGTH_SHORT).show()
                 }
             })
@@ -47,13 +46,12 @@ class AuthActivity : AppCompatActivity() {
         val builder = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Unlock Passcodes")
             .setSubtitle("Use your biometric credential to continue")
+            .setConfirmationRequired(true)
 
-        // Handle the API version difference for the builder
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-            @Suppress("DEPRECATION")
-            builder.setDeviceCredentialAllowed(true)
-        } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             builder.setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+        } else {
+            builder.setDeviceCredentialAllowed(true)
         }
 
         promptInfo = builder.build()
@@ -61,10 +59,10 @@ class AuthActivity : AppCompatActivity() {
 
     private fun checkAndAuthenticate() {
         val biometricManager = BiometricManager.from(this)
-        val authenticators = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-            BIOMETRIC_STRONG
-        } else {
+        val authenticators = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+        } else {
+            BIOMETRIC_STRONG
         }
 
         when (biometricManager.canAuthenticate(authenticators)) {
@@ -74,9 +72,10 @@ class AuthActivity : AppCompatActivity() {
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                 openEnrollmentSettings()
             }
+
             else -> {
-                Toast.makeText(this, "Fatal Warning: Biometric Authentication Skipped!!", Toast.LENGTH_LONG).show()
-                // If hardware is missing, we skip auth
+                // TODO: This should not be done. Authentication should never be skipped!!
+                Toast.makeText(this, "Critical Warning: Biometric Authentication Skipped!!", Toast.LENGTH_LONG).show()
                 onAuthenticateSuccess()
             }
         }
