@@ -215,6 +215,8 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
 
+    implementation(libs.androidx.biometric)
+
     // Jetpack Compose
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)

@@ -16,10 +16,8 @@
         android:theme="@style/PasscodesTheme.Default"
         tools:targetApi="33" >
 
-        <activity android:name=".MainActivity" />
-
         <activity
-            android:name=".oldui.MainActivity"
+            android:name=".AuthActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".MainActivity" />
+
+        <activity android:name=".oldui.MainActivity" />
         <activity android:name=".oldui.SettingsActivity" />
         <activity android:name=".oldui.AboutUsActivity" />
         <activity android:name=".oldui.LicenseActivity" />

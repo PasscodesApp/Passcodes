@@ -7,6 +7,7 @@ lifecycleViewmodelNav3 = "2.10.0"
 okhttp = "5.3.2"
 oss-license = "17.4.0"
 appcompat = "1.7.1"
+androidxBiometric = "1.2.0-alpha05"
 room = "2.8.4"
 json = "20251224"
 junit = "4.13.2"
@@ -55,6 +56,7 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx"
 material = { module = "com.google.android.material:material", version.ref = "material" }
 oss-license = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "oss-license" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "androidxBiometric" }
 
 # Core Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
