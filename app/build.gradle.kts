@@ -204,8 +204,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.biometric:biometric:1.2.0-alpha05")
-
     // In project library / feature modules
     implementation(projects.designSystem)
     implementation(projects.core)
@@ -216,6 +214,8 @@ dependencies {
     // Android Core
     implementation(libs.appcompat)
     implementation(libs.material)
+
+    implementation(libs.androidx.biometric)
 
     // Jetpack Compose
     val composeBom = platform(libs.compose.bom)
