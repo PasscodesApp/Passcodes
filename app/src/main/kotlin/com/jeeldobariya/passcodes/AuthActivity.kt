@@ -33,7 +33,11 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
+import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class AuthActivity : AppCompatActivity() {
 
@@ -42,6 +46,13 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            if (!featureFlagsDatastore.data.first().isPreviewFeaturesEnabled) {
+                onAuthenticateSuccess()
+            }
+        }
+
         setContent {
             PasscodesTheme {
                 AuthScreenContent()
