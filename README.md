@@ -5,7 +5,12 @@
 > Please, consider using it for fun, and not for real password management. (until, we officially
 > release a stable release)
 >
-> Cuz, **`data is stored unencrypted`.. we planning to add encryption soon.**
+> Cuz, **`data is stored unencrypted`.. we're planning to add encryption soon.**
+
+> [!NOTE]
+> Currently, we are android-only, we will soon provide support for desktop (windows-only) using kotlin-multiplatform. but development will remain to android-first.
+>
+> then later-after will migrate to react-native and then passcodes will be multiplatform rather than being android-first. more information will be given in docs soon.
 
 <div align="center">
 

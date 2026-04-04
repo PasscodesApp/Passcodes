@@ -14,12 +14,29 @@ kotlin {
         namespace = "com.jeeldobariya.passcodes.database"
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
 
-        // testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+
+        // Opt-in to enable and configure device-side (instrumented) tests
+        withDeviceTest {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            execution = "HOST"
+        }
     }
 
     sourceSets {
         androidMain.dependencies {
             implementation(libs.koin)
+        }
+
+        getByName("androidDeviceTest").dependencies {
+            implementation(libs.bundles.unit.test)
+            implementation(libs.androidx.junit)
+            implementation(libs.androidx.junit.ktx)
+            implementation(libs.androidx.runner)
+            implementation(libs.coroutines.test)
+            implementation(libs.androidx.room.testing)
         }
 
         commonMain.dependencies {
@@ -32,6 +49,10 @@ kotlin {
 
             // Dependency Injection
             implementation(libs.koin)
+        }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
     }
 }
