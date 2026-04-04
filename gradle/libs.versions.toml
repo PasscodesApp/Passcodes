@@ -9,6 +9,7 @@ oss-license = "17.4.0"
 appcompat = "1.7.1"
 androidxBiometric = "1.2.0-alpha05"
 room = "2.8.4"
+sqlite = "2.6.2"
 json = "20251224"
 junit = "4.13.2"
 truth = "1.4.5"
@@ -16,9 +17,9 @@ runner = "1.7.0"
 androidx-junit = "1.3.0"
 coroutines = "1.10.2"
 lifecycle = "2.10.0"
-koin = "4.1.1"
-composeMultiplatform = "1.10.2"
-composeBom = "2026.03.00"
+koin = "4.2.0"
+composeMultiplatform = "1.10.3"
+composeBom = "2026.03.01"
 compose-activity = "1.13.0"
 compose-viewmodel = "2.10.0"
 datastorePreferences = "1.2.1"
@@ -27,9 +28,8 @@ kotlinSerializationJson = "1.10.0"
 # Plugin versions
 agp = "9.1.0"
 ksp = "2.3.6"
-kotlin = "2.3.10"
-oss-license-plugin = "0.10.10" # Always update also in settings.gradle.kts
-
+kotlin = "2.3.20"
+oss-license-plugin = "0.11.0" # Always update also in settings.gradle.kts
 
 
 
@@ -69,8 +69,10 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 # Room
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
 # Networking
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
@@ -92,6 +94,7 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = 
 json = { module = "org.json:json", version.ref = "json" }
 
 # Testing
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
@@ -130,5 +133,7 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidKmpLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ossLicenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "oss-license-plugin" }
+

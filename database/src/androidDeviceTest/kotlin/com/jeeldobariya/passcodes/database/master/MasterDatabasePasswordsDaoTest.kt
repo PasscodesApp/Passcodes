@@ -3,20 +3,17 @@ package com.jeeldobariya.passcodes.database.master
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.io.IOException
 
 /**
  * Instrumented test for the Room database, specifically testing the PasswordsDao.
  */
-@RunWith(AndroidJUnit4::class)
 class MasterDatabasePasswordsDaoTest {
 
     private lateinit var passwordsDao: PasswordsDao

@@ -1,77 +1,66 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.kotlin.dsl.provideDelegate
 
 plugins {
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidKmpLibrary)
     alias(libs.plugins.ksp)
+    alias (libs.plugins.androidx.room)
 }
 
 kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
-    }
-}
-
-android {
-    namespace = "com.jeeldobariya.passcodes.database"
-    compileSdk {
-        version = release(36)
-    }
-
-    defaultConfig {
+    android {
+        compileSdk = 36
         minSdk = 26
+        namespace = "com.jeeldobariya.passcodes.database"
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+
+        // Opt-in to enable and configure device-side (instrumented) tests
+        withDeviceTest {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            execution = "HOST"
+        }
     }
 
     sourceSets {
-        getByName("androidTest") {
-            assets.directories += "$projectDir/schemas"
-        }
-    }
-
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+        androidMain.dependencies {
+            implementation(libs.koin)
         }
 
-        create("staging") {
-            isMinifyEnabled = false
+        getByName("androidDeviceTest").dependencies {
+            implementation(libs.bundles.unit.test)
+            implementation(libs.androidx.junit)
+            implementation(libs.androidx.junit.ktx)
+            implementation(libs.androidx.runner)
+            implementation(libs.coroutines.test)
+            implementation(libs.androidx.room.testing)
         }
 
-        getByName("debug") {
-            isMinifyEnabled = false
+        commonMain.dependencies {
+            // Coroutines
+            implementation(libs.bundles.coroutines)
+
+            // Room
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+            // Dependency Injection
+            implementation(libs.koin)
         }
-    }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    ksp {
-        val location = "$projectDir/schemas"
-        arg("room.schemaLocation", location)
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
-    implementation(libs.androidx.core.ktx)
-
-    // Data/Persistence (Room Bundle)
-    ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
-
-    // Concurrency (Coroutines Bundle)
-    implementation(libs.bundles.coroutines)
-
-    // Dependency Injection
-    implementation(libs.koin)
-
-    androidTestImplementation(libs.bundles.unit.test)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.junit.ktx)
-    androidTestImplementation(libs.androidx.runner)
-    androidTestImplementation(libs.coroutines.test)
-    androidTestImplementation(libs.room.testing)
+    add("kspAndroid", libs.androidx.room.compiler)
 }

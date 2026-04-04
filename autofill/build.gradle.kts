@@ -57,7 +57,6 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     // Data/Persistence (Room Bundle)
-    ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 
     implementation(libs.coroutines.core)
