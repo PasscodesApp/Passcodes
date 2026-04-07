@@ -10,7 +10,7 @@ actual val databaseModule = module {
         MasterDatabase.createNewDatabase(
             getDatabaseBuilder = {
                 val appContext = androidContext()
-                val dbFile = appContext.getDatabasePath("master.db")
+                val dbFile = appContext.getDatabasePath("master")
 
                 Room.databaseBuilder<MasterDatabase>(
                     context = appContext,
