@@ -1,11 +1,12 @@
 package com.jeeldobariya.passcodes.database.master.migration
 
 import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.SQLiteConnection
+import androidx.sqlite.execSQL
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("""
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("""
             CREATE TABLE IF NOT EXISTS `new_table_passwords` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 `domain` TEXT NOT NULL,
@@ -18,7 +19,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             )
         """.trimIndent())
 
-        db.execSQL("""
+        connection.execSQL("""
             INSERT INTO `new_table_passwords`
                 (`id`, `domain`, `username`, `password`, `notes`, `created_at`, `updated_at`)
             SELECT
@@ -32,20 +33,20 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             FROM `passwords`
         """.trimIndent())
 
-        db.execSQL("""
+        connection.execSQL("""
             UPDATE `new_table_passwords`
             SET `notes` = NULL
             WHERE `notes` = ''
         """.trimIndent())
 
-        db.execSQL("""
+        connection.execSQL("""
             UPDATE `new_table_passwords`
             SET `url` = 'https://local.' || `domain`
             WHERE `url` IS NULL
         """.trimIndent())
 
-        db.execSQL("DROP TABLE `passwords`")
+        connection.execSQL("DROP TABLE `passwords`")
 
-        db.execSQL("ALTER TABLE `new_table_passwords` RENAME TO `passwords`")
+        connection.execSQL("ALTER TABLE `new_table_passwords` RENAME TO `passwords`")
     }
 }
