@@ -12,7 +12,6 @@ import com.jeeldobariya.passcodes.core.domain.usecases.CheckForUpdateUseCase
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
 import com.jeeldobariya.passcodes.password_manager.oldui.PasswordManagerActivity
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch {
             checkForUpdateUseCase(
                 currentVersion = BuildConfig.VERSION_NAME,
                 githubReleaseApiUrl = Constant.GITHUB_RELEASE_API_URL,

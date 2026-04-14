@@ -6,18 +6,21 @@ import com.jeeldobariya.passcodes.core.domain.utils.SemVerUtils
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 
 class CheckForUpdateUseCase(
     private val context: Context,
-    private val client: HttpClient
+    private val client: HttpClient,
+    private val dispatcher: CoroutineContext = Dispatchers.IO
 ) {
     suspend operator fun invoke(
         currentVersion: String,
         githubReleaseApiUrl: String,
         telegramCommunityUrl: String
-    ) {
+    ) = withContext(dispatcher) {
         val currNormalizedVersion = SemVerUtils.normalize(currentVersion)
 
         try {
