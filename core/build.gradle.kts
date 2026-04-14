@@ -53,7 +53,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // Networking/Parsing
-    implementation(libs.okhttp)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.cilent.cio)
     implementation(libs.json)
 
     // Concurrency (Coroutines Bundle)
