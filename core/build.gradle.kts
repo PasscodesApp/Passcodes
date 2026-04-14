@@ -54,6 +54,7 @@ dependencies {
 
     // Networking/Parsing
     implementation(libs.ktor.client.core)
+    implementation(libs.ktor.cilent.cio)
     implementation(libs.okhttp)
     implementation(libs.json)
 

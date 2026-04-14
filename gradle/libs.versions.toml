@@ -78,6 +78,7 @@ androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "
 # Networking
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-cilent-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 
 # Coroutines
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
