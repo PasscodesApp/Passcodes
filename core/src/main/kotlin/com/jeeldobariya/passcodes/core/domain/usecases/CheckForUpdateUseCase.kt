@@ -34,7 +34,8 @@ class CheckForUpdateUseCase(
                 if (release.tag == currNormalizedVersion) {
                     userReleaseFound = true
                     if (release.prerelease) {
-                        showToast("⚠️ You are using a PRE-RELEASE ($currNormalizedVersion). Not safe for use! Join telegram community ($telegramCommunityUrl)")
+                        showToast("⚠️ You are using a PRE-RELEASE ($currNormalizedVersion). Not safe for use!!")
+                        showToast("Join telegram @ ($telegramCommunityUrl)")
                     }
                 }
 
@@ -54,7 +55,8 @@ class CheckForUpdateUseCase(
             }
 
             if (!userReleaseFound) {
-                showToast("⚠️ Version ($currNormalizedVersion) not found on GitHub releases... Join telegram community ($telegramCommunityUrl)")
+                showToast("⚠️ Version ($currNormalizedVersion) not found on GitHub releases...")
+                showToast("Join telegram @ ($telegramCommunityUrl)")
             }
         } catch (e: Exception) {
             e.printStackTrace()
