@@ -49,14 +49,14 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ClassicalSettingsScreen(viewmodel: SettingsViewModel = koinViewModel()) {
-    // val state by viewmodel.state.collectAsState()
+    val state by viewmodel.state.collectAsState()
     
-    ClassicalSettingsScreenContent(onAction = viewmodel::onAction)
+    ClassicalSettingsScreenContent(state = state, onAction = viewmodel::onAction)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ClassicalSettingsScreenContent(onAction: (SettingsAction) -> Unit) {
+private fun ClassicalSettingsScreenContent(state: SettingsState, onAction: (SettingsAction) -> Unit) {
     // TODO: Language & Theme need to be done.
 
     val context = LocalContext.current
@@ -93,7 +93,7 @@ private fun ClassicalSettingsScreenContent(onAction: (SettingsAction) -> Unit) {
                 )
             }
 
-            if (!flagDatastoreState.isPreviewFeaturesEnabled) {
+            if (flagDatastoreState.isPreviewFeaturesEnabled) {
                 item {
                     Card(shape = RoundedCornerShape(16.dp)) {
                         Column(
@@ -115,7 +115,7 @@ private fun ClassicalSettingsScreenContent(onAction: (SettingsAction) -> Unit) {
             } else {
                 // Language Card
                 item {
-                    PreviewLanguageFeatures()
+                    PreviewLanguageFeatures(state)
                 }
 
                 previewThemeFeatures()
@@ -200,9 +200,9 @@ private fun ClassicalSettingsScreenContent(onAction: (SettingsAction) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PreviewLanguageFeatures() {
-    val selectedLanguage = "Under Development"
-    val languageOptions: List<String> = listOf("English", "Korean")
+private fun PreviewLanguageFeatures(state: SettingsState) {
+    val selectedLanguage = state.selectedLanguage
+    val languageOptions: List<String> = state.languageOptions
     val onLanguageSelected: (String) -> Unit = { /* TODO */ }
 
     var expanded by remember { mutableStateOf(false) }
@@ -324,6 +324,9 @@ private fun SwitchCard(
 @Composable
 private fun ClassicalSettingsScreenPreview() {
     PasscodesTheme {
-        ClassicalSettingsScreenContent(onAction = { })
+        ClassicalSettingsScreenContent(
+            state = SettingsState(selectedLanguage = "Chinese"),
+            onAction = { }
+        )
     }
 }

@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.jeeldobariya.passcodes.core.datastore.AppSettings
 import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
@@ -15,8 +17,8 @@ class SettingsViewModel(
     private val passwordRepository: PasswordRepository
 ): ViewModel() {
 
-    // private val _state = MutableStateFlow(SettingsState())
-    // val state = _state.asStateFlow()
+    private val _state = MutableStateFlow(SettingsState())
+    val state = _state.asStateFlow()
 
     fun onAction(action: SettingsAction) {
         when (action) {
