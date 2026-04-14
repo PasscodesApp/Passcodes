@@ -1,0 +1,65 @@
+package com.jeeldobariya.passcodes.presentation.setting_screen
+
+import androidx.datastore.core.DataStore
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jeeldobariya.passcodes.core.datastore.AppSettings
+import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
+import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+
+class SettingsViewModel(
+    private val appDatastore: DataStore<AppSettings>,
+    private val flagDataStore: DataStore<FeatureFlagsSettings>,
+    private val passwordRepository: PasswordRepository
+): ViewModel() {
+
+    private val _state = MutableStateFlow(SettingsState())
+    val state = _state.asStateFlow()
+
+    fun onAction(action: SettingsAction) {
+        when (action) {
+            is SettingsAction.ChangeLanguageTo -> onLanguageChangeTo(action.language)
+
+            SettingsAction.TogglePreviewFeatures -> {
+                viewModelScope.launch {
+                    flagDataStore.updateData {
+                        it.copy(isPreviewFeaturesEnabled = !it.isPreviewFeaturesEnabled)
+                    }
+                }
+            }
+
+            SettingsAction.TogglePreviewLayout -> {
+                viewModelScope.launch {
+                    flagDataStore.updateData {
+                        it.copy(isPreviewLayoutEnabled = !it.isPreviewLayoutEnabled)
+                    }
+                }
+            }
+
+            SettingsAction.ToggleModernLayout -> {
+                viewModelScope.launch {
+                    appDatastore.updateData {
+                        it.copy(isModernLayoutEnable = !it.isModernLayoutEnable)
+                    }
+                }
+            }
+
+            SettingsAction.OnClearDataButtonClick -> {
+                viewModelScope.launch {
+                    passwordRepository.clearAllData()
+                }
+            }
+        }
+    }
+
+    private fun onLanguageChangeTo(lang: String) {
+        _state.update {
+            it.copy(selectedLanguage = lang)
+        }
+    }
+}

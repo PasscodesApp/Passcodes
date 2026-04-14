@@ -29,7 +29,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,21 +44,22 @@ import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
-import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun ClassicalSettingsScreen() {
-    ClassicalSettingsScreenContent()
+fun ClassicalSettingsScreen(viewmodel: SettingsViewModel = koinViewModel()) {
+    val state by viewmodel.state.collectAsState()
+    
+    ClassicalSettingsScreenContent(state = state, onAction = viewmodel::onAction)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ClassicalSettingsScreenContent() {
+private fun ClassicalSettingsScreenContent(state: SettingsState, onAction: (SettingsAction) -> Unit) {
     // TODO: Language & Theme need to be done.
 
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     val flagDataStore = context.featureFlagsDatastore
     val flagDatastoreState by flagDataStore.data.collectAsState(
@@ -73,7 +73,6 @@ private fun ClassicalSettingsScreenContent() {
     val appDatastoreState by appDataStore.data.collectAsState(initial = AppSettings())
 
     Scaffold { padding ->
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -115,7 +114,7 @@ private fun ClassicalSettingsScreenContent() {
             } else {
                 // Language Card
                 item {
-                    PreviewLanguageFeatures()
+                    PreviewLanguageFeatures(state, onAction)
                 }
 
                 previewThemeFeatures()
@@ -126,13 +125,7 @@ private fun ClassicalSettingsScreenContent() {
                 SwitchCard(
                     text = stringResource(R.string.latest_feature),
                     checked = flagDatastoreState.isPreviewFeaturesEnabled,
-                    onCheckedChange = {
-                        scope.launch {
-                            flagDataStore.updateData {
-                                it.copy(isPreviewFeaturesEnabled = !it.isPreviewFeaturesEnabled)
-                            }
-                        }
-                    }
+                    onCheckedChange = { onAction(SettingsAction.TogglePreviewFeatures) }
                 )
             }
 
@@ -141,13 +134,7 @@ private fun ClassicalSettingsScreenContent() {
                 SwitchCard(
                     text = stringResource(R.string.preview_layout),
                     checked = flagDatastoreState.isPreviewLayoutEnabled,
-                    onCheckedChange = {
-                        scope.launch {
-                            flagDataStore.updateData {
-                                it.copy(isPreviewLayoutEnabled = !it.isPreviewLayoutEnabled)
-                            }
-                        }
-                    }
+                    onCheckedChange = { onAction(SettingsAction.TogglePreviewLayout) }
                 )
             }
 
@@ -157,11 +144,7 @@ private fun ClassicalSettingsScreenContent() {
                     text = "Modern Layout",
                     checked = appDatastoreState.isModernLayoutEnable,
                     onCheckedChange = {
-                        scope.launch {
-                            appDataStore.updateData {
-                                it.copy(isModernLayoutEnable = !it.isModernLayoutEnable)
-                            }
-                        }
+                        onAction(SettingsAction.ToggleModernLayout)
                     },
                     enabled = flagDatastoreState.isPreviewLayoutEnabled
                 )
@@ -200,7 +183,7 @@ private fun ClassicalSettingsScreenContent() {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         OutlinedButton(
-                            onClick = { /* TODO */ },
+                            onClick = { onAction(SettingsAction.OnClearDataButtonClick) },
                             colors = ButtonDefaults.outlinedButtonColors(
                                 contentColor = MaterialTheme.colorScheme.error
                             )
@@ -216,10 +199,10 @@ private fun ClassicalSettingsScreenContent() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PreviewLanguageFeatures() {
-    val selectedLanguage = "Under Development"
-    val languageOptions: List<String> = listOf("English", "Korean")
-    val onLanguageSelected: (String) -> Unit = { /* TODO */ }
+private fun PreviewLanguageFeatures(state: SettingsState, onAction: (SettingsAction) -> Unit) {
+    val selectedLanguage = state.selectedLanguage
+    val languageOptions: List<String> = state.languageOptions
+    val onLanguageSelected: (String) -> Unit = { onAction(SettingsAction.ChangeLanguageTo(it)) }
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -340,6 +323,9 @@ private fun SwitchCard(
 @Composable
 private fun ClassicalSettingsScreenPreview() {
     PasscodesTheme {
-        ClassicalSettingsScreenContent()
+        ClassicalSettingsScreenContent(
+            state = SettingsState(),
+            onAction = { }
+        )
     }
 }
