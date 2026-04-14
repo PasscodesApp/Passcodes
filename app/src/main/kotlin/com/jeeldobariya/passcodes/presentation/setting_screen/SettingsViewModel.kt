@@ -8,6 +8,7 @@ import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
@@ -22,6 +23,12 @@ class SettingsViewModel(
 
     fun onAction(action: SettingsAction) {
         when (action) {
+            is SettingsAction.ChangeLanguageTo -> {
+                _state.update {
+                    it.copy(selectedLanguage = action.language)
+                }
+            }
+
             SettingsAction.TogglePreviewFeatures -> {
                 viewModelScope.launch {
                     flagDataStore.updateData {
@@ -29,6 +36,7 @@ class SettingsViewModel(
                     }
                 }
             }
+
             SettingsAction.TogglePreviewLayout -> {
                 viewModelScope.launch {
                     flagDataStore.updateData {
@@ -36,6 +44,7 @@ class SettingsViewModel(
                     }
                 }
             }
+
             SettingsAction.ToggleModernLayout -> {
                 viewModelScope.launch {
                     appDatastore.updateData {
@@ -43,6 +52,7 @@ class SettingsViewModel(
                     }
                 }
             }
+
             SettingsAction.OnClearDataButtonClick -> {
                 viewModelScope.launch {
                     passwordRepository.clearAllData()

@@ -73,7 +73,6 @@ private fun ClassicalSettingsScreenContent(state: SettingsState, onAction: (Sett
     val appDatastoreState by appDataStore.data.collectAsState(initial = AppSettings())
 
     Scaffold { padding ->
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -115,7 +114,7 @@ private fun ClassicalSettingsScreenContent(state: SettingsState, onAction: (Sett
             } else {
                 // Language Card
                 item {
-                    PreviewLanguageFeatures(state)
+                    PreviewLanguageFeatures(state, onAction)
                 }
 
                 previewThemeFeatures()
@@ -200,10 +199,10 @@ private fun ClassicalSettingsScreenContent(state: SettingsState, onAction: (Sett
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PreviewLanguageFeatures(state: SettingsState) {
+private fun PreviewLanguageFeatures(state: SettingsState, onAction: (SettingsAction) -> Unit) {
     val selectedLanguage = state.selectedLanguage
     val languageOptions: List<String> = state.languageOptions
-    val onLanguageSelected: (String) -> Unit = { /* TODO */ }
+    val onLanguageSelected: (String) -> Unit = { onAction(SettingsAction.ChangeLanguageTo(it)) }
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -325,7 +324,7 @@ private fun SwitchCard(
 private fun ClassicalSettingsScreenPreview() {
     PasscodesTheme {
         ClassicalSettingsScreenContent(
-            state = SettingsState(selectedLanguage = "Chinese"),
+            state = SettingsState(),
             onAction = { }
         )
     }
