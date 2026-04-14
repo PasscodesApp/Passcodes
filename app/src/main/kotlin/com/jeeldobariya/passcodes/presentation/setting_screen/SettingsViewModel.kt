@@ -23,11 +23,7 @@ class SettingsViewModel(
 
     fun onAction(action: SettingsAction) {
         when (action) {
-            is SettingsAction.ChangeLanguageTo -> {
-                _state.update {
-                    it.copy(selectedLanguage = action.language)
-                }
-            }
+            is SettingsAction.ChangeLanguageTo -> onLanguageChangeTo(action.language)
 
             SettingsAction.TogglePreviewFeatures -> {
                 viewModelScope.launch {
@@ -58,6 +54,12 @@ class SettingsViewModel(
                     passwordRepository.clearAllData()
                 }
             }
+        }
+    }
+
+    private fun onLanguageChangeTo(lang: String) {
+        _state.update {
+            it.copy(selectedLanguage = lang)
         }
     }
 }

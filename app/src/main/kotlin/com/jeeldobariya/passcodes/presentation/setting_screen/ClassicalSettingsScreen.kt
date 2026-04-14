@@ -92,7 +92,7 @@ private fun ClassicalSettingsScreenContent(state: SettingsState, onAction: (Sett
                 )
             }
 
-            if (flagDatastoreState.isPreviewFeaturesEnabled) {
+            if (!flagDatastoreState.isPreviewFeaturesEnabled) {
                 item {
                     Card(shape = RoundedCornerShape(16.dp)) {
                         Column(
