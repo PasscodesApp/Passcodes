@@ -26,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,17 +42,16 @@ import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
-import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun ModernSettingsScreen() {
-    ModernSettingsScreenContent()
+fun ModernSettingsScreen(viewmodel: SettingsViewModel = koinViewModel()) {
+    ModernSettingsScreenContent(onAction = viewmodel::onAction)
 }
 
 @Composable
-private fun ModernSettingsScreenContent() {
+private fun ModernSettingsScreenContent(onAction: (SettingsAction) -> Unit) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     val flagDataStore = LocalContext.current.featureFlagsDatastore
     val flagDatastoreState by flagDataStore.data.collectAsState(
@@ -125,13 +123,7 @@ private fun ModernSettingsScreenContent() {
 
                     Switch(
                         checked = flagDatastoreState.isPreviewLayoutEnabled,
-                        onCheckedChange = {
-                            scope.launch {
-                                flagDataStore.updateData {
-                                    it.copy(isPreviewLayoutEnabled = !it.isPreviewLayoutEnabled)
-                                }
-                            }
-                        }
+                        onCheckedChange = { onAction(SettingsAction.TogglePreviewLayout) }
                     )
                 }
 
@@ -148,13 +140,7 @@ private fun ModernSettingsScreenContent() {
 
                     Switch(
                         checked = flagDatastoreState.isPreviewFeaturesEnabled,
-                        onCheckedChange = {
-                            scope.launch {
-                                flagDataStore.updateData {
-                                    it.copy(isPreviewFeaturesEnabled = !it.isPreviewFeaturesEnabled)
-                                }
-                            }
-                        }
+                        onCheckedChange = { onAction(SettingsAction.TogglePreviewFeatures) }
                     )
                 }
 
@@ -172,13 +158,7 @@ private fun ModernSettingsScreenContent() {
                     Switch(
                         enabled = flagDatastoreState.isPreviewLayoutEnabled,
                         checked = appDatastoreState.isModernLayoutEnable,
-                        onCheckedChange = {
-                            scope.launch {
-                                appDataStore.updateData {
-                                    it.copy(isModernLayoutEnable = !it.isModernLayoutEnable)
-                                }
-                            }
-                        }
+                        onCheckedChange = { onAction(SettingsAction.ToggleModernLayout) }
                     )
                 }
 
@@ -201,7 +181,7 @@ private fun ModernSettingsScreenContent() {
 
                     OutlinedButton(
                         modifier = Modifier.align(Alignment.TopEnd),
-                        onClick = { }
+                        onClick = { onAction(SettingsAction.OnClearDataButtonClick) }
                     ) {
                         Icon(imageVector = Icons.Default.Delete, contentDescription = "delete", tint = Color.Red)
                         Spacer(modifier = Modifier.padding(2.dp))
@@ -217,6 +197,6 @@ private fun ModernSettingsScreenContent() {
 @Composable
 private fun ModernSettingsScreenPreview() {
     PasscodesTheme {
-        ModernSettingsScreenContent()
+        ModernSettingsScreenContent(onAction = { })
     }
 }
