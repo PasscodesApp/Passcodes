@@ -1,12 +1,13 @@
 package com.jeeldobariya.passcodes.core.domain.usecases
 
 import android.content.Context
-import android.os.Handler
 import android.widget.Toast
 import com.jeeldobariya.passcodes.core.domain.utils.SemVerUtils
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CheckForUpdateUseCase(
     private val context: Context,
@@ -33,10 +34,7 @@ class CheckForUpdateUseCase(
                 if (release.tag == currNormalizedVersion) {
                     userReleaseFound = true
                     if (release.prerelease) {
-                        showToast(
-                            context,
-                            "⚠️ You are using a PRE-RELEASE ($currNormalizedVersion). Not safe for use! Join telegram community ($telegramCommunityUrl)"
-                        )
+                        showToast("⚠️ You are using a PRE-RELEASE ($currNormalizedVersion). Not safe for use! Join telegram community ($telegramCommunityUrl)")
                     }
                 }
 
@@ -51,24 +49,19 @@ class CheckForUpdateUseCase(
 
             latestStable?.let {
                 if (SemVerUtils.compare(currNormalizedVersion, it) < 0) {
-                    showToast(context, "New Update available: $it... Visit our website...")
+                    showToast("New Update available: $it... Visit our website...")
                 }
             }
 
             if (!userReleaseFound) {
-                showToast(
-                    context,
-                    "⚠️ Version ($currNormalizedVersion) not found on GitHub releases... Join telegram community ($telegramCommunityUrl)"
-                )
+                showToast("⚠️ Version ($currNormalizedVersion) not found on GitHub releases... Join telegram community ($telegramCommunityUrl)")
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun showToast(context: Context, message: String) {
-        Handler(context.mainLooper).post {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-        }
+    private suspend fun showToast(message: String) = withContext(Dispatchers.Main) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }
