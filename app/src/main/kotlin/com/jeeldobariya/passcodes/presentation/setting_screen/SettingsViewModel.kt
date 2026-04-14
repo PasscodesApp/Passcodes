@@ -1,19 +1,18 @@
 package com.jeeldobariya.passcodes.presentation.setting_screen
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jeeldobariya.passcodes.core.datastore.AppSettings
-import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.feature_flags.FeatureFlagsSettings
-import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
+import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import kotlinx.coroutines.launch
 
 
 class SettingsViewModel(
     private val appDatastore: DataStore<AppSettings>,
-    private val flagDataStore: DataStore<FeatureFlagsSettings>
+    private val flagDataStore: DataStore<FeatureFlagsSettings>,
+    private val passwordRepository: PasswordRepository
 ): ViewModel() {
 
     // private val _state = MutableStateFlow(SettingsState())
@@ -42,7 +41,11 @@ class SettingsViewModel(
                     }
                 }
             }
-            SettingsAction.OnClearDataButtonClick -> TODO()
+            SettingsAction.OnClearDataButtonClick -> {
+                viewModelScope.launch {
+                    passwordRepository.clearAllData()
+                }
+            }
         }
     }
 }

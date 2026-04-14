@@ -11,7 +11,8 @@ val appModule = module {
     viewModel {
         SettingsViewModel(
             appDatastore = androidContext().appDatastore,
-            flagDataStore = androidContext().featureFlagsDatastore
+            flagDataStore = androidContext().featureFlagsDatastore,
+            passwordRepository = get()
         )
     }
 }
