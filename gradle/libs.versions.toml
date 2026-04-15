@@ -4,7 +4,6 @@ coreKtx = "1.18.0"
 material = "1.13.0"
 nav3Core = "1.1.0"
 lifecycleViewmodelNav3 = "2.10.0"
-okhttp = "5.3.2"
 oss-license = "17.5.0"
 appcompat = "1.7.1"
 androidxBiometric = "1.2.0-alpha05"
@@ -76,7 +75,6 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 
 # Networking
-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-cilent-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 
@@ -102,7 +100,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
-androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidx-junit" }
+androidx-junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "androidx-junit" }
 
 
 
