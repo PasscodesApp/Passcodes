@@ -12,10 +12,19 @@
 
 ## [Unreleased]
 
-- Update dependency.. by @dependabot.
-- Made two layout support in jetpack compose. by @JeelDobariya38
-- Fixed autofill service. by @JeelDobariya38 & @hexCode63.
+- Update dependency to latest. by @dependabot.
+- Improve preview layout support in Jetpack Compose. by @JeelDobariya38.
+- Fixed autofill service (preview feature) by @JeelDobariya38 & @hexCode63.
+- Improve modern & classical screens by @JeelDobariya38.
+- Improve jetpack compose preview in android studio by @JeelDobariya38.
 - Improve CI/CD by @JeelDobariya38.
+- Added biometrics authentication (preview feature) by @JeelDobariya38.
+- Migrate to Ktor http client by @JeelDobariya38.
+- Migrate database module to a KMP library by @JeelDobariya38.
+- Improve documentation by @JeelDobariya38.
+- Made a kmp design system module by @JeelDobariya38..
+- Improved support for swapping layout by @JeelDobariya38..
+- Made basic functioning classical & modern screens by @JeelDobariya38..
 
 ---
 
