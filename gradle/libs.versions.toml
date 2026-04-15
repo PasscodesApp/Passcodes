@@ -95,7 +95,8 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = 
 json = { module = "org.json:json", version.ref = "json" }
 
 # Testing
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
+kotlin-test-annotations-common = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
