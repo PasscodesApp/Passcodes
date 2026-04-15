@@ -43,9 +43,10 @@ kotlin {
 //            implementation(libs.androidx.lifecycle.runtimeCompose)
         }
 
-//        commonTest.dependencies {
-//            implementation(libs.kotlin.test)
-//        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test.common)
+            implementation(libs.kotlin.test.annotations.common)
+        }
 
 //        val desktopMain by getting
 //        desktopMain.dependencies {

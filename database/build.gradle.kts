@@ -52,7 +52,8 @@ kotlin {
         }
 
         commonTest.dependencies {
-            implementation(kotlin("test"))
+            implementation(libs.kotlin.test.common)
+            implementation(libs.kotlin.test.annotations.common)
         }
     }
 }
