@@ -27,7 +27,7 @@ datastorePreferences = "1.2.1"
 kotlinSerializationJson = "1.11.0"
 
 # Plugin versions
-agp = "9.1.0"
+agp = "9.1.1"
 ksp = "2.3.6"
 kotlin = "2.3.20"
 oss-license-plugin = "0.11.0" # Always update also in settings.gradle.kts
