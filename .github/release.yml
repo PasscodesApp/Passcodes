@@ -15,6 +15,10 @@ changelog:
       labels:
         - bug
 
+    - title: 🛠 Code Refactoring
+      labels:
+        - refactor
+
     - title: 📚 Documentation
       labels:
         - documentation

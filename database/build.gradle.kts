@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.provideDelegate
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKmpLibrary)

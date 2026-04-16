@@ -29,10 +29,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeeldobariya.passcodes.core.navigation.Route
 import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
+import com.jeeldobariya.passcodes.password_manager.R
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -60,9 +62,10 @@ private fun ModernPasswordManagerScreenContent(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("Password Manager") },
+                title = { Text(stringResource(R.string.textview_passwordmanager_headline)) },
                 navigationIcon = {
                     IconButton(onClick = {
+                        // TODO: Back navigation
                         scope.launch {
                             snackbarHostState.showSnackbar("Coming Soon")
                         }
