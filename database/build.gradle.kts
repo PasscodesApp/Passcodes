@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKmpLibrary)
     alias(libs.plugins.ksp)
-    alias (libs.plugins.androidx.room)
+    alias(libs.plugins.androidx.room)
 }
 
 kotlin {
