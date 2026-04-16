@@ -28,24 +28,24 @@ class SavePasswordActivity : AppCompatActivity() {
 
         binding.inputDomain.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                binding.inputDomain.setHint(getString(R.string.placeholder_domain_field))
+                binding.inputDomain.hint = getString(R.string.placeholder_domain_field)
             } else {
-                binding.inputDomain.setHint("")
+                binding.inputDomain.hint = ""
             }
         }
 
         binding.inputUsername.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                binding.inputUsername.setHint(getString(R.string.placeholder_username_field))
+                binding.inputUsername.hint = getString(R.string.placeholder_username_field)
             } else {
-                binding.inputUsername.setHint("")
+                binding.inputUsername.hint = ""
             }
         }
         binding.inputPassword.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                binding.inputPassword.setHint(getString(R.string.placeholder_password_field))
+                binding.inputPassword.hint = getString(R.string.placeholder_password_field)
             } else {
-                binding.inputPassword.setHint("")
+                binding.inputPassword.hint = ""
             }
         }
 
