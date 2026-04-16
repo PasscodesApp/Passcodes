@@ -22,9 +22,9 @@
 - Migrate to Ktor http client by @JeelDobariya38.
 - Migrate database module to a KMP library by @JeelDobariya38.
 - Improve documentation by @JeelDobariya38.
-- Made a kmp design system module by @JeelDobariya38..
-- Improved support for swapping layout by @JeelDobariya38..
-- Made basic functioning classical & modern screens by @JeelDobariya38..
+- Made a kmp design system module by @JeelDobariya38.
+- Improved support for swapping layout by @JeelDobariya38.
+- Made basic functioning classical & modern screens by @JeelDobariya38.
 
 ---
 
