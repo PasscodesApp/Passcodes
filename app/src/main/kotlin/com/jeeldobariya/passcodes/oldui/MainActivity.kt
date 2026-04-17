@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                     com.jeeldobariya.passcodes.MainActivity::class.java
                 ).also {
                     startActivity(it)
+                    finish()
                 }
             }
         }
