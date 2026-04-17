@@ -6,8 +6,9 @@
 
 ## Breaking Changes / Compatibility
 
-q[write about breaking changes, if there are any... like architecture changes or database changes etc...].
+[list out any breaking changes, if there are any... like architecture changes or database changes etc...].
 
 ## Notes
 
 [write notes if any...]
+

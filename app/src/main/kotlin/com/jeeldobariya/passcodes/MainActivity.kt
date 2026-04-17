@@ -45,6 +45,7 @@ class MainActivity : ComponentActivity() {
 
                     Intent(context, com.jeeldobariya.passcodes.oldui.MainActivity::class.java).also {
                         context.startActivity(it)
+                        finish()
                     }
                 }
 
