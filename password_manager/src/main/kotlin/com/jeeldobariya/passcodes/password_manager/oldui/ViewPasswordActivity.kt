@@ -1,6 +1,5 @@
 package com.jeeldobariya.passcodes.password_manager.oldui
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -29,7 +28,6 @@ class ViewPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewPasswordBinding
 
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         runBlocking {
             setTheme(appDatastore.data.first().theme)
@@ -52,11 +50,11 @@ class ViewPasswordActivity : AppCompatActivity() {
         viewModel.onAction(ViewPasswordAction.LoadPassword(passwordEntityId))
 
         collectLatestLifecycleFlow(viewModel.state) { state ->
-            binding.inputDomain.setText("${getString(R.string.domain_prefix)}  ${state.domain}")
-            binding.inputUsername.setText("${getString(R.string.username_prefix)}  ${state.username}")
-            binding.inputPassword.setText("${getString(R.string.password_prefix)}  ${state.password}")
-            binding.inputNotes.setText("${getString(R.string.notes_prefix)}  ${state.notes}")
-            binding.inputUpdatedAt.setText("${getString(R.string.updatedat_prefix)}  ${state.lastUpdatedAt}")
+            binding.inputDomain.setText(state.domain)
+            binding.inputUsername.setText(state.username)
+            binding.inputPassword.setText(state.password)
+            binding.inputNotes.setText(state.notes)
+            binding.inputUpdatedAt.setText(state.lastUpdatedAt)
 
             if (state.isError) {
                 Toast.makeText(
