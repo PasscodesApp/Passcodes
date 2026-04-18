@@ -88,7 +88,7 @@ class ViewPasswordActivity : AppCompatActivity() {
             val confirmDialog = AlertDialog.Builder(this@ViewPasswordActivity)
                 .setTitle(R.string.copy_password_dialog_title)
                 .setMessage(R.string.danger_copy_to_clipboard_desc)
-                .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
+                .setPositiveButton(R.string.confirm_dialog_button_text) { _, _ ->
                     val clipboard = getSystemService(CLIPBOARD_SERVICE) as? ClipboardManager
                     val clip: ClipData =
                         ClipData.newPlainText(
@@ -106,7 +106,7 @@ class ViewPasswordActivity : AppCompatActivity() {
                             .show()
                     }
                 }
-                .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->
+                .setNegativeButton(R.string.discard_dialog_button_text) { _, _ ->
                     Toast.makeText(this, getString(R.string.action_discard), Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -125,11 +125,11 @@ class ViewPasswordActivity : AppCompatActivity() {
             val confirmDialog = AlertDialog.Builder(this@ViewPasswordActivity)
                 .setTitle(R.string.delete_password_dialog_title)
                 .setMessage(R.string.irreversible_dialog_desc)
-                .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
+                .setPositiveButton(R.string.confirm_dialog_button_text) { _, _ ->
                     runBlocking { viewModel.onAction(ViewPasswordAction.DeletePasswordAction) }
                     finish()
                 }
-                .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->
+                .setNegativeButton(R.string.discard_dialog_button_text) { _, _ ->
                     Toast.makeText(this, getString(R.string.action_discard), Toast.LENGTH_SHORT)
                         .show()
                 }
