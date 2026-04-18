@@ -45,7 +45,9 @@ class MainActivity : AppCompatActivity() {
             )
 
             when (result) {
-                UpdateCheckingResult.ON_UNOFFICIAL_RELEASE -> {
+                UpdateCheckingResult.ON_UNOFFICIAL_RELEASE,
+                UpdateCheckingResult.ON_PRE_RELEASE
+                    -> {
                     Intent(this@MainActivity, UpdateCheckingActivity::class.java).also {
                         startActivity(it)
                     }
