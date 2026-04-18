@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -53,7 +54,14 @@ class ViewPasswordActivity : AppCompatActivity() {
             binding.inputDomain.setText(state.domain)
             binding.inputUsername.setText(state.username)
             binding.inputPassword.setText(state.password)
-            binding.inputNotes.setText(state.notes)
+
+            if (state.notes.isNotBlank()) {
+                binding.inputContainerNotes.visibility = View.VISIBLE
+                binding.inputNotes.setText(state.notes)
+            } else {
+                binding.inputContainerNotes.visibility = View.GONE
+            }
+
             binding.inputUpdatedAt.setText(state.lastUpdatedAt)
 
             if (state.isError) {
