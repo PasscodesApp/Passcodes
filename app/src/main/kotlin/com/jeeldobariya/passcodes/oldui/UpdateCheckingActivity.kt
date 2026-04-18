@@ -20,5 +20,4 @@ class UpdateCheckingActivity: AppCompatActivity() {
         binding = ActivityUpdateCheckingBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-
 }

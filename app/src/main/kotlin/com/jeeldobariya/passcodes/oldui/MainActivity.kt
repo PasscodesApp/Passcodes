@@ -2,6 +2,7 @@ package com.jeeldobariya.passcodes.oldui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -9,6 +10,7 @@ import com.jeeldobariya.passcodes.BuildConfig
 import com.jeeldobariya.passcodes.Constant
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.core.domain.usecases.CheckForUpdateUseCase
+import com.jeeldobariya.passcodes.core.domain.usecases.UpdateCheckingResult
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.databinding.ActivityMainBinding
 import com.jeeldobariya.passcodes.password_manager.oldui.PasswordManagerActivity
@@ -36,11 +38,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch {
-            checkForUpdateUseCase(
+            val result = checkForUpdateUseCase(
                 currentVersion = BuildConfig.VERSION_NAME,
                 githubReleaseApiUrl = Constant.GITHUB_RELEASE_API_URL,
                 telegramCommunityUrl = Constant.TELEGRAM_COMMUNITY_URL
             )
+
+            when (result) {
+                UpdateCheckingResult.ON_UNOFFICIAL_RELEASE -> {
+                    Intent(this@MainActivity, UpdateCheckingActivity::class.java).also {
+                        startActivity(it)
+                    }
+                }
+                else -> Log.e("UpdateChecking", result.toString())
+            }
         }
 
         // Add event onclick listener
