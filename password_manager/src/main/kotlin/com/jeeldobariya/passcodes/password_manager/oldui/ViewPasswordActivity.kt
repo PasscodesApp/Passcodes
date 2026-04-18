@@ -1,5 +1,6 @@
 package com.jeeldobariya.passcodes.password_manager.oldui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -28,6 +29,7 @@ class ViewPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewPasswordBinding
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         runBlocking {
             setTheme(appDatastore.data.first().theme)
@@ -50,16 +52,11 @@ class ViewPasswordActivity : AppCompatActivity() {
         viewModel.onAction(ViewPasswordAction.LoadPassword(passwordEntityId))
 
         collectLatestLifecycleFlow(viewModel.state) { state ->
-            binding.tvDomain.text =
-                "${getString(R.string.domain_prefix)}  ${state.domain}"
-            binding.tvUsername.text =
-                "${getString(R.string.username_prefix)}  ${state.username}"
-            binding.tvPassword.text =
-                "${getString(R.string.password_prefix)}  ${state.password}"
-            binding.tvNotes.text =
-                "${getString(R.string.notes_prefix)}  ${state.notes}"
-            binding.tvUpdatedAt.text =
-                "${getString(R.string.updatedat_prefix)}  ${state.lastUpdatedAt}"
+            binding.tvDomain.setText("${getString(R.string.domain_prefix)}  ${state.domain}")
+            binding.tvUsername.setText("${getString(R.string.username_prefix)}  ${state.username}")
+            binding.tvPassword.setText("${getString(R.string.password_prefix)}  ${state.password}")
+            binding.tvNotes.setText("${getString(R.string.notes_prefix)}  ${state.notes}")
+            binding.tvUpdatedAt.setText("${getString(R.string.updatedat_prefix)}  ${state.lastUpdatedAt}")
 
             if (state.isError) {
                 Toast.makeText(
