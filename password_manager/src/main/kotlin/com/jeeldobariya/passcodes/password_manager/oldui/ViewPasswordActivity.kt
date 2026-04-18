@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -50,16 +51,18 @@ class ViewPasswordActivity : AppCompatActivity() {
         viewModel.onAction(ViewPasswordAction.LoadPassword(passwordEntityId))
 
         collectLatestLifecycleFlow(viewModel.state) { state ->
-            binding.tvDomain.text =
-                "${getString(R.string.domain_prefix)}  ${state.domain}"
-            binding.tvUsername.text =
-                "${getString(R.string.username_prefix)}  ${state.username}"
-            binding.tvPassword.text =
-                "${getString(R.string.password_prefix)}  ${state.password}"
-            binding.tvNotes.text =
-                "${getString(R.string.notes_prefix)}  ${state.notes}"
-            binding.tvUpdatedAt.text =
-                "${getString(R.string.updatedat_prefix)}  ${state.lastUpdatedAt}"
+            binding.inputDomain.setText(state.domain)
+            binding.inputUsername.setText(state.username)
+            binding.inputPassword.setText(state.password)
+
+            if (state.notes.isNotBlank()) {
+                binding.inputContainerNotes.visibility = View.VISIBLE
+                binding.inputNotes.setText(state.notes)
+            } else {
+                binding.inputContainerNotes.visibility = View.GONE
+            }
+
+            binding.inputUpdatedAt.setText(state.lastUpdatedAt)
 
             if (state.isError) {
                 Toast.makeText(
@@ -91,7 +94,7 @@ class ViewPasswordActivity : AppCompatActivity() {
             val confirmDialog = AlertDialog.Builder(this@ViewPasswordActivity)
                 .setTitle(R.string.copy_password_dialog_title)
                 .setMessage(R.string.danger_copy_to_clipboard_desc)
-                .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
+                .setPositiveButton(R.string.confirm_dialog_button_text) { _, _ ->
                     val clipboard = getSystemService(CLIPBOARD_SERVICE) as? ClipboardManager
                     val clip: ClipData =
                         ClipData.newPlainText(
@@ -109,7 +112,7 @@ class ViewPasswordActivity : AppCompatActivity() {
                             .show()
                     }
                 }
-                .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->
+                .setNegativeButton(R.string.discard_dialog_button_text) { _, _ ->
                     Toast.makeText(this, getString(R.string.action_discard), Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -128,11 +131,11 @@ class ViewPasswordActivity : AppCompatActivity() {
             val confirmDialog = AlertDialog.Builder(this@ViewPasswordActivity)
                 .setTitle(R.string.delete_password_dialog_title)
                 .setMessage(R.string.irreversible_dialog_desc)
-                .setPositiveButton(R.string.confirm_dialog_button_text) { dialog, which ->
+                .setPositiveButton(R.string.confirm_dialog_button_text) { _, _ ->
                     runBlocking { viewModel.onAction(ViewPasswordAction.DeletePasswordAction) }
                     finish()
                 }
-                .setNegativeButton(R.string.discard_dialog_button_text) { dialog, which ->
+                .setNegativeButton(R.string.discard_dialog_button_text) { _, _ ->
                     Toast.makeText(this, getString(R.string.action_discard), Toast.LENGTH_SHORT)
                         .show()
                 }
