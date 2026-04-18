@@ -52,11 +52,11 @@ class ViewPasswordActivity : AppCompatActivity() {
         viewModel.onAction(ViewPasswordAction.LoadPassword(passwordEntityId))
 
         collectLatestLifecycleFlow(viewModel.state) { state ->
-            binding.tvDomain.setText("${getString(R.string.domain_prefix)}  ${state.domain}")
-            binding.tvUsername.setText("${getString(R.string.username_prefix)}  ${state.username}")
-            binding.tvPassword.setText("${getString(R.string.password_prefix)}  ${state.password}")
-            binding.tvNotes.setText("${getString(R.string.notes_prefix)}  ${state.notes}")
-            binding.tvUpdatedAt.setText("${getString(R.string.updatedat_prefix)}  ${state.lastUpdatedAt}")
+            binding.inputDomain.setText("${getString(R.string.domain_prefix)}  ${state.domain}")
+            binding.inputUsername.setText("${getString(R.string.username_prefix)}  ${state.username}")
+            binding.inputPassword.setText("${getString(R.string.password_prefix)}  ${state.password}")
+            binding.inputNotes.setText("${getString(R.string.notes_prefix)}  ${state.notes}")
+            binding.inputUpdatedAt.setText("${getString(R.string.updatedat_prefix)}  ${state.lastUpdatedAt}")
 
             if (state.isError) {
                 Toast.makeText(
