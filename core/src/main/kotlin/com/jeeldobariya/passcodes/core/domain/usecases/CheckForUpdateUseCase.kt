@@ -57,7 +57,7 @@ class CheckForUpdateUseCase(
             }
 
             if (!userReleaseFound) {
-                showToast("⚠️ Version ($currNormalizedVersion) not found on GitHub releases...")
+                showToast("⚠️ Version ($currNormalizedVersion) is not an official releases on github...")
                 showToast("Join telegram @ ($telegramCommunityUrl)")
             }
         } catch (e: Exception) {
