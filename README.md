@@ -35,6 +35,18 @@ to push them to cloud.
 > securing the process as much as
 > possible. [Read more](https://passcodesapp.github.io/Passcodes-Docs/other-docs/project-overview/)
 
+## Stats
+
+### Star History
+
+<a href="https://www.star-history.com/?repos=PasscodesApp%2FPasscodes&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=PasscodesApp/Passcodes&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=PasscodesApp/Passcodes&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=PasscodesApp/Passcodes&type=date&legend=top-left" />
+ </picture>
+</a>
+
 ## Screen Shots
 
 <details open>
