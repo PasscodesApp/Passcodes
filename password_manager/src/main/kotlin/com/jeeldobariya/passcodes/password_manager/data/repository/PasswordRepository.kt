@@ -27,10 +27,13 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         username: String,
         password: String,
         notes: String,
+        url: String = "",
     ): Int {
         require(domain.isNotBlank() || username.isNotBlank() || password.isNotBlank())
 
-        val url = "https://local.${domain.trim().lowercase()}"
+        val url = url.ifBlank {
+            "https://local.${domain.trim().lowercase()}"
+        }
 
         val currentTimestamp = DateTimeUtils.getCurrDateTime()
         val newPassword = PasswordEntity(

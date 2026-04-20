@@ -98,6 +98,16 @@ private fun ModernSavePasswordScreenContent(
                 }
             )
 
+            OutlinedTextField(
+                value = state.url,
+                onValueChange = {
+                    onAction(SavePasswordAction.OnChangeUrl(it))
+                },
+                label = {
+                    Text("URL")
+                }
+            )
+
             Spacer(modifier = Modifier.padding(8.dp))
 
             Button(onClick = {

@@ -53,7 +53,7 @@ class ImportPasswordCSVUseCase(
                         domain = chosenDomain,
                         username = cols[2].trim(),
                         password = cols[3].trim(),
-                        notes = cols[4].trim()
+                        notes = cols[4].trim(),
                     )
                 }
 

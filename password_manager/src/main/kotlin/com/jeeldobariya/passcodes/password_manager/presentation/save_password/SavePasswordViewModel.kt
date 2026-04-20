@@ -34,6 +34,10 @@ class SavePasswordViewModel(
                 onChangeNotesText(action.newNotes)
             }
 
+            is SavePasswordAction.OnChangeUrl -> {
+                onChangeUrlText(action.newUrl)
+            }
+
             SavePasswordAction.OnSavePasswordButtonClick -> {
                 savePasswordEntity()
             }
@@ -56,6 +60,10 @@ class SavePasswordViewModel(
         _state.update { it.copy(notes = newNotes) }
     }
 
+    private fun onChangeUrlText(newUrl: String) {
+        _state.update { it.copy(url = newUrl) }
+    }
+
     private fun savePasswordEntity() {
         viewModelScope.launch {
             try {
@@ -64,10 +72,11 @@ class SavePasswordViewModel(
                         domain = _state.value.domain,
                         username = _state.value.username,
                         password = _state.value.password,
-                        notes = _state.value.notes
+                        notes = _state.value.notes,
+                        url = _state.value.url
                     )
                 )
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _state.update { it.copy(isError = true) }
             }
         }
