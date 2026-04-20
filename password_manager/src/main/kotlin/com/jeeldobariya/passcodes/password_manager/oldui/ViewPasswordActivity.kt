@@ -62,6 +62,13 @@ class ViewPasswordActivity : AppCompatActivity() {
                 binding.inputContainerNotes.visibility = View.GONE
             }
 
+            if (state.url.isNotBlank()) {
+                binding.inputContainerUrl.visibility = View.VISIBLE
+                binding.inputUrl.setText(state.url)
+            } else {
+                binding.inputContainerUrl.visibility = View.GONE
+            }
+
             binding.inputUpdatedAt.setText(state.lastUpdatedAt)
 
             if (state.isError) {
