@@ -97,6 +97,17 @@ private fun ModernUpdatePasswordScreenContent(
                 }
             )
 
+            OutlinedTextField(
+                value = state.url,
+                onValueChange = {
+                    onAction(UpdatePasswordAction.OnChangeUrl(it))
+                },
+                label = {
+                    Text("URL")
+                }
+            )
+
+
             Spacer(modifier = Modifier.padding(8.dp))
 
             Button(onClick = {

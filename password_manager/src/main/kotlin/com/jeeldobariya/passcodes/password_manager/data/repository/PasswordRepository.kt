@@ -91,7 +91,8 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         domain: String,
         username: String,
         password: String,
-        notes: String
+        notes: String,
+        url: String = ""
     ): Int {
         require(domain.isNotBlank() || username.isNotBlank() || password.isNotBlank())
 
@@ -103,6 +104,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
             username = username,
             password = password,
             notes = notes,
+            url = url,
             updatedAt = updatedTimestamp
         )
 
