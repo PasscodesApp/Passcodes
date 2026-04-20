@@ -26,7 +26,7 @@ class SavePasswordActivity : AppCompatActivity() {
         binding = ActivitySavePasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.inputDomain.setOnFocusChangeListener { v, hasFocus ->
+        binding.inputDomain.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.inputDomain.hint = getString(R.string.placeholder_domain_field)
             } else {
@@ -34,14 +34,14 @@ class SavePasswordActivity : AppCompatActivity() {
             }
         }
 
-        binding.inputUsername.setOnFocusChangeListener { v, hasFocus ->
+        binding.inputUsername.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.inputUsername.hint = getString(R.string.placeholder_username_field)
             } else {
                 binding.inputUsername.hint = ""
             }
         }
-        binding.inputPassword.setOnFocusChangeListener { v, hasFocus ->
+        binding.inputPassword.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.inputPassword.hint = getString(R.string.placeholder_password_field)
             } else {

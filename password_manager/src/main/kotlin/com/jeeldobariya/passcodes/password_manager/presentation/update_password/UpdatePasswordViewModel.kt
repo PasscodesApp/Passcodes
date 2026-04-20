@@ -33,7 +33,8 @@ class UpdatePasswordViewModel(
                         domain = password.domain,
                         username = password.username,
                         password = password.password,
-                        notes = password.notes
+                        notes = password.notes,
+                        url = password.url
                     )
                 }
             } catch (_: Exception) {
@@ -60,6 +61,10 @@ class UpdatePasswordViewModel(
                 onChangeNotesText(action.newNotes)
             }
 
+            is UpdatePasswordAction.OnChangeUrl -> {
+                onChangeUrlText(action.newUrl)
+            }
+
             UpdatePasswordAction.OnUpdatePasswordButtonClick -> {
                 updatePasswordEntity()
             }
@@ -82,6 +87,10 @@ class UpdatePasswordViewModel(
         _state.update { it.copy(notes = newNotes) }
     }
 
+    private fun onChangeUrlText(newUrl: String) {
+        _state.update { it.copy(url = newUrl) }
+    }
+
     private fun updatePasswordEntity() {
         viewModelScope.launch {
             try {
@@ -91,7 +100,8 @@ class UpdatePasswordViewModel(
                         domain = _state.value.domain,
                         username = _state.value.username,
                         password = _state.value.password,
-                        notes = _state.value.notes
+                        notes = _state.value.notes,
+                        url = _state.value.url
                     )
                 )
             } catch (_: Exception) {

@@ -102,7 +102,20 @@ private fun ClassicalSavePasswordScreenContent(
                     Text("Notes (Optional):")
                 },
                 placeholder = {
-                    Text("e.g. Url or Platform Info. Account Info.")
+                    Text("e.g. Url / Platform Info / Account Info.")
+                }
+            )
+
+            OutlinedTextField(
+                value = state.url,
+                onValueChange = {
+                    onAction(SavePasswordAction.OnChangeUrl(it))
+                },
+                label = {
+                    Text("URL (Optional):")
+                },
+                placeholder = {
+                    Text("e.g. https://github.com/login, https://accounts.google.com")
                 }
             )
 

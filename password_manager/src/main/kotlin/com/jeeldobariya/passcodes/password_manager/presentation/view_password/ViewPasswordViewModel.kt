@@ -49,6 +49,7 @@ class ViewPasswordViewModel(
                         username = password.username,
                         password = password.password,
                         notes = password.notes,
+                        url = password.url,
                         lastUpdatedAt = password.lastUpdatedAt
                     )
                 }

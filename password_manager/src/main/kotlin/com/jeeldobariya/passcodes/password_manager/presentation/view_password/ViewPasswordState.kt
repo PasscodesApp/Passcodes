@@ -5,6 +5,7 @@ data class ViewPasswordState(
     val username: String = "",
     val password: String = "",
     val notes: String = "",
+    val url: String = "",
     val lastUpdatedAt: String = "",
     val isError: Boolean = false
 )

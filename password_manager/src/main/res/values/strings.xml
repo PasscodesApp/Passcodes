@@ -5,6 +5,7 @@
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_notes">Notes</string>
+    <string name="hint_url">URL</string>
     <string name="hint_updatedAt">Last Updated</string>
     <string name="placeholder_domain_field">e.g. Google, Instagram, WhatsApp, etc.</string>
     <string name="placeholder_username_field">e.g. Liam15, Noha, Olivia, Ava_25, etc.</string>

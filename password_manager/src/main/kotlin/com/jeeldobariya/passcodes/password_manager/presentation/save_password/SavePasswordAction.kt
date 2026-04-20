@@ -5,5 +5,6 @@ sealed interface SavePasswordAction {
     data class OnChangeUsername(val newUsername: String) : SavePasswordAction
     data class OnChangePassword(val newPassword: String) : SavePasswordAction
     data class OnChangeNotes(val newNotes: String) : SavePasswordAction
+    data class OnChangeUrl(val newUrl: String) : SavePasswordAction
     data object OnSavePasswordButtonClick : SavePasswordAction
 }

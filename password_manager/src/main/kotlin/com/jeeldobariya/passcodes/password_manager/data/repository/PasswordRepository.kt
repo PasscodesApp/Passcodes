@@ -27,10 +27,13 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         username: String,
         password: String,
         notes: String,
+        url: String = "",
     ): Int {
         require(domain.isNotBlank() || username.isNotBlank() || password.isNotBlank())
 
-        val url = "https://local.${domain.trim().lowercase()}"
+        val url = url.ifBlank {
+            "https://local.${domain.trim().lowercase()}"
+        }
 
         val currentTimestamp = DateTimeUtils.getCurrDateTime()
         val newPassword = PasswordEntity(
@@ -88,7 +91,8 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
         domain: String,
         username: String,
         password: String,
-        notes: String
+        notes: String,
+        url: String = ""
     ): Int {
         require(domain.isNotBlank() || username.isNotBlank() || password.isNotBlank())
 
@@ -100,6 +104,7 @@ class PasswordRepository(val passwordsDao: PasswordsDao) {
             username = username,
             password = password,
             notes = notes,
+            url = url,
             updatedAt = updatedTimestamp
         )
 

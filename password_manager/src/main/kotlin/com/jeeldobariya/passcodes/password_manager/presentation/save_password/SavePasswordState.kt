@@ -5,5 +5,6 @@ data class SavePasswordState(
     val username: String = "",
     val password: String = "",
     val notes: String = "",
+    val url: String = "",
     val isError: Boolean = false
 )

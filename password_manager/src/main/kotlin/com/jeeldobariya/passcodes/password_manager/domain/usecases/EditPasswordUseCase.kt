@@ -12,7 +12,8 @@ class EditPasswordUseCase(
             domain = password.domain,
             username = password.username,
             password = password.password,
-            notes = password.notes
+            notes = password.notes,
+            url = password.url
         )
     }
 }
