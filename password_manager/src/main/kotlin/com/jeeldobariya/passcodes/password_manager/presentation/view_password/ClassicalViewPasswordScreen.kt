@@ -62,6 +62,7 @@ private fun ClassicalViewPasswordScreenContent(
                 Text("Username:     ${state.username}", fontSize = 18.sp)
                 Text("Password:     ${state.password}", fontSize = 18.sp)
                 Text("Notes:        ${state.notes}", fontSize = 18.sp)
+                Text("Url:          ${state.url}", fontSize = 18.sp)
                 Text("LastUpdateAt: ${state.lastUpdatedAt}", fontSize = 18.sp)
             }
 
