@@ -9,14 +9,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text
-        style={{
-          fontSize: 40,
-          fontWeight: "black",
-        }}
-      >
-        Passcodes
-      </Text>
+      <Text>Passcodes</Text>
     </View>
   );
 }
