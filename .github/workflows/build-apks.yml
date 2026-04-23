@@ -6,21 +6,21 @@ on:
   # This allows you to manually trigger the workflow from the GitHub UI.
   workflow_dispatch:
 
-  push:
-    branches:
-      - main
-    paths:
-      - '**'
-      - '!**.md'
-      - '!**.txt'
-      - '!**.yml'
-      - '!docs/**'
-      - '.github/workflows/**.yml'
-
-  release:
-    types:
-      - created
-      - published
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - '**'
+  #     - '!**.md'
+  #     - '!**.txt'
+  #     - '!**.yml'
+  #     - '!docs/**'
+  #     - '.github/workflows/**.yml'
+  #
+  # release:
+  #   types:
+  #     - created
+  #     - published
 
 jobs:
   build_and_upload_apk:
