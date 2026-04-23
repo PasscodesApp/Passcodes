@@ -12,12 +12,9 @@
 
 ## [Unreleased]
 
-- Update dependency to latest. by @dependabot.
-- Add a End Of Support Warning. by @JeelDobariya38.
-- Improve View Password Screen. by @JeelDobariya38.
-- Improve Update Checking Functionality. by @JeelDobariya38.
-- Added a Link Field to Passwords. by @JeelDobariya38.
-- Fixed Back Navigation Gesture Problems With Preview Layout. by @JeelDobariya38.
+- ...
+- ...
+- ...
 
 ---
 
