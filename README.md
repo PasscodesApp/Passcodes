@@ -3,34 +3,25 @@
 > [!WARNING]
 > It is just a open source project. An is current under active development.
 > Please, consider using it for fun, and not for real password management. (until, we officially
-> release a stable release)
+> release a stable release, which will be around AUG, 2026)
 >
 > Cuz, **`data is stored unencrypted`.. we're planning to add encryption soon.**
-
-> [!NOTE]
-> Currently, we are android-only, we will soon provide support for desktop (windows-only) using kotlin-multiplatform. but development will remain to android-first.
->
-> then later-after will migrate to react-native and then passcodes will be multiplatform rather than being android-first. more information will be given in docs soon.
 
 <div align="center">
 
   <img width="512" height="250" alt="passcodes play store banner" src="https://github.com/user-attachments/assets/88e63483-9930-4ce0-a01e-4564e18b3c71" />
 
 ![Static Badge](https://img.shields.io/badge/Release-Prototype-blue)
-[![Android CI/CD](https://github.com/PasscodesApp/Passcodes/actions/workflows/build-apks.yml/badge.svg)](https://github.com/PasscodesApp/Passcodes/actions/workflows/build-apks.yml)
-[![CodeQL](https://github.com/PasscodesApp/Passcodes/actions/workflows/codeql.yml/badge.svg)](https://github.com/PasscodesApp/Passcodes/actions/workflows/codeql.yml)
 ![Visitor Counter (@hehuapei/visitor-badge)](https://visitor-badge.laobi.icu/badge?page_id=JeelDobariya38.Passcodes&format=true)
 
 </div>
 
-A android app that take down the headache of remembering passwords. It is open source solutions that
-help you in keeping your passwords safe and secure, in your own local storage without ever needing
-to push them to cloud.
+A app that take down the headache of remembering passwords. It is open source solutions that help you in keeping your passwords safe and secure, in your own local storage without ever needing to push them to cloud.
 
 [Visit Website](https://passcodesapp.github.io/Passcodes-Website/)
 
 > What we think of passcodes?
-> Password management is one such thing that is as simple as remember a password yet, it very
+> Password management is one of such thing that is as simple as remember a password yet, it very
 > important topic in term of security. So, we as developer of passcodes think to streamline and
 > securing the process as much as
 > possible. [Read more](https://passcodesapp.github.io/Passcodes-Docs/other-docs/project-overview/)
@@ -99,6 +90,10 @@ Note: high versions can still run, but we are not guaranteed offically.
 
 ## Installation Steps
 
+<details>
+  <summary>Deperacted Stuff Bro!!!</summary>
+
+```
 1. Go to
    our [github repository release page](https://github.com/PasscodesApp/Passcodes/releases/latest).
 
@@ -111,9 +106,16 @@ It was most shortest and sweetest description (I have ever crafted), For more de
 See the
 file [installing.md](https://passcodesapp.github.io/Passcodes-Docs/user-docs/installing/)
 in `PasscodesApp/Passcodes-Docs`.
+```
+
+</details>
 
 ## Building The App
 
+<details>
+  <summary>Deperacted Stuff Bro!!!</summary>
+
+```
 1. Clone the repository on your machine.
 
 2. Open the project own your Android Studio.
@@ -125,14 +127,17 @@ in `PasscodesApp/Passcodes-Docs`.
 It was general, intuitive, short and sweet description, For more detailed description, Visit the
 file [building.md](https://passcodesapp.github.io/Passcodes-Docs/dev-docs/building/) in
 `PasscodesApp/Passcodes-Docs`.
+```
 
-## Support Docs
+</details>
+
+## Documentation
 
 You can checkout support docs, provided
 in [@github:PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/Passcodes-Docs) Or You can even
-seek help on our [telegram community](https://t.me/passcodescommunity)
+seek help on our [discord community](https://discord.gg/zPbk2gp3Sg)
 
-## Changelog & Release Notes
+### Changelog & Release Notes
 
 - Professional
   ChangeLog: [here](https://passcodesapp.github.io/Passcodes-Docs/user-docs/changelog/)
@@ -141,33 +146,12 @@ seek help on our [telegram community](https://t.me/passcodescommunity)
 
 ## Contribution Are Appreciated!!!
 
-> [!IMPORTANT]
-> Currently the project (more or less also me) is not ready for (code) contributions.
-> This project is currently limited by my expertise & I am beginner. Meaning I don;t want others
-> code in my codebase, that I don't understand, I am learning android and will surely learn basic
-> off by start of 2026.. then i will allow the contribution to this repo... But as of now i don't
-> admire code contribution. As I am beginner in android and might have difficultly in understanding
-> code that not written by me...
->
-> There are still other ways to contribute to project.. like by testing app, by contributing to
-> documentation or more or less just by spreading the word around.. about the app. but, code
-> contribution is limited from my side.... & I hope you can understand...
->
-> For more, information on what kind of contribution we approve or allow, please open a issue in our
-> repo. that way you avoid wasting your time...
->
-> [Read More](https://passcodesapp.github.io/Passcodes-Docs/other-docs/open-contributing-timeline/)
-
 By, contributing to project you accept
 the [Terms For Contributions](https://passcodesapp.github.io/Passcodes-Docs/other-docs/terms-for-contributions/), [CONTRIBUTING.md](https://passcodesapp.github.io/Passcodes-Docs/CONTRIBUTING/) & [MIT License](https://passcodesapp.github.io/Passcodes-Docs/LICENSE/).
 
-And also have look
-at [Open Contributing Timeline](https://passcodesapp.github.io/Passcodes-Docs/other-docs/open-contributing-timeline/).
-
 ## Security Policy
 
-Available here
-in [PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/Passcodes-Docs/SECURITY/).
+Available over at [PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/Passcodes-Docs/SECURITY/).
 
 ## License
 

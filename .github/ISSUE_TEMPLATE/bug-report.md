@@ -30,7 +30,7 @@ If applicable, add screenshots to help explain your problem.
 ## Smartphone (please complete the following information):
 
 - Device: [e.g. Google Pixel 9]
-- Android Version: [e.g. 14]
+- OS Version: [e.g. Android 14,  iOS 26.4.2]
 - App Version: [e.g. v0.1.0]
 
 ## Additional Context:
