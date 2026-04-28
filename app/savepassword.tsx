@@ -2,12 +2,22 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 
+function savePasswordToDB(
+  domain: string,
+  username: string,
+  password: string,
+  url: string,
+  notes: string,
+) {
+  console.log("Save the infomation:", [domain, username, password, url, notes]);
+}
+
 export default function SavePassword() {
-  let [domain, setDomain] = useState("Domain:");
-  let [username, setUsername] = useState("Username:");
-  let [password, setPassword] = useState("Password:");
-  let [url, setUrl] = useState("URL:");
-  let [notes, setNotes] = useState("Notes:");
+  let [domain, setDomain] = useState("");
+  let [username, setUsername] = useState("");
+  let [password, setPassword] = useState("");
+  let [url, setUrl] = useState("");
+  let [notes, setNotes] = useState("");
 
   return (
     <View
@@ -19,13 +29,39 @@ export default function SavePassword() {
     >
       <Text>Save Password</Text>
 
-      <TextInput value={domain} onChangeText={setDomain} />
-      <TextInput value={username} onChangeText={setUsername} />
-      <TextInput value={password} onChangeText={setPassword} />
-      <TextInput value={url} onChangeText={setUrl} />
-      <TextInput value={notes} onChangeText={setNotes} />
+      <TextInput
+        value={domain}
+        onChangeText={setDomain}
+        placeholder="Enter your domain..."
+      />
+      <TextInput
+        value={username}
+        onChangeText={setUsername}
+        placeholder="Enter your username..."
+      />
+      <TextInput
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Enter your passsword..."
+      />
+      <TextInput
+        value={url}
+        onChangeText={setUrl}
+        placeholder="Enter your url..."
+      />
+      <TextInput
+        value={notes}
+        onChangeText={setNotes}
+        placeholder="Enter your notes..."
+      />
 
-      <Button title="Save Password" onPress={() => router.back()} />
+      <Button
+        title="Save Password"
+        onPress={() => {
+          savePasswordToDB(domain, username, password, url, notes);
+          router.back();
+        }}
+      />
     </View>
   );
 }
