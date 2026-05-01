@@ -11,11 +11,13 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.jeeldobariya.passcodes.dev.expo",
+      "icon": "./assets/images/android-icon-launcher.png",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#305969",
+        "foregroundImage": "./assets/images/android-icon-launcher-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-launcher-background.png",
+        "monochromeImage": "./assets/images/android-icon-launcher-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
     },

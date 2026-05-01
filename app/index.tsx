@@ -1,6 +1,7 @@
+import { Link } from "expo-router";
 import { Text, View } from "react-native";
 
-export default function Index() {
+export default function Home() {
   return (
     <View
       style={{
@@ -10,6 +11,8 @@ export default function Index() {
       }}
     >
       <Text>Passcodes</Text>
+      <Text>vX.X.X - Alpha</Text>
+      <Link href={"/savepassword"}>Save Password</Link>
     </View>
   );
 }

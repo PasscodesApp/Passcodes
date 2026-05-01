@@ -60,8 +60,8 @@ Note: high versions can still run, but we are not guaranteed offically.
 
 - [ ] Intuitive UI.
 - [ ] Update Checkers & Manager.
-- [x] Password Management. (Current Priority)
-- [x] Autofill. (as preview feature)
+- [ ] Password Management. (Current Priority)
+- [ ] Autofill.
 - [ ] Secure File. (Least Priority, Because it include permission. Which, I am as developer not
       familiar with 😂)
   - Could be Image. (JPG. PNG ....)
