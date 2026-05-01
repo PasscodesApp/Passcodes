@@ -30,26 +30,31 @@ export default function SavePassword() {
       <Text>Save Password</Text>
 
       <TextInput
+        style={{ borderWidth: 2 }}
         value={domain}
         onChangeText={setDomain}
         placeholder="Enter your domain..."
       />
       <TextInput
+        style={{ borderWidth: 2 }}
         value={username}
         onChangeText={setUsername}
         placeholder="Enter your username..."
       />
       <TextInput
+        style={{ borderWidth: 2 }}
         value={password}
         onChangeText={setPassword}
         placeholder="Enter your passsword..."
       />
       <TextInput
+        style={{ borderWidth: 2 }}
         value={url}
         onChangeText={setUrl}
         placeholder="Enter your url..."
       />
       <TextInput
+        style={{ borderWidth: 2 }}
         value={notes}
         onChangeText={setNotes}
         placeholder="Enter your notes..."
