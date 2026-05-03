@@ -13,6 +13,7 @@ export default function Home() {
       <Text>Passcodes</Text>
       <Text>vX.X.X - Alpha</Text>
       <Link href={"/savepassword"}>Save Password</Link>
+      <Link href={"/loadpassword"}>Load Password</Link>
     </View>
   );
 }
