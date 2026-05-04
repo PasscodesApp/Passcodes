@@ -28,7 +28,7 @@ val appDevLabel = "v2.0.1 - ${getCurrentTimeLabel()}"
 // SDK Versions
 val appCompileSdk = 37
 val appMinSdk = 26
-val appTargetSdk = 34
+val appTargetSdk = 37
 
 // Naming & Identification
 val appNamespace = "com.jeeldobariya.passcodes"
