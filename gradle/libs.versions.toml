@@ -4,7 +4,7 @@ coreKtx = "1.18.0"
 material = "1.13.0"
 nav3Core = "1.1.1"
 lifecycleViewmodelNav3 = "2.10.0"
-oss-license = "17.5.0"
+oss-license = "17.5.1"
 appcompat = "1.7.1"
 androidxBiometric = "1.4.0-alpha07"
 room = "2.8.4"
@@ -26,8 +26,8 @@ datastorePreferences = "1.2.1"
 kotlinSerializationJson = "1.11.0"
 
 # Plugin versions
-agp = "9.1.1"
-ksp = "2.3.6"
+agp = "9.2.0"
+ksp = "2.3.7"
 kotlin = "2.3.21"
 oss-license-plugin = "0.11.0" # Always update also in settings.gradle.kts
 
