@@ -34,36 +34,37 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import androidx.compose.material3.AlertDialog
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
-    private var showDeprecationDialog = mutableStateOf(true)
+    private var showDeprecationDialog by mutableStateOf(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycleScope.launch {
-            if (!featureFlagsDatastore.data.first().isPreviewFeaturesEnabled) {
-                onAuthenticateSuccess()
-            }
-        }
-
         setContent {
             PasscodesTheme {
 
-                if (showDeprecationDialog.value) {
+                LaunchedEffect(showDeprecationDialog) {
+                    if (!showDeprecationDialog && !featureFlagsDatastore.data.first().isPreviewFeaturesEnabled) {
+                        onAuthenticateSuccess()
+                    }
+                }
+
+                if (showDeprecationDialog) {
                     DeprecationDialog(
-                        onDismiss = { showDeprecationDialog.value = false },
+                        onDismiss = { showDeprecationDialog = false },
                         onUpdate = {
                             Intent(Intent.ACTION_VIEW,
                                 Constant.WEBSITE_URL.toUri()).also {
