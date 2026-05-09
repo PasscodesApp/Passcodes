@@ -14,7 +14,7 @@ kotlin {
 android {
     namespace = "com.jeeldobariya.passcodes.core"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
