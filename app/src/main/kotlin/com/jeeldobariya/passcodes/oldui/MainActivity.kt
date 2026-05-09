@@ -3,6 +3,7 @@ package com.jeeldobariya.passcodes.oldui
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -46,11 +47,9 @@ class MainActivity : AppCompatActivity() {
 
             when (result) {
                 UpdateCheckingResult.ON_UNOFFICIAL_RELEASE,
-                UpdateCheckingResult.ON_PRE_RELEASE
-                    -> {
-                    Intent(this@MainActivity, UpdateCheckingActivity::class.java).also {
-                        startActivity(it)
-                    }
+                UpdateCheckingResult.ON_PRE_RELEASE -> {
+                    Toast.makeText(this@MainActivity, "You are on a Unofficial Release", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity, "Update as soon as possible!!", Toast.LENGTH_LONG).show()
                 }
                 else -> Log.e("UpdateChecking", result.toString())
             }
