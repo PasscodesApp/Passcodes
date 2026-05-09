@@ -208,17 +208,17 @@
                         android:padding="16dp">
 
                         <ImageView
-                            android:layout_width="128dp"
-                            android:layout_height="128dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:layout_marginBottom="8dp"
-                            android:contentDescription="Join Telegram Community"
+                            android:contentDescription="Join Discord Community"
                             android:src="@drawable/ic_send"
                             app:tint="?attr/colorPrimary" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/view_telegram_community_text"
+                            android:text="Join Discord"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
                     </LinearLayout>

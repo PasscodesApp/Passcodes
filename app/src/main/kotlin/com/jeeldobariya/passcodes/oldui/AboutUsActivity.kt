@@ -53,7 +53,7 @@ class AboutUsActivity : AppCompatActivity() {
         }
 
         binding.cardTelegramCommunity.setOnClickListener {
-            openBrowser(Constant.TELEGRAM_COMMUNITY_URL)
+            openBrowser(Constant.DISCORD_COMMUNITY_URL)
         }
     }
 }

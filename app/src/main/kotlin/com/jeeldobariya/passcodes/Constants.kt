@@ -5,7 +5,7 @@ object Constant {
 
     // Main URL Constants
     const val DOCS_WEBSITE_URL = "https://passcodesapp.github.io/Passcodes-Docs"
-    const val TELEGRAM_COMMUNITY_URL = "https://t.me/passcodescommunity"
+    const val DISCORD_COMMUNITY_URL = "https://discord.gg/zPbk2gp3Sg"
     const val REPOSITORY_URL = "https://github.com/$REPOSITORY_SIGNATURE"
 
     // URL Constants
