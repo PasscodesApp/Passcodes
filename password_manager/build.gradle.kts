@@ -15,7 +15,7 @@ kotlin {
 android {
     namespace = "com.jeeldobariya.passcodes.password_manager"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {

@@ -7,7 +7,7 @@ plugins {
 
 kotlin {
     android {
-        compileSdk = 36
+        compileSdk = 37
         minSdk = 26
         namespace = "com.jeeldobariya.passcodes.database"
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true

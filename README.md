@@ -58,10 +58,9 @@ to push them to cloud.
 
 ## Compatibility
 
-- **Compile Sdk**: `Android 16 (API level 36)`
-- **Recommend**: `Android 14`
+- **Compile Sdk**: `Android 17 (API level 37)`
 
-`Android 8+` [API level 26+] -> `Android 14` [API level 34] (we support offically)
+`Android 8+` [API level 26+] -> `Android 17` [API level 34] (we support offically)
 
 Note: high versions can still run, but we are not guaranteed offically.
 
