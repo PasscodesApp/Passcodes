@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
             checkForUpdateUseCase(
                 currentVersion = BuildConfig.VERSION_NAME,
                 githubReleaseApiUrl = Constant.GITHUB_RELEASE_API_URL,
-                telegramCommunityUrl = Constant.TELEGRAM_COMMUNITY_URL
+                discordUrl = Constant.DISCORD_COMMUNITY_URL
             )
         }
 

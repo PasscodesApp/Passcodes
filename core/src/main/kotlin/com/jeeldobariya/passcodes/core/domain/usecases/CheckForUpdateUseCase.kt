@@ -28,7 +28,7 @@ class CheckForUpdateUseCase(
     suspend operator fun invoke(
         currentVersion: String,
         githubReleaseApiUrl: String,
-        telegramCommunityUrl: String
+        discordUrl: String
     ): UpdateCheckingResult = withContext(dispatcher) {
         val currNormalizedVersion = SemVerUtils.normalize(currentVersion)
 
@@ -47,7 +47,7 @@ class CheckForUpdateUseCase(
                     userReleaseFound = true
                     if (release.prerelease) {
                         showToast("⚠️ You are using a PRE-RELEASE ($currNormalizedVersion). Not safe for use!!")
-                        showToast("Join telegram @ ($telegramCommunityUrl)")
+                        showToast("Join Discord @ ($discordUrl)")
 
                         return@withContext UpdateCheckingResult.ON_PRE_RELEASE
                     }
@@ -71,7 +71,7 @@ class CheckForUpdateUseCase(
 
             if (!userReleaseFound) {
                 showToast("⚠️ Version ($currNormalizedVersion) is not an official releases on github...")
-                showToast("Join telegram @ ($telegramCommunityUrl)")
+                showToast("Join Discord @ ($discordUrl)")
 
                 return@withContext UpdateCheckingResult.ON_UNOFFICIAL_RELEASE
             }

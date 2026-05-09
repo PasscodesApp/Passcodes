@@ -182,10 +182,9 @@ private fun AboutGridSection() {
             )
         }
 
-        TelegramCard(
-            text = stringResource(R.string.view_telegram_community_text),
+        DiscordCard(
             onClick = {
-                Intent(Intent.ACTION_VIEW, Constant.TELEGRAM_COMMUNITY_URL.toUri()).also {
+                Intent(Intent.ACTION_VIEW, Constant.DISCORD_COMMUNITY_URL.toUri()).also {
                     context.startActivity(it)
                 }
             }
@@ -229,8 +228,8 @@ private fun AboutCard(
 }
 
 @Composable
-private fun TelegramCard(
-    text: String,
+private fun DiscordCard(
+    text: String = "Join Discord",
     onClick: () -> Unit
 ) {
     Card(
