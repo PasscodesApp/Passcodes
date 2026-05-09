@@ -15,8 +15,8 @@
     <string name="load_password_button_text">Load Password</string>
     <string name="update_password_button_text">Update Password</string>
     <string name="delete_password_button_text">Delete Password</string>
-    <string name="import_password_button_text">Import G-Password</string>
-    <string name="export_password_button_text">Export G-Password</string>
+    <string name="import_password_button_text">Import Goggle-Password</string>
+    <string name="export_password_button_text">Export Goggle-Password</string>
 
     <!-- Headline of Activity -->
     <string name="textview_passwordmanager_headline">Password Manager</string>
