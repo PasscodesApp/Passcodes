@@ -1,10 +1,13 @@
 package com.jeeldobariya.passcodes
 
 object Constant {
+
+    const val GH_DOMAIN_URL = "https://passcodesapp.github.io"
     const val REPOSITORY_SIGNATURE = "PasscodesApp/Passcodes"
 
     // Main URL Constants
-    const val DOCS_WEBSITE_URL = "https://passcodesapp.github.io/Passcodes-Docs"
+    const val WEBSITE_URL = "$GH_DOMAIN_URL/Passcodes-Website"
+    const val DOCS_WEBSITE_URL = "$GH_DOMAIN_URL/Passcodes-Docs"
     const val DISCORD_COMMUNITY_URL = "https://discord.gg/zPbk2gp3Sg"
     const val REPOSITORY_URL = "https://github.com/$REPOSITORY_SIGNATURE"
 

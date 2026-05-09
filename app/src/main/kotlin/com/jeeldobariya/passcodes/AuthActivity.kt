@@ -65,9 +65,10 @@ class AuthActivity : AppCompatActivity() {
                     DeprecationDialog(
                         onDismiss = { showDeprecationDialog.value = false },
                         onUpdate = {
-                            val intent = Intent(Intent.ACTION_VIEW,
-                                "https://yourwebsite.com/download".toUri())
-                            startActivity(intent)
+                            Intent(Intent.ACTION_VIEW,
+                                Constant.WEBSITE_URL.toUri()).also {
+                                startActivity(it)
+                            }
                         }
                     )
                 }
@@ -84,7 +85,7 @@ class AuthActivity : AppCompatActivity() {
             title = {
                 Column {
                     Text(
-                        text = "End of Support Notice 🛑",
+                        text = " 🛑 End of Support Notice",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.ExtraBold
                     )
@@ -105,9 +106,9 @@ class AuthActivity : AppCompatActivity() {
                     )
 
                     Text(
-                        text = "We will provide the new version (v3.0.0) soon!!",
-                        style = MaterialTheme.typography.bodySmallEmphasized,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = "Version 3.0.0 is coming soon",
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold), // Explicit bold
+                        color = MaterialTheme.colorScheme.primary // Use primary to highlight the upcoming good news
                     )
 
                     Text(
@@ -119,25 +120,26 @@ class AuthActivity : AppCompatActivity() {
                 }
             },
             confirmButton = {
-                Button(
-                    onClick = onUpdate,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Download Latest Version")
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Button(
+                        onClick = onUpdate,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Download Latest Version")
+                    }
+                    TextButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Continue with Legacy Version (Unsafe)",
+                            color = MaterialTheme.colorScheme.error,
+                            fontSize = 12.sp
+                        )
+                    }
                 }
             },
-            dismissButton = {
-                TextButton(
-                    onClick = onDismiss,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Continue with Legacy Version (Unsafe)",
-                        color = MaterialTheme.colorScheme.error,
-                        fontSize = 12.sp
-                    )
-                }
-            }
+            dismissButton = null
         )
     }
 
