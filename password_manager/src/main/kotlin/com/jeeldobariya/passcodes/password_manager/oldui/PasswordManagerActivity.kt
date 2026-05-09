@@ -2,15 +2,12 @@ package com.jeeldobariya.passcodes.password_manager.oldui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View.GONE
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
-import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
-import com.jeeldobariya.passcodes.core.utils.collectLatestLifecycleFlow
 import com.jeeldobariya.passcodes.password_manager.R
 import com.jeeldobariya.passcodes.password_manager.databinding.ActivityPasswordManagerBinding
 import com.jeeldobariya.passcodes.password_manager.domain.usecases.ExportPasswordCSVUseCase
@@ -66,13 +63,6 @@ class PasswordManagerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPasswordManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        collectLatestLifecycleFlow(featureFlagsDatastore.data) {
-            if (!it.isPreviewFeaturesEnabled) {
-                binding.importPasswordBtn.visibility = GONE
-                binding.exportPasswordBtn.visibility = GONE
-            }
-        }
 
         // Add event onclick listener
         addOnClickListenerOnButton(binding)
