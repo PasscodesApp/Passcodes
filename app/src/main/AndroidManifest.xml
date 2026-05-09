@@ -29,7 +29,6 @@
         <activity android:name=".MainActivity" />
 
         <activity android:name=".oldui.MainActivity" />
-        <activity android:name=".oldui.UpdateCheckingActivity" />
         <activity android:name=".oldui.SettingsActivity" />
         <activity android:name=".oldui.AboutUsActivity" />
         <activity android:name=".oldui.LicenseActivity" />

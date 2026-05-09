@@ -25,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -38,11 +39,15 @@ import com.jeeldobariya.passcodes.core.feature_flags.featureFlagsDatastore
 import com.jeeldobariya.passcodes.design_system.theme.PasscodesTheme
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
+import androidx.compose.material3.AlertDialog
 
 class AuthActivity : AppCompatActivity() {
 
     private lateinit var biometricPrompt: BiometricPrompt
     private lateinit var promptInfo: BiometricPrompt.PromptInfo
+
+    private var showDeprecationDialog = mutableStateOf(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +60,85 @@ class AuthActivity : AppCompatActivity() {
 
         setContent {
             PasscodesTheme {
+
+                if (showDeprecationDialog.value) {
+                    DeprecationDialog(
+                        onDismiss = { showDeprecationDialog.value = false },
+                        onUpdate = {
+                            val intent = Intent(Intent.ACTION_VIEW,
+                                "https://yourwebsite.com/download".toUri())
+                            startActivity(intent)
+                        }
+                    )
+                }
+
                 AuthScreenContent()
             }
         }
+    }
+
+    @Composable
+    private fun DeprecationDialog(onDismiss: () -> Unit, onUpdate: () -> Unit) {
+        AlertDialog(
+            onDismissRequest = { /* Rigid: user must choose an action */ },
+            title = {
+                Column {
+                    Text(
+                        text = "End of Support Notice 🛑",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = "As of now & forwards, we are officially deprecating all versions v2.x.x and prior.",
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Text(
+                        text = "To ensure your data remains secure and you keep access to your passcodes, please update to the latest version immediately.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Text(
+                        text = "We will provide the new version (v3.0.0) soon!!",
+                        style = MaterialTheme.typography.bodySmallEmphasized,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Text(
+                        text = "END OF SUPPORT: May 25, 2026",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.error,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = onUpdate,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Download Latest Version")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = onDismiss,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Continue with Legacy Version (Unsafe)",
+                        color = MaterialTheme.colorScheme.error,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        )
     }
 
     @Composable
