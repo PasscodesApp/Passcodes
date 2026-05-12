@@ -13,18 +13,11 @@
 ## [Unreleased]
 
 - Update dependency to latest. by @dependabot.
-- Improve preview layout support in Jetpack Compose. by @JeelDobariya38.
-- Fixed autofill service (preview feature) by @JeelDobariya38 & @hexCode63.
-- Improve modern & classical screens by @JeelDobariya38.
-- Improve jetpack compose preview in android studio by @JeelDobariya38.
-- Improve CI/CD by @JeelDobariya38.
-- Added biometrics authentication (preview feature) by @JeelDobariya38.
-- Migrate to Ktor http client by @JeelDobariya38.
-- Migrate database module to a KMP library by @JeelDobariya38.
-- Improve documentation by @JeelDobariya38.
-- Made a kmp design system module by @JeelDobariya38.
-- Improved support for swapping layout by @JeelDobariya38.
-- Made basic functioning classical & modern screens by @JeelDobariya38.
+- Add a End Of Support Warning. by @JeelDobariya38.
+- Improve View Password Screen. by @JeelDobariya38.
+- Improve Update Checking Functionality. by @JeelDobariya38.
+- Added a Link Field to Passwords. by @JeelDobariya38.
+- Fixed Back Navigation Gesture Problems With Preview Layout. by @JeelDobariya38.
 
 ---
 
