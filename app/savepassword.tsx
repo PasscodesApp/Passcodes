@@ -30,30 +30,35 @@ export default function SavePassword() {
         value={domain}
         onChangeText={setDomain}
         placeholder="Enter your domain..."
+        placeholderTextColor={"#000"}
       />
       <TextInput
         style={{ borderWidth: 2 }}
         value={username}
         onChangeText={setUsername}
         placeholder="Enter your username..."
+        placeholderTextColor={"#000"}
       />
       <TextInput
         style={{ borderWidth: 2 }}
         value={password}
         onChangeText={setPassword}
         placeholder="Enter your passsword..."
+        placeholderTextColor={"#000"}
       />
       <TextInput
         style={{ borderWidth: 2 }}
         value={url}
         onChangeText={setUrl}
         placeholder="Enter your url..."
+        placeholderTextColor={"#000"}
       />
       <TextInput
         style={{ borderWidth: 2 }}
         value={notes}
         onChangeText={setNotes}
         placeholder="Enter your notes..."
+        placeholderTextColor={"#000"}
       />
 
       <Button
