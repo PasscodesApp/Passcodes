@@ -1,13 +1,24 @@
 import { passwords } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
+import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Button, ScrollView, Text, View } from "react-native";
 
 export default function LoadPassword() {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
   let [passwordList, setPasswordList] = useState<any[]>([]);
+
+  function deletePasswordById(id: number) {
+    drizzleDb
+      .delete(passwords)
+      .where(eq(passwords.id, id))
+      .then(() => {
+        router.back();
+      });
+  }
 
   useEffect(() => {
     drizzleDb
@@ -38,6 +49,12 @@ export default function LoadPassword() {
             <Text>URL: {passwords.url}</Text>
             <Text>Notes: {passwords.notes}</Text>
             <Text>Updated-At: {passwords.updatedAt}</Text>
+            <Button
+              title="Delete Password"
+              onPress={() => {
+                deletePasswordById(passwords.id);
+              }}
+            />
           </View>
         ))
       ) : (
