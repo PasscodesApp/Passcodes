@@ -53,7 +53,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/setting_btn"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Widget.Material3Expressive.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/setting_button_text"
@@ -61,7 +61,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/about_us_btn"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Widget.Material3Expressive.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_us_button_text"

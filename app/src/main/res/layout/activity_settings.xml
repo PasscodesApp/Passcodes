@@ -165,7 +165,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/autofill_setting_btn"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3Expressive.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
@@ -191,7 +191,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/clear_all_data_btn"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3Expressive.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"

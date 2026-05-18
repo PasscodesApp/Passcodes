@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="PasscodesTheme.Default" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="PasscodesTheme.Default" parent="Theme.Material3Expressive.Dark.NoActionBar">
         <!-- Base Colors -->
         <item name="colorPrimary">@color/md_theme_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
@@ -39,7 +39,7 @@
     </style>
 
     <!-- Passcodes Trusted Dark Theme (Bluish) -->
-    <style name="PasscodesTheme.Trusted" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="PasscodesTheme.Trusted" parent="Theme.Material3Expressive.Dark.NoActionBar">
         <!-- Base Colors - Using a bluish palette -->
         <item name="colorPrimary">@color/md_theme_trusted_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_trusted_dark_onPrimary</item>
@@ -80,7 +80,7 @@
 
 
     <!-- Passcodes Pink Dark Theme (Pinkish) -->
-    <style name="PasscodesTheme.Pink" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="PasscodesTheme.Pink" parent="Theme.Material3Expressive.Dark.NoActionBar">
         <!-- Base Colors - Using a pinkish palette -->
         <item name="colorPrimary">@color/md_theme_pink_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_pink_dark_onPrimary</item>
@@ -118,7 +118,7 @@
     </style>
 
     <!-- Passcodes Cute Dark Theme (Pinkish) -->
-    <style name="PasscodesTheme.Cute" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="PasscodesTheme.Cute" parent="Theme.Material3Expressive.Dark.NoActionBar">
         <!-- Base Colors - Using a pinkish palette -->
         <item name="colorPrimary">@color/md_theme_cute_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_cute_dark_onPrimary</item>
@@ -155,7 +155,7 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="PasscodesTheme.GreenSafe" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="PasscodesTheme.GreenSafe" parent="Theme.Material3Expressive.Dark.NoActionBar">
         <item name="colorPrimary">@color/md_theme_green_safe_dark_primary</item>
         <item name="colorOnPrimary">@color/md_theme_green_safe_dark_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_green_safe_dark_primaryContainer</item>
