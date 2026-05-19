@@ -9,6 +9,7 @@ appcompat = "1.7.1"
 androidxBiometric = "1.4.0-alpha07"
 room = "2.8.4"
 sqlite = "2.6.2"
+apacheCSV = "1.14.1"
 json = "20251224"
 junit = "4.13.2"
 truth = "1.4.5"
@@ -93,6 +94,9 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = 
 
 # Json
 json = { module = "org.json:json", version.ref = "json" }
+
+# CSV
+apache-csv = { module = "org.apache.commons:commons-csv", version.ref = "apacheCSV" }
 
 # Testing
 kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }

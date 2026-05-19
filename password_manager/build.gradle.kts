@@ -70,6 +70,9 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.kotlinx.serialization.json)
 
+    // CSV
+    implementation(libs.apache.csv)
+
     // Concurrency (Coroutines Bundle)
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)

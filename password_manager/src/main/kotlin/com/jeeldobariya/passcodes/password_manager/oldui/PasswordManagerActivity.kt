@@ -10,19 +10,19 @@ import androidx.lifecycle.lifecycleScope
 import com.jeeldobariya.passcodes.core.datastore.appDatastore
 import com.jeeldobariya.passcodes.password_manager.R
 import com.jeeldobariya.passcodes.password_manager.databinding.ActivityPasswordManagerBinding
-import com.jeeldobariya.passcodes.password_manager.domain.usecases.ExportPasswordCSVUseCase
-import com.jeeldobariya.passcodes.password_manager.domain.usecases.ImportPasswordCSVUseCase
+import com.jeeldobariya.passcodes.password_manager.presentation.password_manager.PasswordManagerAction
+import com.jeeldobariya.passcodes.password_manager.presentation.password_manager.PasswordManagerViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.getValue
 
 
 class PasswordManagerActivity : AppCompatActivity() {
-    private val importPasswordUseCase: ImportPasswordCSVUseCase by inject()
 
-    private val exportPasswordUseCase: ExportPasswordCSVUseCase by inject()
+    private val viewModel: PasswordManagerViewModel by viewModel()
 
     private lateinit var binding: ActivityPasswordManagerBinding
 
@@ -33,9 +33,7 @@ class PasswordManagerActivity : AppCompatActivity() {
 
             Toast.makeText(this@PasswordManagerActivity, "Exporting...", Toast.LENGTH_SHORT).show()
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                exportPasswordUseCase(uri)
-            }
+            viewModel.onAction(PasswordManagerAction.OnExportGooglePassword(uri))
         } else {
             Toast.makeText(this@PasswordManagerActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
         }
@@ -48,9 +46,7 @@ class PasswordManagerActivity : AppCompatActivity() {
 
             Toast.makeText(this@PasswordManagerActivity, "Importing...", Toast.LENGTH_SHORT).show()
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                importPasswordUseCase(uri)
-            }
+            viewModel.onAction(PasswordManagerAction.OnImportGooglePassword(uri))
         } else {
             Toast.makeText(this@PasswordManagerActivity, "Something went wrong...", Toast.LENGTH_SHORT).show()
         }

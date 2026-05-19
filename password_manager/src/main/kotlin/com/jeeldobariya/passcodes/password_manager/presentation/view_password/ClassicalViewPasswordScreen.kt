@@ -84,12 +84,6 @@ private fun ClassicalViewPasswordScreenContent(
             ) {
                 Text("Delete Password")
             }
-
-            Button(onClick = {
-                /* TODO: Navigate Back */
-            }) {
-                Text(" Navigate Back ")
-            }
         }
     }
 }
