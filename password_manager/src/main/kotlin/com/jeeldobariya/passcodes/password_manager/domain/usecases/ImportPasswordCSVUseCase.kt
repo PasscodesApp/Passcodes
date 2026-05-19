@@ -43,7 +43,7 @@ class ImportPasswordCSVUseCase(
                 val notes = if (headerMap.containsKey("notes")) record.get("notes")?.trim()
                     .orEmpty() else ""
 
-                val chosenDomain = url.ifBlank { name }
+                val chosenDomain = name.ifBlank { url }
 
                 // Skip the row if it lacks domain, username, or password
                 if (chosenDomain.isBlank() || username.isBlank() || passwordString.isEmpty()) {
