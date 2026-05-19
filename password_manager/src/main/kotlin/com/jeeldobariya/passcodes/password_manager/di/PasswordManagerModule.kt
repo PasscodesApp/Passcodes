@@ -52,7 +52,11 @@ val passwordManagerModule = module {
     }
 
     viewModel {
-        PasswordManagerViewModel(get())
+        PasswordManagerViewModel(
+            retrieveAllPasswordUseCase = get(),
+            importPasswordCSVUseCase = get(),
+            exportPasswordCSVUseCase = get()
+        )
     }
 
     viewModel {
