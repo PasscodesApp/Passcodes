@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
-import com.jeeldobariya.passcodes.password_manager.domain.utils.GOGGLE_IMPORT_EXPORT_CSV_HEADER
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import java.io.InputStreamReader
@@ -17,9 +16,8 @@ class ImportPasswordCSVUseCase(
         val inputStream = context.contentResolver.openInputStream(importFileUri)
             ?: throw Exception("Failed to open file stream")
 
-        // Configure CSV parser to automatically parse header matching standard formatting
         val csvFormat = CSVFormat.DEFAULT.builder()
-            .setHeader() // Dynamically reads first line as header mapping
+            .setHeader()
             .setSkipHeaderRecord(true)
             .setIgnoreSurroundingSpaces(true)
             .get()
@@ -36,7 +34,6 @@ class ImportPasswordCSVUseCase(
 
             // 2. Safely process row entries
             for (record in parser) {
-                // Extract values by header name mapping instead of hardcoded column indexes
                 val url = record.get("url")?.trim().orEmpty()
                 val name =
                     if (headerMap.containsKey("name")) record.get("name")?.trim().orEmpty() else ""
