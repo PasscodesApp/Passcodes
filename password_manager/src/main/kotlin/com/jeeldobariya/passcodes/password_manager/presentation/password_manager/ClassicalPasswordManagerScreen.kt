@@ -66,7 +66,7 @@ fun ClassicalPasswordManagerScreen(navigateTo: (Route) -> Unit, viewModel: Passw
     ClassicalPasswordManagerScreenContent(
         navigateTo = navigateTo,
         onImportClicked = {
-            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 setType("text/comma-separated-values")
                 putExtra(Intent.EXTRA_TITLE, "passwords.csv")
@@ -77,9 +77,10 @@ fun ClassicalPasswordManagerScreen(navigateTo: (Route) -> Unit, viewModel: Passw
         onExportClicked = {
             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "text/comma-separated-values"
+                setType("text/comma-separated-values")
                 putExtra(Intent.EXTRA_TITLE, "passwords.csv")
             }
+
             exportLauncher.launch(intent)
         }
     )
