@@ -5,59 +5,77 @@ import android.net.Uri
 import com.jeeldobariya.passcodes.password_manager.data.repository.PasswordRepository
 import com.jeeldobariya.passcodes.password_manager.domain.modals.PasswordModal
 import com.jeeldobariya.passcodes.password_manager.domain.utils.GOGGLE_IMPORT_EXPORT_CSV_HEADER
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
+import java.io.InputStreamReader
 
 class ImportPasswordCSVUseCase(
     val context: Context,
     val passwordRepository: PasswordRepository
 ) {
     suspend operator fun invoke(importFileUri: Uri) {
-        context.contentResolver.openInputStream(importFileUri)?.bufferedReader().use { reader ->
-            requireNotNull(reader)
+        val inputStream = context.contentResolver.openInputStream(importFileUri)
+            ?: throw Exception("Failed to open file stream")
 
-            val header = reader.readLine()
-            if (header != GOGGLE_IMPORT_EXPORT_CSV_HEADER) {
-                throw Exception("The given csv file has incorrect header format. Correct Format is [$GOGGLE_IMPORT_EXPORT_CSV_HEADER]")
+        // Configure CSV parser to automatically parse header matching standard formatting
+        val csvFormat = CSVFormat.DEFAULT.builder()
+            .setHeader() // Dynamically reads first line as header mapping
+            .setSkipHeaderRecord(true)
+            .setIgnoreSurroundingSpaces(true)
+            .get()
+
+        InputStreamReader(inputStream).use { reader ->
+            val parser: CSVParser = csvFormat.parse(reader)
+
+            // 1. Strict Header Validation
+            // Google expects keys: "url", "username", "password", "notes" (sometimes "name")
+            val headerMap = parser.headerMap
+            if (!headerMap.containsKey("url") || !headerMap.containsKey("username") || !headerMap.containsKey("password")) {
+                throw Exception("The given CSV file has an incorrect header format. Missing required columns.")
             }
 
-            var line: String? = reader.readLine()
-            while (line != null) {
-                val cols = line.split(",")
+            // 2. Safely process row entries
+            for (record in parser) {
+                // Extract values by header name mapping instead of hardcoded column indexes
+                val url = record.get("url")?.trim().orEmpty()
+                val name =
+                    if (headerMap.containsKey("name")) record.get("name")?.trim().orEmpty() else ""
+                val username = record.get("username")?.trim().orEmpty()
+                val passwordString = record.get("password")
+                    .orEmpty() // Passwords shouldn't be trimmed to preserve spacing intent
+                val notes = if (headerMap.containsKey("notes")) record.get("notes")?.trim()
+                    .orEmpty() else ""
 
-                val chosenDomain: String = if (!cols[0].isBlank()) {
-                    cols[0].trim()
-                } else cols[1].trim()
+                val chosenDomain = url.ifBlank { name }
 
-                // Skip the entity/row of csv
-                // If,
-                //     It lacks value for either, [domain, username or password]!!
-                if (chosenDomain.isBlank() || cols[2].isBlank() || cols[3].isEmpty()) {
-                    line = reader.readLine()
+                // Skip the row if it lacks domain, username, or password
+                if (chosenDomain.isBlank() || username.isBlank() || passwordString.isEmpty()) {
                     continue
                 }
 
-                val password: PasswordModal? = passwordRepository.getPasswordByUsernameAndDomain(
-                    username = cols[2].trim(),
-                    domain = chosenDomain
-                )
+                // 3. Database Sync Strategy (Check for duplicate)
+                val existingPassword: PasswordModal? =
+                    passwordRepository.getPasswordByUsernameAndDomain(
+                        username = username,
+                        domain = chosenDomain
+                    )
 
-                if (password != null) {
+                if (existingPassword != null) {
                     passwordRepository.updatePassword(
-                        id = password.id,
-                        domain = password.domain,
-                        username = password.username,
-                        password = cols[3].trim(),
-                        notes = cols[4].trim()
+                        id = existingPassword.id,
+                        domain = existingPassword.domain,
+                        username = existingPassword.username,
+                        password = passwordString,
+                        notes = notes
                     )
                 } else {
                     passwordRepository.savePasswordEntity(
                         domain = chosenDomain,
-                        username = cols[2].trim(),
-                        password = cols[3].trim(),
-                        notes = cols[4].trim(),
+                        username = username,
+                        password = passwordString,
+                        notes = notes
                     )
                 }
-
-                line = reader.readLine()
             }
         }
     }
