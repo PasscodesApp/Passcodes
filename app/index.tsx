@@ -14,6 +14,7 @@ export default function Home() {
       <Text>vX.X.X - Alpha</Text>
       <Link href={"/savepassword"}>Save Password</Link>
       <Link href={"/loadpassword"}>Load Password</Link>
+      <Link href={"/getbackpasswords"}>GetBack Password</Link>
     </View>
   );
 }

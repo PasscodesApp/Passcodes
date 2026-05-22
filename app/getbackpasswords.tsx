@@ -1,0 +1,299 @@
+import { Directory, File, Paths } from "expo-file-system";
+import * as SQLite from "expo-sqlite";
+import { useState } from "react";
+import { Text, View } from "react-native";
+
+export default function GetBackPasswords() {
+  const [taskStatus, setTaskStatus] = useState({
+    message: "Running Task....",
+    isError: false,
+  });
+
+  const expoDb = SQLite.useSQLiteContext();
+
+  migrateOldAndroidData(expoDb)
+    .then((value) => {
+      setTaskStatus({ message: value, isError: false });
+    })
+    .catch((reason) => {
+      setTaskStatus({ message: reason, isError: true });
+    });
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text>GetBack Data</Text>
+      <Text
+        style={{
+          color: taskStatus.isError ? "#ef5350" : "#80ef80",
+        }}
+      >
+        {taskStatus.message}
+      </Text>
+    </View>
+  );
+}
+
+async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
+  const ROOM_DB_NAME = "master";
+
+  // ==========================================
+  // STEP 1: locate database & backup directiories
+  // ==========================================
+
+  const androidNativeDbDir = new Directory(
+    Paths.document.parentDirectory,
+    "databases",
+  );
+  const roomDbFile = new File(androidNativeDbDir.uri, ROOM_DB_NAME);
+
+  if (!roomDbFile.exists) {
+    console.warn("Room database file not found at:", roomDbFile.uri);
+    return "Data Migration Was Not Need, What-so-Ever";
+  }
+
+  const backUpDir = new Directory(Paths.document, "backup_room_migration");
+  if (!backUpDir.exists) {
+    console.warn("Backup directory not found. Creating it at:", backUpDir.uri);
+    backUpDir.create();
+  }
+
+  // ==========================================
+  // STEP 2. execute the copy/backup operation
+  // ==========================================
+
+  // We must track all 3 files that make up a Room database instance
+  const filesToBackup = [
+    ROOM_DB_NAME,
+    `${ROOM_DB_NAME}-wal`,
+    `${ROOM_DB_NAME}-shm`,
+  ];
+
+  console.log("Starting secure backup sequence...");
+
+  try {
+    for (const fileName of filesToBackup) {
+      // Construct exact source and destination URIs for each file
+      const sourceDir = new Directory(androidNativeDbDir.uri, fileName);
+      const destinationDir = new Directory(backUpDir.uri, fileName);
+
+      if (sourceDir.exists) {
+        sourceDir.copy(destinationDir);
+        console.log(`[Backup Success] Copied: ${destinationDir.uri}`);
+      } else {
+        console.log(
+          `[Backup Info] ${sourceDir.uri} does not exist.. (skipping)`,
+        );
+      }
+    }
+
+    console.log(
+      "Backup Complete: Persistent backup secured at:",
+      backUpDir.uri,
+    );
+  } catch (error) {
+    console.error("CRITICAL ERROR DURING BACKUP PHASE:", error);
+    // Halt execution immediately to prevent data loss or manipulation
+    throw new Error("Migration stopped: Backup could not be verified safely.");
+  }
+
+  // ==========================================
+  // STEP 3: copy to expo-sqlite workspace
+  // ==========================================
+
+  // Temporary name for the old Room database inside Expo's workspace
+  // to keep it isolated from your new Drizzle database file.
+  const EXPO_TEMP_ROOM_DB_NAME = "old_room_source.db";
+
+  const filesToProcess = new Map([
+    [ROOM_DB_NAME, EXPO_TEMP_ROOM_DB_NAME],
+    [`${ROOM_DB_NAME}-wal`, `${EXPO_TEMP_ROOM_DB_NAME}-wal`],
+    [`${ROOM_DB_NAME}-shm`, `${EXPO_TEMP_ROOM_DB_NAME}-shm`],
+  ]);
+
+  try {
+    // Expo SQLite strictly expects databases to be in standard application files/SQLite/
+    const expoSqliteDir = new Directory(Paths.document, "SQLite");
+
+    if (!expoSqliteDir.exists) {
+      console.warn(
+        "expo-sqlite directory not found. Creating it at:",
+        expoSqliteDir.uri,
+      );
+      expoSqliteDir.create();
+    }
+
+    for (const fileName of filesToProcess.keys()) {
+      const sourceDir = new Directory(androidNativeDbDir.uri, fileName);
+      let targetName = filesToProcess.get(fileName);
+
+      if (!targetName) {
+        // This is likely unreachable point, but just satisfy typescript..
+        throw new Error(
+          `Mapkey (' ${targetName} ') not found in map (' ${filesToProcess} ')`,
+        );
+      }
+
+      const targetDir = new Directory(expoSqliteDir, targetName);
+
+      if (sourceDir.exists) {
+        sourceDir.copy(targetDir);
+        console.log(
+          `[Expo-SQLite Workspace] Placed copy of (' ${fileName} '): ${targetDir.uri}`,
+        );
+      } else {
+        console.warn(
+          `[Expo-SQLite Workspace] Skipping (' ${fileName} ') for copy as file not found!!`,
+        );
+      }
+    }
+  } catch (error) {
+    console.error("CRITICAL ERROR DURING MOVE TO WORKSPACE PHASE:", error);
+    // Halt execution immediately to prevent data loss or manipulation
+    throw new Error(
+      "Migration stopped: file move to expo-sqlite workspace could not be verified safely.",
+    );
+  }
+
+  // ==========================================
+  // STEP 4: open room database & extracted data
+  // ==========================================
+
+  let intermediateDataRepresentation: any[] = [];
+
+  let roomExpoSqliteDb: SQLite.SQLiteDatabase | undefined = undefined;
+  try {
+    console.log("Opening working room database instance via Expo SQLite...");
+    roomExpoSqliteDb = await SQLite.openDatabaseAsync(EXPO_TEMP_ROOM_DB_NAME);
+
+    // 1. Fetch Room database version via user_version PRAGMA
+    const versionResult = await roomExpoSqliteDb.getFirstAsync<{
+      user_version: number;
+    }>("PRAGMA user_version;");
+    let dbVersion = versionResult?.user_version;
+
+    if (!dbVersion) {
+      dbVersion = 1;
+      console.log(
+        `[Database Discovery] Room User Version Not Detected, So Assuming Database as: v${dbVersion}`,
+      );
+    }
+
+    console.log(
+      `[Database Discovery] Room User Version Detected: v${dbVersion}`,
+    );
+
+    // 2. Conditional Extraction Routing
+    if (dbVersion === 2) {
+      console.log("Processing Version 2 database structure extraction...");
+      intermediateDataRepresentation =
+        await extractVersion2Data(roomExpoSqliteDb);
+    } else if (dbVersion === 1) {
+      console.log("Processing Version 1 database structure extraction...");
+      intermediateDataRepresentation =
+        await extractVersion1Data(roomExpoSqliteDb);
+    } else {
+      // This is likely unreachable point, but just satisfy typescript correctness..
+      throw new Error(
+        `Unexpected database schema version encountered: v${dbVersion}`,
+      );
+    }
+
+    console.log(
+      "[Database Discovery] Successfully extracted intermediate data representation.",
+    );
+  } catch (error) {
+    console.error(
+      "CRITICAL ERROR ENCOUNTERED DURING DATA MID-REPRESENTATION PHRASE:",
+      error,
+    );
+
+    throw new Error(
+      "Migration stopped: room database's intermediate representation could not be verified safely.",
+    );
+  } finally {
+    await roomExpoSqliteDb?.closeAsync();
+  }
+
+  // ==========================================
+  // STEP 5: room database -> expo database
+  // ==========================================
+  console.log("Moving Data.... it might take few minutes");
+
+  try {
+    const insertStatement = await expoDb.prepareAsync(
+      `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
+    VALUES ($domain, $username, $password, $notes, $url, $created_at, $updated_at)`,
+    );
+
+    intermediateDataRepresentation.forEach((data) => {
+      let statementData = {
+        $domain: data.domain,
+        $username: data.username,
+        $password: data.password,
+        $notes: data.notes,
+        $url: data.url,
+        $created_at: data.created_at,
+        $updated_at: data.updated_at,
+      };
+      insertStatement.executeAsync(statementData);
+    });
+  } catch (error) {
+    console.error("CRITICAL ERROR ENCOUNTERED DURING EXPO PHRASE:", error);
+
+    throw new Error(
+      "Migration stopped: room database's intermediate representation could not be verified safely.",
+    );
+  }
+
+  console.log("Successfully moved data to expo-sqlite db...");
+
+  console.log("Successfully Migrated Data, Now just clean up is left...");
+
+  // ==========================================
+  // STEP 6: clean up backuped data
+  // ==========================================
+
+  console.log("[CLEAN BACKUP]: cleaning...");
+  if (backUpDir.exists) {
+    backUpDir.delete();
+    console.log("[CLEAN BACKUP]: deleted backup directory:", backUpDir.uri);
+  }
+  console.log("[CLEAN BACKUP]: cleaned all backup files...");
+
+  const successMessage = "SUCCESSFULLY MIGRATED All OLD DATA!!";
+  console.log(successMessage);
+  console.log("task exit 0;");
+
+  return successMessage;
+}
+
+async function extractVersion2Data(db: SQLite.SQLiteDatabase) {
+  let rows: any[] = await db.getAllAsync(
+    `SELECT domain, username, password, notes, url, created_at, updated_at FROM passwords`,
+  );
+  console.log(`Extracted rows from v2 passwords table: ${rows.length}`);
+  return rows;
+}
+
+async function extractVersion1Data(db: SQLite.SQLiteDatabase) {
+  let dataRows: any[] = await db.getAllAsync(
+    `SELECT domain, username, password, notes, created_at, updated_at FROM passwords`,
+  );
+  console.log(`Extracted rows from v1 passwords table: ${dataRows.length}`);
+
+  const updatedRows = dataRows.map((dataRow) => {
+    let domain = dataRow.domain;
+    return { ...dataRow, url: `https://local${domain}` };
+  });
+
+  console.log("Successfully generated urls for v1 to make it compitable...");
+
+  // FIX 3: Return the newly generated array
+  return updatedRows;
+}
