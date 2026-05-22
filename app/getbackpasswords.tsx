@@ -18,7 +18,7 @@ export default function GetBackPasswords() {
   useEffect(() => {
     async function runMigration() {
       // It only for test so that migration run everytime
-      await AsyncStorage.setItem(MIGRATION_KEY, "false");
+      // await AsyncStorage.setItem(MIGRATION_KEY, "false");
 
       try {
         // Only Android supports this Room migration
