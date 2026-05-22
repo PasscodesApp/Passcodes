@@ -4,6 +4,7 @@ import * as SQLite from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Platform, Text, View } from "react-native";
 
+const ROOM_DB_NAME = "master";
 const MIGRATION_KEY = "room_expo_migration_complete_v1";
 
 export default function GetBackPasswords() {
@@ -16,6 +17,9 @@ export default function GetBackPasswords() {
 
   useEffect(() => {
     async function runMigration() {
+      // It only for test so that migration run everytime
+      await AsyncStorage.setItem(MIGRATION_KEY, "false");
+
       try {
         // Only Android supports this Room migration
         if (Platform.OS !== "android") {
@@ -51,7 +55,7 @@ export default function GetBackPasswords() {
         });
       } catch (error: any) {
         setTaskStatus({
-          message: error?.message ?? "Unknown migration failure",
+          message: error?.message ?? "Unknown Error: migration failure",
           isError: true,
         });
       }
@@ -81,8 +85,6 @@ export default function GetBackPasswords() {
 }
 
 async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
-  const ROOM_DB_NAME = "master";
-
   // ==========================================
   // STEP 1: locate database & backup directiories
   // ==========================================
@@ -95,7 +97,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
 
   if (!roomDbFile.exists) {
     console.warn("Room database file not found at:", roomDbFile.uri);
-    return "Data Migration Was Not Need, What-so-Ever";
+    return "Data Migration Was Not Need, What-so-Ever As roomdb file not found";
   }
 
   const backUpDir = new Directory(Paths.document, "backup_room_migration");
