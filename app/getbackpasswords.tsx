@@ -1,7 +1,10 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Directory, File, Paths } from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
+
+const MIGRATION_KEY = "room_expo_migration_complete_v1";
 
 export default function GetBackPasswords() {
   const [taskStatus, setTaskStatus] = useState({
@@ -12,13 +15,49 @@ export default function GetBackPasswords() {
   const expoDb = SQLite.useSQLiteContext();
 
   useEffect(() => {
-    migrateOldAndroidData(expoDb)
-      .then((value) => {
-        setTaskStatus({ message: value, isError: false });
-      })
-      .catch((reason) => {
-        setTaskStatus({ message: reason, isError: true });
-      });
+    async function runMigration() {
+      try {
+        // Only Android supports this Room migration
+        if (Platform.OS !== "android") {
+          setTaskStatus({
+            message: "Migration not required on this platform.",
+            isError: false,
+          });
+
+          return;
+        }
+
+        // Check migration marker
+        const alreadyMigrated = await AsyncStorage.getItem(MIGRATION_KEY);
+
+        if (alreadyMigrated === "true") {
+          setTaskStatus({
+            message: "Migration already completed.",
+            isError: false,
+          });
+
+          return;
+        }
+
+        // Run migration
+        const result = await migrateOldAndroidData(expoDb);
+
+        // Mark complete
+        await AsyncStorage.setItem(MIGRATION_KEY, "true");
+
+        setTaskStatus({
+          message: result,
+          isError: false,
+        });
+      } catch (error: any) {
+        setTaskStatus({
+          message: error?.message ?? "Unknown migration failure",
+          isError: true,
+        });
+      }
+    }
+
+    runMigration();
   }, []);
 
   return (
@@ -43,7 +82,6 @@ export default function GetBackPasswords() {
 
 async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   const ROOM_DB_NAME = "master";
-  const MIGRATION_KEY = "room_expo_migration_complete";
 
   // ==========================================
   // STEP 1: locate database & backup directiories
