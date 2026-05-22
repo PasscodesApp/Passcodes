@@ -1,6 +1,6 @@
 import { Directory, File, Paths } from "expo-file-system";
 import * as SQLite from "expo-sqlite";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
 export default function GetBackPasswords() {
@@ -11,13 +11,15 @@ export default function GetBackPasswords() {
 
   const expoDb = SQLite.useSQLiteContext();
 
-  migrateOldAndroidData(expoDb)
-    .then((value) => {
-      setTaskStatus({ message: value, isError: false });
-    })
-    .catch((reason) => {
-      setTaskStatus({ message: reason, isError: true });
-    });
+  useEffect(() => {
+    migrateOldAndroidData(expoDb)
+      .then((value) => {
+        setTaskStatus({ message: value, isError: false });
+      })
+      .catch((reason) => {
+        setTaskStatus({ message: reason, isError: true });
+      });
+  }, []);
 
   return (
     <View
@@ -41,6 +43,7 @@ export default function GetBackPasswords() {
 
 async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   const ROOM_DB_NAME = "master";
+  const MIGRATION_KEY = "room_expo_migration_complete";
 
   // ==========================================
   // STEP 1: locate database & backup directiories
@@ -79,15 +82,15 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   try {
     for (const fileName of filesToBackup) {
       // Construct exact source and destination URIs for each file
-      const sourceDir = new Directory(androidNativeDbDir.uri, fileName);
-      const destinationDir = new Directory(backUpDir.uri, fileName);
+      const sourceFile = new File(androidNativeDbDir.uri, fileName);
+      const destinationFile = new File(backUpDir.uri, fileName);
 
-      if (sourceDir.exists) {
-        sourceDir.copy(destinationDir);
-        console.log(`[Backup Success] Copied: ${destinationDir.uri}`);
+      if (sourceFile.exists) {
+        sourceFile.copy(destinationFile);
+        console.log(`[Backup Success] Copied: ${destinationFile.uri}`);
       } else {
         console.log(
-          `[Backup Info] ${sourceDir.uri} does not exist.. (skipping)`,
+          `[Backup Info] ${sourceFile.uri} does not exist.. (skipping)`,
         );
       }
     }
@@ -129,7 +132,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
     }
 
     for (const fileName of filesToProcess.keys()) {
-      const sourceDir = new Directory(androidNativeDbDir.uri, fileName);
+      const sourceFile = new File(androidNativeDbDir.uri, fileName);
       let targetName = filesToProcess.get(fileName);
 
       if (!targetName) {
@@ -139,12 +142,12 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
         );
       }
 
-      const targetDir = new Directory(expoSqliteDir, targetName);
+      const targetFile = new File(expoSqliteDir, targetName);
 
-      if (sourceDir.exists) {
-        sourceDir.copy(targetDir);
+      if (sourceFile.exists) {
+        sourceFile.copy(targetFile);
         console.log(
-          `[Expo-SQLite Workspace] Placed copy of (' ${fileName} '): ${targetDir.uri}`,
+          `[Expo-SQLite Workspace] Placed copy of (' ${fileName} '): ${targetFile.uri}`,
         );
       } else {
         console.warn(
@@ -165,6 +168,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   // ==========================================
 
   let intermediateDataRepresentation: any[] = [];
+  let sourceResult: { count: number } | null = null;
 
   let roomExpoSqliteDb: SQLite.SQLiteDatabase | undefined = undefined;
   try {
@@ -188,7 +192,12 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
       `[Database Discovery] Room User Version Detected: v${dbVersion}`,
     );
 
-    // 2. Conditional Extraction Routing
+    // 2. Total Count Of Passsowrds
+    sourceResult = await roomExpoSqliteDb.getFirstAsync<{
+      count: number;
+    }>("SELECT COUNT(*) as count FROM passwords;");
+
+    // 3. Conditional Extraction Routing
     if (dbVersion === 2) {
       console.log("Processing Version 2 database structure extraction...");
       intermediateDataRepresentation =
@@ -225,30 +234,48 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   // ==========================================
   console.log("Moving Data.... it might take few minutes");
 
-  try {
-    const insertStatement = await expoDb.prepareAsync(
-      `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
+  const insertStatement = await expoDb.prepareAsync(
+    `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
     VALUES ($domain, $username, $password, $notes, $url, $created_at, $updated_at)`,
-    );
+  );
 
-    intermediateDataRepresentation.forEach((data) => {
-      let statementData = {
-        $domain: data.domain,
-        $username: data.username,
-        $password: data.password,
-        $notes: data.notes,
-        $url: data.url,
-        $created_at: data.created_at,
-        $updated_at: data.updated_at,
-      };
-      insertStatement.executeAsync(statementData);
+  try {
+    await expoDb.withTransactionAsync(async () => {
+      for (const data of intermediateDataRepresentation) {
+        let statementData = {
+          $domain: data.domain,
+          $username: data.username,
+          $password: data.password,
+          $notes: data.notes,
+          $url: data.url,
+          $created_at: data.created_at,
+          $updated_at: data.updated_at,
+        };
+
+        await insertStatement.executeAsync(statementData);
+      }
     });
+
+    const targetResult = await expoDb.getFirstAsync<{
+      count: number;
+    }>("SELECT COUNT(*) as count FROM passwords;");
+
+    const sourceRows = sourceResult?.count ?? 0;
+    const insertedRows = targetResult?.count ?? 0;
+
+    if (sourceRows !== insertedRows) {
+      throw new Error(
+        `Data migration verification failed. Source: ${sourceRows}, Inserted: ${insertedRows}`,
+      );
+    }
   } catch (error) {
     console.error("CRITICAL ERROR ENCOUNTERED DURING EXPO PHRASE:", error);
 
     throw new Error(
       "Migration stopped: room database's intermediate representation could not be verified safely.",
     );
+  } finally {
+    await insertStatement.finalizeAsync();
   }
 
   console.log("Successfully moved data to expo-sqlite db...");
@@ -289,11 +316,10 @@ async function extractVersion1Data(db: SQLite.SQLiteDatabase) {
 
   const updatedRows = dataRows.map((dataRow) => {
     let domain = dataRow.domain;
-    return { ...dataRow, url: `https://local${domain}` };
+    return { ...dataRow, url: `https://local.${domain}` };
   });
 
   console.log("Successfully generated urls for v1 to make it compitable...");
 
-  // FIX 3: Return the newly generated array
   return updatedRows;
 }
