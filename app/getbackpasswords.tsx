@@ -301,9 +301,9 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
     }>("SELECT COUNT(*) as count FROM passwords;");
 
     const sourceRows = sourceResult?.count ?? 0;
-    const insertedRows = targetResult?.count ?? 0;
+    const totalRowsInDestination = targetResult?.count ?? 0;
 
-    if (sourceRows !== insertedRows) {
+    if (sourceRows <= totalRowsInDestination) {
       throw new Error(
         `Data migration verification failed. Source: ${sourceRows}, Inserted: ${insertedRows}`,
       );
