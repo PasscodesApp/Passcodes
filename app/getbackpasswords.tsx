@@ -86,7 +86,7 @@ export default function GetBackPasswords() {
 
 async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   // ==========================================
-  // STEP 1: locate database & backup directiories
+  // STEP 1: locate database & backup directories
   // ==========================================
 
   const androidNativeDbDir = new Directory(
@@ -182,7 +182,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
         );
       }
 
-      const targetFile = new File(expoSqliteDir, targetName);
+      const targetFile = new File(expoSqliteDir.uri, targetName);
 
       if (sourceFile.exists) {
         sourceFile.copy(targetFile);
@@ -232,7 +232,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
       `[Database Discovery] Room User Version Detected: v${dbVersion}`,
     );
 
-    // 2. Total Count Of Passsowrds
+    // 2. Total Count Of Passswords
     sourceResult = await roomExpoSqliteDb.getFirstAsync<{
       count: number;
     }>("SELECT COUNT(*) as count FROM passwords;");
@@ -294,7 +294,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
           $updated_at: data.updated_at,
         };
 
-        await insertStatement.executeAsync(statementData);
+        await insertStatement?.executeAsync(statementData);
       }
     });
 
@@ -307,17 +307,20 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
 
     if (sourceRows <= totalRowsInDestination) {
       throw new Error(
-        `Data migration verification failed. Source: ${sourceRows}, Inserted: ${insertedRows}`,
+        `Data migration verification failed. Source: ${sourceRows}, Inserted: ${totalRowsInDestination}`,
       );
     }
   } catch (error) {
-    console.error("CRITICAL ERROR ENCOUNTERED DURING EXPO PHRASE:", error);
+    console.error(
+      "CRITICAL ERROR ENCOUNTERED DATA MOVING TO EXPO SQLITE PHRASE:",
+      error,
+    );
 
     throw new Error(
-      "Migration stopped: room database's intermediate representation could not be verified safely.",
+      "Migration stopped: expo database's data migrated could not be verified safely.",
     );
   } finally {
-    await insertStatement.finalizeAsync();
+    await insertStatement?.finalizeAsync();
   }
 
   console.log("Successfully moved data to expo-sqlite db...");
@@ -361,7 +364,7 @@ async function extractVersion1Data(db: SQLite.SQLiteDatabase) {
     return { ...dataRow, url: `https://local.${domain}` };
   });
 
-  console.log("Successfully generated urls for v1 to make it compitable...");
+  console.log("Successfully generated urls for v1 to make it compatible...");
 
   return updatedRows;
 }
