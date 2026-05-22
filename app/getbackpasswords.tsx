@@ -274,12 +274,14 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   // ==========================================
   console.log("Moving Data.... it might take few minutes");
 
-  const insertStatement = await expoDb.prepareAsync(
-    `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
-    VALUES ($domain, $username, $password, $notes, $url, $created_at, $updated_at)`,
-  );
+  let insertStatement: SQLite.SQLiteStatement | undefined;
 
   try {
+    insertStatement = await expoDb.prepareAsync(
+      `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
+      VALUES ($domain, $username, $password, $notes, $url, $created_at, $updated_at)`,
+    );
+
     await expoDb.withTransactionAsync(async () => {
       for (const data of intermediateDataRepresentation) {
         let statementData = {
