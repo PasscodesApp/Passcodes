@@ -277,6 +277,10 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   let insertStatement: SQLite.SQLiteStatement | undefined;
 
   try {
+    const rowsBefore = await expoDb.getFirstAsync<{ count: number }>(
+      "SELECT COUNT(*) as count FROM passwords;",
+    );
+
     insertStatement = await expoDb.prepareAsync(
       `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
       VALUES ($domain, $username, $password, $notes, $url, $created_at, $updated_at)`,
@@ -298,16 +302,16 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
       }
     });
 
-    const targetResult = await expoDb.getFirstAsync<{
+    const rowsAfter = await expoDb.getFirstAsync<{
       count: number;
     }>("SELECT COUNT(*) as count FROM passwords;");
 
     const sourceRows = sourceResult?.count ?? 0;
-    const totalRowsInDestination = targetResult?.count ?? 0;
+    const inserted = (rowsAfter?.count ?? 0) - (rowsBefore?.count ?? 0);
 
-    if (sourceRows <= totalRowsInDestination) {
+    if (sourceRows !== inserted) {
       throw new Error(
-        `Data migration verification failed. Source: ${sourceRows}, Inserted: ${totalRowsInDestination}`,
+        `Data migration verification failed. Source: ${sourceRows}, Inserted: ${inserted}`,
       );
     }
   } catch (error) {
