@@ -100,7 +100,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
     return "Data Migration Was Not Need, What-so-Ever As roomdb file not found";
   }
 
-  const backUpDir = new Directory(Paths.document, "backup_room_migration");
+  const backUpDir = new Directory(Paths.cache, "backup_room_migration");
   if (!backUpDir.exists) {
     console.warn("Backup directory not found. Creating it at:", backUpDir.uri);
     backUpDir.create();
@@ -151,7 +151,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
 
   // Temporary name for the old Room database inside Expo's workspace
   // to keep it isolated from your new Drizzle database file.
-  const EXPO_TEMP_ROOM_DB_NAME = "old_room_source.db";
+  const EXPO_TEMP_ROOM_DB_NAME = "old_room_source";
 
   const filesToProcess = new Map([
     [ROOM_DB_NAME, EXPO_TEMP_ROOM_DB_NAME],
@@ -159,10 +159,10 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
     [`${ROOM_DB_NAME}-shm`, `${EXPO_TEMP_ROOM_DB_NAME}-shm`],
   ]);
 
-  try {
-    // Expo SQLite strictly expects databases to be in standard application files/SQLite/
-    const expoSqliteDir = new Directory(Paths.document, "SQLite");
+  // Expo SQLite strictly expects databases to be in standard application files/SQLite/
+  const expoSqliteDir = new Directory(Paths.document, "SQLite");
 
+  try {
     if (!expoSqliteDir.exists) {
       console.warn(
         "expo-sqlite directory not found. Creating it at:",
@@ -334,15 +334,30 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
   console.log("Successfully Migrated Data, Now just clean up is left...");
 
   // ==========================================
-  // STEP 6: clean up backuped data
+  // STEP 6: clean up
   // ==========================================
 
-  console.log("[CLEAN BACKUP]: cleaning...");
-  if (backUpDir.exists) {
-    backUpDir.delete();
-    console.log("[CLEAN BACKUP]: deleted backup directory:", backUpDir.uri);
+  console.log("[CLEAN MESS]: cleaning...");
+
+  for (const fileName of filesToProcess.keys()) {
+    let targetName = filesToProcess.get(fileName);
+
+    if (!targetName) {
+      // This is likely unreachable point, but just satisfy typescript..
+      throw new Error(
+        `Mapkey (' ${targetName} ') not found in map (' ${filesToProcess} ')`,
+      );
+    }
+
+    const targetFile = new File(expoSqliteDir.uri, targetName);
+
+    if (targetFile.exists) {
+      targetFile.delete();
+      console.log(`[CLEAN MESS]] Delete (' ${fileName} '): ${targetFile.uri}`);
+    }
   }
-  console.log("[CLEAN BACKUP]: cleaned all backup files...");
+
+  console.log("[CLEAN MESS]: cleaned all backup files...");
 
   const successMessage = "SUCCESSFULLY MIGRATED All OLD DATA!!";
   console.log(successMessage);
