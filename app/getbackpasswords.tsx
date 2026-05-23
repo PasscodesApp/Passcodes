@@ -7,6 +7,13 @@ import { Platform, Text, View } from "react-native";
 const ROOM_DB_NAME = "master";
 const MIGRATION_KEY = "room_expo_migration_complete_v1";
 
+enum MIGRATION_STATUS {
+  IDLE = "idle",
+  RUNNING = "running",
+  FAILED = "failed",
+  SUCCESS = "success",
+}
+
 export default function GetBackPasswords() {
   const [taskStatus, setTaskStatus] = useState({
     message: "Running Task....",
@@ -17,24 +24,15 @@ export default function GetBackPasswords() {
 
   useEffect(() => {
     async function runMigration() {
-      // It only for test so that migration run everytime
-      // await AsyncStorage.setItem(MIGRATION_KEY, "false");
-
       try {
-        // Only Android supports this Room migration
-        if (Platform.OS !== "android") {
-          setTaskStatus({
-            message: "Migration not required on this platform.",
-            isError: false,
-          });
+        // Check migration marker
+        let alreadyMigrated = await AsyncStorage.getItem(MIGRATION_KEY);
 
-          return;
+        if (!alreadyMigrated) {
+          alreadyMigrated = MIGRATION_STATUS.IDLE;
         }
 
-        // Check migration marker
-        const alreadyMigrated = await AsyncStorage.getItem(MIGRATION_KEY);
-
-        if (alreadyMigrated === "true") {
+        if (alreadyMigrated === MIGRATION_STATUS.SUCCESS) {
           setTaskStatus({
             message: "Migration already completed.",
             isError: false,
@@ -43,17 +41,20 @@ export default function GetBackPasswords() {
           return;
         }
 
+        await AsyncStorage.setItem(MIGRATION_KEY, MIGRATION_STATUS.RUNNING);
+
         // Run migration
         const result = await migrateOldAndroidData(expoDb);
 
-        // Mark complete
-        await AsyncStorage.setItem(MIGRATION_KEY, "true");
+        await AsyncStorage.setItem(MIGRATION_KEY, MIGRATION_STATUS.SUCCESS);
 
         setTaskStatus({
           message: result,
           isError: false,
         });
       } catch (error: any) {
+        await AsyncStorage.setItem(MIGRATION_KEY, MIGRATION_STATUS.FAILED);
+
         setTaskStatus({
           message: error?.message ?? "Unknown Error: migration failure",
           isError: true,
@@ -61,6 +62,15 @@ export default function GetBackPasswords() {
       }
     }
 
+    // Only Android supports this Room migration
+    if (Platform.OS !== "android") {
+      setTaskStatus({
+        message: "Migration not required on this platform.",
+        isError: false,
+      });
+
+      return;
+    }
     runMigration();
   }, []);
 
@@ -300,8 +310,6 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
 
         await insertStatement.executeAsync(statementData);
       }
-
-      insertStatement.finalizeAsync();
     });
 
     const rowsAfter = await expoDb.getFirstAsync<{
