@@ -281,12 +281,12 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
       "SELECT COUNT(*) as count FROM passwords;",
     );
 
-    insertStatement = await expoDb.prepareAsync(
-      `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
-      VALUES ($domain, $username, $password, $notes, $url, $created_at, $updated_at)`,
-    );
-
     await expoDb.withTransactionAsync(async () => {
+      insertStatement = await expoDb.prepareAsync(
+        `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
+        VALUES ($domain, $username, $password, $notes, $url, $created_at, $updated_at)`,
+      );
+
       for (const data of intermediateDataRepresentation) {
         let statementData = {
           $domain: data.domain,
@@ -298,8 +298,10 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
           $updated_at: data.updated_at,
         };
 
-        await insertStatement?.executeAsync(statementData);
+        await insertStatement.executeAsync(statementData);
       }
+
+      insertStatement.finalizeAsync();
     });
 
     const rowsAfter = await expoDb.getFirstAsync<{
