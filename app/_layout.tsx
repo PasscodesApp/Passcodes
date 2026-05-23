@@ -10,6 +10,7 @@ const DATABASE_NAME = "test2.db";
 
 export default function RootLayout() {
   const expoDb = openDatabaseSync(DATABASE_NAME);
+
   const db = drizzle(expoDb);
 
   const { success, error } = useMigrations(db, migrations);

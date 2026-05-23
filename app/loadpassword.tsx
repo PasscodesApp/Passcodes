@@ -45,7 +45,7 @@ export default function LoadPassword() {
           >
             <Text>Domain: {passwords.domain}</Text>
             <Text>Username: {passwords.username}</Text>
-            <Text>Password: {passwords.passsword}</Text>
+            <Text>Password: {passwords.password}</Text>
             <Text>URL: {passwords.url}</Text>
             <Text>Notes: {passwords.notes}</Text>
             <Text>Updated-At: {passwords.updatedAt}</Text>
