@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Platform, Text, View } from "react-native";
 
 const ROOM_DB_NAME = "master";
-const MIGRATION_KEY = "room_expo_migration_complete_v1";
 
 enum MIGRATION_STATUS {
   IDLE = "idle",
@@ -23,6 +22,8 @@ export default function GetBackPasswords() {
   const expoDb = SQLite.useSQLiteContext();
 
   useEffect(() => {
+    const MIGRATION_KEY = "room_expo_migration_complete_v1";
+
     async function runMigration() {
       try {
         // Check migration marker
