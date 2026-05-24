@@ -9,19 +9,19 @@ export default function Home() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        gap: 10,
+        gap: 15,
       }}
     >
-      <Text style={{ fontSize: 36 }}>Passcodes</Text>
-      <Text style={{ fontSize: 16 }}>v3.0.0 - Alpha</Text>
+      <Text style={{ fontSize: 32 }}>Passcodes</Text>
+      <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
 
-      <Link style={{ fontSize: 20 }} href={"/savepassword"}>
+      <Link style={{ fontSize: 16 }} href={"/savepassword"}>
         Save Password
       </Link>
-      <Link style={{ fontSize: 20 }} href={"/loadpassword"}>
+      <Link style={{ fontSize: 16 }} href={"/loadpassword"}>
         Load Password
       </Link>
-      <Link style={{ fontSize: 20 }} href={"/getbackpasswords"}>
+      <Link style={{ fontSize: 16 }} href={"/getbackpasswords"}>
         GetBack Password
       </Link>
     </SafeAreaView>

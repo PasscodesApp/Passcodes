@@ -24,7 +24,7 @@ export default function SavePassword() {
         gap: 5,
       }}
     >
-      <Text style={{ fontSize: 36 }}>Save Password</Text>
+      <Text style={{ fontSize: 32 }}>Save Password</Text>
 
       <TextInput
         style={{ borderWidth: 2 }}

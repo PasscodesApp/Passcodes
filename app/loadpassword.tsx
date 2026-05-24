@@ -30,7 +30,7 @@ export default function LoadPassword() {
 
   return (
     <SafeAreaView>
-      <Text style={{ fontSize: 36, textAlign: "center" }}>Load Password</Text>
+      <Text style={{ fontSize: 32, textAlign: "center" }}>Load Password</Text>
 
       <ScrollView
         contentContainerStyle={{
@@ -65,7 +65,7 @@ export default function LoadPassword() {
             </View>
           ))
         ) : (
-          <Text>No Data</Text>
+          <Text style={{ fontSize: 12 }}>No Data</Text>
         )}
       </ScrollView>
     </SafeAreaView>
