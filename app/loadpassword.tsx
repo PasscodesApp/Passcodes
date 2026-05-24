@@ -1,22 +1,23 @@
 import { passwords } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
-import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Button, ScrollView, Text, View } from "react-native";
+import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoadPassword() {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
-  let [passwordList, setPasswordList] = useState<any[]>([]);
+
+  const [passwordList, setPasswordList] = useState<any[]>([]);
 
   function deletePasswordById(id: number) {
     drizzleDb
       .delete(passwords)
       .where(eq(passwords.id, id))
       .then(() => {
-        router.back();
+        setPasswordList((prev) => prev.filter((item) => item.id !== id));
       });
   }
 
@@ -28,38 +29,96 @@ export default function LoadPassword() {
   }, []);
 
   return (
-    <ScrollView
-      contentContainerStyle={{
+    <SafeAreaView
+      style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: "#f5f5f5",
+        paddingHorizontal: 16,
       }}
     >
-      <Text>Load Password</Text>
+      <Text
+        style={{
+          fontSize: 32,
+          fontWeight: "bold",
+          textAlign: "center",
+          marginVertical: 20,
+        }}
+      >
+        Load Passwords
+      </Text>
 
-      {passwordList.length > 0 ? (
-        passwordList.map((passwords) => (
+      <FlatList
+        data={passwordList}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{
+          paddingBottom: 20,
+        }}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={<Text style={styles.emptyText}>No Data!!</Text>}
+        renderItem={({ item }) => (
           <View
-            key={passwords.id}
-            style={{ margin: 6, borderWidth: 4, borderRadius: 10, padding: 4 }}
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: 16,
+              padding: 16,
+              marginBottom: 16,
+            }}
           >
-            <Text>Domain: {passwords.domain}</Text>
-            <Text>Username: {passwords.username}</Text>
-            <Text>Password: {passwords.password}</Text>
-            <Text>URL: {passwords.url}</Text>
-            <Text>Notes: {passwords.notes}</Text>
-            <Text>Updated-At: {passwords.updatedAt}</Text>
-            <Button
-              title="Delete Password"
-              onPress={() => {
-                deletePasswordById(passwords.id);
-              }}
-            />
+            <Text style={styles.label}>
+              Domain: <Text style={styles.value}>{item.domain}</Text>
+            </Text>
+
+            <Text style={styles.label}>
+              Username: <Text style={styles.value}>{item.username}</Text>
+            </Text>
+
+            <Text style={styles.label}>
+              Password: <Text style={styles.value}>{item.password}</Text>
+            </Text>
+
+            <Text style={styles.label}>
+              URL: <Text style={styles.value}>{item.url}</Text>
+            </Text>
+
+            <Text style={styles.label}>
+              Notes: <Text style={styles.value}>{item.notes}</Text>
+            </Text>
+
+            <Text style={styles.label}>
+              Updated At: <Text style={styles.value}>{item.updatedAt}</Text>
+            </Text>
+
+            <View style={{ marginTop: 10 }}>
+              <Button
+                title="Delete Password"
+                color="#e63946"
+                onPress={() => deletePasswordById(item.id)}
+              />
+            </View>
           </View>
-        ))
-      ) : (
-        <Text>No Data</Text>
-      )}
-    </ScrollView>
+        )}
+      />
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  label: {
+    fontSize: 15,
+    fontWeight: "600",
+    marginBottom: 6,
+    color: "#333",
+  },
+
+  value: {
+    fontWeight: "400",
+    color: "#555",
+  },
+
+  emptyText: {
+    textAlign: "center",
+    marginTop: 40,
+    fontSize: 16,
+    color: "gray",
+  },
+});
