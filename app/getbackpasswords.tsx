@@ -89,7 +89,7 @@ export default function GetBackPasswords() {
         gap: 10,
       }}
     >
-      <Text style={{ fontSize: 24 }}>GetBack Data</Text>
+      <Text style={{ fontSize: 32, fontWeight: "bold" }}>GetBack Data</Text>
       <Text
         style={{
           color: taskStatus.isError ? "#ef1713" : "#1aadf1",
