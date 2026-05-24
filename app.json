@@ -2,7 +2,7 @@
   "expo": {
     "name": "Passcodes",
     "slug": "passcodes",
-    "version": "1.0.0",
+    "version": "v3.0.0-Alpha",
     "orientation": "portrait",
     "icon": "./assets/images/passcodes_icon.png",
     "scheme": "passcodes",
@@ -11,7 +11,7 @@
       "supportsTablet": true
     },
     "android": {
-      "version": "v3.0.0-Aplha",
+      "version": "v3.0.0-Alpha",
       "versionCode": 8,
       "package": "com.jeeldobariya.passcodes",
       "icon": "./assets/images/android-icon-launcher.png",
