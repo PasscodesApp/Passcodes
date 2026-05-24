@@ -7,6 +7,7 @@
     "icon": "./assets/images/passcodes_icon.png",
     "scheme": "passcodes",
     "userInterfaceStyle": "automatic",
+    "githubUrl": "https://github.com/PasscodesApp/Passcodes",
     "ios": {
       "supportsTablet": true
     },
