@@ -21,8 +21,8 @@ export default function Home() {
       <Link style={{ fontSize: 16 }} href={"/loadpassword"}>
         Load Password
       </Link>
-      <Link style={{ fontSize: 16 }} href={"/getbackpasswords"}>
-        GetBack Password
+      <Link style={{ fontSize: 16 }} href={"/settings"}>
+        Settings
       </Link>
     </SafeAreaView>
   );
