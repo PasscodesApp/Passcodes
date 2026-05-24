@@ -11,7 +11,9 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.jeeldobariya.passcodes.dev.expo",
+      "version": "v3.0.0-Aplha",
+      "versionCode": 8,
+      "package": "com.jeeldobariya.passcodes",
       "icon": "./assets/images/android-icon-launcher.png",
       "adaptiveIcon": {
         "backgroundColor": "#305969",
@@ -47,6 +49,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "960e68d8-0220-4068-8f1f-e141d29dbcef"
+      }
+    },
+    "owner": "passcodesapp"
   }
 }
