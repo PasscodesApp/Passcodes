@@ -19,6 +19,7 @@
     "drizzle-orm": "^0.45.2",
     "expo": "~55.0.26",
     "expo-constants": "~55.0.15",
+    "expo-file-system": "~55.0.22",
     "expo-font": "~55.0.8",
     "expo-haptics": "~55.0.14",
     "expo-image": "~55.0.11",
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.10",
+    "babel-preset-expo": "~55.0.8",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~55.0.1",
