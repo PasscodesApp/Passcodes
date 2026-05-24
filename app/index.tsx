@@ -12,7 +12,7 @@ export default function Home() {
         gap: 15,
       }}
     >
-      <Text style={{ fontSize: 32 }}>Passcodes</Text>
+      <Text style={{ fontSize: 32, fontWeight: "bold" }}>Passcodes</Text>
       <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
 
       <Link style={{ fontSize: 16 }} href={"/savepassword"}>

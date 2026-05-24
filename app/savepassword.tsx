@@ -3,7 +3,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Alert, Button, Text, TextInput, View } from "react-native";
 
 export default function SavePassword() {
   let [domain, setDomain] = useState("");
@@ -24,7 +24,7 @@ export default function SavePassword() {
         gap: 5,
       }}
     >
-      <Text style={{ fontSize: 32 }}>Save Password</Text>
+      <Text style={{ fontSize: 32, fontWeight: "bold" }}>Save Password</Text>
 
       <TextInput
         style={{ borderWidth: 2 }}
@@ -65,6 +65,14 @@ export default function SavePassword() {
       <Button
         title="Save Password"
         onPress={() => {
+          if (!domain || !username || !password) {
+            Alert.alert(
+              "Missing Fields",
+              "Domain, Username and Password are required.",
+            );
+            return;
+          }
+
           drizzleDb
             .insert(passwords)
             .values({
@@ -74,7 +82,11 @@ export default function SavePassword() {
               notes,
               url,
             })
-            .then(() => router.back());
+            .then(() => router.back())
+            .catch((err) => {
+              console.error(err);
+              Alert.alert("Error", "Failed to save password.");
+            });
         }}
       />
     </View>

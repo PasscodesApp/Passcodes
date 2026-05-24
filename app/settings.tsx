@@ -12,7 +12,7 @@ export default function Settings() {
         gap: 15,
       }}
     >
-      <Text style={{ fontSize: 32 }}>Settings</Text>
+      <Text style={{ fontSize: 32, fontWeight: "bold" }}>Settings</Text>
 
       <View>
         <Text style={{ fontSize: 28 }}>TroubleShooting</Text>
