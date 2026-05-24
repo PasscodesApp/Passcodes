@@ -111,6 +111,18 @@ in `PasscodesApp/Passcodes-Docs`.
 
 ## Building The App
 
+1. Install Dependency
+
+```bash
+npm install
+```
+
+2. Use Expo Go. (prototyping)
+
+```bash
+npm start
+```
+
 <details>
   <summary>Deperacted Stuff Bro!!!</summary>
 
