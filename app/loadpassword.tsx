@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Button, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoadPassword() {
   const db = useSQLiteContext();
@@ -28,38 +29,45 @@ export default function LoadPassword() {
   }, []);
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Load Password</Text>
+    <SafeAreaView>
+      <Text style={{ fontSize: 36, textAlign: "center" }}>Load Password</Text>
 
-      {passwordList.length > 0 ? (
-        passwordList.map((passwords) => (
-          <View
-            key={passwords.id}
-            style={{ margin: 6, borderWidth: 4, borderRadius: 10, padding: 4 }}
-          >
-            <Text>Domain: {passwords.domain}</Text>
-            <Text>Username: {passwords.username}</Text>
-            <Text>Password: {passwords.password}</Text>
-            <Text>URL: {passwords.url}</Text>
-            <Text>Notes: {passwords.notes}</Text>
-            <Text>Updated-At: {passwords.updatedAt}</Text>
-            <Button
-              title="Delete Password"
-              onPress={() => {
-                deletePasswordById(passwords.id);
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        {passwordList.length > 0 ? (
+          passwordList.map((passwords) => (
+            <View
+              key={passwords.id}
+              style={{
+                margin: 6,
+                borderWidth: 4,
+                borderRadius: 10,
+                padding: 4,
               }}
-            />
-          </View>
-        ))
-      ) : (
-        <Text>No Data</Text>
-      )}
-    </ScrollView>
+            >
+              <Text>Domain: {passwords.domain}</Text>
+              <Text>Username: {passwords.username}</Text>
+              <Text>Password: {passwords.password}</Text>
+              <Text>URL: {passwords.url}</Text>
+              <Text>Notes: {passwords.notes}</Text>
+              <Text>Updated-At: {passwords.updatedAt}</Text>
+              <Button
+                title="Delete Password"
+                onPress={() => {
+                  deletePasswordById(passwords.id);
+                }}
+              />
+            </View>
+          ))
+        ) : (
+          <Text>No Data</Text>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 }

@@ -21,9 +21,10 @@ export default function SavePassword() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        gap: 5,
       }}
     >
-      <Text>Save Password</Text>
+      <Text style={{ fontSize: 36 }}>Save Password</Text>
 
       <TextInput
         style={{ borderWidth: 2 }}

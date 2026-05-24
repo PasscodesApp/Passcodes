@@ -3,7 +3,8 @@ import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { Stack } from "expo-router";
 import { SQLiteProvider, openDatabaseSync } from "expo-sqlite";
 import { Suspense } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import migrations from "../db/drizzle/migrations";
 
 const DATABASE_NAME = "test2.db";
@@ -17,17 +18,17 @@ export default function RootLayout() {
 
   if (error) {
     return (
-      <View>
-        <Text>Migration error: {error.message}</Text>
-      </View>
+      <SafeAreaView>
+        <Text style={{ fontSize: 32 }}>Migration error: {error.message}</Text>
+      </SafeAreaView>
     );
   }
 
   if (!success) {
     return (
-      <View>
-        <Text>Migration is in progress...</Text>
-      </View>
+      <SafeAreaView>
+        <ActivityIndicator size="large" />
+      </SafeAreaView>
     );
   }
 
