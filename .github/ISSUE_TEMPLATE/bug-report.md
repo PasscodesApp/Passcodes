@@ -27,10 +27,10 @@ A clear and concise description of what you expected to happen.
 
 If applicable, add screenshots to help explain your problem.
 
-## Smartphone (please complete the following information):
+## Device (please complete the following information):
 
 - Device: [e.g. Google Pixel 9]
-- OS Version: [e.g. Android 14,  iOS 26.4.2]
+- OS Version: [e.g. Android 14, iOS 26.4.2]
 - App Version: [e.g. v0.1.0]
 
 ## Additional Context:
