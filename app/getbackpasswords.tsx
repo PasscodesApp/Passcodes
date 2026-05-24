@@ -2,7 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Directory, File, Paths } from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Platform, Text, View } from "react-native";
+import { Button, Platform, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ROOM_DB_NAME = "master";
 
@@ -14,16 +15,15 @@ enum MIGRATION_STATUS {
 }
 
 export default function GetBackPasswords() {
+  const MIGRATION_KEY = "room_expo_migration_complete_v1";
   const [taskStatus, setTaskStatus] = useState({
-    message: "Running Task....",
+    message: "Task Idle",
     isError: false,
   });
 
   const expoDb = SQLite.useSQLiteContext();
 
   useEffect(() => {
-    const MIGRATION_KEY = "room_expo_migration_complete_v1";
-
     async function runMigration() {
       try {
         // Check migration marker
@@ -43,6 +43,11 @@ export default function GetBackPasswords() {
         }
 
         await AsyncStorage.setItem(MIGRATION_KEY, MIGRATION_STATUS.RUNNING);
+
+        setTaskStatus({
+          message: "Running Task....",
+          isError: false,
+        });
 
         // Run migration
         const result = await migrateOldAndroidData(expoDb);
@@ -76,22 +81,36 @@ export default function GetBackPasswords() {
   }, []);
 
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        gap: 10,
       }}
     >
-      <Text>GetBack Data</Text>
+      <Text style={{ fontSize: 36 }}>GetBack Data</Text>
       <Text
         style={{
-          color: taskStatus.isError ? "#ef5350" : "#80ef80",
+          color: taskStatus.isError ? "#ef1713" : "#1aadf1",
+          fontSize: 24,
         }}
       >
         {taskStatus.message}
       </Text>
-    </View>
+
+      <Button
+        title="Clear Previous Result (Unsafe)"
+        onPress={() => {
+          AsyncStorage.removeItem(MIGRATION_KEY);
+
+          setTaskStatus({
+            message: "Result is cleared. migration will re-run nexttime..",
+            isError: true,
+          });
+        }}
+      />
+    </SafeAreaView>
   );
 }
 
