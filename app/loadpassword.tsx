@@ -1,6 +1,7 @@
 import { passwords } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
+import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
@@ -88,7 +89,16 @@ export default function LoadPassword() {
               Updated At: <Text style={styles.value}>{item.updatedAt}</Text>
             </Text>
 
-            <View style={{ marginTop: 10 }}>
+            <View style={{ gap: 10, marginTop: 10 }}>
+              <Button
+                title="Update Password"
+                onPress={() =>
+                  router.push({
+                    pathname: "/updatepassword",
+                    params: { id: item.id },
+                  })
+                }
+              />
               <Button
                 title="Delete Password"
                 color="#e63946"

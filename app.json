@@ -8,6 +8,7 @@
     "scheme": "passcodes",
     "userInterfaceStyle": "automatic",
     "githubUrl": "https://github.com/PasscodesApp/Passcodes",
+    "platforms": ["android"],
     "ios": {
       "supportsTablet": true
     },
