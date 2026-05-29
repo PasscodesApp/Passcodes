@@ -1,3 +1,4 @@
+import ScreenHeading from "@/components/ScreenHeading";
 import { passwords } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
@@ -37,16 +38,7 @@ export default function LoadPassword() {
         paddingHorizontal: 16,
       }}
     >
-      <Text
-        style={{
-          fontSize: 32,
-          fontWeight: "bold",
-          textAlign: "center",
-          marginVertical: 20,
-        }}
-      >
-        Load Passwords
-      </Text>
+      <ScreenHeading title="View Password" />
 
       <FlatList
         data={passwordList}

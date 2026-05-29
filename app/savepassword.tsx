@@ -1,10 +1,11 @@
 import FormTextField from "@/components/FormTextField";
+import ScreenHeading from "@/components/ScreenHeading";
 import { passwords } from "@/db/schema";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, Button, ScrollView, Text } from "react-native";
+import { Alert, Button, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SavePassword() {
@@ -25,9 +26,7 @@ export default function SavePassword() {
           gap: 16,
         }}
       >
-        <Text style={{ fontSize: 32, fontWeight: "bold", textAlign: "center" }}>
-          Save Password
-        </Text>
+        <ScreenHeading title="Save Password" />
 
         <FormTextField
           label="Domain"

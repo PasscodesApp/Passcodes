@@ -1,11 +1,12 @@
 import FormTextField from "@/components/FormTextField";
+import ScreenHeading from "@/components/ScreenHeading";
 import { passwords } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Button, ScrollView, StyleSheet, Text } from "react-native";
+import { Button, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UpdatePassword() {
@@ -65,7 +66,7 @@ export default function UpdatePassword() {
           gap: 16,
         }}
       >
-        <Text style={styles.title}>Update Password</Text>
+        <ScreenHeading title="Update Password" />
 
         <FormTextField label="Domain" value={domain} onChangeText={setDomain} />
 
