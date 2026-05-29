@@ -6,7 +6,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Button, ScrollView, StyleSheet } from "react-native";
+import { Button, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UpdatePassword() {
@@ -80,7 +80,6 @@ export default function UpdatePassword() {
           label="Password"
           value={password}
           onChangeText={setPassword}
-          secureTextEntry
         />
 
         <FormTextField label="URL" value={url} onChangeText={setUrl} />
@@ -97,12 +96,3 @@ export default function UpdatePassword() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 10,
-  },
-});
