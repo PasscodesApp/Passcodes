@@ -1,17 +1,11 @@
+import FormTextField from "@/components/FormTextField";
 import { passwords } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Button, ScrollView, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UpdatePassword() {
@@ -73,47 +67,30 @@ export default function UpdatePassword() {
       >
         <Text style={styles.title}>Update Password</Text>
 
-        <View>
-          <Text style={styles.label}>Domain:</Text>
-          <TextInput
-            value={domain}
-            onChangeText={setDomain}
-            style={styles.input}
-          />
-        </View>
+        <FormTextField label="Domain" value={domain} onChangeText={setDomain} />
 
-        <View>
-          <Text style={styles.label}>Username:</Text>
-          <TextInput
-            value={username}
-            onChangeText={setUsername}
-            style={styles.input}
-          />
-        </View>
+        <FormTextField
+          label="Username"
+          value={username}
+          onChangeText={setUsername}
+        />
 
-        <View>
-          <Text style={styles.label}>Password:</Text>
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            style={styles.input}
-          />
-        </View>
+        <FormTextField
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-        <View>
-          <Text style={styles.label}>URL:</Text>
-          <TextInput value={url} onChangeText={setUrl} style={styles.input} />
-        </View>
+        <FormTextField label="URL" value={url} onChangeText={setUrl} />
 
-        <View>
-          <Text style={styles.label}>Notes:</Text>
-          <TextInput
-            value={notes}
-            onChangeText={setNotes}
-            multiline
-            style={styles.input}
-          />
-        </View>
+        <FormTextField
+          label="Notes"
+          value={notes}
+          onChangeText={setNotes}
+          multiline
+        />
+
         <Button title="Update Password" onPress={updatePassword} />
       </ScrollView>
     </SafeAreaView>
@@ -126,19 +103,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
-  },
-
-  label: {
-    fontSize: 16,
-    fontWeight: 600,
-  },
-
-  input: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 12,
-    padding: 14,
-    fontSize: 16,
   },
 });
