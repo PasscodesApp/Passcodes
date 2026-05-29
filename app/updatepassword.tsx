@@ -9,7 +9,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput
+  TextInput,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -72,42 +73,47 @@ export default function UpdatePassword() {
       >
         <Text style={styles.title}>Update Password</Text>
 
-        <TextInput
-          placeholder="Domain"
-          value={domain}
-          onChangeText={setDomain}
-          style={styles.input}
-        />
+        <View>
+          <Text style={styles.label}>Domain:</Text>
+          <TextInput
+            value={domain}
+            onChangeText={setDomain}
+            style={styles.input}
+          />
+        </View>
 
-        <TextInput
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-          style={styles.input}
-        />
+        <View>
+          <Text style={styles.label}>Username:</Text>
+          <TextInput
+            value={username}
+            onChangeText={setUsername}
+            style={styles.input}
+          />
+        </View>
 
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-        />
+        <View>
+          <Text style={styles.label}>Password:</Text>
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            style={styles.input}
+          />
+        </View>
 
-        <TextInput
-          placeholder="URL"
-          value={url}
-          onChangeText={setUrl}
-          style={styles.input}
-        />
+        <View>
+          <Text style={styles.label}>URL:</Text>
+          <TextInput value={url} onChangeText={setUrl} style={styles.input} />
+        </View>
 
-        <TextInput
-          placeholder="Notes"
-          value={notes}
-          onChangeText={setNotes}
-          multiline
-          style={[styles.input, { height: 100 }]}
-        />
-
+        <View>
+          <Text style={styles.label}>Notes:</Text>
+          <TextInput
+            value={notes}
+            onChangeText={setNotes}
+            multiline
+            style={styles.input}
+          />
+        </View>
         <Button title="Update Password" onPress={updatePassword} />
       </ScrollView>
     </SafeAreaView>
@@ -116,9 +122,15 @@ export default function UpdatePassword() {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 10,
+  },
+
+  label: {
+    fontSize: 16,
+    fontWeight: 600,
   },
 
   input: {
