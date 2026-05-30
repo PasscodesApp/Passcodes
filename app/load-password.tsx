@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function LoadPassword() {
+export default function LoadPasswordScreen() {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
 
@@ -70,23 +70,15 @@ export default function LoadPassword() {
             </Text>
 
             <Text style={styles.label}>
-              URL: <Text style={styles.value}>{item.url}</Text>
-            </Text>
-
-            <Text style={styles.label}>
-              Notes: <Text style={styles.value}>{item.notes}</Text>
-            </Text>
-
-            <Text style={styles.label}>
               Updated At: <Text style={styles.value}>{item.updatedAt}</Text>
             </Text>
 
             <View style={{ gap: 10, marginTop: 10 }}>
               <Button
-                title="Update Password"
+                title="View Password"
                 onPress={() =>
                   router.push({
-                    pathname: "/updatepassword",
+                    pathname: "/password-details",
                     params: { id: item.id },
                   })
                 }

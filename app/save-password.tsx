@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Alert, Button, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function SavePassword() {
+export default function SavePasswordScreen() {
   let [domain, setDomain] = useState("");
   let [username, setUsername] = useState("");
   let [password, setPassword] = useState("");
