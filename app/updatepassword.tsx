@@ -20,27 +20,24 @@ export default function UpdatePassword() {
   const [password, setPassword] = useState("");
   const [url, setUrl] = useState("");
   const [notes, setNotes] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    async function loadPassword() {
-      const result = await drizzleDb
-        .select()
-        .from(passwords)
-        .where(eq(passwords.id, Number(id)));
+  async function loadAndRefreshPassword() {
+    const result = await drizzleDb
+      .select()
+      .from(passwords)
+      .where(eq(passwords.id, Number(id)));
 
-      if (result.length > 0) {
-        const data = result[0];
+    if (result.length > 0) {
+      const data = result[0];
 
-        setDomain(data.domain || "");
-        setUsername(data.username || "");
-        setPassword(data.password || "");
-        setUrl(data.url || "");
-        setNotes(data.notes || "");
-      }
+      setDomain(data.domain || "");
+      setUsername(data.username || "");
+      setPassword(data.password || "");
+      setUrl(data.url || "");
+      setNotes(data.notes || "");
     }
-
-    loadPassword();
-  }, []);
+  }
 
   async function updatePassword() {
     await drizzleDb
@@ -58,6 +55,10 @@ export default function UpdatePassword() {
     router.back();
   }
 
+  useEffect(() => {
+    loadAndRefreshPassword();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
@@ -68,30 +69,57 @@ export default function UpdatePassword() {
       >
         <ScreenHeading title="Update Password" />
 
-        <FormTextField label="Domain" value={domain} onChangeText={setDomain} />
+        <FormTextField
+          label="Domain"
+          value={domain}
+          onChangeText={setDomain}
+          editable={isEditing}
+        />
 
         <FormTextField
           label="Username"
           value={username}
           onChangeText={setUsername}
+          editable={isEditing}
         />
 
         <FormTextField
           label="Password"
           value={password}
           onChangeText={setPassword}
+          editable={isEditing}
         />
 
-        <FormTextField label="URL" value={url} onChangeText={setUrl} />
+        <FormTextField
+          label="URL"
+          value={url}
+          onChangeText={setUrl}
+          editable={isEditing}
+        />
 
         <FormTextField
           label="Notes"
           value={notes}
           onChangeText={setNotes}
+          editable={isEditing}
           multiline
         />
 
-        <Button title="Update Password" onPress={updatePassword} />
+        {!isEditing ? (
+          <Button title="Edit Password" onPress={() => setIsEditing(true)} />
+        ) : (
+          <>
+            <Button title="Update Password" onPress={updatePassword} />
+
+            <Button
+              title="Cancel"
+              onPress={() => {
+                setIsEditing(false);
+                loadAndRefreshPassword();
+              }}
+            />
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
