@@ -15,7 +15,7 @@ enum MIGRATION_STATUS {
   SUCCESS = "success",
 }
 
-export default function GetBackPasswordsPage() {
+export default function GetBackPasswordsScreen() {
   const MIGRATION_KEY = "room_expo_migration_complete_v1";
   const [taskStatus, setTaskStatus] = useState({
     message: "Task Idle",

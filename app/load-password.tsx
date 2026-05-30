@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function LoadPasswordPage() {
+export default function LoadPasswordScreen() {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
 

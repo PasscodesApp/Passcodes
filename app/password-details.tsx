@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { Button, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function PasswordDetailsPage() {
+export default function PasswordDetailsScreen() {
   const { id } = useLocalSearchParams();
 
   const db = useSQLiteContext();
