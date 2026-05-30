@@ -70,20 +70,12 @@ export default function LoadPasswordPage() {
             </Text>
 
             <Text style={styles.label}>
-              URL: <Text style={styles.value}>{item.url}</Text>
-            </Text>
-
-            <Text style={styles.label}>
-              Notes: <Text style={styles.value}>{item.notes}</Text>
-            </Text>
-
-            <Text style={styles.label}>
               Updated At: <Text style={styles.value}>{item.updatedAt}</Text>
             </Text>
 
             <View style={{ gap: 10, marginTop: 10 }}>
               <Button
-                title="Update Password"
+                title="View Password"
                 onPress={() =>
                   router.push({
                     pathname: "/password-details",
