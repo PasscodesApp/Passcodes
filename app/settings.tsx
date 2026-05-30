@@ -1,3 +1,4 @@
+import ScreenHeading from "@/components/ScreenHeading";
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,7 +13,7 @@ export default function Settings() {
         gap: 15,
       }}
     >
-      <Text style={{ fontSize: 32, fontWeight: "bold" }}>Settings</Text>
+      <ScreenHeading title="Settings" />
 
       <View>
         <Text style={{ fontSize: 28 }}>TroubleShooting</Text>

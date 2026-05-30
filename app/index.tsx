@@ -1,3 +1,4 @@
+import ScreenHeading from "@/components/ScreenHeading";
 import { Link } from "expo-router";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,7 +13,7 @@ export default function Home() {
         gap: 15,
       }}
     >
-      <Text style={{ fontSize: 32, fontWeight: "bold" }}>Passcodes</Text>
+      <ScreenHeading title="Passcodes" />
       <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
 
       <Link style={{ fontSize: 16 }} href={"/savepassword"}>

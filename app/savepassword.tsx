@@ -1,9 +1,11 @@
+import FormTextField from "@/components/FormTextField";
+import ScreenHeading from "@/components/ScreenHeading";
 import { passwords } from "@/db/schema";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
+import { Alert, Button, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SavePassword() {
@@ -24,100 +26,48 @@ export default function SavePassword() {
           gap: 16,
         }}
       >
-        <Text style={{ fontSize: 32, fontWeight: "bold", textAlign: "center" }}>
-          Save Password
-        </Text>
+        <ScreenHeading title="Save Password" />
 
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-            }}
-          >
-            Domain:
-          </Text>
-          <TextInput
-            style={{ borderWidth: 2 }}
-            value={domain}
-            onChangeText={setDomain}
-            placeholder="Enter your domain..."
-            placeholderTextColor={"#000"}
-          />
-        </View>
+        <FormTextField
+          label="Domain"
+          value={domain}
+          onChangeText={setDomain}
+          placeholder="Enter your domain..."
+          placeholderTextColor={"#000"}
+        />
 
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-            }}
-          >
-            Username:
-          </Text>
-          <TextInput
-            style={{ borderWidth: 2 }}
-            value={username}
-            onChangeText={setUsername}
-            placeholder="Enter your username..."
-            placeholderTextColor={"#000"}
-          />
-        </View>
+        <FormTextField
+          label="Username"
+          value={username}
+          onChangeText={setUsername}
+          placeholder="Enter your username..."
+          placeholderTextColor={"#000"}
+        />
 
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-            }}
-          >
-            Password:
-          </Text>
-          <TextInput
-            style={{ borderWidth: 2 }}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Enter your passsword..."
-            placeholderTextColor={"#000"}
-          />
-        </View>
+        <FormTextField
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Enter your password..."
+          placeholderTextColor={"#000"}
+        />
 
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-            }}
-          >
-            URL:
-          </Text>
-          <TextInput
-            style={{ borderWidth: 2 }}
-            value={url}
-            onChangeText={setUrl}
-            placeholder="Enter your url..."
-            placeholderTextColor={"#000"}
-          />
-        </View>
+        <FormTextField
+          label="URL"
+          value={url}
+          onChangeText={setUrl}
+          placeholder="Enter your url..."
+          placeholderTextColor={"#000"}
+        />
 
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-            }}
-          >
-            Notes:
-          </Text>
-          <TextInput
-            style={{ borderWidth: 2 }}
-            value={notes}
-            onChangeText={setNotes}
-            placeholder="Enter your notes..."
-            placeholderTextColor={"#000"}
-            multiline
-          />
-        </View>
+        <FormTextField
+          label="Notes"
+          value={notes}
+          onChangeText={setNotes}
+          placeholder="Enter your notes..."
+          placeholderTextColor={"#000"}
+          multiline
+        />
 
         <Button
           title="Save Password"

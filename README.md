@@ -2,8 +2,7 @@
 
 > [!WARNING]
 > It is just a open source project. An is current under active development.
-> Please, consider using it for fun, and not for real password management. (until, we officially
-> release a stable release, which will be around AUG, 2026)
+> Please, consider using it for fun, and not for real password management. (until, we officially release a stable release, which will be around AUG, 2026)
 >
 > Cuz, **`data is stored unencrypted`.. we're planning to add encryption soon.**
 
@@ -47,14 +46,6 @@ A app that take down the headache of remembering passwords. It is open source so
   <img style="width: 40%; height: 100%; padding-right: 10px" src="https://github.com/user-attachments/assets/0c84450e-608d-4845-8771-2adba562e48d" />
 </details>
 
-## Compatibility
-
-- **Compile Sdk**: `Android 17 (API level 37)`
-
-`Android 8+` [API level 26+] -> `Android 17` [API level 34] (we support offically)
-
-Note: high versions can still run, but we are not guaranteed offically.
-
 ## Features
 
 - [ ] Intuitive UI.
@@ -69,14 +60,14 @@ Note: high versions can still run, but we are not guaranteed offically.
 - [ ] Other Secret Info Management.
   - Could be note. (txt file)
   - Could be any info that can encode as key & value.
-  ```json
-  {
-    "key": "SECRET API KEY",
-    "content": "qwerty-let-say",
-    "created-at": "...",
-    "updated-at": "..."
-  }
-  ```
+    ```json
+    {
+      "key": "SECRET API KEY",
+      "content": "qwerty-let-say",
+      "created-at": "...",
+      "updated-at": "..."
+    }
+    ```
 - [ ] NON Secret Info Store.
 - [ ] Encryption and Decryption.
 - [ ] Backup Manager.
@@ -146,19 +137,23 @@ file [building.md](https://passcodesapp.github.io/Passcodes-Docs/dev-docs/buildi
 
 You can checkout support docs, provided
 in [@github:PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/Passcodes-Docs) Or You can even
-seek help on our [discord community](https://discord.gg/zPbk2gp3Sg)
+seek help on our [discord community](https://discord.gg/kSSkYq7KAQ)
 
 ### Changelog & Release Notes
 
-- Professional
-  ChangeLog: [here](https://passcodesapp.github.io/Passcodes-Docs/user-docs/changelog/)
-- Casual Release
-  Notes: [here](https://passcodesapp.github.io/Passcodes-Docs/user-docs/release-notes/)
+- [Casual Release
+  Notes](https://passcodesapp.github.io/Passcodes-Docs/user-docs/release-notes/)
+- [Professional
+  Changelog](https://passcodesapp.github.io/Passcodes-Docs/user-docs/changelog/)
 
 ## Contribution Are Appreciated!!!
 
 By, contributing to project you accept
-the [Terms For Contributions](https://passcodesapp.github.io/Passcodes-Docs/other-docs/terms-for-contributions/), [CONTRIBUTING.md](https://passcodesapp.github.io/Passcodes-Docs/CONTRIBUTING/) & [MIT License](https://passcodesapp.github.io/Passcodes-Docs/LICENSE/).
+the:
+
+- [Terms For Contributions](https://passcodesapp.github.io/Passcodes-Docs/other-docs/terms-for-contributions/)
+- [CONTRIBUTING.md](https://passcodesapp.github.io/Passcodes-Docs/CONTRIBUTING/)
+- [MIT License](https://passcodesapp.github.io/Passcodes-Docs/LICENSE/).
 
 ## Security Policy
 
@@ -168,8 +163,7 @@ Available over at [PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/P
 
 Passcodes Project is license
 under [MIT](https://passcodesapp.github.io/Passcodes-Docs/LICENSE/) License.
-Downloading Or Use the app or any associated stuff would mean, you are okay and have accepted the
-license terms.
+Downloading Or Use the app or any associated stuff would mean, you are okay and have accepted the license's terms.
 
 ---
 
