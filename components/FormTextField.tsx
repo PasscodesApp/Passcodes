@@ -1,9 +1,9 @@
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TextInputProps,
-    View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
 } from "react-native";
 
 type Props = TextInputProps & {
@@ -19,6 +19,7 @@ export default function FormTextField({ label, ...props }: Props) {
         {...props}
         style={[
           styles.input,
+          !props.editable && styles.readOnlyInput,
           props.multiline && {
             minHeight: 100,
             textAlignVertical: "top",
@@ -44,5 +45,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
+  },
+
+  readOnlyInput: {
+    backgroundColor: "#e1e1e1",
   },
 });

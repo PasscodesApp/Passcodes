@@ -6,7 +6,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Button, ScrollView } from "react-native";
+import { Button, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UpdatePassword() {
@@ -105,21 +105,29 @@ export default function UpdatePassword() {
           multiline
         />
 
-        {!isEditing ? (
-          <Button title="Edit Password" onPress={() => setIsEditing(true)} />
-        ) : (
-          <>
-            <Button title="Update Password" onPress={updatePassword} />
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row-reverse",
+            gap: 4,
+          }}
+        >
+          {!isEditing ? (
+            <Button title="Edit Password" onPress={() => setIsEditing(true)} />
+          ) : (
+            <>
+              <Button title="Save Password" onPress={() => updatePassword()} />
 
-            <Button
-              title="Cancel"
-              onPress={() => {
-                setIsEditing(false);
-                loadAndRefreshPassword();
-              }}
-            />
-          </>
-        )}
+              <Button
+                title="Cancel"
+                onPress={() => {
+                  setIsEditing(false);
+                  loadAndRefreshPassword();
+                }}
+              />
+            </>
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
