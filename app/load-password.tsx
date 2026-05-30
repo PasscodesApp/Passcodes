@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function LoadPassword() {
+export default function LoadPasswordPage() {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
 
@@ -86,7 +86,7 @@ export default function LoadPassword() {
                 title="Update Password"
                 onPress={() =>
                   router.push({
-                    pathname: "/updatepassword",
+                    pathname: "/password-details",
                     params: { id: item.id },
                   })
                 }

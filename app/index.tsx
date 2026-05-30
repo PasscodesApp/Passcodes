@@ -3,7 +3,7 @@ import { Link } from "expo-router";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <SafeAreaView
       style={{
@@ -16,10 +16,10 @@ export default function Home() {
       <ScreenHeading title="Passcodes" />
       <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
 
-      <Link style={{ fontSize: 16 }} href={"/savepassword"}>
+      <Link style={{ fontSize: 16 }} href={"/save-password"}>
         Save Password
       </Link>
-      <Link style={{ fontSize: 16 }} href={"/loadpassword"}>
+      <Link style={{ fontSize: 16 }} href={"/load-password"}>
         Load Password
       </Link>
       <Link style={{ fontSize: 16 }} href={"/settings"}>

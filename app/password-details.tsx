@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { Button, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function UpdatePassword() {
+export default function PasswordDetailsPage() {
   const { id } = useLocalSearchParams();
 
   const db = useSQLiteContext();
@@ -67,7 +67,7 @@ export default function UpdatePassword() {
           gap: 16,
         }}
       >
-        <ScreenHeading title="Update Password" />
+        <ScreenHeading title="Password Details" />
 
         <FormTextField
           label="Domain"

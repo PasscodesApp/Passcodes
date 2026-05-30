@@ -3,7 +3,7 @@ import { Link } from "expo-router";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Settings() {
+export default function SettingsPage() {
   return (
     <SafeAreaView
       style={{
@@ -17,7 +17,7 @@ export default function Settings() {
 
       <View>
         <Text style={{ fontSize: 28 }}>TroubleShooting</Text>
-        <Link style={{ color: "#5a5ada" }} href={"/getbackpasswords"}>
+        <Link style={{ color: "#5a5ada" }} href={"/get-back-passwords"}>
           GetBack Passwords From Prior To v3.
         </Link>
       </View>
