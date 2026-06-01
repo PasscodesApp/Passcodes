@@ -7,13 +7,22 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "withoutCredentials": true
+      "withoutCredentials": true,
+      "env": {
+        "APP_VARIANT": "development"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "development"
+      }
     },
     "production": {
-      "autoIncrement": false
+      "autoIncrement": false,
+      "env": {
+        "APP_VARIANT": "production"
+      }
     }
   },
   "submit": {
