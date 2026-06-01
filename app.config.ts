@@ -27,9 +27,15 @@ const config: ExpoConfig = {
     icon: "./assets/images/android-icon-launcher.png",
     adaptiveIcon: {
       backgroundColor: "#34597f",
-      foregroundImage: "./assets/images/android-icon-launcher-foreground.png",
-      backgroundImage: "./assets/images/android-icon-launcher-background.png",
-      monochromeImage: "./assets/images/android-icon-launcher-monochrome.png",
+      foregroundImage: IS_DEV
+        ? "./assets/images/dev-android-icon-launcher-foreground.png"
+        : "./assets/images/android-icon-launcher-foreground.png",
+      backgroundImage: IS_DEV
+        ? "./assets/images/dev-android-icon-launcher-background.png"
+        : "./assets/images/android-icon-launcher-background.png",
+      monochromeImage: IS_DEV
+        ? "./assets/images/dev-android-icon-launcher-foreground.png"
+        : "./assets/images/android-icon-launcher-monochrome.png",
     },
     predictiveBackGestureEnabled: false,
   },
