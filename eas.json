@@ -5,8 +5,9 @@
   },
   "build": {
     "development": {
-      "developmentClient": false,
-      "distribution": "internal"
+      "developmentClient": true,
+      "distribution": "internal",
+      "withoutCredentials": true
     },
     "preview": {
       "distribution": "internal"
