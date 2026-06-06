@@ -24,19 +24,20 @@ const config: ExpoConfig = {
     package: IS_DEV
       ? "com.jeeldobariya.passcodes.dev"
       : "com.jeeldobariya.passcodes",
-    icon: "./assets/images/android-icon-launcher.png",
-    adaptiveIcon: {
-      backgroundColor: "#34597f",
-      foregroundImage: IS_DEV
-        ? "./assets/images/dev-android-icon-launcher-foreground.png"
-        : "./assets/images/android-icon-launcher-foreground.png",
-      backgroundImage: IS_DEV
-        ? "./assets/images/dev-android-icon-launcher-background.png"
-        : "./assets/images/android-icon-launcher-background.png",
-      monochromeImage: IS_DEV
-        ? "./assets/images/dev-android-icon-launcher-foreground.png"
-        : "./assets/images/android-icon-launcher-monochrome.png",
-    },
+    icon: IS_DEV
+      ? "./assets/images/dev-android-icon-launcher.png"
+      : "./assets/images/android-icon-launcher.png",
+    adaptiveIcon: IS_DEV
+      ? undefined
+      : {
+          backgroundColor: "#34597f",
+          foregroundImage:
+            "./assets/images/android-icon-launcher-foreground.png",
+          backgroundImage:
+            "./assets/images/android-icon-launcher-background.png",
+          monochromeImage:
+            "./assets/images/android-icon-launcher-monochrome.png",
+        },
     predictiveBackGestureEnabled: false,
   },
 
