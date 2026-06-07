@@ -80,58 +80,55 @@ A app that take down the headache of remembering passwords. It is open source so
 
 ## Installation Steps
 
-<details>
-  <summary>Deperacted Stuff Bro!!!</summary>
+1. Go to [our github repository release page](https://github.com/PasscodesApp/Passcodes/releases/latest).
 
-```
-1. Go to
-   our [github repository release page](https://github.com/PasscodesApp/Passcodes/releases/latest).
-
-2. Download the apk for your phone. If Don't know the architecture of phone then download apk file
+2. Download the apk form your phone. If don't know the architecture of phone, then download apk file
    that has universal in its name.
 
 3. Install the apk and you are ready to use the app.
 
 It was most shortest and sweetest description (I have ever crafted), For more detailed description,
-See the
-file [installing.md](https://passcodesapp.github.io/Passcodes-Docs/user-docs/installing/)
+See the file [installing.md](https://passcodesapp.github.io/Passcodes-Docs/user-docs/installing/)
 in `PasscodesApp/Passcodes-Docs`.
-```
 
-</details>
+## Upgrading Steps
+
+1. Open current install passcodes app in yout phone.
+
+2. On main screen or sometimes under settings screen, you wll find version infomation.
+
+3. Get this version infomation and compare it with [latest release in our github repository](https://github.com/PasscodesApp/Passcodes/releases/latest).
+
+4. If thier is a new release on github.
+
+5. Download the apk form your phone. If don't know the architecture of phone, then download apk file
+   that has universal in its name.
+
+6. Install the apk, which now will say "upgrade" and you are ready to use the app.
 
 ## Building The App
 
-1. Install Dependency
+1.  Clone the repository on your machine.
 
-```bash
-npm install
-```
+    ```bash
+    git clone https://github.com/PasscodesApp/Passcodes.git && cd Passcodes
+    ```
 
-2. Use Expo Go. (prototyping)
+2.  Install Dependency.
 
-```bash
-npm start
-```
+    ```bash
+    npm install
+    ```
 
-<details>
-  <summary>Deperacted Stuff Bro!!!</summary>
+3.  Use Expo Go. [download app](https://expo.dev/go) (use this for prototyping only)
 
-```
-1. Clone the repository on your machine.
-
-2. Open the project own your Android Studio.
-
-3. Follow the general step and build the app.
-
-4. For code documentation and support docs, check the `docs/` folder in our repository.
+    ```bash
+    npm start
+    ```
 
 It was general, intuitive, short and sweet description, For more detailed description, Visit the
 file [building.md](https://passcodesapp.github.io/Passcodes-Docs/dev-docs/building/) in
 `PasscodesApp/Passcodes-Docs`.
-```
-
-</details>
 
 ## Documentation
 
