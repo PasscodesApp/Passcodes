@@ -15,6 +15,7 @@
     "babel-plugin-inline-import": "^3.0.0",
     "drizzle-orm": "^0.45.2",
     "expo": "^56.0.9",
+    "expo-build-properties": "~56.0.17",
     "expo-constants": "~56.0.17",
     "expo-dev-client": "~56.0.19",
     "expo-file-system": "~56.0.7",

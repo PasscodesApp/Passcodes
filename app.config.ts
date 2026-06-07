@@ -60,6 +60,15 @@ const config: ExpoConfig = {
         },
       },
     ],
+    [
+      "expo-build-properties",
+      {
+        android: {
+          enableMinifyInReleaseBuilds: true,
+          enableShrinkResourcesInReleaseBuilds: true,
+        },
+      },
+    ],
     "expo-font",
     "expo-status-bar",
     "expo-image",
