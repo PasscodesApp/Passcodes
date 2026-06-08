@@ -69,10 +69,7 @@ const config: ExpoConfig = {
         },
       },
     ],
-    "expo-font",
     "expo-status-bar",
-    "expo-image",
-    "expo-web-browser",
     "expo-sqlite",
   ],
   experiments: {
