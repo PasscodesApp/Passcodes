@@ -14,8 +14,12 @@
     },
     "preview": {
       "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "withoutCredentials": true,
       "env": {
-        "APP_VARIANT": "development"
+        "APP_VARIANT": "preview"
       }
     },
     "production": {

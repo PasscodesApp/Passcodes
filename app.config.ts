@@ -1,11 +1,29 @@
 import { ExpoConfig } from "expo/config";
 
 const IS_DEV = process.env.APP_VARIANT === "development";
+const IS_PREVIEW = process.env.APP_VARIANT === "preview";
+
+let appNameSuffix = "";
+let packageNameSuffix = "";
+let versionNameSuffix = "";
+let launcherAppIcon = "./assets/images/android-icon-launcher.png";
+
+if (IS_DEV) {
+  appNameSuffix = " Dev";
+  packageNameSuffix = ".dev";
+  versionNameSuffix = "-Dev";
+  launcherAppIcon = "./assets/images/dev-android-icon-launcher.png";
+} else if (IS_PREVIEW) {
+  appNameSuffix = " Preview";
+  packageNameSuffix = ".preview";
+  versionNameSuffix = "-Preview";
+  launcherAppIcon = "./assets/images/dev-android-icon-launcher.png";
+}
 
 const config: ExpoConfig = {
-  name: IS_DEV ? "Passcodes Dev" : "Passcodes",
+  name: "Passcodes" + appNameSuffix,
   slug: "passcodes",
-  version: IS_DEV ? "v3.0.0-Alpha" : "v3.0.0-Alpha-Dev",
+  version: "v3.0.0-Alpha" + versionNameSuffix,
 
   orientation: "portrait",
   icon: "./assets/images/passcodes_icon.png",
@@ -20,13 +38,9 @@ const config: ExpoConfig = {
 
   android: {
     versionCode: 8,
-    version: IS_DEV ? "v3.0.0-Alpha" : "v3.0.0-Alpha-Dev",
-    package: IS_DEV
-      ? "com.jeeldobariya.passcodes.dev"
-      : "com.jeeldobariya.passcodes",
-    icon: IS_DEV
-      ? "./assets/images/dev-android-icon-launcher.png"
-      : "./assets/images/android-icon-launcher.png",
+    version: "v3.0.0-Alpha" + versionNameSuffix,
+    package: "com.jeeldobariya.passcodes" + packageNameSuffix,
+    icon: launcherAppIcon,
     adaptiveIcon: IS_DEV
       ? undefined
       : {
@@ -60,9 +74,16 @@ const config: ExpoConfig = {
         },
       },
     ],
-    "expo-font",
-    "expo-image",
-    "expo-web-browser",
+    [
+      "expo-build-properties",
+      {
+        android: {
+          enableMinifyInReleaseBuilds: true,
+          enableShrinkResourcesInReleaseBuilds: true,
+        },
+      },
+    ],
+    "expo-status-bar",
     "expo-sqlite",
   ],
   experiments: {
