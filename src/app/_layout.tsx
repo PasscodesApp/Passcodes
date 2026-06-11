@@ -1,3 +1,4 @@
+import migrations from "@/db/drizzle/migrations";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { Stack } from "expo-router";
@@ -5,7 +6,6 @@ import { SQLiteProvider, openDatabaseSync } from "expo-sqlite";
 import { Suspense } from "react";
 import { ActivityIndicator, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import migrations from "../db/drizzle/migrations";
 
 const DATABASE_NAME = "test2.db";
 
