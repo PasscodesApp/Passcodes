@@ -1,5 +1,5 @@
+import LinkButton from "@/components/LinkButton";
 import ScreenHeading from "@/components/ScreenHeading";
-import { Link } from "expo-router";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -16,15 +16,9 @@ export default function HomeScreen() {
       <ScreenHeading title="Passcodes" />
       <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
 
-      <Link style={{ fontSize: 16 }} href={"/save-password"}>
-        Save Password
-      </Link>
-      <Link style={{ fontSize: 16 }} href={"/load-password"}>
-        Load Password
-      </Link>
-      <Link style={{ fontSize: 16 }} href={"/settings"}>
-        Settings
-      </Link>
+      <LinkButton href={"/save-password"} text="Save Password" />
+      <LinkButton href={"/load-password"} text="Load Password" />
+      <LinkButton href={"/settings"} text="Settings" />
     </SafeAreaView>
   );
 }

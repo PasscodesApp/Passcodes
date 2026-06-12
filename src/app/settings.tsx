@@ -1,5 +1,5 @@
+import LinkButton from "@/components/LinkButton";
 import ScreenHeading from "@/components/ScreenHeading";
-import { Link } from "expo-router";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -16,26 +16,26 @@ export default function SettingsScreen() {
       <ScreenHeading title="Settings" />
 
       <View>
-        <Text style={{ fontSize: 28 }}>TroubleShooting</Text>
-        <Link style={{ color: "#5a5ada" }} href={"/get-back-passwords"}>
-          GetBack Passwords From Prior To v3.
-        </Link>
+        <Text style={{ fontSize: 32 }}>TroubleShooting</Text>
+        <LinkButton
+          style={{ color: "#5a5ada" }}
+          href={"/get-back-passwords"}
+          text="GetBack Passwords From Prior To v3."
+        />
       </View>
 
       <View>
-        <Text style={{ fontSize: 28 }}>Contact Us</Text>
-        <Link
-          style={{ color: "#5a5ada" }}
+        <Text style={{ fontSize: 32 }}>Contact Us</Text>
+        <LinkButton
+          style={{ color: "#5a5ada", textAlign: "center" }}
           href={"https://passcodesapp.github.io/Passcodes-Website/"}
-        >
-          Goto Website
-        </Link>
-        <Link
-          style={{ color: "#5a5ada" }}
+          text="Goto Website"
+        />
+        <LinkButton
+          style={{ color: "#5a5ada", textAlign: "center" }}
           href={"mailto:jeeldobariya38@gmail.com"}
-        >
-          Email Me
-        </Link>
+          text="Email Me"
+        />
       </View>
     </SafeAreaView>
   );
