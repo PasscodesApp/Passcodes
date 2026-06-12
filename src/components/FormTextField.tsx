@@ -8,12 +8,20 @@ import {
 
 type Props = TextInputProps & {
   label: string;
+  isRequired?: boolean;
 };
 
-export default function FormTextField({ label, ...props }: Props) {
+export default function FormTextField({
+  label,
+  isRequired = false,
+  ...props
+}: Props) {
   return (
     <View>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={styles.label}>
+        {label}
+        {isRequired && <Text style={{ color: "#ee0000" }}> *</Text>}
+      </Text>
 
       <TextInput
         {...props}

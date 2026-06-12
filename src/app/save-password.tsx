@@ -26,51 +26,54 @@ export default function SavePasswordScreen() {
           gap: 16,
         }}
       >
-        <ScreenHeading title="Save Password" />
+        <ScreenHeading title="New Password" />
 
         <FormTextField
           label="Domain"
           value={domain}
+          isRequired={true}
           onChangeText={setDomain}
-          placeholder="Enter your domain..."
-          placeholderTextColor={"#000"}
+          placeholder="google, instagram, whatsapp...."
+          placeholderTextColor={"#9e9e9e"}
         />
 
         <FormTextField
           label="Username"
           value={username}
+          isRequired={true}
           onChangeText={setUsername}
-          placeholder="Enter your username..."
-          placeholderTextColor={"#000"}
+          placeholder="username..."
+          placeholderTextColor={"#9e9e9e"}
         />
 
         <FormTextField
           label="Password"
           value={password}
+          isRequired={true}
           onChangeText={setPassword}
-          placeholder="Enter your password..."
-          placeholderTextColor={"#000"}
+          placeholder="password..."
+          placeholderTextColor={"#9e9e9e"}
         />
 
         <FormTextField
           label="URL"
           value={url}
           onChangeText={setUrl}
-          placeholder="Enter your url..."
-          placeholderTextColor={"#000"}
+          placeholder="https://..."
+          placeholderTextColor={"#9e9e9e"}
         />
 
         <FormTextField
           label="Notes"
           value={notes}
           onChangeText={setNotes}
-          placeholder="Enter your notes..."
-          placeholderTextColor={"#000"}
+          placeholder="your nonsense..."
+          placeholderTextColor={"#9e9e9e"}
           multiline
         />
 
         <Button
-          title="Save Password"
+          title="Save"
           onPress={() => {
             if (!domain || !username || !password) {
               Alert.alert(
