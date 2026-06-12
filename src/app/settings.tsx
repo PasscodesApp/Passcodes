@@ -9,30 +9,47 @@ export default function SettingsScreen() {
       style={{
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "stretch",
+        padding: 20,
         gap: 15,
       }}
     >
       <ScreenHeading title="Settings" />
 
-      <View>
-        <Text style={{ fontSize: 32 }}>TroubleShooting</Text>
+      <View
+        style={{
+          backgroundColor: "#efe9e3",
+          borderWidth: 2,
+          padding: 16,
+          borderRadius: 20,
+          gap: 12,
+        }}
+      >
+        <Text style={{ fontSize: 32, marginBottom: 12 }}>TroubleShooting</Text>
         <LinkButton
-          style={{ color: "#5a5ada" }}
+          style={{ color: "#0257c1", textAlign: "center" }}
           href={"/get-back-passwords"}
-          text="GetBack Passwords From Prior To v3."
+          text="GetBack Passwords From v2"
         />
       </View>
 
-      <View>
+      <View
+        style={{
+          backgroundColor: "#efe9e3",
+          borderWidth: 2,
+          padding: 16,
+          borderRadius: 20,
+          gap: 12,
+        }}
+      >
         <Text style={{ fontSize: 32 }}>Contact Us</Text>
         <LinkButton
-          style={{ color: "#5a5ada", textAlign: "center" }}
+          style={{ color: "#0257c1", textAlign: "center" }}
           href={"https://passcodesapp.github.io/Passcodes-Website/"}
           text="Goto Website"
         />
         <LinkButton
-          style={{ color: "#5a5ada", textAlign: "center" }}
+          style={{ color: "#0257c1", textAlign: "center" }}
           href={"mailto:jeeldobariya38@gmail.com"}
           text="Email Me"
         />

@@ -1,6 +1,6 @@
 import LinkButton from "@/components/LinkButton";
 import ScreenHeading from "@/components/ScreenHeading";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
@@ -10,15 +10,19 @@ export default function HomeScreen() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        gap: 15,
+        gap: 24,
       }}
     >
-      <ScreenHeading title="Passcodes" />
-      <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
+      <View style={{ alignItems: "center" }}>
+        <ScreenHeading title="Passcodes" />
+        <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
+      </View>
 
-      <LinkButton href={"/save-password"} text="Save Password" />
-      <LinkButton href={"/load-password"} text="Load Password" />
-      <LinkButton href={"/settings"} text="Settings" />
+      <View style={{ alignItems: "stretch", gap: 13 }}>
+        <LinkButton href={"/save-password"} text="Save Password" />
+        <LinkButton href={"/load-password"} text="Password List" />
+        <LinkButton href={"/settings"} text="Settings" />
+      </View>
     </SafeAreaView>
   );
 }

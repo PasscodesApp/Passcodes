@@ -14,8 +14,9 @@ export default function LinkButton({ text, ...props }: Props) {
         {
           borderRadius: 12,
           borderWidth: 2,
-          paddingInline: 6,
+          paddingInline: 8,
           paddingBlock: 12,
+          textAlign: "center",
         },
       ]}
       asChild

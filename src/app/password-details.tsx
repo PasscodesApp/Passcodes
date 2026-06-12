@@ -113,10 +113,10 @@ export default function PasswordDetailsScreen() {
           }}
         >
           {!isEditing ? (
-            <Button title="Edit Password" onPress={() => setIsEditing(true)} />
+            <Button title="Edit" onPress={() => setIsEditing(true)} />
           ) : (
             <>
-              <Button title="Save Password" onPress={() => updatePassword()} />
+              <Button title="Save" onPress={() => updatePassword()} />
 
               <Button
                 title="Cancel"
