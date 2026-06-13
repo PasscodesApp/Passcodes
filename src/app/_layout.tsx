@@ -7,7 +7,7 @@ import { Suspense } from "react";
 import { ActivityIndicator, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const DATABASE_NAME = "test2.db";
+const DATABASE_NAME = "master.db";
 
 export default function RootLayout() {
   const expoDb = openDatabaseSync(DATABASE_NAME);
