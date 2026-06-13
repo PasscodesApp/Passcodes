@@ -18,7 +18,7 @@ export default function HomeScreen() {
         <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
       </View>
 
-      <View style={{ alignItems: "stretch", gap: 13 }}>
+      <View style={{ alignItems: "stretch", gap: 12 }}>
         <LinkButton href={"/save-password"} text="Save Password" />
         <LinkButton href={"/load-password"} text="Password List" />
         <LinkButton href={"/settings"} text="Settings" />

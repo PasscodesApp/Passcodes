@@ -42,7 +42,7 @@ export default function SavePasswordScreen() {
           value={username}
           isRequired={true}
           onChangeText={setUsername}
-          placeholder="username..."
+          placeholder="alan24_st, olivia_12, ava2026@gmail.com..."
           placeholderTextColor={"#9e9e9e"}
         />
 
@@ -51,7 +51,7 @@ export default function SavePasswordScreen() {
           value={password}
           isRequired={true}
           onChangeText={setPassword}
-          placeholder="password..."
+          placeholder="************"
           placeholderTextColor={"#9e9e9e"}
         />
 
