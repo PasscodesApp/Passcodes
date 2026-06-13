@@ -35,10 +35,11 @@ export default function LoadPasswordScreen() {
       style={{
         flex: 1,
         backgroundColor: "#f5f5f5",
-        paddingHorizontal: 16,
+        padding: 20,
+        gap: 12,
       }}
     >
-      <ScreenHeading title="View Password" />
+      <ScreenHeading title="Password Manager" />
 
       <FlatList
         data={passwordList}
@@ -75,7 +76,7 @@ export default function LoadPasswordScreen() {
 
             <View style={{ gap: 10, marginTop: 10 }}>
               <Button
-                title="View Password"
+                title="View"
                 onPress={() =>
                   router.push({
                     pathname: "/password-details",
@@ -84,7 +85,7 @@ export default function LoadPasswordScreen() {
                 }
               />
               <Button
-                title="Delete Password"
+                title="Delete"
                 color="#e63946"
                 onPress={() => deletePasswordById(item.id)}
               />
