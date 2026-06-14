@@ -31,6 +31,11 @@ export default function SettingsScreen() {
           href={"/get-back-passwords"}
           text="GetBack Passwords From v2"
         />
+        <LinkButton
+          style={{ color: "#0257c1", textAlign: "center" }}
+          href={"/data-recovery"}
+          text="Data Recovery"
+        />
       </View>
 
       <View

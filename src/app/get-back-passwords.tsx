@@ -1,7 +1,7 @@
 import ScreenHeading from "@/components/ScreenHeading";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Directory, File, Paths } from "expo-file-system";
 import * as SQLite from "expo-sqlite";
+import AsyncStorage from "expo-sqlite/kv-store";
 import { useEffect, useState } from "react";
 import { Button, Platform, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -87,13 +87,14 @@ export default function GetBackPasswordsScreen() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        padding: 20,
         gap: 10,
       }}
     >
       <ScreenHeading title="GetBack Data" />
       <Text
         style={{
-          color: taskStatus.isError ? "#ef1713" : "#1aadf1",
+          color: taskStatus.isError ? "#d1120f" : "#06a3eb",
           fontSize: 16,
         }}
       >

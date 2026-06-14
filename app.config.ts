@@ -85,6 +85,7 @@ const config: ExpoConfig = {
     ],
     "expo-status-bar",
     "expo-sqlite",
+    "./plugins/withHasFragileUserData.ts",
   ],
   experiments: {
     typedRoutes: true,
