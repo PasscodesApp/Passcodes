@@ -35,8 +35,12 @@ export default function RootLayout() {
   return (
     <Suspense fallback={<ActivityIndicator size="large" />}>
       <SQLiteProvider databaseName={DATABASE_NAME} useSuspense>
-        <Stack screenOptions={{ headerShown: false }} />
+        <AppContent />
       </SQLiteProvider>
     </Suspense>
   );
+}
+
+function AppContent() {
+  return <Stack screenOptions={{ headerShown: false }} />;
 }
