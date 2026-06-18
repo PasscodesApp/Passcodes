@@ -1,6 +1,10 @@
 import ScreenHeading from "@/components/ScreenHeading";
 import DatabaseProvider from "@/db/provider";
-import { authenticateBiometric, isBiometricAvailable } from "@/libs/biometric";
+import {
+  authenticateBiometric,
+  isBiometricAvailable,
+  isBiometricsAuthEnabled,
+} from "@/libs/biometric";
 import { AppState, Button } from "react-native";
 
 import { Stack } from "expo-router";
@@ -16,7 +20,9 @@ export default function RootLayout() {
 }
 
 function AppContent() {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(
+    isBiometricsAuthEnabled() ? false : true,
+  );
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
@@ -33,7 +39,12 @@ function AppContent() {
   if (!authenticated) {
     return (
       <SafeAreaView
-        style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 10 }
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 10,
+        }}
       >
         <ScreenHeading title="App Locked!!" />
         <Button
