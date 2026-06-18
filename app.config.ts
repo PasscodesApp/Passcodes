@@ -83,6 +83,12 @@ const config: ExpoConfig = {
         },
       },
     ],
+    [
+      "expo-local-authentication",
+      {
+        faceIDPermission: "Allow Passcodes to use Face ID.",
+      },
+    ],
     "expo-status-bar",
     "expo-sqlite",
     "./plugins/withHasFragileUserData.ts",
