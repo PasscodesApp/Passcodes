@@ -7,7 +7,7 @@ export default async function roomDrizzleMigration(
   expoDb: SQLite.SQLiteDatabase,
 ) {
   // ==========================================
-  // STEP 1: locate database & backup directories
+  // STEP 1: RoomDB Discovery: locate database & backup directories
   // ==========================================
 
   const androidNativeDbDir = new Directory(
@@ -17,57 +17,20 @@ export default async function roomDrizzleMigration(
   const roomDbFile = new File(androidNativeDbDir.uri, ROOM_DB_NAME);
 
   if (!roomDbFile.exists) {
-    console.warn("Room database file not found at:", roomDbFile.uri);
+    console.warn(
+      "[RoomDB Discovery]: Room database file not found at:",
+      roomDbFile.uri,
+    );
     return "Data Migration Was Not Need, What-so-Ever As roomdb file not found";
   }
 
-  const backUpDir = new Directory(Paths.cache, "backup_room_migration");
-  if (!backUpDir.exists) {
-    console.warn("Backup directory not found. Creating it at:", backUpDir.uri);
-    backUpDir.create();
-  }
+  console.log(
+    "[RoomDB Discovery]: room database file found at:",
+    roomDbFile.uri,
+  );
 
   // ==========================================
-  // STEP 2. execute the copy/backup operation
-  // ==========================================
-
-  // We must track all 3 files that make up a Room database instance
-  const filesToBackup = [
-    ROOM_DB_NAME,
-    `${ROOM_DB_NAME}-wal`,
-    `${ROOM_DB_NAME}-shm`,
-  ];
-
-  console.log("Starting secure backup sequence...");
-
-  try {
-    for (const fileName of filesToBackup) {
-      // Construct exact source and destination URIs for each file
-      const sourceFile = new File(androidNativeDbDir.uri, fileName);
-      const destinationFile = new File(backUpDir.uri, fileName);
-
-      if (sourceFile.exists) {
-        await sourceFile.copy(destinationFile);
-        console.log(`[Backup Success] Copied: ${destinationFile.uri}`);
-      } else {
-        console.log(
-          `[Backup Info] ${sourceFile.uri} does not exist.. (skipping)`,
-        );
-      }
-    }
-
-    console.log(
-      "Backup Complete: Persistent backup secured at:",
-      backUpDir.uri,
-    );
-  } catch (error) {
-    console.error("CRITICAL ERROR DURING BACKUP PHASE:", error);
-    // Halt execution immediately to prevent data loss or manipulation
-    throw new Error("Migration stopped: Backup could not be verified safely.");
-  }
-
-  // ==========================================
-  // STEP 3: copy to expo-sqlite workspace
+  // STEP 2: Expo-SQLite Workspace: move to expo-sqlite workspace
   // ==========================================
 
   // Temporary name for the old Room database inside Expo's workspace
@@ -86,7 +49,7 @@ export default async function roomDrizzleMigration(
   try {
     if (!expoSqliteDir.exists) {
       console.warn(
-        "expo-sqlite directory not found. Creating it at:",
+        "[Expo-SQLite Workspace]: expo-sqlite directory not found. Creating it at:",
         expoSqliteDir.uri,
       );
       expoSqliteDir.create();
@@ -94,38 +57,33 @@ export default async function roomDrizzleMigration(
 
     for (const fileName of filesToProcess.keys()) {
       const sourceFile = new File(androidNativeDbDir.uri, fileName);
-      let targetName = filesToProcess.get(fileName);
-
-      if (!targetName) {
-        // This is likely unreachable point, but just satisfy typescript..
-        throw new Error(
-          `Mapkey (' ${targetName} ') not found in map (' ${filesToProcess} ')`,
-        );
-      }
-
+      let targetName = filesToProcess.get(fileName) as string; // I know, cuz, code guarantees its string.
       const targetFile = new File(expoSqliteDir.uri, targetName);
 
       if (sourceFile.exists) {
         await sourceFile.copy(targetFile);
         console.log(
-          `[Expo-SQLite Workspace] Placed copy of (' ${fileName} '): ${targetFile.uri}`,
+          `[Expo-SQLite Workspace]: Placed copy of (' ${fileName} '): ${targetFile.uri}`,
         );
       } else {
         console.warn(
-          `[Expo-SQLite Workspace] Skipping (' ${fileName} ') for copy as file not found!!`,
+          `[Expo-SQLite Workspace]: Skipping (' ${fileName} ') for copy as file not found!!`,
         );
       }
     }
   } catch (error) {
-    console.error("CRITICAL ERROR DURING MOVE TO WORKSPACE PHASE:", error);
+    console.error(
+      "[Expo-SQLite Workspace]: CRITICAL ERROR DURING MOVE TO WORKSPACE PHASE:",
+      error,
+    );
     // Halt execution immediately to prevent data loss or manipulation
     throw new Error(
-      "Migration stopped: file move to expo-sqlite workspace could not be verified safely.",
+      "[Expo-SQLite Workspace]: Migration stopped: file move to expo-sqlite workspace could not be verified safely.",
     );
   }
 
   // ==========================================
-  // STEP 4: open room database & extracted data
+  // STEP 4: Extracting Data: open room database & extracted data
   // ==========================================
 
   let intermediateDataRepresentation: any[] = [];
@@ -133,7 +91,9 @@ export default async function roomDrizzleMigration(
 
   let roomExpoSqliteDb: SQLite.SQLiteDatabase | undefined = undefined;
   try {
-    console.log("Opening working room database instance via Expo SQLite...");
+    console.log(
+      "[Extracting Data]: Opening working room database instance via Expo SQLite...",
+    );
     roomExpoSqliteDb = await SQLite.openDatabaseAsync(EXPO_TEMP_ROOM_DB_NAME);
 
     // 1. Fetch Room database version via user_version PRAGMA
@@ -145,13 +105,11 @@ export default async function roomDrizzleMigration(
     if (!dbVersion) {
       dbVersion = 1;
       console.log(
-        `[Database Discovery] Room User Version Not Detected, So Assuming Database as: v${dbVersion}`,
+        `[Extracting Data] Room User Version Not Detected, So Assuming Database as: v${dbVersion}`,
       );
     }
 
-    console.log(
-      `[Database Discovery] Room User Version Detected: v${dbVersion}`,
-    );
+    console.log(`[Extracting Data] Room User Version Detected: v${dbVersion}`);
 
     // 2. Total Count Of Passswords
     sourceResult = await roomExpoSqliteDb.getFirstAsync<{
@@ -160,40 +118,44 @@ export default async function roomDrizzleMigration(
 
     // 3. Conditional Extraction Routing
     if (dbVersion === 2) {
-      console.log("Processing Version 2 database structure extraction...");
+      console.log(
+        "[Extracting Data]: Processing Version 2 database structure extraction...",
+      );
       intermediateDataRepresentation =
         await extractVersion2Data(roomExpoSqliteDb);
     } else if (dbVersion === 1) {
-      console.log("Processing Version 1 database structure extraction...");
+      console.log(
+        "[Extracting Data]: Processing Version 1 database structure extraction...",
+      );
       intermediateDataRepresentation =
         await extractVersion1Data(roomExpoSqliteDb);
     } else {
       // This is likely unreachable point, but just satisfy typescript correctness..
       throw new Error(
-        `Unexpected database schema version encountered: v${dbVersion}`,
+        `[Extracting Data]: Unexpected database schema version encountered: v${dbVersion}`,
       );
     }
 
     console.log(
-      "[Database Discovery] Successfully extracted intermediate data representation.",
+      "[Extracting Data]: Successfully extracted intermediate data representation.",
     );
   } catch (error) {
     console.error(
-      "CRITICAL ERROR ENCOUNTERED DURING DATA MID-REPRESENTATION PHRASE:",
+      "[Extracting Data]: CRITICAL ERROR ENCOUNTERED DURING DATA MID-REPRESENTATION PHRASE:",
       error,
     );
 
     throw new Error(
-      "Migration stopped: room database's intermediate representation could not be verified safely.",
+      "[Extracting Data]: Migration stopped: room database's intermediate representation could not be verified safely.",
     );
   } finally {
     await roomExpoSqliteDb?.closeAsync();
   }
 
   // ==========================================
-  // STEP 5: room database -> expo database
+  // STEP 5: Migrating Data: room database -> expo database
   // ==========================================
-  console.log("Moving Data.... it might take few minutes");
+  console.log("[Migrating Data]: Moving Data.... it might take few minutes");
 
   let insertStatement: SQLite.SQLiteStatement | undefined;
 
@@ -232,52 +194,49 @@ export default async function roomDrizzleMigration(
 
     if (sourceRows !== inserted) {
       throw new Error(
-        `Data migration verification failed. Source: ${sourceRows}, Inserted: ${inserted}`,
+        `[Migrating Data]: Data migration verification failed. Source: ${sourceRows}, Inserted: ${inserted}`,
       );
     }
   } catch (error) {
     console.error(
-      "CRITICAL ERROR ENCOUNTERED DATA MOVING TO EXPO SQLITE PHRASE:",
+      "[Migrating Data]: CRITICAL ERROR ENCOUNTERED DATA MOVING TO EXPO SQLITE PHRASE:",
       error,
     );
 
     throw new Error(
-      "Migration stopped: expo database's data migrated could not be verified safely.",
+      "[Migrating Data]: Migration stopped: expo database's data migrated could not be verified safely.",
     );
   } finally {
     await insertStatement?.finalizeAsync();
   }
 
-  console.log("Successfully moved data to expo-sqlite db...");
+  console.log("[Migrating Data]: Successfully moved data to expo-sqlite db...");
 
-  console.log("Successfully Migrated Data, Now just clean up is left...");
+  console.log(
+    "[Almost Success]: Successfully Migrated Data, Now just clean up is left...",
+  );
 
   // ==========================================
-  // STEP 6: clean up
+  // STEP 6: CLEAN MESS: cleaning up
   // ==========================================
 
   console.log("[CLEAN MESS]: cleaning...");
 
   for (const fileName of filesToProcess.keys()) {
-    let targetName = filesToProcess.get(fileName);
-
-    if (!targetName) {
-      // This is likely unreachable point, but just satisfy typescript..
-      throw new Error(
-        `Mapkey (' ${targetName} ') not found in map (' ${filesToProcess} ')`,
-      );
-    }
-
+    let targetName = filesToProcess.get(fileName) as string; // I know, cuz, code guarantees its string.
     const targetFile = new File(expoSqliteDir.uri, targetName);
 
     if (targetFile.exists) {
       targetFile.delete();
-      console.log(`[CLEAN MESS]] Delete (' ${fileName} '): ${targetFile.uri}`);
+      console.log(`[CLEAN MESS]: Delete (' ${fileName} '): ${targetFile.uri}`);
     }
   }
 
   console.log("[CLEAN MESS]: cleaned all backup files...");
 
+  // ==========================================
+  // SUCCESS!!!
+  // ==========================================
   const successMessage = "SUCCESSFULLY MIGRATED All OLD DATA!!";
   console.log(successMessage);
   console.log("task exit 0;");
