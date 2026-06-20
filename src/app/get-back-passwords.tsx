@@ -158,7 +158,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
       const destinationFile = new File(backUpDir.uri, fileName);
 
       if (sourceFile.exists) {
-        sourceFile.copy(destinationFile);
+        await sourceFile.copy(destinationFile);
         console.log(`[Backup Success] Copied: ${destinationFile.uri}`);
       } else {
         console.log(
@@ -217,7 +217,7 @@ async function migrateOldAndroidData(expoDb: SQLite.SQLiteDatabase) {
       const targetFile = new File(expoSqliteDir.uri, targetName);
 
       if (sourceFile.exists) {
-        sourceFile.copy(targetFile);
+        await sourceFile.copy(targetFile);
         console.log(
           `[Expo-SQLite Workspace] Placed copy of (' ${fileName} '): ${targetFile.uri}`,
         );
