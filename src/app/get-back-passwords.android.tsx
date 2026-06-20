@@ -3,7 +3,7 @@ import { Directory, File, Paths } from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 import AsyncStorage from "expo-sqlite/kv-store";
 import { useEffect, useState } from "react";
-import { Button, Platform, Text } from "react-native";
+import { Button, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ROOM_DB_NAME = "master";
@@ -69,15 +69,6 @@ export default function GetBackPasswordsScreen() {
       }
     }
 
-    // Only Android supports this Room migration
-    if (Platform.OS !== "android") {
-      setTaskStatus({
-        message: "Migration not required on this platform.",
-        isError: false,
-      });
-
-      return;
-    }
     runMigration();
   }, []);
 
