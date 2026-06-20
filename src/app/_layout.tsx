@@ -55,7 +55,7 @@ function AppContent() {
           gap: 10,
         }}
       >
-        <ScreenHeading title="App Locked!!" />
+        <ScreenHeading title="App Locked!!" style={{ marginBlock: 12 }} />
         <Button
           title="Unlock"
           onPress={() => {

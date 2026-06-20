@@ -5,7 +5,7 @@ import {
   toggleBiometricsFeature,
 } from "@/libs/biometric";
 import { useState } from "react";
-import { Platform, ScrollView, Switch, Text, View } from "react-native";
+import { ScrollView, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
@@ -52,18 +52,11 @@ export default function SettingsScreen() {
           <Text style={{ fontSize: 32, marginBottom: 12 }}>
             TroubleShooting
           </Text>
-
-          {
-            // Only Android supports this Room to drizzle migration
-            Platform.OS !== "android" && (
-              <LinkButton
-                style={{ color: "#0257c1", textAlign: "center" }}
-                href={"/get-back-passwords"}
-                text="GetBack Passwords From v2"
-              />
-            )
-          }
-
+          <LinkButton
+            style={{ color: "#0257c1", textAlign: "center" }}
+            href={"/get-back-passwords"}
+            text="GetBack Passwords From v2"
+          />
           <LinkButton
             style={{ color: "#0257c1", textAlign: "center" }}
             href={"/data-recovery"}
