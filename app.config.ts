@@ -1,4 +1,10 @@
-import { ExpoConfig } from "expo/config";
+import { ConfigContext, ExpoConfig } from "expo/config";
+
+import localAuthenticationPlugin from "expo-local-authentication/plugin";
+import routerPlugin from "expo-router/plugin";
+import splashScreenPlugin from "expo-splash-screen/plugin";
+import sqlitePlugin from "expo-sqlite/plugin";
+import statusBarPlugin from "expo-status-bar/plugin";
 
 const IS_DEV = process.env.APP_VARIANT === "development";
 const IS_PREVIEW = process.env.APP_VARIANT === "preview";
@@ -20,7 +26,8 @@ if (IS_DEV) {
   launcherAppIcon = "./assets/images/dev-android-icon-launcher.png";
 }
 
-const config: ExpoConfig = {
+export default ({ config }: ConfigContext): ExpoConfig => ({
+  ...config,
   name: "Passcodes" + appNameSuffix,
   slug: "passcodes",
   version: "v3.0.0-Alpha" + versionNameSuffix,
@@ -61,36 +68,31 @@ const config: ExpoConfig = {
   },
 
   plugins: [
-    "expo-router",
-    [
-      "expo-splash-screen",
-      {
-        image: "./assets/images/passcodes_icon.png",
-        imageWidth: 200,
-        resizeMode: "contain",
-        backgroundColor: "#d0e3f7",
-        dark: {
-          backgroundColor: "#34597f",
-        },
+    routerPlugin(),
+    splashScreenPlugin({
+      image: "./assets/images/passcodes_icon.png",
+      imageWidth: 200,
+      resizeMode: "contain",
+      backgroundColor: "#d0e3f7",
+      dark: {
+        backgroundColor: "#34597f",
       },
-    ],
+    }),
     [
       "expo-build-properties",
       {
         android: {
+          usePrecompiledHeaders: true,
           enableMinifyInReleaseBuilds: true,
           enableShrinkResourcesInReleaseBuilds: true,
         },
       },
     ],
-    [
-      "expo-local-authentication",
-      {
-        faceIDPermission: "Allow Passcodes to use Face ID.",
-      },
-    ],
-    "expo-status-bar",
-    "expo-sqlite",
+    localAuthenticationPlugin({
+      faceIDPermission: "Allow Passcodes to use Face ID.",
+    }),
+    statusBarPlugin({ style: "dark" }),
+    sqlitePlugin(),
     "./plugins/withHasFragileUserData.ts",
   ],
   experiments: {
@@ -104,6 +106,4 @@ const config: ExpoConfig = {
     },
   },
   owner: "passcodesapp",
-};
-
-export default config;
+});

@@ -1,11 +1,15 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, TextProps } from "react-native";
 
-type Props = {
+type Props = TextProps & {
   title: string;
 };
 
-export default function ScreenHeading({ title }: Props) {
-  return <Text style={styles.title}>{title}</Text>;
+export default function ScreenHeading({ title, ...props }: Props) {
+  return (
+    <Text {...props} style={[props.style, styles.title]}>
+      {title}
+    </Text>
+  );
 }
 
 const styles = StyleSheet.create({
