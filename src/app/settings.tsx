@@ -80,6 +80,11 @@ export default function SettingsScreen() {
             text="Goto Website"
           />
           <LinkButton
+            style={{ color: "#004292", textAlign: "center" }}
+            href={"https://discord.gg/kSSkYq7KAQ"}
+            text="Join Discord"
+          />
+          <LinkButton
             style={{ color: "#0257c1", textAlign: "center" }}
             href={"mailto:jeeldobariya38@gmail.com"}
             text="Email Me"
