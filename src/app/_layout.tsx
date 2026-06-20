@@ -5,10 +5,11 @@ import {
   isBiometricAvailable,
   isBiometricsAuthEnabled,
 } from "@/libs/biometric";
-import { AppState, Button } from "react-native";
-
+import { NavigationBar } from "expo-navigation-bar";
 import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
+import { AppState, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
@@ -23,6 +24,14 @@ function AppContent() {
   const [authenticated, setAuthenticated] = useState(
     isBiometricsAuthEnabled() ? false : true,
   );
+
+  useEffect(() => {
+    StatusBar.setStyle("auto");
+    StatusBar.setHidden(false);
+
+    NavigationBar.setStyle("auto");
+    NavigationBar.setHidden(false);
+  }, []);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
