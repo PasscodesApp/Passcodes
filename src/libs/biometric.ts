@@ -9,6 +9,20 @@ enum BIOMETRICS_AUTH_KV {
   DISABLED = "false",
 }
 
+// ------ PUBLIC APIS ------
+
+export async function unlockWithBiometricsApp() {
+  const available = await isBiometricAvailable();
+
+  if (!available) {
+    // TODO: must ask for other method to authenicate.
+    return true;
+  }
+
+  const success = await authenticateBiometric();
+  return success;
+}
+
 export function isBiometricsAuthEnabled() {
   let result = AsyncStorage.getItemSync(IS_BIOMETRICS_ENABLED);
   return result === BIOMETRICS_AUTH_KV.DISABLED ? false : true;
@@ -25,14 +39,16 @@ export function toggleBiometricsFeature() {
   return !isEnabled;
 }
 
-export async function isBiometricAvailable() {
+// ------ PRIVATE APIS ------
+
+async function isBiometricAvailable() {
   const hasHardware = await LocalAuthentication.hasHardwareAsync();
   const isEnrolled = await LocalAuthentication.isEnrolledAsync();
 
   return hasHardware && isEnrolled;
 }
 
-export async function authenticateBiometric() {
+async function authenticateBiometric() {
   const result = await LocalAuthentication.authenticateAsync({
     promptMessage: "Unlock Passcodes",
     cancelLabel: "Cancel",

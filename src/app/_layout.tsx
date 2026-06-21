@@ -1,9 +1,8 @@
 import ScreenHeading from "@/components/ScreenHeading";
 import DatabaseProvider from "@/db/provider";
 import {
-  authenticateBiometric,
-  isBiometricAvailable,
   isBiometricsAuthEnabled,
+  unlockWithBiometricsApp,
 } from "@/libs/biometric";
 import { NavigationBar } from "expo-navigation-bar";
 import { Stack } from "expo-router";
@@ -45,6 +44,7 @@ function AppContent() {
 
         if (elapsedSeconds > 120) {
           setIsAuthenticated(false);
+          unlock();
         }
       }
 
@@ -62,7 +62,14 @@ function AppContent() {
     NavigationBar.setHidden(false);
   }, []);
 
+  async function unlock() {
+    let result = await unlockWithBiometricsApp();
+    setIsAuthenticated(result);
+  }
+
   if (!isAuthenticated) {
+    unlock();
+
     return (
       <SafeAreaView
         style={{
@@ -73,25 +80,7 @@ function AppContent() {
         }}
       >
         <ScreenHeading title="App Locked!!" style={{ marginBlock: 12 }} />
-        <Button
-          title="Unlock"
-          onPress={() => {
-            async function unlock() {
-              const available = await isBiometricAvailable();
-
-              if (!available) {
-                // TODO: must ask for other method to authenicate.
-                setIsAuthenticated(true);
-                return;
-              }
-
-              const success = await authenticateBiometric();
-              setIsAuthenticated(success);
-            }
-
-            unlock();
-          }}
-        ></Button>
+        <Button title="Unlock" onPress={unlock}></Button>
       </SafeAreaView>
     );
   }
