@@ -43,7 +43,7 @@ function AppContent() {
         const elapsedSeconds =
           Date.now() - (backgroundTimestamp.current ?? Date.now()) / 1000;
 
-        if (elapsedSeconds > 30) {
+        if (elapsedSeconds > 120) {
           setIsAuthenticated(false);
         }
       }
