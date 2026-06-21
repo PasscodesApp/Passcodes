@@ -8,7 +8,7 @@ import {
 import { NavigationBar } from "expo-navigation-bar";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AppState, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,9 +21,38 @@ export default function RootLayout() {
 }
 
 function AppContent() {
-  const [authenticated, setAuthenticated] = useState(
+  const appState = useRef(AppState.currentState);
+  const backgroundTimestamp = useRef<number | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(
     isBiometricsAuthEnabled() ? false : true,
   );
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (
+        appState.current === "active" &&
+        nextAppState.match(/inactive|background/)
+      ) {
+        backgroundTimestamp.current = Date.now();
+      }
+
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        const elapsedSeconds =
+          Date.now() - (backgroundTimestamp.current ?? Date.now()) / 1000;
+
+        if (elapsedSeconds > 30) {
+          setIsAuthenticated(false);
+        }
+      }
+
+      appState.current = nextAppState;
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   useEffect(() => {
     StatusBar.setStyle("auto");
@@ -33,19 +62,7 @@ function AppContent() {
     NavigationBar.setHidden(false);
   }, []);
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (nextAppState !== "active") {
-        setAuthenticated(false);
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  if (!authenticated) {
+  if (!isAuthenticated) {
     return (
       <SafeAreaView
         style={{
@@ -63,12 +80,13 @@ function AppContent() {
               const available = await isBiometricAvailable();
 
               if (!available) {
-                setAuthenticated(true);
+                // TODO: must ask for other method to authenicate.
+                setIsAuthenticated(true);
                 return;
               }
 
               const success = await authenticateBiometric();
-              setAuthenticated(success);
+              setIsAuthenticated(success);
             }
 
             unlock();
