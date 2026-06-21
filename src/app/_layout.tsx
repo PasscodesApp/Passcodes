@@ -1,14 +1,13 @@
 import ScreenHeading from "@/components/ScreenHeading";
 import DatabaseProvider from "@/db/provider";
 import {
-  authenticateBiometric,
-  isBiometricAvailable,
   isBiometricsAuthEnabled,
+  unlockWithBiometricsApp,
 } from "@/libs/biometric";
 import { NavigationBar } from "expo-navigation-bar";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AppState, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,9 +20,39 @@ export default function RootLayout() {
 }
 
 function AppContent() {
-  const [authenticated, setAuthenticated] = useState(
+  const appState = useRef(AppState.currentState);
+  const backgroundTimestamp = useRef<number | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(
     isBiometricsAuthEnabled() ? false : true,
   );
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (
+        appState.current === "active" &&
+        nextAppState.match(/inactive|background/)
+      ) {
+        backgroundTimestamp.current = Date.now();
+      }
+
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        const elapsedSeconds =
+          Date.now() - (backgroundTimestamp.current ?? Date.now()) / 1000;
+
+        if (elapsedSeconds > 120) {
+          setIsAuthenticated(false);
+          unlock();
+        }
+      }
+
+      appState.current = nextAppState;
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   useEffect(() => {
     StatusBar.setStyle("auto");
@@ -33,19 +62,14 @@ function AppContent() {
     NavigationBar.setHidden(false);
   }, []);
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (nextAppState !== "active") {
-        setAuthenticated(false);
-      }
-    });
+  async function unlock() {
+    let result = await unlockWithBiometricsApp();
+    setIsAuthenticated(result);
+  }
 
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+  if (!isAuthenticated) {
+    unlock();
 
-  if (!authenticated) {
     return (
       <SafeAreaView
         style={{
@@ -56,24 +80,7 @@ function AppContent() {
         }}
       >
         <ScreenHeading title="App Locked!!" style={{ marginBlock: 12 }} />
-        <Button
-          title="Unlock"
-          onPress={() => {
-            async function unlock() {
-              const available = await isBiometricAvailable();
-
-              if (!available) {
-                setAuthenticated(true);
-                return;
-              }
-
-              const success = await authenticateBiometric();
-              setAuthenticated(success);
-            }
-
-            unlock();
-          }}
-        ></Button>
+        <Button title="Unlock" onPress={unlock}></Button>
       </SafeAreaView>
     );
   }
