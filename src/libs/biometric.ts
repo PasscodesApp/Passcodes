@@ -17,7 +17,8 @@ export function isBiometricsAuthEnabled() {
 export function toggleBiometricsFeature() {
   let isEnabled = isBiometricsAuthEnabled();
 
-  AsyncStorage.setItemAsync(IS_BIOMETRICS_ENABLED, () =>
+  AsyncStorage.setItemAsync(
+    IS_BIOMETRICS_ENABLED,
     isEnabled ? BIOMETRICS_AUTH_KV.DISABLED : BIOMETRICS_AUTH_KV.ENABLED,
   );
 
