@@ -1,7 +1,7 @@
 import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 
-type Password = {
+export type PasswordCSVFormat = {
   domain: string;
   url: string | null;
   username: string;
@@ -9,7 +9,9 @@ type Password = {
   notes: string | null;
 };
 
-export async function getGooglePasswordsCSVContent(passwords: Password[]) {
+export async function getGooglePasswordsCSVContent(
+  passwords: PasswordCSVFormat[],
+) {
   let result = ["name,url,username,password,note"];
 
   passwords.forEach((password) => {

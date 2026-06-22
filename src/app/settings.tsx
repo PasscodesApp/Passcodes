@@ -7,8 +7,13 @@ import {
 } from "@/libs/biometric";
 import {
   getGooglePasswordsCSVContent,
+  type PasswordCSVFormat,
   sharePasswordAsCSV,
 } from "@/libs/exporting";
+import {
+  convertRawCSVToPasswords,
+  getCSVPasswordString,
+} from "@/libs/importing";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
@@ -20,10 +25,32 @@ export default function SettingsScreen() {
   const toggleSwitch = () => setIsEnabled(toggleBiometricsFeature());
 
   let db = useSQLiteContext();
+  const drizzleDb = drizzle(db);
+
+  async function handleImportPasswords() {
+    let content = await getCSVPasswordString();
+    let importPasswordList: PasswordCSVFormat[] =
+      convertRawCSVToPasswords(content);
+
+    drizzleDb.transaction((tx) => {
+      importPasswordList.forEach((importablePassword) => {
+        tx.insert(passwords)
+          .values({
+            domain: importablePassword.domain,
+            username: importablePassword.username,
+            password: importablePassword.password,
+            notes: importablePassword.notes,
+            url: importablePassword.url,
+          })
+          .execute();
+      });
+    });
+  }
 
   async function handleExportPasswords() {
-    const drizzleDb = drizzle(db);
-    const result = await drizzleDb.select().from(passwords);
+    const result: PasswordCSVFormat[] = await drizzleDb
+      .select()
+      .from(passwords);
 
     let content = await getGooglePasswordsCSVContent(result);
     sharePasswordAsCSV(content);
@@ -64,10 +91,16 @@ export default function SettingsScreen() {
             padding: 16,
             borderRadius: 20,
             alignItems: "center",
+            gap: 12,
           }}
         >
           <Button
-            title="Share to Google Passwords"
+            title="Import With Google Passwords Format"
+            onPress={() => handleImportPasswords()}
+          />
+
+          <Button
+            title="Share With Google Passwords Format"
             onPress={() => handleExportPasswords()}
           />
         </View>
