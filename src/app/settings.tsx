@@ -4,6 +4,7 @@ import { passwords } from "@/db/schema";
 import {
   isBiometricsAuthEnabled,
   toggleBiometricsFeature,
+  unlockWithBiometricsApp,
 } from "@/libs/biometric";
 import {
   getGooglePasswordsCSVContent,
@@ -17,7 +18,7 @@ import {
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Button, ScrollView, Switch, Text, View } from "react-native";
+import { Alert, Button, ScrollView, Switch, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
@@ -101,7 +102,17 @@ export default function SettingsScreen() {
 
           <Button
             title="Share With Google Passwords Format"
-            onPress={() => handleExportPasswords()}
+            onPress={async () => {
+              let result = await unlockWithBiometricsApp();
+              if (result) {
+                handleExportPasswords();
+              } else {
+                Alert.alert(
+                  "Authentication Failed!!!",
+                  "exporting passwords is security activity and is protected by app lock.",
+                );
+              }
+            }}
           />
         </View>
 
