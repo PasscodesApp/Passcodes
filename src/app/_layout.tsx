@@ -39,10 +39,10 @@ function AppContent() {
         appState.current.match(/inactive|background/) &&
         nextAppState === "active"
       ) {
-        const elapsedSeconds =
-          Date.now() - (backgroundTimestamp.current ?? Date.now()) / 1000;
+        const elapsedMilliseconds =
+          Date.now() - (backgroundTimestamp.current ?? Date.now());
 
-        if (elapsedSeconds > 120) {
+        if (elapsedMilliseconds / 1000 > 120) {
           setIsAuthenticated(false);
           unlock();
         }
