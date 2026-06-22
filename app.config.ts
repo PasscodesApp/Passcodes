@@ -30,7 +30,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Passcodes" + appNameSuffix,
   slug: "passcodes",
-  version: "v3.0.0-Alpha" + versionNameSuffix,
+  version: "v3.1.0-Stable" + versionNameSuffix,
 
   orientation: "portrait",
   icon: "./assets/images/passcodes_icon.png",
@@ -44,8 +44,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
 
   android: {
-    versionCode: 8,
-    version: "v3.0.0-Alpha" + versionNameSuffix,
+    versionCode: 9,
+    version: "v3.1.0-Stable" + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
     adaptiveIcon: IS_DEV
