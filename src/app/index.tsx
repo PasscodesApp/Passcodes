@@ -15,7 +15,7 @@ export default function HomeScreen() {
     >
       <View style={{ alignItems: "center" }}>
         <ScreenHeading title="Passcodes" />
-        <Text style={{ fontSize: 12 }}>v3.0.0 - Alpha</Text>
+        <Text style={{ fontSize: 12 }}>v3.1.0 - Stable</Text>
       </View>
 
       <View style={{ alignItems: "stretch", gap: 12 }}>
