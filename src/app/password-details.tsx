@@ -4,6 +4,7 @@ import { passwords } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, useLocalSearchParams } from "expo-router";
+import { usePreventScreenCapture } from "expo-screen-capture";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Button, ScrollView, View } from "react-native";
@@ -11,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
   const { id } = useLocalSearchParams();
+  usePreventScreenCapture();
 
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
