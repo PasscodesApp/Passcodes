@@ -1,7 +1,7 @@
 # Passcodes
 
 > [!WARNING]
-> It is just a open source project. An is current under active development.
+> It is just an open source project. And is current under active development.
 > Please, consider using it for fun, and not for real password management. (until, we officially release a stable release, which will be around AUG, 2026)
 >
 > Cuz, **`data is stored unencrypted`.. we're planning to add encryption soon.**
@@ -15,7 +15,7 @@
 
 </div>
 
-A app that take down the headache of remembering passwords. It is open source solutions that help you in keeping your passwords safe and secure, in your own local storage without ever needing to push them to cloud.
+An app that take down the headache of remembering passwords. It is an open source solution that help you in keeping your passwords safe and secure, in your own local storage without ever needing to push them to the cloud.
 
 [Visit Website](https://passcodesapp.github.io/Passcodes-Website/)
 
@@ -52,11 +52,11 @@ A app that take down the headache of remembering passwords. It is open source so
 - [ ] Update Checkers & Manager.
 - [ ] Password Management. (Current Priority)
 - [ ] Autofill.
-- [ ] Secure File. (Least Priority, Because it include permission. Which, I am as developer not
+- [ ] Secure File. (Least Priority, Because it includes permission. Which, I am as developer not
       familiar with 😂)
   - Could be Image. (JPG. PNG ....)
   - Could be Video.
-  - Could any Binary File. (more like won't be a text file)
+  - Could be any Binary File. (more like won't be a text file)
 - [ ] Other Secret Info Management.
   - Could be note. (txt file)
   - Could be any info that can encode as key & value.
@@ -82,29 +82,29 @@ A app that take down the headache of remembering passwords. It is open source so
 
 1. Go to [our github repository release page](https://github.com/PasscodesApp/Passcodes/releases/latest).
 
-2. Download the apk form your phone. If don't know the architecture of phone, then download apk file
+2. Download the APK from your phone. If don't know the architecture of phone, then download APK file
    that has universal in its name.
 
-3. Install the apk and you are ready to use the app.
+3. Install the APK and you are ready to use the app.
 
 It was most shortest and sweetest description (I have ever crafted), For more detailed description,
-See the file [installing.md](https://passcodesapp.github.io/Passcodes-Docs/user-docs/installing/)
+see the file [installing.md](https://passcodesapp.github.io/Passcodes-Docs/user-docs/installing/)
 in `PasscodesApp/Passcodes-Docs`.
 
 ## Upgrading Steps
 
-1. Open current install passcodes app in yout phone.
+1. Open current install passcodes app in your phone.
 
 2. On main screen or sometimes under settings screen, you wll find version infomation.
 
 3. Get this version infomation and compare it with [latest release in our github repository](https://github.com/PasscodesApp/Passcodes/releases/latest).
 
-4. If thier is a new release on github.
+4. If there is a new release on GitHub.
 
-5. Download the apk form your phone. If don't know the architecture of phone, then download apk file
+5. Download the APK from your phone. If don't know the architecture of phone, then download APK file
    that has universal in its name.
 
-6. Install the apk, which now will say "upgrade" and you are ready to use the app.
+6. Install the APK, which now will say "upgrade" and you are ready to use the app.
 
 ## Building The App
 
@@ -126,15 +126,15 @@ in `PasscodesApp/Passcodes-Docs`.
     npm start
     ```
 
-It was general, intuitive, short and sweet description, For more detailed description, Visit the
+It was a general, intuitive, short and sweet description, For more detailed description, Visit the
 file [building.md](https://passcodesapp.github.io/Passcodes-Docs/dev-docs/building/) in
 `PasscodesApp/Passcodes-Docs`.
 
 ## Documentation
 
-You can checkout support docs, provided
+You can check out support docs, provided
 in [@github:PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/Passcodes-Docs) Or You can even
-seek help on our [discord community](https://discord.gg/kSSkYq7KAQ)
+seek help on our [Discord community](https://discord.gg/kSSkYq7KAQ)
 
 ### Changelog & Release Notes
 
@@ -145,7 +145,7 @@ seek help on our [discord community](https://discord.gg/kSSkYq7KAQ)
 
 ## Contribution Are Appreciated!!!
 
-By, contributing to project you accept
+By contributing to project you, accept
 the:
 
 - [Terms For Contributions](https://passcodesapp.github.io/Passcodes-Docs/other-docs/terms-for-contributions/)
@@ -158,9 +158,9 @@ Available over at [PasscodesApp/Passcodes-Docs](https://passcodesapp.github.io/P
 
 ## License
 
-Passcodes Project is license
+Passcodes Project is licensed
 under [MIT](https://passcodesapp.github.io/Passcodes-Docs/LICENSE/) License.
-Downloading Or Use the app or any associated stuff would mean, you are okay and have accepted the license's terms.
+Downloading or using the app or any associated stuff would mean that you are okay and have accepted the license's terms.
 
 ---
 
