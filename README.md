@@ -48,9 +48,9 @@ An app that take down the headache of remembering passwords. It is an open sourc
 
 ## Features
 
-- [ ] Intuitive UI.
+- [x] Intuitive UI.
 - [ ] Update Checkers & Manager.
-- [ ] Password Management. (Current Priority)
+- [x] Password Management.
 - [ ] Autofill.
 - [ ] Secure File. (Least Priority, Because it includes permission. Which, I am as developer not
       familiar with 😂)
@@ -76,7 +76,7 @@ An app that take down the headache of remembering passwords. It is an open sourc
 - [ ] Multiple Language Translation.
 - [ ] Theme & Customization.
 - [ ] Key Manager.
-- [ ] Multi Platform Support. (KMP)
+- [ ] Multi Platform Support.
 
 ## Installation Steps
 
