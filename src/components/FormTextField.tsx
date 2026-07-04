@@ -1,3 +1,4 @@
+import { useTheme } from "expo-router";
 import {
   StyleSheet,
   Text,
@@ -16,9 +17,11 @@ export default function FormTextField({
   isRequired = false,
   ...props
 }: Props) {
+  let theme = useTheme();
+
   return (
     <View>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: theme.colors.text }]}>
         {label}
         {isRequired && <Text style={{ color: "#ee0000" }}> *</Text>}
       </Text>
@@ -27,7 +30,10 @@ export default function FormTextField({
         {...props}
         style={[
           styles.input,
-          !props.editable && styles.readOnlyInput,
+          {
+            color: theme.colors.text,
+            borderColor: theme.colors.border,
+          },
           props.multiline && {
             minHeight: 100,
             textAlignVertical: "top",
@@ -47,15 +53,9 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: "#ddd",
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-  },
-
-  readOnlyInput: {
-    backgroundColor: "#e1e1e1",
   },
 });

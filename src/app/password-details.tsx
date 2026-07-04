@@ -1,9 +1,8 @@
 import FormTextField from "@/components/FormTextField";
-import ScreenHeading from "@/components/ScreenHeading";
 import { passwords } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { usePreventScreenCapture } from "expo-screen-capture";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
@@ -62,75 +61,76 @@ export default function PasswordDetailsScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView
-        contentContainerStyle={{
-          padding: 20,
-          gap: 16,
-        }}
-      >
-        <ScreenHeading title="Password Details" />
-
-        <FormTextField
-          label="Domain"
-          value={domain}
-          onChangeText={setDomain}
-          editable={isEditing}
-        />
-
-        <FormTextField
-          label="Username"
-          value={username}
-          onChangeText={setUsername}
-          editable={isEditing}
-        />
-
-        <FormTextField
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          editable={isEditing}
-        />
-
-        <FormTextField
-          label="URL"
-          value={url}
-          onChangeText={setUrl}
-          editable={isEditing}
-        />
-
-        <FormTextField
-          label="Notes"
-          value={notes}
-          onChangeText={setNotes}
-          editable={isEditing}
-          multiline
-        />
-
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row-reverse",
-            gap: 4,
+    <>
+      <Stack.Title>Password Details</Stack.Title>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{
+            padding: 20,
+            gap: 16,
           }}
         >
-          {!isEditing ? (
-            <Button title="Edit" onPress={() => setIsEditing(true)} />
-          ) : (
-            <>
-              <Button title="Save" onPress={() => updatePassword()} />
+          <FormTextField
+            label="Domain"
+            value={domain}
+            onChangeText={setDomain}
+            editable={isEditing}
+          />
 
-              <Button
-                title="Cancel"
-                onPress={() => {
-                  setIsEditing(false);
-                  loadAndRefreshPassword();
-                }}
-              />
-            </>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <FormTextField
+            label="Username"
+            value={username}
+            onChangeText={setUsername}
+            editable={isEditing}
+          />
+
+          <FormTextField
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            editable={isEditing}
+          />
+
+          <FormTextField
+            label="URL"
+            value={url}
+            onChangeText={setUrl}
+            editable={isEditing}
+          />
+
+          <FormTextField
+            label="Notes"
+            value={notes}
+            onChangeText={setNotes}
+            editable={isEditing}
+            multiline
+          />
+
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row-reverse",
+              gap: 4,
+            }}
+          >
+            {!isEditing ? (
+              <Button title="Edit" onPress={() => setIsEditing(true)} />
+            ) : (
+              <>
+                <Button title="Save" onPress={() => updatePassword()} />
+
+                <Button
+                  title="Cancel"
+                  onPress={() => {
+                    setIsEditing(false);
+                    loadAndRefreshPassword();
+                  }}
+                />
+              </>
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 }

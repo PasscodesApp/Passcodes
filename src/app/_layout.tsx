@@ -4,11 +4,9 @@ import {
   isBiometricsAuthEnabled,
   unlockWithBiometricsApp,
 } from "@/libs/biometric";
-import { NavigationBar } from "expo-navigation-bar";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { AppState, Button } from "react-native";
+import { AppState, Button, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
@@ -20,6 +18,8 @@ export default function RootLayout() {
 }
 
 function AppContent() {
+  let systemScheme = useColorScheme();
+  let isDarkScheme = systemScheme === "dark";
   const appState = useRef(AppState.currentState);
   const backgroundTimestamp = useRef<number | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -54,14 +54,6 @@ function AppContent() {
     return () => subscription.remove();
   }, []);
 
-  useEffect(() => {
-    StatusBar.setStyle("auto");
-    StatusBar.setHidden(false);
-
-    NavigationBar.setStyle("auto");
-    NavigationBar.setHidden(false);
-  }, []);
-
   async function unlock() {
     let result = await unlockWithBiometricsApp();
     setIsAuthenticated(result);
@@ -85,5 +77,9 @@ function AppContent() {
     );
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <ThemeProvider value={isDarkScheme ? DarkTheme : DefaultTheme}>
+      <Stack screenOptions={{ headerShown: true }} />
+    </ThemeProvider>
+  );
 }
