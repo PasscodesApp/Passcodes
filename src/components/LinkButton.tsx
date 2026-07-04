@@ -1,4 +1,4 @@
-import { Link, LinkProps } from "expo-router";
+import { Link, LinkProps, useTheme } from "expo-router";
 import { Text } from "react-native";
 
 type Props = LinkProps & {
@@ -6,20 +6,24 @@ type Props = LinkProps & {
 };
 
 export default function LinkButton({ text, ...props }: Props) {
+  let theme = useTheme();
+
   return (
     <Link
+      asChild
       {...props}
       style={[
-        props.style,
         {
           borderRadius: 12,
           borderWidth: 2,
           paddingInline: 8,
           paddingBlock: 12,
           textAlign: "center",
+          borderColor: theme.colors.border,
+          color: theme.colors.text,
         },
+        props.style,
       ]}
-      asChild
     >
       <Text style={{ fontSize: 16 }}>{text}</Text>
     </Link>

@@ -1,9 +1,10 @@
 import ScreenHeading from "@/components/ScreenHeading";
+import Text from "@/components/Text";
 import roomDrizzleMigration from "@/libs/room_drizzle_migration";
 import * as SQLite from "expo-sqlite";
 import AsyncStorage from "expo-sqlite/kv-store";
 import { useEffect, useState } from "react";
-import { Button, Text } from "react-native";
+import { Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 enum MIGRATION_STATUS {

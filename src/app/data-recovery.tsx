@@ -1,8 +1,8 @@
 import ScreenHeading from "@/components/ScreenHeading";
+import Text from "@/components/Text";
 import dataRecoveryFromTestDB from "@/libs/data_recovery_test_db_mess";
 import * as SQLite from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type MigrationResult = {

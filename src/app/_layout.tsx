@@ -4,9 +4,9 @@ import {
   isBiometricsAuthEnabled,
   unlockWithBiometricsApp,
 } from "@/libs/biometric";
-import { DefaultTheme, Stack, ThemeProvider } from "expo-router";
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { AppState, Button } from "react-native";
+import { AppState, Button, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
@@ -18,6 +18,8 @@ export default function RootLayout() {
 }
 
 function AppContent() {
+  let systemScheme = useColorScheme();
+  let isDarkScheme = systemScheme === "dark";
   const appState = useRef(AppState.currentState);
   const backgroundTimestamp = useRef<number | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -76,7 +78,7 @@ function AppContent() {
   }
 
   return (
-    <ThemeProvider value={DefaultTheme}>
+    <ThemeProvider value={isDarkScheme ? DarkTheme : DefaultTheme}>
       <Stack screenOptions={{ headerShown: true }} />
     </ThemeProvider>
   );

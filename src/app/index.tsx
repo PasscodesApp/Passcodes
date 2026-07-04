@@ -1,7 +1,8 @@
 import LinkButton from "@/components/LinkButton";
 import ScreenHeading from "@/components/ScreenHeading";
+import Text from "@/components/Text";
 import { Stack } from "expo-router";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
