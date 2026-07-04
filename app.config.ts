@@ -2,6 +2,7 @@ import { ConfigContext, ExpoConfig } from "expo/config";
 
 import localAuthenticationPlugin from "expo-local-authentication/plugin";
 import routerPlugin from "expo-router/plugin";
+import sharingPlugin from "expo-sharing/plugin";
 import splashScreenPlugin from "expo-splash-screen/plugin";
 import sqlitePlugin from "expo-sqlite/plugin";
 import statusBarPlugin from "expo-status-bar/plugin";
@@ -93,6 +94,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     }),
     statusBarPlugin({ style: "dark" }),
     sqlitePlugin(),
+    sharingPlugin(),
     "./plugins/withHasFragileUserData.ts",
   ],
   experiments: {
