@@ -12,7 +12,6 @@
     "build:preview": "eas build --profile preview --platform android --local"
   },
   "dependencies": {
-    "@expo/ui": "~56.0.18",
     "babel-plugin-inline-import": "^3.0.0",
     "drizzle-orm": "^0.45.2",
     "expo": "~56.0.12",
