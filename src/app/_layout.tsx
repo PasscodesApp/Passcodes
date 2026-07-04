@@ -4,9 +4,7 @@ import {
   isBiometricsAuthEnabled,
   unlockWithBiometricsApp,
 } from "@/libs/biometric";
-import { NavigationBar } from "expo-navigation-bar";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import { DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { AppState, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -54,14 +52,6 @@ function AppContent() {
     return () => subscription.remove();
   }, []);
 
-  useEffect(() => {
-    StatusBar.setStyle("auto");
-    StatusBar.setHidden(false);
-
-    NavigationBar.setStyle("auto");
-    NavigationBar.setHidden(false);
-  }, []);
-
   async function unlock() {
     let result = await unlockWithBiometricsApp();
     setIsAuthenticated(result);
@@ -85,5 +75,9 @@ function AppContent() {
     );
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <ThemeProvider value={DefaultTheme}>
+      <Stack screenOptions={{ headerShown: true }} />
+    </ThemeProvider>
+  );
 }
