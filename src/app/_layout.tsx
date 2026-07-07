@@ -4,12 +4,20 @@ import {
   isBiometricsAuthEnabled,
   unlockWithBiometricsApp,
 } from "@/libs/biometric";
+import { NavigationBar } from "expo-navigation-bar";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import { AppState, Button, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
+  StatusBar.setStyle("auto");
+  StatusBar.setHidden(false);
+
+  NavigationBar.setStyle("auto");
+  NavigationBar.setHidden(false);
+
   return (
     <DatabaseProvider>
       <AppContent />
