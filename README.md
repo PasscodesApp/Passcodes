@@ -23,12 +23,36 @@ An app that take down the headache of remembering passwords. It is an open sourc
 [Visit Website](https://passcodesapp.github.io/Passcodes-Website/)
 
 > What we think of passcodes?
+>
 > Password management is one of such thing that is as simple as remember a password yet, it very
 > important topic in term of security. So, we as developer of passcodes think to streamline and
 > securing the process as much as
 > possible. [Read more](https://passcodesapp.github.io/Passcodes-Docs/other-docs/project-overview/)
 
+## TOC
+
+- [Stats](#stats)
+  - [Star History](#star-history)
+- [Screen Shots](#screen-shots)
+- [Features](#features)
+- [Installation Steps](#installation-steps)
+- [Upgrading Steps](#upgrading-steps)
+- [Building The App](#building-the-app)
+- [Documentation](#documentation)
+  - [Changelog & Release Notes](#changelog--release-notes)
+- [Contribution Are Appreciated!!!](#contribution-are-appreciated)
+- [Security Policy](#security-policy)
+- [License](#license)
+
 ## Stats
+
+<details>
+
+<summary> (only accessible for contributors,
+
+with a access token in [star-history.com](https://www.star-history.com))
+
+</summary>
 
 ### Star History
 
@@ -39,6 +63,8 @@ An app that take down the headache of remembering passwords. It is an open sourc
    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=PasscodesApp/Passcodes&type=date&legend=top-left" />
  </picture>
 </a>
+
+</details>
 
 ## Screen Shots
 
@@ -88,7 +114,7 @@ An app that take down the headache of remembering passwords. It is an open sourc
 2. Download the APK from your phone. If don't know the architecture of phone, then download APK file
    that has universal in its name.
 
-3. Install the APK and you are ready to use the app.
+3. Install the APK and then you can use the app.
 
 It was most shortest and sweetest description (I have ever crafted), For more detailed description,
 see the file [installing.md](https://passcodesapp.github.io/Passcodes-Docs/user-docs/installing/)
@@ -96,18 +122,17 @@ in `PasscodesApp/Passcodes-Docs`.
 
 ## Upgrading Steps
 
-1. Open current install passcodes app in your phone.
+1. Open currently installed passcodes app in your phone.
 
-2. On main screen or sometimes under settings screen, you wll find version infomation.
+2. On main screen or sometimes under settings screen, you will find version infomation.
 
 3. Get this version infomation and compare it with [latest release in our github repository](https://github.com/PasscodesApp/Passcodes/releases/latest).
 
 4. If there is a new release on GitHub.
 
-5. Download the APK from your phone. If don't know the architecture of phone, then download APK file
-   that has universal in its name.
+5. Download the APK from your phone. If don't know the architecture of phone, then download APK file that has universal in its name.
 
-6. Install the APK, which now will say "upgrade" and you are ready to use the app.
+6. Install the APK, the prompt from android will say "upgrade" and the app will updated.
 
 ## Building The App
 
@@ -123,11 +148,25 @@ in `PasscodesApp/Passcodes-Docs`.
     npm install
     ```
 
-3.  Use Expo Go. [download app](https://expo.dev/go) (use this for prototyping only)
+    - NOTE: It is recommend to run expo doctor.
+
+      ```bash
+      npx expo-doctor
+      ```
+
+3.  Use Expo Go. [download app from here](https://expo.dev/go)
 
     ```bash
     npm start
     ```
+
+    - NOTE: use expo go that comptitable with the app.. please check the sdk and download from expo go from website. not from store pages..
+
+    - NOTE: This expo go shouldn;t be use if wanna contibute to the repository it for testing & prototyping.. in such cases use dev build.
+
+      ```bash
+      npm run build:develop
+      ```
 
 It was a general, intuitive, short and sweet description, For more detailed description, Visit the
 file [building.md](https://passcodesapp.github.io/Passcodes-Docs/dev-docs/building/) in
