@@ -13,6 +13,9 @@
 ![Static Badge](https://img.shields.io/badge/Release-Prototype-blue)
 ![Visitor Counter (@hehuapei/visitor-badge)](https://visitor-badge.laobi.icu/badge?page_id=JeelDobariya38.Passcodes&format=true)
 
+<a href="https://komistore.app/app/?repo=PasscodesApp/Passcodes"><img height="60" src="assets/images/komi-store.png" /></a>
+<a href="https://github.com/PasscodesApp/Passcodes/releases/latest"><img height="60" src="assets/images/github-store.svg" /></a>
+
 </div>
 
 An app that take down the headache of remembering passwords. It is an open source solution that help you in keeping your passwords safe and secure, in your own local storage without ever needing to push them to the cloud.
