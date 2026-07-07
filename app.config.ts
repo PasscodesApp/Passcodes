@@ -1,5 +1,7 @@
 import { ConfigContext, ExpoConfig } from "expo/config";
 
+import buildPropertiesPlugin from "expo-build-properties/plugin";
+import devBuildPlugin from "expo-dev-client/plugin";
 import localAuthenticationPlugin from "expo-local-authentication/plugin";
 import routerPlugin from "expo-router/plugin";
 import sharingPlugin from "expo-sharing/plugin";
@@ -72,23 +74,24 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     routerPlugin(),
     splashScreenPlugin({
       image: "./assets/images/passcodes_icon.png",
-      imageWidth: 200,
+      imageWidth: 250,
       resizeMode: "contain",
       backgroundColor: "#d0e3f7",
       dark: {
         backgroundColor: "#34597f",
       },
     }),
-    [
-      "expo-build-properties",
-      {
-        android: {
-          usePrecompiledHeaders: true,
-          enableMinifyInReleaseBuilds: true,
-          enableShrinkResourcesInReleaseBuilds: true,
-        },
+    devBuildPlugin({
+      launchMode: "launcher",
+      addGeneratedScheme: false,
+    }),
+    buildPropertiesPlugin({
+      android: {
+        usePrecompiledHeaders: true,
+        enableMinifyInReleaseBuilds: true,
+        enableShrinkResourcesInReleaseBuilds: true,
       },
-    ],
+    }),
     localAuthenticationPlugin({
       faceIDPermission: "Allow Passcodes to use Face ID.",
     }),
