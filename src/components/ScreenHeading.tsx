@@ -1,18 +1,14 @@
-import { useTheme } from "expo-router";
-import { StyleSheet, Text, TextProps } from "react-native";
+import { StyleSheet, type Text as NativeText } from "react-native";
+import { TextProps } from "react-native-paper";
+import Text from "./Text";
 
-type Props = TextProps & {
+type Props = Omit<TextProps<NativeText>, "children"> & {
   title: string;
 };
 
 export default function ScreenHeading({ title, ...props }: Props) {
-  let theme = useTheme();
-
   return (
-    <Text
-      {...props}
-      style={[styles.title, { color: theme.colors.text }, props.style]}
-    >
+    <Text {...props} style={[styles.title, props.style]}>
       {title}
     </Text>
   );

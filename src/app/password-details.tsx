@@ -1,4 +1,5 @@
 import FormTextField from "@/components/FormTextField";
+import SecureTextField from "@/components/SecureTextField";
 import { passwords } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
@@ -6,7 +7,8 @@ import { router, Stack, useLocalSearchParams } from "expo-router";
 import { usePreventScreenCapture } from "expo-screen-capture";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Button, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
@@ -82,9 +84,11 @@ export default function PasswordDetailsScreen() {
             value={username}
             onChangeText={setUsername}
             editable={isEditing}
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
-          <FormTextField
+          <SecureTextField
             label="Password"
             value={password}
             onChangeText={setPassword}
@@ -96,6 +100,8 @@ export default function PasswordDetailsScreen() {
             value={url}
             onChangeText={setUrl}
             editable={isEditing}
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <FormTextField
@@ -114,18 +120,23 @@ export default function PasswordDetailsScreen() {
             }}
           >
             {!isEditing ? (
-              <Button title="Edit" onPress={() => setIsEditing(true)} />
+              <Button mode="contained-tonal" onPress={() => setIsEditing(true)}>
+                Edit
+              </Button>
             ) : (
               <>
-                <Button title="Save" onPress={() => updatePassword()} />
+                <Button mode="contained-tonal" onPress={() => updatePassword()}>
+                  Save
+                </Button>
 
                 <Button
-                  title="Cancel"
                   onPress={() => {
                     setIsEditing(false);
                     loadAndRefreshPassword();
                   }}
-                />
+                >
+                  Cancel
+                </Button>
               </>
             )}
           </View>

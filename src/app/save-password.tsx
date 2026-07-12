@@ -1,12 +1,13 @@
 import FormTextField from "@/components/FormTextField";
-import ScreenHeading from "@/components/ScreenHeading";
+import SecureTextField from "@/components/SecureTextField";
 import { passwords } from "@/db/schema";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, Stack } from "expo-router";
 import { usePreventScreenCapture } from "expo-screen-capture";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, Button, ScrollView } from "react-native";
+import { Alert, ScrollView, View } from "react-native";
+import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SavePasswordScreen() {
@@ -31,12 +32,9 @@ export default function SavePasswordScreen() {
             gap: 16,
           }}
         >
-          <ScreenHeading title="New Password" />
-
           <FormTextField
             label="Domain"
             value={domain}
-            isRequired={true}
             onChangeText={setDomain}
             placeholder="google, instagram, whatsapp...."
             placeholderTextColor={"#9e9e9e"}
@@ -45,16 +43,16 @@ export default function SavePasswordScreen() {
           <FormTextField
             label="Username"
             value={username}
-            isRequired={true}
             onChangeText={setUsername}
             placeholder="alan24_st, olivia_12, ava2026@gmail.com..."
             placeholderTextColor={"#9e9e9e"}
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
-          <FormTextField
+          <SecureTextField
             label="Password"
             value={password}
-            isRequired={true}
             onChangeText={setPassword}
             placeholder="************"
             placeholderTextColor={"#9e9e9e"}
@@ -66,6 +64,8 @@ export default function SavePasswordScreen() {
             onChangeText={setUrl}
             placeholder="https://..."
             placeholderTextColor={"#9e9e9e"}
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <FormTextField
@@ -77,33 +77,43 @@ export default function SavePasswordScreen() {
             multiline
           />
 
-          <Button
-            title="Save"
-            onPress={() => {
-              if (!domain || !username || !password) {
-                Alert.alert(
-                  "Missing Fields",
-                  "Domain, Username and Password are required.",
-                );
-                return;
-              }
-
-              drizzleDb
-                .insert(passwords)
-                .values({
-                  domain,
-                  username,
-                  password,
-                  notes,
-                  url,
-                })
-                .then(() => router.back())
-                .catch((err) => {
-                  console.error(err);
-                  Alert.alert("Error", "Failed to save password.");
-                });
+          <View
+            style={{
+              marginVertical: 20,
+              alignItems: "center",
             }}
-          />
+          >
+            <Button
+              mode="contained"
+              style={{ width: "45%" }}
+              onPress={() => {
+                if (!domain || !username || !password) {
+                  Alert.alert(
+                    "Missing Fields",
+                    "Domain, Username and Password are required.",
+                  );
+                  return;
+                }
+
+                drizzleDb
+                  .insert(passwords)
+                  .values({
+                    domain,
+                    username,
+                    password,
+                    notes,
+                    url,
+                  })
+                  .then(() => router.back())
+                  .catch((err) => {
+                    console.error(err);
+                    Alert.alert("Error", "Failed to save password.");
+                  });
+              }}
+            >
+              Save
+            </Button>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </>

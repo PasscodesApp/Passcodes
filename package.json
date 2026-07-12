@@ -12,6 +12,7 @@
     "build:preview": "eas build --profile preview --platform android --local"
   },
   "dependencies": {
+    "@react-native-vector-icons/material-design-icons": "^13.1.2",
     "babel-plugin-inline-import": "^3.0.0",
     "drizzle-orm": "^0.45.2",
     "expo": "~57.0.4",
