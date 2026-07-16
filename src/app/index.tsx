@@ -3,6 +3,7 @@ import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
 import { Stack } from "expo-router";
 import { View } from "react-native";
+import { Card } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
@@ -22,11 +23,15 @@ export default function HomeScreen() {
           <Text style={{ fontSize: 8 }}>v3.1.0.rc1 - Stable</Text>
         </View>
 
-        <View style={{ alignItems: "stretch", gap: 12 }}>
-          <LinkButton href={"/save-password"} text="Save Password" />
-          <LinkButton href={"/load-password"} text="Password List" />
-          <LinkButton href={"/settings"} text="Settings" />
-        </View>
+        <Card>
+          <Card.Actions
+            style={{ flexDirection: "column", alignItems: "stretch", gap: 12 }}
+          >
+            <LinkButton href={"/save-password"} text="Save Password" />
+            <LinkButton href={"/load-password"} text="Password List" />
+            <LinkButton href={"/settings"} text="Settings" />
+          </Card.Actions>
+        </Card>
       </SafeAreaView>
     </>
   );

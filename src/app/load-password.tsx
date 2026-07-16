@@ -16,8 +16,8 @@ export default function LoadPasswordScreen() {
 
   const [passwordList, setPasswordList] = useState<any[]>([]);
 
-  function deletePassword(item: any) {
-    Alert.alert("Delete?", `${item.domain} : ${item.username}`, [
+  function deletePassword(password: any) {
+    Alert.alert("Delete?", `${password.domain} : ${password.username}`, [
       {
         text: "Cancel",
         style: "cancel",
@@ -27,9 +27,11 @@ export default function LoadPasswordScreen() {
         onPress: () => {
           drizzleDb
             .delete(passwords)
-            .where(eq(passwords.id, item.id))
+            .where(eq(passwords.id, password.id))
             .then(() => {
-              setPasswordList((prev) => prev.filter((item) => item.id !== id));
+              setPasswordList((prev) =>
+                prev.filter((item) => item.id !== password.id),
+              );
             });
         },
         style: "destructive",
