@@ -93,7 +93,6 @@ export default function LoadPasswordScreen() {
 
 const styles = StyleSheet.create({
   label: {
-    fontSize: 15,
     fontWeight: "600",
     marginBottom: 6,
     color: "#333",
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: "center",
     marginTop: 40,
-    fontSize: 16,
+    fontSize: 12,
     color: "gray",
   },
 });

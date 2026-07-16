@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TextInput, TextInputProps } from "react-native-paper";
+import FormTextField from "./FormTextField";
 
 type SecureTextFieldProps = Omit<TextInputProps, "secureTextEntry" | "right">;
 
@@ -7,7 +8,7 @@ export default function SecureTextField({ ...props }: SecureTextFieldProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
-    <TextInput
+    <FormTextField
       mode="outlined"
       autoCapitalize="none"
       autoCorrect={false}

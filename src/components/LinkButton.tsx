@@ -1,31 +1,23 @@
-import { Link, LinkProps, useTheme } from "expo-router";
-import { Text } from "react-native";
+import { Href, router } from "expo-router";
+import { Button, ButtonProps, useTheme } from "react-native-paper";
+import Text from "./Text";
 
-type Props = LinkProps & {
+type Props = Omit<ButtonProps, "children"> & {
   text: string;
+  href: Href;
 };
 
-export default function LinkButton({ text, ...props }: Props) {
+export default function LinkButton({ text, href, ...props }: Props) {
   let theme = useTheme();
 
   return (
-    <Link
-      asChild
-      {...props}
-      style={[
-        {
-          borderRadius: 12,
-          borderWidth: 2,
-          paddingInline: 8,
-          paddingBlock: 12,
-          textAlign: "center",
-          borderColor: theme.colors.border,
-          color: theme.colors.text,
-        },
-        props.style,
-      ]}
+    <Button
+      mode="contained-tonal"
+      onPress={() => {
+        router.navigate(href);
+      }}
     >
-      <Text style={{ fontSize: 12 }}>{text}</Text>
-    </Link>
+      <Text style={{ fontSize: 12, color: theme.colors.primary }}>{text}</Text>
+    </Button>
   );
 }

@@ -14,7 +14,7 @@ export default function HomeScreen() {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
-          gap: 24,
+          gap: 48,
         }}
       >
         <View style={{ alignItems: "center" }}>

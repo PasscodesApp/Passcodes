@@ -68,8 +68,8 @@ export default function PasswordDetailsScreen() {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView
           contentContainerStyle={{
-            padding: 20,
-            gap: 16,
+            margin: 20,
+            gap: 24,
           }}
         >
           <FormTextField
@@ -105,11 +105,13 @@ export default function PasswordDetailsScreen() {
           />
 
           <FormTextField
+            style={{ minHeight: 80 }}
             label="Notes"
             value={notes}
             onChangeText={setNotes}
             editable={isEditing}
             multiline
+            numberOfLines={3}
           />
 
           <View
