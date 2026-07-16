@@ -25,7 +25,7 @@ export default function LinkButton({ text, ...props }: Props) {
         props.style,
       ]}
     >
-      <Text style={{ fontSize: 16 }}>{text}</Text>
+      <Text style={{ fontSize: 12 }}>{text}</Text>
     </Link>
   );
 }

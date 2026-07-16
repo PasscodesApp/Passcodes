@@ -16,7 +16,7 @@ export default function ScreenHeading({ title, ...props }: Props) {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
   },
