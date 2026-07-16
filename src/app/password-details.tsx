@@ -105,7 +105,6 @@ export default function PasswordDetailsScreen() {
           />
 
           <FormTextField
-            style={{ minHeight: 80 }}
             label="Notes"
             value={notes}
             onChangeText={setNotes}

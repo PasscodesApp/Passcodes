@@ -5,22 +5,36 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Button, FlatList, StyleSheet, View } from "react-native";
+import { Alert, FlatList, Pressable, StyleSheet, View } from "react-native";
+import { useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoadPasswordScreen() {
+  let theme = useTheme();
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
 
   const [passwordList, setPasswordList] = useState<any[]>([]);
 
-  function deletePasswordById(id: number) {
-    drizzleDb
-      .delete(passwords)
-      .where(eq(passwords.id, id))
-      .then(() => {
-        setPasswordList((prev) => prev.filter((item) => item.id !== id));
-      });
+  function deletePassword(item: any) {
+    Alert.alert("Delete?", `${item.domain} : ${item.username}`, [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => {
+          drizzleDb
+            .delete(passwords)
+            .where(eq(passwords.id, item.id))
+            .then(() => {
+              setPasswordList((prev) => prev.filter((item) => item.id !== id));
+            });
+        },
+        style: "destructive",
+      },
+    ]);
   }
 
   useEffect(() => {
@@ -43,47 +57,56 @@ export default function LoadPasswordScreen() {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={<Text style={styles.emptyText}>No Data!!</Text>}
           renderItem={({ item }) => (
-            <View
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: 16,
-                padding: 16,
-                marginBottom: 16,
-              }}
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: "/password-details",
+                  params: { id: item.id },
+                })
+              }
+              onLongPress={() => deletePassword(item)}
             >
-              <Text style={styles.label}>
-                Domain: <Text style={styles.value}>{item.domain}</Text>
-              </Text>
+              <View
+                style={{
+                  backgroundColor: theme.colors.surface,
+                  borderRadius: 16,
+                  padding: 16,
+                  marginBottom: 16,
+                }}
+              >
+                <Text style={styles.label}>
+                  Domain:{" "}
+                  <Text style={[styles.value, { color: theme.colors.primary }]}>
+                    {item.domain}
+                  </Text>
+                </Text>
 
-              <Text style={styles.label}>
-                Username: <Text style={styles.value}>{item.username}</Text>
-              </Text>
+                <Text style={styles.label}>
+                  Username:{" "}
+                  <Text style={[styles.value, { color: theme.colors.primary }]}>
+                    {item.username}
+                  </Text>
+                </Text>
 
-              <Text style={styles.label}>
-                Password: <Text style={styles.value}>{item.password}</Text>
-              </Text>
+                <Text style={styles.label}>
+                  Password:{" "}
+                  <Text
+                    style={[styles.value, { color: theme.colors.tertiary }]}
+                  >
+                    **********
+                  </Text>
+                </Text>
 
-              <Text style={styles.label}>
-                Updated At: <Text style={styles.value}>{item.updatedAt}</Text>
-              </Text>
-
-              <View style={{ gap: 10, marginTop: 10 }}>
-                <Button
-                  title="View"
-                  onPress={() =>
-                    router.push({
-                      pathname: "/password-details",
-                      params: { id: item.id },
-                    })
-                  }
-                />
-                <Button
-                  title="Delete"
-                  color="#e63946"
-                  onPress={() => deletePasswordById(item.id)}
-                />
+                <Text style={[styles.label, { color: theme.colors.onSurface }]}>
+                  Updated At:{" "}
+                  <Text
+                    style={[styles.value, { color: theme.colors.tertiary }]}
+                  >
+                    {item.updatedAt.split("T")[0]}
+                  </Text>
+                </Text>
               </View>
-            </View>
+            </Pressable>
           )}
         />
       </SafeAreaView>
@@ -95,12 +118,10 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: "600",
     marginBottom: 6,
-    color: "#333",
   },
 
   value: {
     fontWeight: "400",
-    color: "#555",
   },
 
   emptyText: {
