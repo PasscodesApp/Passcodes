@@ -13,11 +13,15 @@ import { PaperProvider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
-  StatusBar.setStyle("auto");
-  StatusBar.setHidden(false);
+  let systemScheme = useColorScheme();
 
-  NavigationBar.setStyle("auto");
-  NavigationBar.setHidden(false);
+  useEffect(() => {
+    StatusBar.setStyle("auto");
+    StatusBar.setHidden(false);
+
+    NavigationBar.setStyle("auto");
+    NavigationBar.setHidden(false);
+  }, [systemScheme]);
 
   return (
     <DatabaseProvider>
