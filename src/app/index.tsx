@@ -20,7 +20,7 @@ export default function HomeScreen() {
       >
         <View style={{ alignItems: "center" }}>
           <ScreenHeading title="Passcodes" style={{ color: "#34597f" }} />
-          <Text style={{ fontSize: 8 }}>v3.1.0.rc1 - Stable</Text>
+          <Text style={{ fontSize: 8 }}>v3.1.0.rc2 - Stable</Text>
         </View>
 
         <Card
