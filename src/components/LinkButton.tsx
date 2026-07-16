@@ -5,19 +5,35 @@ import Text from "./Text";
 type Props = Omit<ButtonProps, "children"> & {
   text: string;
   href: Href;
+  variant?: "primary" | "secondary";
 };
 
-export default function LinkButton({ text, href, ...props }: Props) {
+export default function LinkButton({
+  text,
+  href,
+  variant = "secondary",
+  ...props
+}: Props) {
   let theme = useTheme();
 
   return (
     <Button
-      mode="contained-tonal"
+      mode={variant === "secondary" ? "outlined" : "contained"}
       onPress={() => {
         router.navigate(href);
       }}
     >
-      <Text style={{ fontSize: 12, color: theme.colors.primary }}>{text}</Text>
+      <Text
+        style={{
+          fontSize: 12,
+          color:
+            variant === "secondary"
+              ? theme.colors.secondary
+              : theme.colors.onPrimary,
+        }}
+      >
+        {text}
+      </Text>
     </Button>
   );
 }

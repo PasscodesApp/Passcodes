@@ -6,7 +6,7 @@ import { router, Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Alert, FlatList, Pressable, StyleSheet, View } from "react-native";
-import { useTheme } from "react-native-paper";
+import { FAB, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoadPasswordScreen() {
@@ -111,6 +111,13 @@ export default function LoadPasswordScreen() {
             </Pressable>
           )}
         />
+        <FAB
+          style={{ position: "absolute", bottom: 25, right: 25 }}
+          icon={"plus"}
+          onPress={() => {
+            router.push("/save-password");
+          }}
+        ></FAB>
       </SafeAreaView>
     </>
   );

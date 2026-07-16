@@ -19,16 +19,23 @@ export default function HomeScreen() {
         }}
       >
         <View style={{ alignItems: "center" }}>
-          <ScreenHeading title="Passcodes" />
+          <ScreenHeading title="Passcodes" style={{ color: "#34597f" }} />
           <Text style={{ fontSize: 8 }}>v3.1.0.rc1 - Stable</Text>
         </View>
 
-        <Card>
+        <Card
+          style={{
+            padding: 12,
+          }}
+        >
           <Card.Actions
             style={{ flexDirection: "column", alignItems: "stretch", gap: 12 }}
           >
-            <LinkButton href={"/save-password"} text="Save Password" />
-            <LinkButton href={"/load-password"} text="Password List" />
+            <LinkButton
+              variant="primary"
+              href={"/password-manager"}
+              text="Password Manager"
+            />
             <LinkButton href={"/settings"} text="Settings" />
           </Card.Actions>
         </Card>

@@ -79,13 +79,12 @@ export default function SavePasswordScreen() {
 
           <View
             style={{
-              marginVertical: 20,
+              margin: 20,
               alignItems: "center",
             }}
           >
             <Button
               mode="contained"
-              style={{ width: "45%" }}
               onPress={() => {
                 if (!domain || !username || !password) {
                   Alert.alert(
