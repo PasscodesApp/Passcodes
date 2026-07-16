@@ -74,7 +74,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     routerPlugin(),
     splashScreenPlugin({
       image: "./assets/images/passcodes_icon.png",
-      imageWidth: 250,
+      imageWidth: 200,
       resizeMode: "contain",
       backgroundColor: "#d0e3f7",
       dark: {
