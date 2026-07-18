@@ -99,7 +99,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     sqlitePlugin(),
     sharingPlugin(),
     "./plugins/withHasFragileUserData.ts",
-    "@react-native-vector-icons/material-design-icons",
+    "@react-native-vector-icons/fontawesome6",
   ],
   experiments: {
     typedRoutes: true,

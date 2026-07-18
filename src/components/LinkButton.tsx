@@ -1,8 +1,8 @@
 import { Href, router } from "expo-router";
-import { Button, ButtonProps, useTheme } from "react-native-paper";
+import { Button, type ButtonProps, useTheme } from "react-native-paper";
 import Text from "./Text";
 
-type Props = Omit<ButtonProps, "children"> & {
+type Props = Omit<ButtonProps, "children" | "onPress"> & {
   text: string;
   href: Href;
   variant?: "primary" | "secondary";

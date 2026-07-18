@@ -1,4 +1,5 @@
 import LinkButton from "@/components/LinkButton";
+import { LinkIconButton } from "@/components/LinkIconButton";
 import Text from "@/components/Text";
 import { passwords } from "@/db/schema";
 import {
@@ -15,11 +16,12 @@ import {
   convertRawCSVToPasswords,
   getCSVPasswordString,
 } from "@/libs/importing";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, ScrollView } from "react-native";
+import { Alert, ScrollView, StyleSheet } from "react-native";
 import { Button, Card, Switch, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -127,18 +129,49 @@ export default function SettingsScreen() {
                 Contact Us
               </Text>
 
-              <Card.Actions style={{ flexDirection: "column", gap: 12 }}>
-                <LinkButton
-                  href={"https://discord.gg/kSSkYq7KAQ"}
-                  text="Join Discord"
+              <Card.Actions style={{ justifyContent: "center", gap: 12 }}>
+                <LinkIconButton
+                  href="https://discord.gg/kSSkYq7KAQ"
+                  icon={({ size, color }) => (
+                    <FontAwesome6
+                      name="discord"
+                      size={size}
+                      color={color}
+                      iconStyle="brand"
+                    />
+                  )}
+                  darkModeColor="#5865F2"
                 />
-                <LinkButton
-                  href={"https://passcodesapp.github.io/Passcodes-Website/"}
-                  text="Goto Website"
+                <LinkIconButton
+                  href="https://github.com/PasscodesApp/Passcodes"
+                  icon={({ size, color }) => (
+                    <FontAwesome6
+                      name="github"
+                      size={size}
+                      color={color}
+                      iconStyle="brand"
+                    />
+                  )}
+                  darkModeColor="#3a424b"
                 />
-                <LinkButton
-                  href={"mailto:jeeldobariya38@gmail.com"}
-                  text="Email Me"
+                <LinkIconButton
+                  href="mailto:jeeldobariya38@gmail.com"
+                  icon={({ size, color }) => (
+                    <FontAwesome6 name="envelope" size={size} color={color} />
+                  )}
+                  darkModeColor="#6b7174"
+                />
+                <LinkIconButton
+                  href="mailto:jeeldobariya38@gmail.com"
+                  icon={({ size, color }) => (
+                    <FontAwesome6
+                      name="telegram"
+                      size={size}
+                      color={color}
+                      iconStyle="brand"
+                    />
+                  )}
+                  darkModeColor="#0088cc"
                 />
               </Card.Actions>
             </Card.Content>
@@ -148,3 +181,11 @@ export default function SettingsScreen() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 16,
+  },
+});
