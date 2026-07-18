@@ -1,31 +1,40 @@
-import { Link, LinkProps, useTheme } from "expo-router";
-import { Text } from "react-native";
+import { Href, router } from "expo-router";
+import { Button, type ButtonProps, useTheme } from "react-native-paper";
+import Text from "./Text";
 
-type Props = LinkProps & {
+type Props = Omit<ButtonProps, "children" | "onPress"> & {
   text: string;
+  href: Href;
+  variant?: "primary" | "secondary";
 };
 
-export default function LinkButton({ text, ...props }: Props) {
+export default function LinkButton({
+  text,
+  href,
+  variant = "secondary",
+  ...props
+}: Props) {
   let theme = useTheme();
 
   return (
-    <Link
-      asChild
-      {...props}
-      style={[
-        {
-          borderRadius: 12,
-          borderWidth: 2,
-          paddingInline: 8,
-          paddingBlock: 12,
-          textAlign: "center",
-          borderColor: theme.colors.border,
-          color: theme.colors.text,
-        },
-        props.style,
-      ]}
+    <Button
+      mode={variant === "secondary" ? "outlined" : "contained"}
+      icon={props.icon}
+      onPress={() => {
+        router.navigate(href);
+      }}
     >
-      <Text style={{ fontSize: 16 }}>{text}</Text>
-    </Link>
+      <Text
+        style={{
+          fontSize: 12,
+          color:
+            variant === "secondary"
+              ? theme.colors.secondary
+              : theme.colors.onPrimary,
+        }}
+      >
+        {text}
+      </Text>
+    </Button>
   );
 }

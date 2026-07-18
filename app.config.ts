@@ -33,7 +33,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Passcodes" + appNameSuffix,
   slug: "passcodes",
-  version: "v3.1.0-Stable" + versionNameSuffix,
+  version: "v3.1.0.rc2-Stable" + versionNameSuffix,
 
   orientation: "portrait",
   icon: "./assets/images/passcodes_icon.png",
@@ -48,7 +48,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   android: {
     versionCode: 9,
-    version: "v3.1.0-Stable" + versionNameSuffix,
+    version: "v3.1.0.rc2-Stable" + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
     adaptiveIcon: IS_DEV
@@ -74,7 +74,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     routerPlugin(),
     splashScreenPlugin({
       image: "./assets/images/passcodes_icon.png",
-      imageWidth: 250,
+      imageWidth: 200,
       resizeMode: "contain",
       backgroundColor: "#d0e3f7",
       dark: {
@@ -99,6 +99,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     sqlitePlugin(),
     sharingPlugin(),
     "./plugins/withHasFragileUserData.ts",
+    "@react-native-vector-icons/fontawesome6",
   ],
   experiments: {
     typedRoutes: true,

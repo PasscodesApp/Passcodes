@@ -1,8 +1,10 @@
+import Text from "@/components/Text";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { openDatabaseSync, SQLiteProvider } from "expo-sqlite";
 import { Suspense, type PropsWithChildren } from "react";
-import { ActivityIndicator, Text } from "react-native";
+import { View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import migrations from "./drizzle/migrations";
 
@@ -20,7 +22,22 @@ export default function DatabaseProvider({ children }: PropsWithChildren) {
       <SafeAreaView
         style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
       >
-        <Text style={{ fontSize: 32 }}>Migration error: {error.message}</Text>
+        <View
+          style={{
+            backgroundColor: "#020221",
+            padding: 20,
+            borderRadius: 20,
+            gap: 12,
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: "#EF9F9F", fontSize: 16, fontWeight: 800 }}>
+            Something went wrong!!
+          </Text>
+          <Text style={{ color: "#f56f6f" }}>
+            Please close & reopen the app.
+          </Text>
+        </View>
       </SafeAreaView>
     );
   }
@@ -36,7 +53,15 @@ export default function DatabaseProvider({ children }: PropsWithChildren) {
   }
 
   return (
-    <Suspense fallback={<ActivityIndicator size="large" />}>
+    <Suspense
+      fallback={
+        <SafeAreaView
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator size="large" />
+        </SafeAreaView>
+      }
+    >
       <SQLiteProvider databaseName={DATABASE_NAME} useSuspense>
         {children}
       </SQLiteProvider>

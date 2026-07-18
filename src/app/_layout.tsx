@@ -9,14 +9,19 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import { AppState, Button, useColorScheme } from "react-native";
+import { PaperProvider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
-  StatusBar.setStyle("auto");
-  StatusBar.setHidden(false);
+  let systemScheme = useColorScheme();
 
-  NavigationBar.setStyle("auto");
-  NavigationBar.setHidden(false);
+  useEffect(() => {
+    StatusBar.setStyle("auto");
+    StatusBar.setHidden(false);
+
+    NavigationBar.setStyle("auto");
+    NavigationBar.setHidden(false);
+  }, [systemScheme]);
 
   return (
     <DatabaseProvider>
@@ -87,7 +92,9 @@ function AppContent() {
 
   return (
     <ThemeProvider value={isDarkScheme ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: true }} />
+      <PaperProvider>
+        <Stack screenOptions={{ headerShown: true }} />
+      </PaperProvider>
     </ThemeProvider>
   );
 }

@@ -1,12 +1,15 @@
 import FormTextField from "@/components/FormTextField";
+import SecureTextField from "@/components/SecureTextField";
 import { passwords } from "@/db/schema";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { usePreventScreenCapture } from "expo-screen-capture";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Button, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
+import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
@@ -66,8 +69,8 @@ export default function PasswordDetailsScreen() {
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView
           contentContainerStyle={{
-            padding: 20,
-            gap: 16,
+            margin: 20,
+            gap: 24,
           }}
         >
           <FormTextField
@@ -82,9 +85,11 @@ export default function PasswordDetailsScreen() {
             value={username}
             onChangeText={setUsername}
             editable={isEditing}
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
-          <FormTextField
+          <SecureTextField
             label="Password"
             value={password}
             onChangeText={setPassword}
@@ -96,6 +101,8 @@ export default function PasswordDetailsScreen() {
             value={url}
             onChangeText={setUrl}
             editable={isEditing}
+            autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <FormTextField
@@ -104,6 +111,7 @@ export default function PasswordDetailsScreen() {
             onChangeText={setNotes}
             editable={isEditing}
             multiline
+            numberOfLines={3}
           />
 
           <View
@@ -114,18 +122,53 @@ export default function PasswordDetailsScreen() {
             }}
           >
             {!isEditing ? (
-              <Button title="Edit" onPress={() => setIsEditing(true)} />
+              <Button
+                mode="contained-tonal"
+                icon={({ size, color }) => (
+                  <FontAwesome6
+                    name="pencil"
+                    size={size}
+                    color={color}
+                    iconStyle="solid"
+                  />
+                )}
+                onPress={() => setIsEditing(true)}
+              >
+                Edit
+              </Button>
             ) : (
               <>
-                <Button title="Save" onPress={() => updatePassword()} />
+                <Button
+                  mode="contained-tonal"
+                  icon={({ size, color }) => (
+                    <FontAwesome6
+                      name="store"
+                      size={size}
+                      color={color}
+                      iconStyle="solid"
+                    />
+                  )}
+                  onPress={() => updatePassword()}
+                >
+                  Save
+                </Button>
 
                 <Button
-                  title="Cancel"
+                  icon={({ size, color }) => (
+                    <FontAwesome6
+                      name="xmark"
+                      size={size}
+                      color={color}
+                      iconStyle="solid"
+                    />
+                  )}
                   onPress={() => {
                     setIsEditing(false);
                     loadAndRefreshPassword();
                   }}
-                />
+                >
+                  Cancel
+                </Button>
               </>
             )}
           </View>
