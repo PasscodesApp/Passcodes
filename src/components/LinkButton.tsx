@@ -19,6 +19,7 @@ export default function LinkButton({
   return (
     <Button
       mode={variant === "secondary" ? "outlined" : "contained"}
+      icon={props.icon}
       onPress={() => {
         router.navigate(href);
       }}

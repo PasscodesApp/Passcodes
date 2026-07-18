@@ -1,6 +1,7 @@
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { passwords } from "@/db/schema";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, Stack } from "expo-router";
 import { usePreventScreenCapture } from "expo-screen-capture";
@@ -85,6 +86,14 @@ export default function SavePasswordScreen() {
           >
             <Button
               mode="contained"
+              icon={({ size, color }) => (
+                <FontAwesome6
+                  name="store"
+                  size={size}
+                  color={color}
+                  iconStyle="solid"
+                />
+              )}
               onPress={() => {
                 if (!domain || !username || !password) {
                   Alert.alert(
@@ -110,7 +119,7 @@ export default function SavePasswordScreen() {
                   });
               }}
             >
-              Save
+              Save Password
             </Button>
           </View>
         </ScrollView>

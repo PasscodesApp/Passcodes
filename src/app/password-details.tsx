@@ -1,6 +1,7 @@
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { passwords } from "@/db/schema";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, Stack, useLocalSearchParams } from "expo-router";
@@ -121,16 +122,46 @@ export default function PasswordDetailsScreen() {
             }}
           >
             {!isEditing ? (
-              <Button mode="contained-tonal" onPress={() => setIsEditing(true)}>
+              <Button
+                mode="contained-tonal"
+                icon={({ size, color }) => (
+                  <FontAwesome6
+                    name="pencil"
+                    size={size}
+                    color={color}
+                    iconStyle="solid"
+                  />
+                )}
+                onPress={() => setIsEditing(true)}
+              >
                 Edit
               </Button>
             ) : (
               <>
-                <Button mode="contained-tonal" onPress={() => updatePassword()}>
+                <Button
+                  mode="contained-tonal"
+                  icon={({ size, color }) => (
+                    <FontAwesome6
+                      name="store"
+                      size={size}
+                      color={color}
+                      iconStyle="solid"
+                    />
+                  )}
+                  onPress={() => updatePassword()}
+                >
                   Save
                 </Button>
 
                 <Button
+                  icon={({ size, color }) => (
+                    <FontAwesome6
+                      name="xmark"
+                      size={size}
+                      color={color}
+                      iconStyle="solid"
+                    />
+                  )}
                   onPress={() => {
                     setIsEditing(false);
                     loadAndRefreshPassword();

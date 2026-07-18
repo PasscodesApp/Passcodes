@@ -1,5 +1,6 @@
 import Text from "@/components/Text";
 import { passwords } from "@/db/schema";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, Stack } from "expo-router";
@@ -112,8 +113,15 @@ export default function LoadPasswordScreen() {
           )}
         />
         <FAB
-          style={{ position: "absolute", bottom: 25, right: 25 }}
-          icon={"plus"}
+          style={{ position: "absolute", bottom: 35, right: 35 }}
+          icon={({ size, color }) => (
+            <FontAwesome6
+              name="plus"
+              size={size}
+              color={color}
+              iconStyle="solid"
+            />
+          )}
           onPress={() => {
             router.push("/save-password");
           }}

@@ -21,12 +21,13 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, ScrollView, StyleSheet } from "react-native";
-import { Button, Card, Switch, useTheme } from "react-native-paper";
+import { Alert, ScrollView, StyleSheet, useColorScheme } from "react-native";
+import { Button, Card, Switch } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
-  const theme = useTheme();
+  const scheme = useColorScheme();
+
   const [isEnabled, setIsEnabled] = useState(isBiometricsAuthEnabled());
   const toggleSwitch = () => setIsEnabled(toggleBiometricsFeature());
 
@@ -80,12 +81,30 @@ export default function SettingsScreen() {
 
           <Card>
             <Card.Actions style={{ flexDirection: "column", gap: 12 }}>
-              <Button onPress={() => handleImportPasswords()}>
+              <Button
+                icon={({ size, color }) => (
+                  <FontAwesome6
+                    name="upload"
+                    size={size}
+                    color={color}
+                    iconStyle="solid"
+                  />
+                )}
+                onPress={() => handleImportPasswords()}
+              >
                 <Text>Import With Google Passwords Format</Text>
               </Button>
 
               <Button
                 mode="outlined"
+                icon={({ size, color }) => (
+                  <FontAwesome6
+                    name="share-nodes"
+                    size={size}
+                    color={color}
+                    iconStyle="solid"
+                  />
+                )}
                 onPress={async () => {
                   let result = await unlockWithBiometricsApp();
                   if (result) {
@@ -122,25 +141,29 @@ export default function SettingsScreen() {
           </Card>
 
           <Card>
-            <Card.Content>
-              <Text
-                style={{ fontSize: 28, marginBottom: 12, textAlign: "center" }}
-              >
-                Contact Us
-              </Text>
+            <Card.Content style={{ gap: 12 }}>
+              <Card.Title
+                title="Passcodes"
+                titleVariant="headlineLarge"
+                titleStyle={{ textAlign: "center" }}
+                subtitle="v3.1.0.rc2 - Stable"
+                subtitleVariant="labelMedium"
+                subtitleStyle={{ textAlign: "center" }}
+                style={{ marginBlock: 24 }}
+              />
 
               <Card.Actions style={{ justifyContent: "center", gap: 12 }}>
                 <LinkIconButton
-                  href="https://discord.gg/kSSkYq7KAQ"
+                  href="mailto:jeeldobariya38@gmail.com"
                   icon={({ size, color }) => (
                     <FontAwesome6
-                      name="discord"
+                      name="envelope"
                       size={size}
                       color={color}
-                      iconStyle="brand"
+                      iconStyle="regular"
                     />
                   )}
-                  darkModeColor="#5865F2"
+                  darkModeColor="#2a4759"
                 />
                 <LinkIconButton
                   href="https://github.com/PasscodesApp/Passcodes"
@@ -157,13 +180,6 @@ export default function SettingsScreen() {
                 <LinkIconButton
                   href="mailto:jeeldobariya38@gmail.com"
                   icon={({ size, color }) => (
-                    <FontAwesome6 name="envelope" size={size} color={color} />
-                  )}
-                  darkModeColor="#6b7174"
-                />
-                <LinkIconButton
-                  href="mailto:jeeldobariya38@gmail.com"
-                  icon={({ size, color }) => (
                     <FontAwesome6
                       name="telegram"
                       size={size}
@@ -172,6 +188,18 @@ export default function SettingsScreen() {
                     />
                   )}
                   darkModeColor="#0088cc"
+                />
+                <LinkIconButton
+                  href="https://discord.gg/kSSkYq7KAQ"
+                  icon={({ size, color }) => (
+                    <FontAwesome6
+                      name="discord"
+                      size={size}
+                      color={color}
+                      iconStyle="brand"
+                    />
+                  )}
+                  darkModeColor="#5865F2"
                 />
               </Card.Actions>
             </Card.Content>
