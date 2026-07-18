@@ -21,13 +21,11 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, ScrollView, StyleSheet, useColorScheme } from "react-native";
+import { Alert, ScrollView } from "react-native";
 import { Button, Card, Switch } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
-  const scheme = useColorScheme();
-
   const [isEnabled, setIsEnabled] = useState(isBiometricsAuthEnabled());
   const toggleSwitch = () => setIsEnabled(toggleBiometricsFeature());
 
@@ -209,11 +207,3 @@ export default function SettingsScreen() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 16,
-  },
-});
