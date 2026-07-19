@@ -1,12 +1,13 @@
 import Text from "@/components/Text";
 import { passwords } from "@/db/schema";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import { FlashList } from "@shopify/flash-list";
 import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/expo-sqlite";
+import { drizzle, useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { router, Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { useEffect, useState } from "react";
-import { Alert, FlatList, Pressable, StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { FAB, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -15,7 +16,18 @@ export default function LoadPasswordScreen() {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
 
-  const [passwordList, setPasswordList] = useState<any[]>([]);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const { data: passwordList = [] } = useLiveQuery(
+    drizzleDb.select().from(passwords),
+    [refreshKey],
+  );
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function onRefresh() {
+    setRefreshing(true);
+    setRefreshKey((k) => k + 1);
+    setRefreshing(false);
+  }
 
   function deletePassword(password: any) {
     Alert.alert("Delete?", `${password.domain} : ${password.username}`, [
@@ -25,35 +37,25 @@ export default function LoadPasswordScreen() {
       },
       {
         text: "Delete",
-        onPress: () => {
-          drizzleDb
+        onPress: async () => {
+          await drizzleDb
             .delete(passwords)
-            .where(eq(passwords.id, password.id))
-            .then(() => {
-              setPasswordList((prev) =>
-                prev.filter((item) => item.id !== password.id),
-              );
-            });
+            .where(eq(passwords.id, password.id));
         },
         style: "destructive",
       },
     ]);
   }
 
-  useEffect(() => {
-    drizzleDb
-      .select()
-      .from(passwords)
-      .then((result) => setPasswordList(result));
-  }, []);
-
   return (
     <>
       <Stack.Title>Password Manager</Stack.Title>
       <SafeAreaView style={{ flex: 1 }}>
-        <FlatList
+        <FlashList
           data={passwordList}
           keyExtractor={(item) => item.id.toString()}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
           contentContainerStyle={{
             paddingInline: 20,
           }}
@@ -105,7 +107,7 @@ export default function LoadPasswordScreen() {
                   <Text
                     style={[styles.value, { color: theme.colors.tertiary }]}
                   >
-                    {item.updatedAt.split("T")[0]}
+                    {item.updatedAt?.slice(0, 10)}
                   </Text>
                 </Text>
               </View>

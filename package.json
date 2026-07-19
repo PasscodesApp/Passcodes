@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@react-native-vector-icons/fontawesome6": "^13.1.2",
+    "@shopify/flash-list": "2.0.2",
     "babel-plugin-inline-import": "^3.0.0",
     "drizzle-orm": "^0.45.2",
     "expo": "~57.0.7",
