@@ -1,12 +1,13 @@
 import Text from "@/components/Text";
 import { passwords } from "@/db/schema";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import { FlashList } from "@shopify/flash-list";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router, Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Alert, FlatList, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { FAB, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -51,7 +52,7 @@ export default function LoadPasswordScreen() {
     <>
       <Stack.Title>Password Manager</Stack.Title>
       <SafeAreaView style={{ flex: 1 }}>
-        <FlatList
+        <FlashList
           data={passwordList}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{
