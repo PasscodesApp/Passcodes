@@ -17,6 +17,21 @@ export default function LoadPasswordScreen() {
   const drizzleDb = drizzle(db);
 
   const [passwordList, setPasswordList] = useState<any[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  function fetchPasswords() {
+    try {
+      setRefreshing(true);
+      drizzleDb
+        .select()
+        .from(passwords)
+        .then((result) => setPasswordList(result));
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  }
 
   function deletePassword(password: any) {
     Alert.alert("Delete?", `${password.domain} : ${password.username}`, [
@@ -42,10 +57,7 @@ export default function LoadPasswordScreen() {
   }
 
   useEffect(() => {
-    drizzleDb
-      .select()
-      .from(passwords)
-      .then((result) => setPasswordList(result));
+    fetchPasswords();
   }, []);
 
   return (
@@ -55,6 +67,8 @@ export default function LoadPasswordScreen() {
         <FlashList
           data={passwordList}
           keyExtractor={(item) => item.id.toString()}
+          refreshing={refreshing}
+          onRefresh={fetchPasswords}
           contentContainerStyle={{
             paddingInline: 20,
           }}
