@@ -62,7 +62,13 @@ export default function DatabaseProvider({ children }: PropsWithChildren) {
         </SafeAreaView>
       }
     >
-      <SQLiteProvider databaseName={DATABASE_NAME} useSuspense>
+      <SQLiteProvider
+        databaseName={DATABASE_NAME}
+        options={{
+          enableChangeListener: true,
+        }}
+        useSuspense
+      >
         {children}
       </SQLiteProvider>
     </Suspense>
