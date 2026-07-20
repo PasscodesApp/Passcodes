@@ -10,7 +10,7 @@ import { DarkTheme, DefaultTheme, Tabs, ThemeProvider } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import { AppState, Button, useColorScheme } from "react-native";
-import { PaperProvider, useTheme } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
@@ -97,7 +97,7 @@ function AppContent() {
         <Tabs
           screenOptions={{
             headerShown: true,
-            tabBarActiveTintColor: useTheme().colors.tertiary,
+            tabBarActiveTintColor: "#34597f",
             headerTitleAlign: "center",
           }}
         >
