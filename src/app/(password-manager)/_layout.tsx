@@ -15,7 +15,7 @@ export default function PasswordManagerLayout() {
         options={{
           title: "New Password",
           presentation: "formSheet",
-          sheetAllowedDetents: [0.35, 0.95],
+          sheetAllowedDetents: [0.7, 0.95],
           sheetGrabberVisible: true,
           headerShown: false,
           sheetCornerRadius: 20,
