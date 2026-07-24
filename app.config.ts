@@ -45,6 +45,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   platforms: ["android"],
 
   ios: {
+    buildNumber: "2",
+    version: "v3.1.0.rc2-Stable" + versionNameSuffix,
+    bundleIdentifier:
+      "com.jeeldobariya.passcodes.earlybeta" + packageNameSuffix,
     supportsTablet: true,
   },
 

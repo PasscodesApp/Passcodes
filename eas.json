@@ -24,6 +24,9 @@
     },
     "production": {
       "autoIncrement": false,
+      "ios": {
+        "withoutCredentials": true
+      },
       "env": {
         "APP_VARIANT": "production"
       }
