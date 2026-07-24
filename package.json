@@ -47,6 +47,7 @@
     "eslint-config-expo": "~57.0.0",
     "expo-atlas": "^0.4.0",
     "expo-doctor": "^1.19.8",
+    "tsx": "^4.23.1",
     "typescript": "~6.0.3"
   },
   "private": true

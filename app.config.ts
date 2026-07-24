@@ -1,3 +1,5 @@
+import "tsx/cjs";
+
 import { ConfigContext, ExpoConfig } from "expo/config";
 
 import buildPropertiesPlugin from "expo-build-properties/plugin";
@@ -98,7 +100,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     statusBarPlugin({ style: "dark" }),
     sqlitePlugin(),
     sharingPlugin(),
-    "./plugins/withHasFragileUserData.ts",
+    "./plugins/withProtectUserData.ts",
     "@react-native-vector-icons/fontawesome6",
   ],
   experiments: {
