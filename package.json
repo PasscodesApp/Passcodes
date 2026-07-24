@@ -43,10 +43,10 @@
     "@types/react": "~19.2.10",
     "babel-preset-expo": "~57.0.0",
     "drizzle-kit": "^0.31.10",
-    "eslint": "^9.25.0",
+    "eslint": "^9.39.5",
     "eslint-config-expo": "~57.0.0",
     "expo-atlas": "^0.4.0",
-    "expo-doctor": "^1.19.8",
+    "expo-doctor": "^1.20.1",
     "tsx": "^4.23.1",
     "typescript": "~6.0.3"
   },
