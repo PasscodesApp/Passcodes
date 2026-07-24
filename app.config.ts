@@ -1,3 +1,5 @@
+import "tsx/cjs";
+
 import { ConfigContext, ExpoConfig } from "expo/config";
 
 import buildPropertiesPlugin from "expo-build-properties/plugin";
@@ -51,17 +53,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     version: "v3.1.0.rc2-Stable" + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
-    adaptiveIcon: IS_DEV
-      ? undefined
-      : {
-          backgroundColor: "#34597f",
-          foregroundImage:
-            "./assets/images/android-icon-launcher-foreground.png",
-          backgroundImage:
-            "./assets/images/android-icon-launcher-background.png",
-          monochromeImage:
-            "./assets/images/android-icon-launcher-monochrome.png",
-        },
+    adaptiveIcon:
+      IS_DEV || IS_PREVIEW
+        ? undefined
+        : {
+            backgroundColor: "#34597f",
+            foregroundImage:
+              "./assets/images/android-icon-launcher-foreground.png",
+            backgroundImage:
+              "./assets/images/android-icon-launcher-background.png",
+            monochromeImage:
+              "./assets/images/android-icon-launcher-monochrome.png",
+          },
     predictiveBackGestureEnabled: false,
   },
 
@@ -90,6 +93,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         usePrecompiledHeaders: true,
         enableMinifyInReleaseBuilds: true,
         enableShrinkResourcesInReleaseBuilds: true,
+        buildArchs: ["armeabi-v7a", "arm64-v8a"],
       },
     }),
     localAuthenticationPlugin({
@@ -98,7 +102,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     statusBarPlugin({ style: "dark" }),
     sqlitePlugin(),
     sharingPlugin(),
-    "./plugins/withHasFragileUserData.ts",
+    "./plugins/withProtectUserData.ts",
     "@react-native-vector-icons/fontawesome6",
   ],
   experiments: {
