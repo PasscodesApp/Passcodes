@@ -7,6 +7,7 @@ import {
   toggleBiometricsFeature,
   unlockWithBiometricsApp,
 } from "@/libs/biometric";
+import constants from "@/libs/constants";
 import {
   getGooglePasswordsCSVContent,
   type PasswordCSVFormat,
@@ -138,10 +139,10 @@ export default function SettingsScreen() {
         <Card>
           <Card.Content style={{ gap: 12 }}>
             <Card.Title
-              title="Passcodes"
+              title={constants.appname}
               titleVariant="headlineLarge"
               titleStyle={{ textAlign: "center" }}
-              subtitle="v3.1.0.rc2 - Stable"
+              subtitle={constants.version}
               subtitleVariant="labelMedium"
               subtitleStyle={{ textAlign: "center" }}
               style={{ marginBlock: 24 }}

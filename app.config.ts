@@ -2,6 +2,7 @@ import "tsx/cjs";
 
 import { ConfigContext, ExpoConfig } from "expo/config";
 
+import constants from "@/libs/constants";
 import buildPropertiesPlugin from "expo-build-properties/plugin";
 import devBuildPlugin from "expo-dev-client/plugin";
 import localAuthenticationPlugin from "expo-local-authentication/plugin";
@@ -33,9 +34,9 @@ if (IS_DEV) {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "Passcodes" + appNameSuffix,
+  name: constants.appname + appNameSuffix,
   slug: "passcodes",
-  version: "v3.1.0.rc2-Stable" + versionNameSuffix,
+  version: constants.version + versionNameSuffix,
 
   orientation: "portrait",
   icon: "./assets/images/passcodes_icon.png",
@@ -45,12 +46,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   platforms: ["android"],
 
   ios: {
+    buildNumber: "2",
+    version: constants.version + versionNameSuffix,
+    icon: launcherAppIcon,
+    bundleIdentifier:
+      "com.jeeldobariya.passcodes.earlybeta" + packageNameSuffix,
     supportsTablet: true,
   },
 
   android: {
     versionCode: 9,
-    version: "v3.1.0.rc2-Stable" + versionNameSuffix,
+    version: constants.version + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
     adaptiveIcon:
@@ -65,7 +71,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             monochromeImage:
               "./assets/images/android-icon-launcher-monochrome.png",
           },
-    predictiveBackGestureEnabled: false,
+    predictiveBackGestureEnabled: true,
   },
 
   web: {
