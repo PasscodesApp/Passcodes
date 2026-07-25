@@ -22,6 +22,10 @@
         "APP_VARIANT": "preview"
       }
     },
+    "deploy": {
+      "distribution": "internal",
+      "extends": "production"
+    },
     "production": {
       "autoIncrement": false,
       "ios": {
