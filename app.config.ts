@@ -43,11 +43,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: "passcodes",
   userInterfaceStyle: "automatic",
   githubUrl: "https://github.com/PasscodesApp/Passcodes",
-  platforms: ["android"],
+  platforms: ["android", "ios"],
 
   ios: {
-    buildNumber: "2",
-    version: constants.version + versionNameSuffix,
+    buildNumber: "1",
+    version: constants.iosVersion,
     icon: launcherAppIcon,
     bundleIdentifier:
       "com.jeeldobariya.passcodes.earlybeta" + packageNameSuffix,
@@ -55,7 +55,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
 
   android: {
-    versionCode: 9,
+    versionCode: 10,
     version: constants.version + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
@@ -85,7 +85,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       image: "./assets/images/passcodes_icon.png",
       imageWidth: 200,
       resizeMode: "contain",
-      backgroundColor: "#d0e3f7",
+      backgroundColor: "#7eabee",
       dark: {
         backgroundColor: "#34597f",
       },
@@ -99,7 +99,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         usePrecompiledHeaders: true,
         enableMinifyInReleaseBuilds: true,
         enableShrinkResourcesInReleaseBuilds: true,
-        buildArchs: ["armeabi-v7a", "arm64-v8a"],
+        buildArchs: ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"],
       },
     }),
     localAuthenticationPlugin({
