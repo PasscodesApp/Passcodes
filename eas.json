@@ -30,6 +30,34 @@
       "env": {
         "APP_VARIANT": "production"
       }
+    },
+    "deploy": {
+      "distribution": "internal",
+      "extends": "production"
+    },
+    "deploy-arm64": {
+      "extends": "deploy",
+      "env": {
+        "ANDROID_ABIS": "arm64-v8a"
+      }
+    },
+    "deploy-armv7": {
+      "extends": "deploy",
+      "env": {
+        "ANDROID_ABIS": "armeabi-v7a"
+      }
+    },
+    "deploy-x86": {
+      "extends": "deploy",
+      "env": {
+        "ANDROID_ABIS": "x86"
+      }
+    },
+    "deploy-x86_64": {
+      "extends": "deploy",
+      "env": {
+        "ANDROID_ABIS": "x86_64"
+      }
     }
   },
   "submit": {

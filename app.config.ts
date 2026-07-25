@@ -12,24 +12,55 @@ import splashScreenPlugin from "expo-splash-screen/plugin";
 import sqlitePlugin from "expo-sqlite/plugin";
 import statusBarPlugin from "expo-status-bar/plugin";
 
-const IS_DEV = process.env.APP_VARIANT === "development";
-const IS_PREVIEW = process.env.APP_VARIANT === "preview";
+const IS_DEV_BUILD = process.env.APP_VARIANT === "development";
+const IS_PREVIEW_BUILD = process.env.APP_VARIANT === "preview";
+const IS_PRODUCTION_BUILD = process.env.APP_VARIANT === "production";
+
+type AdaptiveLauncherAppIcon = {
+  backgroundColor: string;
+  foregroundImage: string;
+  backgroundImage: string;
+  monochromeImage: string;
+};
+
+type APK_ABIS = "armeabi-v7a" | "arm64-v8a" | "x86" | "x86_64";
+
+const UNIVERSAL_ABIS: APK_ABIS[] = [
+  "armeabi-v7a",
+  "arm64-v8a",
+  "x86",
+  "x86_64",
+];
 
 let appNameSuffix = "";
 let packageNameSuffix = "";
 let versionNameSuffix = "";
 let launcherAppIcon = "./assets/images/android-icon-launcher.png";
+let adaptiveLauncherAppIcon: AdaptiveLauncherAppIcon | undefined = {
+  backgroundColor: "#34597f",
+  foregroundImage: "./assets/images/android-icon-launcher-foreground.png",
+  backgroundImage: "./assets/images/android-icon-launcher-background.png",
+  monochromeImage: "./assets/images/android-icon-launcher-monochrome.png",
+};
 
-if (IS_DEV) {
+let buildAPKABIS: APK_ABIS[] = process.env.ANDROID_ABIS
+  ? (process.env.ANDROID_ABIS.split(",") as APK_ABIS[])
+  : UNIVERSAL_ABIS;
+
+if (IS_DEV_BUILD) {
   appNameSuffix = " Dev";
   packageNameSuffix = ".dev";
   versionNameSuffix = "-Dev";
-  launcherAppIcon = "./assets/images/dev-android-icon-launcher.png";
-} else if (IS_PREVIEW) {
+} else if (IS_PREVIEW_BUILD) {
   appNameSuffix = " Preview";
   packageNameSuffix = ".preview";
   versionNameSuffix = "-Preview";
+}
+
+if (!IS_PRODUCTION_BUILD) {
   launcherAppIcon = "./assets/images/dev-android-icon-launcher.png";
+  buildAPKABIS = ["arm64-v8a"];
+  adaptiveLauncherAppIcon = undefined;
 }
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -46,12 +77,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   platforms: ["android", "ios"],
 
   ios: {
-    buildNumber: "1",
-    version: constants.iosVersion,
+    buildNumber: "1.0.0",
+    version: constants.version,
     icon: launcherAppIcon,
     bundleIdentifier:
       "com.jeeldobariya.passcodes.earlybeta" + packageNameSuffix,
     supportsTablet: true,
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
+    },
   },
 
   android: {
@@ -59,18 +93,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     version: constants.version + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
-    adaptiveIcon:
-      IS_DEV || IS_PREVIEW
-        ? undefined
-        : {
-            backgroundColor: "#34597f",
-            foregroundImage:
-              "./assets/images/android-icon-launcher-foreground.png",
-            backgroundImage:
-              "./assets/images/android-icon-launcher-background.png",
-            monochromeImage:
-              "./assets/images/android-icon-launcher-monochrome.png",
-          },
+    adaptiveIcon: adaptiveLauncherAppIcon,
     predictiveBackGestureEnabled: true,
   },
 
@@ -99,7 +122,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         usePrecompiledHeaders: true,
         enableMinifyInReleaseBuilds: true,
         enableShrinkResourcesInReleaseBuilds: true,
-        buildArchs: ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"],
+
+        // NOTE: buildArchs: APK_ABIS[] = ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"],
+        buildArchs: buildAPKABIS,
       },
     }),
     localAuthenticationPlugin({

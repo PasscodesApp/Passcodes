@@ -8,8 +8,14 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
+    "build": "bash scripts/build-all-cloud.sh",
     "build:develop": "eas build --profile development --platform android --local",
-    "build:preview": "eas build --profile preview --platform android --local"
+    "build:preview": "eas build --profile preview --platform android --local",
+    "deploy": "eas build --profile deploy --platform android --local",
+    "deploy:arm64": "eas build --profile deploy-arm64 --platform android --local",
+    "deploy:armv7": "eas build --profile deploy-armv7 --platform android --local",
+    "deploy:x86": "eas build --profile deploy-x86 --platform android --local",
+    "deploy:x86_64": "eas build --profile deploy-x86_64 --platform android --local"
   },
   "dependencies": {
     "@react-native-vector-icons/fontawesome6": "^13.1.2",
