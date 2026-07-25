@@ -1,23 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-build() {
-    local abi="$1"
+echo "Building Universal APK"
+eas build --profile deploy --platform android --non-interactive --no-wait
 
-    if [[ -z "$abi" ]]; then
-        echo "Building Universal APK"
-        eas build --profile deploy --platform android --non-interactive --no-wait
-    else
-        echo "Building $abi APK"
-        ANDROID_ABIS="$abi" \
-            eas build --profile deploy --platform android --non-interactive --no-wait
-    fi
-}
+echo "Building arm64-v8a APK"
+eas build --profile deploy-arm64 --platform android --non-interactive --no-wait
 
-build ""
-build "arm64-v8a"
-build "armeabi-v7a"
-build "x86"
-build "x86_64"
+echo "Building armeabi-v7a APK"
+eas build --profile deploy-armv7 --platform android --non-interactive --no-wait
 
-echo "✅ All cloud builds submitted!"
+echo "Building x86 APK"
+eas build --profile deploy-x86 --platform android --non-interactive --no-wait
+
+echo "Building x86_64 APK"
+eas build --profile deploy-x86_64 --platform android --non-interactive --no-wait
+
+echo "All cloud builds submitted!"
