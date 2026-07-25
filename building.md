@@ -1,6 +1,6 @@
 # Building
 
-**Last-Updated-AT**: `2026-07-07T09:46:52Z (UTC)`.
+**Last-Updated-AT**: `2026-07-25T15:23:46Z (UTC)`.
 
 There are 4 ways to build... all ways are pretty standard in expo application development workflow.
 
@@ -16,7 +16,7 @@ all other ways are found at [building.md in Passcodes-Docs](https://passcodesapp
 >
 > YOU WILL NEED A EXPO ACCOUNT FOR THIS >>> THIS ALSO MEAN YOU ARE OPTING OUT FROM PASSCODES RELEASE PROCESS.
 >
-> if do this, please not the commit hash, you are build the app from and make sure your `git status` says no changes to commit in other word your changes are complete commited & and you have clean working tree.
+> if you do this, please take note of the commit hash, you are build the app from and make sure your `git status` says no changes to commit in other word your changes are complete commited & and you have clean working tree.
 
 ### Steps
 
@@ -34,10 +34,16 @@ all other ways are found at [building.md in Passcodes-Docs](https://passcodesapp
    npm install -g eas-cli
    ```
 
-3. Build preview application.
+3. Login to expo account.
 
    ```bash
-   eas build --profile production
+   eas login
    ```
 
-4. Install it on your phone.
+4. Build production application.
+
+   ```bash
+   eas build --profile deploy
+   ```
+
+5. Download & Install it on your phone.
