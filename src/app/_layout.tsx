@@ -4,9 +4,8 @@ import {
   isBiometricsAuthEnabled,
   unlockWithBiometricsApp,
 } from "@/libs/biometric";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { NavigationBar } from "expo-navigation-bar";
-import { DarkTheme, DefaultTheme, Tabs, ThemeProvider } from "expo-router";
+import { DarkTheme, DefaultTheme, Slot, ThemeProvider } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import { AppState, Button, useColorScheme } from "react-native";
@@ -94,42 +93,7 @@ function AppContent() {
   return (
     <ThemeProvider value={isDarkScheme ? DarkTheme : DefaultTheme}>
       <PaperProvider>
-        <Tabs
-          screenOptions={{
-            headerShown: true,
-            tabBarActiveTintColor: "#34597f",
-            headerTitleAlign: "center",
-          }}
-        >
-          <Tabs.Screen
-            name="(password-manager)"
-            options={{
-              title: "Passcodes",
-              tabBarIcon: ({ size, color }) => (
-                <FontAwesome6
-                  name="key"
-                  size={size}
-                  color={color}
-                  iconStyle="solid"
-                />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="(settings)"
-            options={{
-              title: "Settings",
-              tabBarIcon: ({ size, color }) => (
-                <FontAwesome6
-                  name="gear"
-                  size={size}
-                  color={color}
-                  iconStyle="solid"
-                />
-              ),
-            }}
-          />
-        </Tabs>
+        <Slot />
       </PaperProvider>
     </ThemeProvider>
   );
