@@ -27,6 +27,7 @@
     "expo-constants": "~57.0.3",
     "expo-dev-client": "~57.0.10",
     "expo-file-system": "~57.0.0",
+    "expo-linear-gradient": "~57.0.1",
     "expo-linking": "~57.0.4",
     "expo-local-authentication": "~57.0.2",
     "expo-navigation-bar": "~57.0.2",
