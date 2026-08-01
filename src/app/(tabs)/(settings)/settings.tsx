@@ -19,16 +19,17 @@ import {
 } from "@/libs/importing";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { drizzle } from "drizzle-orm/expo-sqlite";
+import { LinearGradient } from "expo-linear-gradient";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, ScrollView } from "react-native";
-import { Button, Card, Switch } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert, ScrollView, View } from "react-native";
+import { Button, Card, Switch, useTheme } from "react-native-paper";
 
 export default function SettingsScreen() {
   const [isEnabled, setIsEnabled] = useState(isBiometricsAuthEnabled());
   const toggleSwitch = () => setIsEnabled(toggleBiometricsFeature());
 
+  const theme = useTheme();
   let db = useSQLiteContext();
   const drizzleDb = drizzle(db);
 
@@ -62,10 +63,33 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingHorizontal: 12 }}>
-      <ScrollView contentContainerStyle={{ gap: 16 }}>
+    <View style={{ flex: 1, margin: 8 }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 12,
+          paddingBottom: 64,
+          gap: 24,
+        }}
+        showsVerticalScrollIndicator
+      >
+        <Text
+          variant="headlineMedium"
+          style={{
+            marginTop: 8,
+            marginBottom: 20,
+            marginHorizontal: 4,
+            textAlign: "center",
+          }}
+        >
+          Settings
+        </Text>
+
         <Card>
-          <Card.Content>
+          <Card.Content
+            style={{
+              padding: 20,
+            }}
+          >
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
               In App Lock (Biometrics):
             </Text>
@@ -76,7 +100,14 @@ export default function SettingsScreen() {
         </Card>
 
         <Card>
-          <Card.Actions style={{ flexDirection: "column", gap: 12 }}>
+          <Card.Content
+            style={{
+              padding: 20,
+              flexDirection: "column",
+              alignItems: "stretch",
+              gap: 16,
+            }}
+          >
             <Button
               icon={({ size, color }) => (
                 <FontAwesome6
@@ -92,7 +123,6 @@ export default function SettingsScreen() {
             </Button>
 
             <Button
-              mode="outlined"
               icon={({ size, color }) => (
                 <FontAwesome6
                   name="share-nodes"
@@ -115,7 +145,7 @@ export default function SettingsScreen() {
             >
               <Text>Share With Google Passwords Format</Text>
             </Button>
-          </Card.Actions>
+          </Card.Content>
         </Card>
 
         <Card>
@@ -123,16 +153,23 @@ export default function SettingsScreen() {
             <Text
               style={{ fontSize: 28, marginBottom: 12, textAlign: "center" }}
             >
-              TroubleShooting
+              Recovery
             </Text>
 
-            <Card.Actions style={{ flexDirection: "column", gap: 12 }}>
+            <Card.Content
+              style={{
+                padding: 20,
+                flexDirection: "column",
+                alignItems: "stretch",
+                gap: 16,
+              }}
+            >
               <LinkButton
                 href="/get-back-passwords"
                 text="GetBack Passwords From v2"
               />
               <LinkButton href="/data-recovery" text="Data Recovery" />
-            </Card.Actions>
+            </Card.Content>
           </Card.Content>
         </Card>
 
@@ -201,6 +238,18 @@ export default function SettingsScreen() {
           </Card.Content>
         </Card>
       </ScrollView>
-    </SafeAreaView>
+
+      <LinearGradient
+        pointerEvents="none"
+        colors={["transparent", theme.colors.background]}
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 40,
+        }}
+      />
+    </View>
   );
 }
