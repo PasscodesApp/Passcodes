@@ -26,8 +26,11 @@ import { Alert, ScrollView, View } from "react-native";
 import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
 
 export default function SettingsScreen() {
-  const [isEnabled, setIsEnabled] = useState(isBiometricsAuthEnabled());
-  const toggleSwitch = () => setIsEnabled(toggleBiometricsFeature());
+  const [isAppLockEnabled, setIsAppLockEnabled] = useState(
+    isBiometricsAuthEnabled(),
+  );
+  const toggleInAppLockSwitch = () =>
+    setIsAppLockEnabled(toggleBiometricsFeature());
 
   const theme = useTheme();
   let db = useSQLiteContext();
@@ -101,8 +104,8 @@ export default function SettingsScreen() {
               right={() => (
                 <Switch
                   style={{ alignSelf: "flex-end" }}
-                  value={isEnabled}
-                  onValueChange={toggleSwitch}
+                  value={isAppLockEnabled}
+                  onValueChange={toggleInAppLockSwitch}
                 />
               )}
             />
