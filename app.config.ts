@@ -69,7 +69,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: "passcodes",
   version: constants.version + versionNameSuffix,
 
-  orientation: "portrait",
+  orientation: "default",
   icon: "./assets/images/passcodes_icon.png",
   scheme: "passcodes",
   userInterfaceStyle: "automatic",
@@ -99,7 +99,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundImage: adaptiveLauncherAppIcon?.backgroundImage,
       monochromeImage: adaptiveLauncherAppIcon?.monochromeImage,
     },
-    predictiveBackGestureEnabled: true,
+    predictiveBackGestureEnabled: false,
   },
 
   web: {
