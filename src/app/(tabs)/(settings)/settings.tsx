@@ -23,14 +23,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
-import {
-  Button,
-  Card,
-  Divider,
-  List,
-  Switch,
-  useTheme,
-} from "react-native-paper";
+import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
 
 export default function SettingsScreen() {
   const [isEnabled, setIsEnabled] = useState(isBiometricsAuthEnabled());
@@ -90,71 +83,34 @@ export default function SettingsScreen() {
         >
           Settings
         </Text>
-        <Card>
-          <Card.Content
-            style={{
-              padding: 20,
-            }}
-          >
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-              In App Lock (Biometrics):
-            </Text>
-          </Card.Content>
-          <Card.Actions>
-            <Switch value={isEnabled} onValueChange={toggleSwitch} />
-          </Card.Actions>
-        </Card>
-        <Card>
-          <Card.Content
-            style={{
-              padding: 20,
-              flexDirection: "column",
-              alignItems: "stretch",
-              gap: 16,
-            }}
-          >
-            <Button
-              icon={({ size, color }) => (
-                <FontAwesome6
-                  name="upload"
-                  size={size}
-                  color={color}
-                  iconStyle="solid"
-                />
-              )}
-              onPress={() => handleImportPasswords()}
-            >
-              <Text>Import With Google Passwords Format</Text>
-            </Button>
 
-            <Button
-              icon={({ size, color }) => (
+        <Card>
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              style={{ paddingRight: 0 }}
+              title="In App Lock"
+              description="Require biometrics to unlock the app"
+              left={(props) => (
                 <FontAwesome6
-                  name="share-nodes"
-                  size={size}
-                  color={color}
+                  {...props}
+                  name="fingerprint"
                   iconStyle="solid"
+                  size={20}
                 />
               )}
-              onPress={async () => {
-                let result = await unlockWithBiometricsApp();
-                if (result) {
-                  handleExportPasswords();
-                } else {
-                  Alert.alert(
-                    "Authentication Failed!!!",
-                    "exporting passwords is security activity and is protected by app lock.",
-                  );
-                }
-              }}
-            >
-              <Text>Share With Google Passwords Format</Text>
-            </Button>
-          </Card.Content>
+              right={() => (
+                <Switch
+                  style={{ alignSelf: "flex-end" }}
+                  value={isEnabled}
+                  onValueChange={toggleSwitch}
+                />
+              )}
+            />
+          </List.Section>
         </Card>
 
         <Card>
-          <List.Section style={{ margin: 20 }}>
+          <List.Section style={{ margin: 15 }}>
             <List.Item
               title="Import passwords"
               description="Import a Google Password CSV"
@@ -238,6 +194,7 @@ export default function SettingsScreen() {
             </Card.Content>
           </Card.Content>
         </Card>
+
         <Card>
           <Card.Content style={{ gap: 12 }}>
             <Card.Title
