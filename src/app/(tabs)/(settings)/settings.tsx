@@ -23,7 +23,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
-import { Button, Card, Switch, useTheme } from "react-native-paper";
+import {
+  Button,
+  Card,
+  Divider,
+  List,
+  Switch,
+  useTheme,
+} from "react-native-paper";
 
 export default function SettingsScreen() {
   const [isEnabled, setIsEnabled] = useState(isBiometricsAuthEnabled());
@@ -83,7 +90,6 @@ export default function SettingsScreen() {
         >
           Settings
         </Text>
-
         <Card>
           <Card.Content
             style={{
@@ -98,7 +104,6 @@ export default function SettingsScreen() {
             <Switch value={isEnabled} onValueChange={toggleSwitch} />
           </Card.Actions>
         </Card>
-
         <Card>
           <Card.Content
             style={{
@@ -149,6 +154,67 @@ export default function SettingsScreen() {
         </Card>
 
         <Card>
+          <List.Section style={{ margin: 20 }}>
+            <List.Item
+              title="Import passwords"
+              description="Import a Google Password CSV"
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="download"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="chevron-right"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              onPress={handleImportPasswords}
+            />
+
+            <Divider bold />
+
+            <List.Item
+              title="Export passwords"
+              description="Share as Google Password CSV"
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="share-nodes"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="chevron-right"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              onPress={async () => {
+                const result = await unlockWithBiometricsApp();
+
+                if (result) {
+                  handleExportPasswords();
+                } else {
+                  Alert.alert(
+                    "Authentication Failed",
+                    "Exporting passwords is protected by App Lock.",
+                  );
+                }
+              }}
+            />
+          </List.Section>
+        </Card>
+
+        <Card>
           <Card.Content>
             <Text
               style={{ fontSize: 28, marginBottom: 12, textAlign: "center" }}
@@ -172,7 +238,6 @@ export default function SettingsScreen() {
             </Card.Content>
           </Card.Content>
         </Card>
-
         <Card>
           <Card.Content style={{ gap: 12 }}>
             <Card.Title
