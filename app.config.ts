@@ -93,7 +93,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     version: constants.version + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
-    adaptiveIcon: adaptiveLauncherAppIcon,
+    adaptiveIcon: {
+      backgroundColor: adaptiveLauncherAppIcon?.backgroundColor,
+      foregroundImage: adaptiveLauncherAppIcon?.foregroundImage,
+      backgroundImage: adaptiveLauncherAppIcon?.backgroundImage,
+      monochromeImage: adaptiveLauncherAppIcon?.monochromeImage,
+    },
     predictiveBackGestureEnabled: true,
   },
 
