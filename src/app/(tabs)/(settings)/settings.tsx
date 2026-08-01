@@ -22,8 +22,9 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, ScrollView, View } from "react-native";
+import { Alert, ScrollView } from "react-native";
 import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
   const [isAppLockEnabled, setIsAppLockEnabled] = useState(
@@ -66,11 +67,11 @@ export default function SettingsScreen() {
   }
 
   return (
-    <View style={{ flex: 1, margin: 8 }}>
+    <SafeAreaView style={{ flex: 1, paddingVertical: 12 }}>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 12,
-          paddingBottom: 64,
+          paddingBottom: 96,
           gap: 24,
         }}
         showsVerticalScrollIndicator
@@ -272,9 +273,9 @@ export default function SettingsScreen() {
           left: 0,
           right: 0,
           bottom: 0,
-          height: 40,
+          height: 150,
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
