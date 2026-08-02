@@ -1,9 +1,20 @@
 import AsyncStorage from "expo-sqlite/kv-store";
 
+import * as ScreenCapture from "expo-screen-capture";
 const IS_SCREENSHOT_PREVENTION_ENABLED = "feat_screenshot_prevention_isEnabled";
 enum SCREENSHOT_PREVENTION_KV {
   ENABLED = "true",
   DISABLED = "false",
+}
+
+export function getScreenShotSecureScreen() {
+  if (isScreenshotPreventionEnabled()) {
+    ScreenCapture.preventScreenCaptureAsync();
+    return true;
+  } else {
+    ScreenCapture.allowScreenCaptureAsync();
+    return false;
+  }
 }
 
 export function toggleScreenshotPreventionFeature() {
