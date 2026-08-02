@@ -12,14 +12,13 @@ enum BIOMETRICS_AUTH_KV {
 // ------ PUBLIC APIS ------
 
 export async function unlockWithBiometricsApp() {
-  const available = await isBiometricAvailable();
+  const isAuthEnrolled = canAuthenticate();
 
-  if (!available) {
-    // TODO: must ask for other method to authenicate.
+  if (!isAuthEnrolled) {
     return true;
   }
 
-  const success = await authenticateBiometric();
+  let success = await authenticate();
   return success;
 }
 
@@ -43,14 +42,13 @@ export function toggleBiometricsFeature() {
 
 // ------ PRIVATE APIS ------
 
-async function isBiometricAvailable() {
-  const hasHardware = await LocalAuthentication.hasHardwareAsync();
-  const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+async function canAuthenticate() {
+  const level = await LocalAuthentication.getEnrolledLevelAsync();
 
-  return hasHardware && isEnrolled;
+  return level !== LocalAuthentication.SecurityLevel.NONE;
 }
 
-async function authenticateBiometric() {
+async function authenticate() {
   const result = await LocalAuthentication.authenticateAsync({
     promptMessage: "Unlock Passcodes",
     cancelLabel: "Cancel",
