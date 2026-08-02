@@ -60,7 +60,9 @@ if (IS_DEV_BUILD) {
 
 if (!IS_PRODUCTION_BUILD) {
   launcherAppIcon = "./assets/images/passcodes-preview-icon.png";
-  buildAPKABIS = ["arm64-v8a"];
+  buildAPKABIS = process.env.ANDROID_ABIS
+    ? (process.env.ANDROID_ABIS.split(",") as APK_ABIS[])
+    : ["arm64-v8a"];
   adaptiveLauncherAppIcon = undefined;
 }
 
@@ -68,18 +70,18 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: constants.appname + appNameSuffix,
   slug: "passcodes",
-  version: constants.version + versionNameSuffix,
+  version: constants.build.version + versionNameSuffix,
 
   orientation: "default",
-  icon: "./assets/images/passcodes-icon.png",
+  icon: launcherAppIcon,
   scheme: "passcodes",
   userInterfaceStyle: "automatic",
   githubUrl: "https://github.com/PasscodesApp/Passcodes",
   platforms: ["android", "ios"],
 
   ios: {
-    buildNumber: "1.0.0",
-    version: constants.version,
+    buildNumber: constants.build.versionCodeIos,
+    version: constants.build.version,
     icon: launcherAppIcon,
     bundleIdentifier:
       "com.jeeldobariya.passcodes.earlybeta" + packageNameSuffix,
@@ -90,8 +92,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
 
   android: {
-    versionCode: 10,
-    version: constants.version + versionNameSuffix,
+    versionCode: constants.build.versionCodeAndroid,
+    version: constants.build.version + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
     adaptiveIcon: {
