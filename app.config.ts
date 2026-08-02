@@ -52,18 +52,18 @@ if (IS_DEV_BUILD) {
   appNameSuffix = " Dev";
   packageNameSuffix = ".dev";
   versionNameSuffix = "-Dev";
+  launcherAppIcon = "./assets/images/passcodes-dev-icon.png";
 } else if (IS_PREVIEW_BUILD) {
   appNameSuffix = " Preview";
   packageNameSuffix = ".preview";
   versionNameSuffix = "-Preview";
+  launcherAppIcon = "./assets/images/passcodes-preview-icon.png";
 }
 
 if (!IS_PRODUCTION_BUILD) {
-  launcherAppIcon = "./assets/images/passcodes-preview-icon.png";
   buildAPKABIS = process.env.ANDROID_ABIS
     ? (process.env.ANDROID_ABIS.split(",") as APK_ABIS[])
     : ["arm64-v8a"];
-  adaptiveLauncherAppIcon = undefined;
 }
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -107,13 +107,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   web: {
     output: "static",
-    favicon: "./assets/images/passcodes-icon.png",
+    favicon: launcherAppIcon,
   },
 
   plugins: [
     routerPlugin(),
     splashScreenPlugin({
-      image: "./assets/images/passcodes-icon.png",
+      image: launcherAppIcon,
       imageWidth: 200,
       resizeMode: "contain",
       backgroundColor: "#7eabee",
