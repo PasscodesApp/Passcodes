@@ -35,7 +35,7 @@ const UNIVERSAL_ABIS: APK_ABIS[] = [
 let appNameSuffix = "";
 let packageNameSuffix = "";
 let versionNameSuffix = "";
-let launcherAppIcon = "./assets/images/android-icon-launcher.png";
+let launcherAppIcon = "./assets/images/passcodes-icon.png";
 let adaptiveLauncherAppIcon: AdaptiveLauncherAppIcon | undefined = {
   backgroundColor: "#34597f",
   foregroundImage: "./assets/images/android-icon-launcher-foreground.png",
@@ -58,7 +58,7 @@ if (IS_DEV_BUILD) {
 }
 
 if (!IS_PRODUCTION_BUILD) {
-  launcherAppIcon = "./assets/images/dev-android-icon-launcher.png";
+  launcherAppIcon = "./assets/images/passcodes_preview_icon.png";
   buildAPKABIS = ["arm64-v8a"];
   adaptiveLauncherAppIcon = undefined;
 }
@@ -70,7 +70,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   version: constants.version + versionNameSuffix,
 
   orientation: "default",
-  icon: "./assets/images/passcodes_icon.png",
+  icon: "./assets/images/passcodes-icon.png",
   scheme: "passcodes",
   userInterfaceStyle: "automatic",
   githubUrl: "https://github.com/PasscodesApp/Passcodes",
@@ -104,13 +104,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   web: {
     output: "static",
-    favicon: "./assets/images/passcodes_icon.png",
+    favicon: "./assets/images/passcodes-icon.png",
   },
 
   plugins: [
     routerPlugin(),
     splashScreenPlugin({
-      image: "./assets/images/passcodes_icon.png",
+      image: "./assets/images/passcodes-icon.png",
       imageWidth: 200,
       resizeMode: "contain",
       backgroundColor: "#7eabee",
