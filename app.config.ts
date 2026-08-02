@@ -52,34 +52,37 @@ if (IS_DEV_BUILD) {
   appNameSuffix = " Dev";
   packageNameSuffix = ".dev";
   versionNameSuffix = "-Dev";
+  launcherAppIcon = "./assets/images/passcodes-dev-icon.png";
 } else if (IS_PREVIEW_BUILD) {
   appNameSuffix = " Preview";
   packageNameSuffix = ".preview";
   versionNameSuffix = "-Preview";
+  launcherAppIcon = "./assets/images/passcodes-preview-icon.png";
 }
 
 if (!IS_PRODUCTION_BUILD) {
-  launcherAppIcon = "./assets/images/passcodes-preview-icon.png";
-  buildAPKABIS = ["arm64-v8a"];
   adaptiveLauncherAppIcon = undefined;
+  buildAPKABIS = process.env.ANDROID_ABIS
+    ? (process.env.ANDROID_ABIS.split(",") as APK_ABIS[])
+    : ["arm64-v8a", "x86_64"];
 }
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: constants.appname + appNameSuffix,
   slug: "passcodes",
-  version: constants.version + versionNameSuffix,
+  version: constants.build.version + versionNameSuffix,
 
   orientation: "default",
-  icon: "./assets/images/passcodes-icon.png",
+  icon: launcherAppIcon,
   scheme: "passcodes",
   userInterfaceStyle: "automatic",
   githubUrl: "https://github.com/PasscodesApp/Passcodes",
   platforms: ["android", "ios"],
 
   ios: {
-    buildNumber: "1.0.0",
-    version: constants.version,
+    buildNumber: constants.build.versionCodeIos,
+    version: constants.build.version,
     icon: launcherAppIcon,
     bundleIdentifier:
       "com.jeeldobariya.passcodes.earlybeta" + packageNameSuffix,
@@ -90,8 +93,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
 
   android: {
-    versionCode: 10,
-    version: constants.version + versionNameSuffix,
+    versionCode: constants.build.versionCodeAndroid,
+    version: constants.build.version + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
     adaptiveIcon: {
@@ -105,13 +108,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
   web: {
     output: "static",
-    favicon: "./assets/images/passcodes-icon.png",
+    favicon: launcherAppIcon,
   },
 
   plugins: [
     routerPlugin(),
     splashScreenPlugin({
-      image: "./assets/images/passcodes-icon.png",
+      image: launcherAppIcon,
       imageWidth: 200,
       resizeMode: "contain",
       backgroundColor: "#7eabee",
