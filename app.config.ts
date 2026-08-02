@@ -61,9 +61,10 @@ if (IS_DEV_BUILD) {
 }
 
 if (!IS_PRODUCTION_BUILD) {
+  adaptiveLauncherAppIcon = undefined;
   buildAPKABIS = process.env.ANDROID_ABIS
     ? (process.env.ANDROID_ABIS.split(",") as APK_ABIS[])
-    : ["arm64-v8a"];
+    : ["arm64-v8a", "x86_64"];
 }
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
