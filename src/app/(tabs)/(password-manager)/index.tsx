@@ -101,6 +101,7 @@ export default function LoadPasswordScreen() {
         ListEmptyComponent={<Text style={styles.emptyText}>No Data!!</Text>}
         renderItem={({ item }) => (
           <Pressable
+            style={{ margin: 2 }}
             onPress={() =>
               router.push({
                 pathname: "/password-details",
@@ -114,7 +115,6 @@ export default function LoadPasswordScreen() {
                 backgroundColor: theme.colors.surface,
                 borderRadius: 16,
                 padding: 16,
-                marginBottom: 16,
               }}
             >
               <Text style={styles.label}>
