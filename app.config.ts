@@ -7,6 +7,7 @@ import buildPropertiesPlugin from "expo-build-properties/plugin";
 import devBuildPlugin from "expo-dev-client/plugin";
 import localAuthenticationPlugin from "expo-local-authentication/plugin";
 import routerPlugin from "expo-router/plugin";
+import expoScreenOrientationPlugin from "expo-screen-orientation/plugin";
 import sharingPlugin from "expo-sharing/plugin";
 import splashScreenPlugin from "expo-splash-screen/plugin";
 import sqlitePlugin from "expo-sqlite/plugin";
@@ -138,6 +139,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     statusBarPlugin({ style: "dark" }),
     sqlitePlugin(),
     sharingPlugin(),
+    expoScreenOrientationPlugin({
+      initialOrientation: "PORTRAIT",
+    }),
     "./plugins/withProtectUserData.ts",
     "@react-native-vector-icons/fontawesome6",
   ],
