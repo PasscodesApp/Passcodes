@@ -32,6 +32,8 @@ export function isBiometricsAuthEnabled() {
 export function toggleBiometricsFeature() {
   let isEnabled = isBiometricsAuthEnabled();
 
+  // TODO: making such that is biometric are not enrolled and hardware is avaliable user are taking to settings app.
+
   AsyncStorage.setItemAsync(
     IS_BIOMETRICS_ENABLED,
     isEnabled ? BIOMETRICS_AUTH_KV.DISABLED : BIOMETRICS_AUTH_KV.ENABLED,
