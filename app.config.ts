@@ -58,7 +58,7 @@ if (IS_DEV_BUILD) {
 }
 
 if (!IS_PRODUCTION_BUILD) {
-  launcherAppIcon = "./assets/images/passcodes_preview_icon.png";
+  launcherAppIcon = "./assets/images/passcodes-preview-icon.png";
   buildAPKABIS = ["arm64-v8a"];
   adaptiveLauncherAppIcon = undefined;
 }
