@@ -17,6 +17,10 @@ import {
   convertRawCSVToPasswords,
   getCSVPasswordString,
 } from "@/libs/importing";
+import {
+  isScreenshotPreventionEnabled,
+  toggleScreenshotPreventionFeature,
+} from "@/libs/screenshot_prevention";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { LinearGradient } from "expo-linear-gradient";
@@ -32,6 +36,12 @@ export default function SettingsScreen() {
   );
   const toggleInAppLockSwitch = () =>
     setIsAppLockEnabled(toggleBiometricsFeature());
+
+  const [isScreenshotPreventEnabled, setIsScreenshotPreventEnabled] = useState(
+    isScreenshotPreventionEnabled(),
+  );
+  const toggleScreenshotPreventSwitch = () =>
+    setIsScreenshotPreventEnabled(toggleScreenshotPreventionFeature());
 
   const theme = useTheme();
   let db = useSQLiteContext();
@@ -111,6 +121,32 @@ export default function SettingsScreen() {
               )}
             />
           </List.Section>
+
+          <Divider />
+
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              style={{ paddingRight: 0 }}
+              title="Screenshot Prevention"
+              description="Doesn't allow screenshot, changes require app restart.."
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  style={[props.style, { marginVertical: "auto" }]}
+                  name="mobile-screen"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={() => (
+                <Switch
+                  style={{ alignSelf: "flex-end" }}
+                  value={isScreenshotPreventEnabled}
+                  onValueChange={toggleScreenshotPreventSwitch}
+                />
+              )}
+            />
+          </List.Section>
         </Card>
 
         <Card>
@@ -137,7 +173,7 @@ export default function SettingsScreen() {
               onPress={handleImportPasswords}
             />
 
-            <Divider bold />
+            <Divider />
 
             <List.Item
               title="Export passwords"

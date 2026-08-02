@@ -25,6 +25,8 @@ export async function unlockWithBiometricsApp() {
 
 export function isBiometricsAuthEnabled() {
   let result = AsyncStorage.getItemSync(IS_BIOMETRICS_ENABLED);
+
+  // this line make sure, this feature is turn on by default.
   return result === BIOMETRICS_AUTH_KV.DISABLED ? false : true;
 }
 
