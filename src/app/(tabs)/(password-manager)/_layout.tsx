@@ -7,7 +7,7 @@ export default function PasswordManagerLayout() {
 
       <Stack.Screen
         name="password-details"
-        options={{ title: "Password Details" }}
+        options={{ title: "Password Details", headerShown: true }}
       />
 
       <Stack.Screen

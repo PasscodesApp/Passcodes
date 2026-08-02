@@ -67,14 +67,18 @@ function AppContent() {
     return () => subscription.remove();
   }, []);
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      unlock();
+    }
+  }, [isAuthenticated]);
+
   async function unlock() {
     let result = await unlockWithBiometricsApp();
     setIsAuthenticated(result);
   }
 
   if (!isAuthenticated) {
-    unlock();
-
     return (
       <SafeAreaView
         style={{

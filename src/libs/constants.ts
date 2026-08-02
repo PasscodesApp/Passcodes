@@ -1,4 +1,4 @@
 export default {
   appname: "Passcodes",
-  version: "v3.2.0 - Stable",
+  version: "v3.2.1 - Stable",
 };

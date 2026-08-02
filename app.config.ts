@@ -7,6 +7,7 @@ import buildPropertiesPlugin from "expo-build-properties/plugin";
 import devBuildPlugin from "expo-dev-client/plugin";
 import localAuthenticationPlugin from "expo-local-authentication/plugin";
 import routerPlugin from "expo-router/plugin";
+import expoScreenOrientationPlugin from "expo-screen-orientation/plugin";
 import sharingPlugin from "expo-sharing/plugin";
 import splashScreenPlugin from "expo-splash-screen/plugin";
 import sqlitePlugin from "expo-sqlite/plugin";
@@ -35,7 +36,7 @@ const UNIVERSAL_ABIS: APK_ABIS[] = [
 let appNameSuffix = "";
 let packageNameSuffix = "";
 let versionNameSuffix = "";
-let launcherAppIcon = "./assets/images/android-icon-launcher.png";
+let launcherAppIcon = "./assets/images/passcodes-icon.png";
 let adaptiveLauncherAppIcon: AdaptiveLauncherAppIcon | undefined = {
   backgroundColor: "#34597f",
   foregroundImage: "./assets/images/android-icon-launcher-foreground.png",
@@ -58,7 +59,7 @@ if (IS_DEV_BUILD) {
 }
 
 if (!IS_PRODUCTION_BUILD) {
-  launcherAppIcon = "./assets/images/dev-android-icon-launcher.png";
+  launcherAppIcon = "./assets/images/passcodes-preview-icon.png";
   buildAPKABIS = ["arm64-v8a"];
   adaptiveLauncherAppIcon = undefined;
 }
@@ -69,8 +70,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: "passcodes",
   version: constants.version + versionNameSuffix,
 
-  orientation: "portrait",
-  icon: "./assets/images/passcodes_icon.png",
+  orientation: "default",
+  icon: "./assets/images/passcodes-icon.png",
   scheme: "passcodes",
   userInterfaceStyle: "automatic",
   githubUrl: "https://github.com/PasscodesApp/Passcodes",
@@ -93,19 +94,24 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     version: constants.version + versionNameSuffix,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
-    adaptiveIcon: adaptiveLauncherAppIcon,
-    predictiveBackGestureEnabled: true,
+    adaptiveIcon: {
+      backgroundColor: adaptiveLauncherAppIcon?.backgroundColor,
+      foregroundImage: adaptiveLauncherAppIcon?.foregroundImage,
+      backgroundImage: adaptiveLauncherAppIcon?.backgroundImage,
+      monochromeImage: adaptiveLauncherAppIcon?.monochromeImage,
+    },
+    predictiveBackGestureEnabled: false,
   },
 
   web: {
     output: "static",
-    favicon: "./assets/images/passcodes_icon.png",
+    favicon: "./assets/images/passcodes-icon.png",
   },
 
   plugins: [
     routerPlugin(),
     splashScreenPlugin({
-      image: "./assets/images/passcodes_icon.png",
+      image: "./assets/images/passcodes-icon.png",
       imageWidth: 200,
       resizeMode: "contain",
       backgroundColor: "#7eabee",
@@ -133,6 +139,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     statusBarPlugin({ style: "dark" }),
     sqlitePlugin(),
     sharingPlugin(),
+    expoScreenOrientationPlugin({
+      initialOrientation: "PORTRAIT",
+    }),
     "./plugins/withProtectUserData.ts",
     "@react-native-vector-icons/fontawesome6",
   ],

@@ -7,11 +7,23 @@ import { drizzle, useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, View } from "react-native";
-import { FAB, useTheme } from "react-native-paper";
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import { FAB, IconButton, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoadPasswordScreen() {
+  const { width } = useWindowDimensions();
+
+  const isLandscape = width > 700;
+  const [forceGrid, setForceGrid] = useState(false);
+  const numColumns = forceGrid || isLandscape ? 2 : 1;
+
   let theme = useTheme();
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
@@ -48,9 +60,37 @@ export default function LoadPasswordScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, paddingVertical: 12 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingHorizontal: 16,
+          paddingVertical: 8,
+        }}
+      >
+        <Text variant="headlineSmall">Passwords</Text>
+
+        <IconButton
+          style={{ backgroundColor: "#ccc" }}
+          icon={() => {
+            return numColumns === 1 ? (
+              <FontAwesome6 name="grip" iconStyle="solid" size={20} />
+            ) : (
+              <FontAwesome6 name="list" iconStyle="solid" size={20} />
+            );
+          }}
+          onPress={() => {
+            setForceGrid((g) => !g);
+          }}
+        />
+      </View>
+
       <FlashList
         data={passwordList}
+        key={numColumns}
+        numColumns={numColumns}
         keyExtractor={(item) => item.id.toString()}
         refreshing={refreshing}
         onRefresh={onRefresh}
@@ -61,6 +101,7 @@ export default function LoadPasswordScreen() {
         ListEmptyComponent={<Text style={styles.emptyText}>No Data!!</Text>}
         renderItem={({ item }) => (
           <Pressable
+            style={{ margin: 2 }}
             onPress={() =>
               router.push({
                 pathname: "/password-details",
@@ -74,7 +115,6 @@ export default function LoadPasswordScreen() {
                 backgroundColor: theme.colors.surface,
                 borderRadius: 16,
                 padding: 16,
-                marginBottom: 16,
               }}
             >
               <Text style={styles.label}>

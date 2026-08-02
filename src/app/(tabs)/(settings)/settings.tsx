@@ -19,16 +19,21 @@ import {
 } from "@/libs/importing";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { drizzle } from "drizzle-orm/expo-sqlite";
+import { LinearGradient } from "expo-linear-gradient";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Alert, ScrollView } from "react-native";
-import { Button, Card, Switch } from "react-native-paper";
+import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
-  const [isEnabled, setIsEnabled] = useState(isBiometricsAuthEnabled());
-  const toggleSwitch = () => setIsEnabled(toggleBiometricsFeature());
+  const [isAppLockEnabled, setIsAppLockEnabled] = useState(
+    isBiometricsAuthEnabled(),
+  );
+  const toggleInAppLockSwitch = () =>
+    setIsAppLockEnabled(toggleBiometricsFeature());
 
+  const theme = useTheme();
   let db = useSQLiteContext();
   const drizzleDb = drizzle(db);
 
@@ -62,60 +67,111 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingHorizontal: 12 }}>
-      <ScrollView contentContainerStyle={{ gap: 16 }}>
+    <SafeAreaView style={{ flex: 1, paddingVertical: 12 }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 12,
+          paddingBottom: 96,
+          gap: 24,
+        }}
+        showsVerticalScrollIndicator
+      >
+        <Text
+          variant="headlineMedium"
+          style={{
+            marginTop: 8,
+            marginBottom: 20,
+            marginHorizontal: 4,
+            textAlign: "center",
+          }}
+        >
+          Settings
+        </Text>
+
         <Card>
-          <Card.Content>
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-              In App Lock (Biometrics):
-            </Text>
-          </Card.Content>
-          <Card.Actions>
-            <Switch value={isEnabled} onValueChange={toggleSwitch} />
-          </Card.Actions>
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              style={{ paddingRight: 0 }}
+              title="In App Lock"
+              description="Require biometrics to unlock the app"
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="fingerprint"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={() => (
+                <Switch
+                  style={{ alignSelf: "flex-end" }}
+                  value={isAppLockEnabled}
+                  onValueChange={toggleInAppLockSwitch}
+                />
+              )}
+            />
+          </List.Section>
         </Card>
 
         <Card>
-          <Card.Actions style={{ flexDirection: "column", gap: 12 }}>
-            <Button
-              icon={({ size, color }) => (
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              title="Import passwords"
+              description="Import a Google Password CSV"
+              left={(props) => (
                 <FontAwesome6
-                  name="upload"
-                  size={size}
-                  color={color}
+                  {...props}
+                  name="download"
                   iconStyle="solid"
+                  size={20}
                 />
               )}
-              onPress={() => handleImportPasswords()}
-            >
-              <Text>Import With Google Passwords Format</Text>
-            </Button>
-
-            <Button
-              mode="outlined"
-              icon={({ size, color }) => (
+              right={(props) => (
                 <FontAwesome6
-                  name="share-nodes"
-                  size={size}
-                  color={color}
+                  {...props}
+                  name="chevron-right"
                   iconStyle="solid"
+                  size={20}
+                />
+              )}
+              onPress={handleImportPasswords}
+            />
+
+            <Divider bold />
+
+            <List.Item
+              title="Export passwords"
+              description="Share as Google Password CSV"
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="share-nodes"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="chevron-right"
+                  iconStyle="solid"
+                  size={20}
                 />
               )}
               onPress={async () => {
-                let result = await unlockWithBiometricsApp();
+                const result = await unlockWithBiometricsApp();
+
                 if (result) {
                   handleExportPasswords();
                 } else {
                   Alert.alert(
-                    "Authentication Failed!!!",
-                    "exporting passwords is security activity and is protected by app lock.",
+                    "Authentication Failed",
+                    "Exporting passwords is protected by App Lock.",
                   );
                 }
               }}
-            >
-              <Text>Share With Google Passwords Format</Text>
-            </Button>
-          </Card.Actions>
+            />
+          </List.Section>
         </Card>
 
         <Card>
@@ -123,16 +179,23 @@ export default function SettingsScreen() {
             <Text
               style={{ fontSize: 28, marginBottom: 12, textAlign: "center" }}
             >
-              TroubleShooting
+              Recovery
             </Text>
 
-            <Card.Actions style={{ flexDirection: "column", gap: 12 }}>
+            <Card.Content
+              style={{
+                padding: 20,
+                flexDirection: "column",
+                alignItems: "stretch",
+                gap: 16,
+              }}
+            >
               <LinkButton
                 href="/get-back-passwords"
                 text="GetBack Passwords From v2"
               />
               <LinkButton href="/data-recovery" text="Data Recovery" />
-            </Card.Actions>
+            </Card.Content>
           </Card.Content>
         </Card>
 
@@ -201,6 +264,18 @@ export default function SettingsScreen() {
           </Card.Content>
         </Card>
       </ScrollView>
+
+      <LinearGradient
+        pointerEvents="none"
+        colors={["transparent", theme.colors.background]}
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 150,
+        }}
+      />
     </SafeAreaView>
   );
 }
