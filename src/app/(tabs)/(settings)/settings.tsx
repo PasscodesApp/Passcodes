@@ -273,7 +273,7 @@ export default function SettingsScreen() {
                 darkModeColor="#3a424b"
               />
               <LinkIconButton
-                href="mailto:jeeldobariya38@gmail.com"
+                href="https://t.me/passcodescommunity"
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="telegram"
