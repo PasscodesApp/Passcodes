@@ -1,0 +1,26 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'com.jeeldobariya.passcodes.autofill'
+version = '0.1.0'
+
+android {
+  namespace "com.jeeldobariya.passcodes.autofill"
+  defaultConfig {
+    versionCode 1
+    versionName "0.1.0"
+  }
+  lintOptions {
+    abortOnError false
+  }
+}
+
+dependencies {
+  // Required standard Expo Module core library
+  implementation project(':expo-modules-core')
+
+  // Optional: AndroidX Autofill helper library for field hint constants
+  implementation 'androidx.autofill:autofill:1.3.0'
+}
