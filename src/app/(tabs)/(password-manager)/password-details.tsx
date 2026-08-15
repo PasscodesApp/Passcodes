@@ -121,20 +121,37 @@ export default function PasswordDetailsScreen() {
           }}
         >
           {!isEditing ? (
-            <Button
-              mode="contained-tonal"
-              icon={({ size, color }) => (
-                <FontAwesome6
-                  name="pencil"
-                  size={size}
-                  color={color}
-                  iconStyle="solid"
-                />
-              )}
-              onPress={() => setIsEditing(true)}
-            >
-              Edit
-            </Button>
+            <>
+              <Button
+                mode="contained-tonal"
+                icon={({ size, color }) => (
+                  <FontAwesome6
+                    name="pencil"
+                    size={size}
+                    color={color}
+                    iconStyle="solid"
+                  />
+                )}
+                onPress={() => setIsEditing(true)}
+              >
+                Edit
+              </Button>
+
+              <Button
+                mode="contained-tonal"
+                icon={({ size, color }) => (
+                  <FontAwesome6
+                    name="link"
+                    size={size}
+                    color={color}
+                    iconStyle="solid"
+                  />
+                )}
+                onPress={() => router.navigate(url)}
+              >
+                Open
+              </Button>
+            </>
           ) : (
             <>
               <Button

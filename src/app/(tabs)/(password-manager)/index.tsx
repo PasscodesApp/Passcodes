@@ -98,7 +98,7 @@ export default function LoadPasswordScreen() {
           paddingInline: 20,
         }}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyText}>No Data!!</Text>}
+        ListEmptyComponent={<Text style={styles.emptyText}>No data!!</Text>}
         renderItem={({ item }) => (
           <Pressable
             style={{ margin: 2 }}
@@ -115,6 +115,7 @@ export default function LoadPasswordScreen() {
                 backgroundColor: theme.colors.surface,
                 borderRadius: 16,
                 padding: 16,
+                height: "100%",
               }}
             >
               <Text style={styles.label}>
