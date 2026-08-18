@@ -1,6 +1,6 @@
+import PasswordItemCard from "@/components/PasswordItemCard";
 import Text from "@/components/Text";
 import { passwords } from "@/db/schema";
-import formatDate from "@/utils/formating";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { FlashList } from "@shopify/flash-list";
 import { eq } from "drizzle-orm";
@@ -8,7 +8,7 @@ import { drizzle, useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { router, Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useMemo, useState } from "react";
-import { Alert, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Pressable } from "react-native";
 import { FAB, IconButton, useTheme } from "react-native-paper";
 
 export default function LoadPasswordScreen() {
@@ -128,7 +128,14 @@ export default function LoadPasswordScreen() {
         }}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>
+          <Text
+            style={{
+              textAlign: "center",
+              marginTop: 40,
+              fontSize: 12,
+              color: "gray",
+            }}
+          >
             {searchQuery.trim() ? "No passwords found!!" : "No data!!"}
           </Text>
         }
@@ -143,44 +150,12 @@ export default function LoadPasswordScreen() {
             }
             onLongPress={() => deletePassword(item)}
           >
-            <View
+            <PasswordItemCard
+              {...item}
               style={{
-                backgroundColor: theme.colors.surface,
-                borderRadius: 16,
-                padding: 16,
                 height: "100%",
               }}
-            >
-              <Text style={styles.label}>
-                Domain:{" "}
-                <Text style={[styles.value, { color: theme.colors.primary }]}>
-                  {item.domain}
-                </Text>
-              </Text>
-
-              <Text style={styles.label}>
-                Username:{" "}
-                <Text style={[styles.value, { color: theme.colors.primary }]}>
-                  {item.username}
-                </Text>
-              </Text>
-
-              <Text style={styles.label}>
-                Password:{" "}
-                <Text style={[styles.value, { color: theme.colors.tertiary }]}>
-                  **********
-                </Text>
-              </Text>
-
-              <Text style={[styles.label, { color: theme.colors.onSurface }]}>
-                Updated At:{" "}
-                <Text style={[styles.value, { color: theme.colors.tertiary }]}>
-                  {item.updatedAt == null
-                    ? "just now"
-                    : formatDate(item.updatedAt)}
-                </Text>
-              </Text>
-            </View>
+            />
           </Pressable>
         )}
       />
@@ -206,21 +181,3 @@ export default function LoadPasswordScreen() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  label: {
-    fontWeight: "600",
-    marginBottom: 6,
-  },
-
-  value: {
-    fontWeight: "400",
-  },
-
-  emptyText: {
-    textAlign: "center",
-    marginTop: 40,
-    fontSize: 12,
-    color: "gray",
-  },
-});
