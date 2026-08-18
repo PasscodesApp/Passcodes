@@ -29,16 +29,9 @@ export default function LoadPasswordScreen() {
     [refreshKey],
   );
 
-  /**
-   * Filter passwords whenever searchQuery or passwordList changes.
-   *
-   * useMemo isn't required, but it avoids doing the filtering
-   * on every render when neither value has changed.
-   */
   const filteredPasswords = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
-    // No search text -> show everything
     if (!query) {
       return passwordList;
     }
@@ -107,7 +100,13 @@ export default function LoadPasswordScreen() {
         <Stack.Screen.Title>Password Manager</Stack.Screen.Title>
 
         <Stack.SearchBar
+          textColor={theme.colors.onSurface}
+          hintTextColor={theme.colors.onSurface}
+          tintColor={theme.colors.onSurface}
+          headerIconColor={theme.colors.onSurface}
+          barTintColor={theme.colors.surfaceDisabled}
           placeholder="Search passwords..."
+          placement="stacked"
           onChangeText={(event) => {
             setSearchQuery(event.nativeEvent.text);
           }}
