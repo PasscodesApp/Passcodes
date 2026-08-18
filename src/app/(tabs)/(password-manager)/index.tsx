@@ -84,7 +84,26 @@ export default function LoadPasswordScreen() {
 
   return (
     <>
-      <Stack.Screen>
+      <Stack.Screen
+        options={{
+          title: "Password Manager",
+          headerRight: (props) => (
+            <IconButton
+              icon={() => (
+                <FontAwesome6
+                  name={numColumns === 1 ? "grip" : "list"}
+                  iconStyle="solid"
+                  size={20}
+                  color={props.tintColor}
+                />
+              )}
+              onPress={() => {
+                setForceGrid((g) => !g);
+              }}
+            />
+          ),
+        }}
+      >
         <Stack.Screen.Title>Password Manager</Stack.Screen.Title>
 
         <Stack.SearchBar
@@ -98,36 +117,6 @@ export default function LoadPasswordScreen() {
         />
       </Stack.Screen>
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingHorizontal: 16,
-          paddingVertical: 8,
-        }}
-      >
-        <Text variant="headlineSmall">
-          {searchQuery.trim()
-            ? `Passwords (${filteredPasswords.length})`
-            : "Passwords"}
-        </Text>
-
-        <IconButton
-          style={{ backgroundColor: "#ccc" }}
-          icon={() => {
-            return numColumns === 1 ? (
-              <FontAwesome6 name="grip" iconStyle="solid" size={20} />
-            ) : (
-              <FontAwesome6 name="list" iconStyle="solid" size={20} />
-            );
-          }}
-          onPress={() => {
-            setForceGrid((g) => !g);
-          }}
-        />
-      </View>
-
       <FlashList
         data={filteredPasswords}
         key={numColumns}
@@ -136,7 +125,7 @@ export default function LoadPasswordScreen() {
         refreshing={refreshing}
         onRefresh={onRefresh}
         contentContainerStyle={{
-          paddingInline: 20,
+          padding: 20,
         }}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
