@@ -1,5 +1,6 @@
 import Text from "@/components/Text";
 import { passwords } from "@/db/schema";
+import formatDate from "@/utils/formating";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { FlashList } from "@shopify/flash-list";
 import { eq } from "drizzle-orm";
@@ -142,7 +143,9 @@ export default function LoadPasswordScreen() {
               <Text style={[styles.label, { color: theme.colors.onSurface }]}>
                 Updated At:{" "}
                 <Text style={[styles.value, { color: theme.colors.tertiary }]}>
-                  {item.updatedAt?.slice(0, 10)}
+                  {item.updatedAt == null
+                    ? "just now"
+                    : formatDate(item.updatedAt)}
                 </Text>
               </Text>
             </View>
