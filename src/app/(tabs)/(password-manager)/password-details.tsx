@@ -2,13 +2,15 @@ import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
+import formatDate from "@/utils/formating";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
-import { router, useLocalSearchParams } from "expo-router";
+import { Href, router, useLocalSearchParams } from "expo-router";
+import { usePreventRemove } from "expo-router/react-navigation";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { Keyboard, ScrollView, View } from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -23,6 +25,8 @@ export default function PasswordDetailsScreen() {
   const [password, setPassword] = useState("");
   const [url, setUrl] = useState("");
   const [notes, setNotes] = useState("");
+  const [lastupdateAt, setLastupdateAt] = useState("");
+
   const [isEditing, setIsEditing] = useState(false);
 
   getScreenShotSecureScreen();
@@ -41,6 +45,7 @@ export default function PasswordDetailsScreen() {
       setPassword(data.password || "");
       setUrl(data.url || "");
       setNotes(data.notes || "");
+      setLastupdateAt(data.updatedAt ? formatDate(data.updatedAt) : "just now");
     }
   }
 
@@ -57,12 +62,26 @@ export default function PasswordDetailsScreen() {
       })
       .where(eq(passwords.id, Number(id)));
 
+    Keyboard.dismiss();
+    setIsEditing(false);
     router.back();
   }
+
+  usePreventRemove(isEditing, () => {
+    Keyboard.dismiss();
+    setIsEditing(false);
+    loadAndRefreshPassword();
+  });
 
   useEffect(() => {
     loadAndRefreshPassword();
   }, []);
+
+  function handleCancel() {
+    Keyboard.dismiss();
+    setIsEditing(false);
+    loadAndRefreshPassword();
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -71,6 +90,7 @@ export default function PasswordDetailsScreen() {
           margin: 20,
           gap: 24,
         }}
+        keyboardShouldPersistTaps="handled"
       >
         <FormTextField
           label="Domain"
@@ -113,6 +133,12 @@ export default function PasswordDetailsScreen() {
           numberOfLines={3}
         />
 
+        <FormTextField
+          label="UpdatedAt"
+          value={lastupdateAt}
+          editable={false}
+        />
+
         <View
           style={{
             flex: 1,
@@ -123,7 +149,6 @@ export default function PasswordDetailsScreen() {
           {!isEditing ? (
             <>
               <Button
-                mode="contained-tonal"
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="pencil"
@@ -138,7 +163,6 @@ export default function PasswordDetailsScreen() {
               </Button>
 
               <Button
-                mode="contained-tonal"
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="link"
@@ -147,7 +171,7 @@ export default function PasswordDetailsScreen() {
                     iconStyle="solid"
                   />
                 )}
-                onPress={() => router.navigate(url)}
+                onPress={() => router.navigate(url as Href)}
               >
                 Open
               </Button>
@@ -155,7 +179,6 @@ export default function PasswordDetailsScreen() {
           ) : (
             <>
               <Button
-                mode="contained-tonal"
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="store"
@@ -164,7 +187,7 @@ export default function PasswordDetailsScreen() {
                     iconStyle="solid"
                   />
                 )}
-                onPress={() => updatePassword()}
+                onPress={updatePassword}
               >
                 Save
               </Button>
@@ -178,10 +201,7 @@ export default function PasswordDetailsScreen() {
                     iconStyle="solid"
                   />
                 )}
-                onPress={() => {
-                  setIsEditing(false);
-                  loadAndRefreshPassword();
-                }}
+                onPress={handleCancel}
               >
                 Cancel
               </Button>

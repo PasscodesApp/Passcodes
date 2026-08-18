@@ -2,12 +2,12 @@ import { Stack } from "expo-router";
 
 export default function PasswordManagerLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack screenOptions={{ headerShown: true }}>
       <Stack.Screen name="index" options={{ title: "Password Manager" }} />
 
       <Stack.Screen
         name="password-details"
-        options={{ title: "Password Details", headerShown: true }}
+        options={{ title: "Details", headerShown: true }}
       />
 
       <Stack.Screen

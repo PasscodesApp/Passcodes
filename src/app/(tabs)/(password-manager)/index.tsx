@@ -1,39 +1,55 @@
 import Text from "@/components/Text";
 import { passwords } from "@/db/schema";
+import formatDate from "@/utils/formating";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { FlashList } from "@shopify/flash-list";
 import { eq } from "drizzle-orm";
 import { drizzle, useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { useState } from "react";
-import {
-  Alert,
-  Pressable,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { useMemo, useState } from "react";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { FAB, IconButton, useTheme } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoadPasswordScreen() {
-  const { width } = useWindowDimensions();
-
-  const isLandscape = width > 700;
   const [forceGrid, setForceGrid] = useState(false);
-  const numColumns = forceGrid || isLandscape ? 2 : 1;
+  const numColumns = forceGrid ? 2 : 1;
 
-  let theme = useTheme();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const theme = useTheme();
+
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
 
-  const [refreshKey, setRefreshKey] = useState(0);
   const { data: passwordList = [] } = useLiveQuery(
     drizzleDb.select().from(passwords),
     [refreshKey],
   );
-  const [refreshing, setRefreshing] = useState(false);
+
+  const filteredPasswords = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    if (!query) {
+      return passwordList;
+    }
+
+    return passwordList.filter((password) => {
+      const domain = password.domain?.toLowerCase() ?? "";
+      const username = password.username?.toLowerCase() ?? "";
+      const url = password.url?.toLowerCase() ?? "";
+      const notes = password.notes?.toLowerCase() ?? "";
+
+      return (
+        domain.includes(query) ||
+        username.includes(query) ||
+        url.includes(query) ||
+        notes.includes(query)
+      );
+    });
+  }, [passwordList, searchQuery]);
 
   async function onRefresh() {
     setRefreshing(true);
@@ -60,45 +76,62 @@ export default function LoadPasswordScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingVertical: 12 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingHorizontal: 16,
-          paddingVertical: 8,
+    <>
+      <Stack.Screen
+        options={{
+          title: "Password Manager",
+          headerRight: (props) => (
+            <IconButton
+              icon={() => (
+                <FontAwesome6
+                  name={numColumns === 1 ? "grip" : "list"}
+                  iconStyle="solid"
+                  size={20}
+                  color={props.tintColor}
+                />
+              )}
+              onPress={() => {
+                setForceGrid((g) => !g);
+              }}
+            />
+          ),
         }}
       >
-        <Text variant="headlineSmall">Passwords</Text>
+        <Stack.Screen.Title>Password Manager</Stack.Screen.Title>
 
-        <IconButton
-          style={{ backgroundColor: "#ccc" }}
-          icon={() => {
-            return numColumns === 1 ? (
-              <FontAwesome6 name="grip" iconStyle="solid" size={20} />
-            ) : (
-              <FontAwesome6 name="list" iconStyle="solid" size={20} />
-            );
+        <Stack.SearchBar
+          textColor={theme.colors.onSurface}
+          hintTextColor={theme.colors.onSurface}
+          tintColor={theme.colors.onSurface}
+          headerIconColor={theme.colors.onSurface}
+          barTintColor={theme.colors.surfaceDisabled}
+          placeholder="Search passwords..."
+          placement="stacked"
+          onChangeText={(event) => {
+            setSearchQuery(event.nativeEvent.text);
           }}
-          onPress={() => {
-            setForceGrid((g) => !g);
+          onSearchButtonPress={(event) => {
+            setSearchQuery(event.nativeEvent.text);
           }}
         />
-      </View>
+      </Stack.Screen>
 
       <FlashList
-        data={passwordList}
+        data={filteredPasswords}
         key={numColumns}
         numColumns={numColumns}
         keyExtractor={(item) => item.id.toString()}
         refreshing={refreshing}
         onRefresh={onRefresh}
         contentContainerStyle={{
-          paddingInline: 20,
+          padding: 20,
         }}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyText}>No data!!</Text>}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>
+            {searchQuery.trim() ? "No passwords found!!" : "No data!!"}
+          </Text>
+        }
         renderItem={({ item }) => (
           <Pressable
             style={{ margin: 2 }}
@@ -142,15 +175,22 @@ export default function LoadPasswordScreen() {
               <Text style={[styles.label, { color: theme.colors.onSurface }]}>
                 Updated At:{" "}
                 <Text style={[styles.value, { color: theme.colors.tertiary }]}>
-                  {item.updatedAt?.slice(0, 10)}
+                  {item.updatedAt == null
+                    ? "just now"
+                    : formatDate(item.updatedAt)}
                 </Text>
               </Text>
             </View>
           </Pressable>
         )}
       />
+
       <FAB
-        style={{ position: "absolute", bottom: 35, right: 35 }}
+        style={{
+          position: "absolute",
+          bottom: 35,
+          right: 35,
+        }}
         icon={({ size, color }) => (
           <FontAwesome6
             name="plus"
@@ -162,8 +202,8 @@ export default function LoadPasswordScreen() {
         onPress={() => {
           router.push("/save-password");
         }}
-      ></FAB>
-    </SafeAreaView>
+      />
+    </>
   );
 }
 
