@@ -149,7 +149,6 @@ export default function PasswordDetailsScreen() {
           {!isEditing ? (
             <>
               <Button
-                mode="contained-tonal"
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="pencil"
@@ -180,7 +179,6 @@ export default function PasswordDetailsScreen() {
           ) : (
             <>
               <Button
-                mode="contained-tonal"
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="store"
