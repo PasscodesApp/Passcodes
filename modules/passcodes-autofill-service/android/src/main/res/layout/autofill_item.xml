@@ -3,25 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
     android:gravity="center_vertical"
-    android:background="?android:attr/selectableItemBackground">
+    android:paddingStart="16dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="12dp">
 
-    <!-- Icon on the left -->
     <TextView
         android:id="@+id/autofill_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginEnd="10dp" />
+        android:textSize="20sp"
+        android:layout_marginEnd="12dp" />
 
-    <!-- Main Text -->
     <TextView
         android:id="@+id/autofill_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:textColor="#1E1E1E" />
+        android:textColor="#1d4063"
+        android:textSize="16sp"
+        android:fontFamily="sans" />
 
 </LinearLayout>

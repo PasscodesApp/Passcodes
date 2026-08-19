@@ -1,16 +1,15 @@
 package com.jeeldobariya.passcodes.autofill
 
 import android.app.assist.AssistStructure
+import android.os.Build
+import android.os.CancellationSignal
 import android.service.autofill.AutofillService
 import android.service.autofill.Dataset
 import android.service.autofill.FillCallback
-import android.service.autofill.FillContext
 import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
-import android.os.Build
-import android.os.CancellationSignal
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
@@ -24,71 +23,129 @@ class PasscodesAutofillService : AutofillService() {
         cancellationSignal: CancellationSignal,
         callback: FillCallback
     ) {
-        // 1. Get the latest AssistStructure from the fill context
-        val context: FillContext = request.fillContexts.lastOrNull() ?: return callback.onSuccess(null)
-        val structure: AssistStructure = context.structure
+        cancellationSignal.setOnCancelListener {
+            // The current implementation does not have any cancellable
+            // background work to clean up.
+        }
 
-        // 2. Locate the focused field that requested autofill
-        val autofillId = findFocusedAutofillId(structure.getWindowNodeAt(0).rootViewNode)
+        val fillContext = request.fillContexts.lastOrNull()
             ?: return callback.onSuccess(null)
 
-        // 3. Build Response with 2 Swagged-out Datasets
+        val rootNode = fillContext.structure
+            .getWindowNodeAt(0)
+            .rootViewNode
+
+        val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
+
+        parseStructure(
+            node = rootNode,
+            viewNodes = viewNodes
+        )
+
+        /*
+         * Only provide suggestions when Android has identified
+         * a password field.
+         */
+        val passwordNode = viewNodes[AUTOFILL_HINT_PASSWORD]
+            ?: return callback.onSuccess(null)
+
+        val passwordId = passwordNode.autofillId
+            ?: return callback.onSuccess(null)
+
+        if (cancellationSignal.isCanceled) {
+            return
+        }
+
+        val passwords = PasscodesDatabase(applicationContext)
+            .getAllPasswords()
+
+        if (passwords.isEmpty()) {
+            callback.onSuccess(null)
+            return
+        }
+
         val responseBuilder = FillResponse.Builder()
 
-        // --- Dataset 1: The Sass Master ---
-        val views1 = RemoteViews(packageName, R.layout.autofill_item).apply {
-            setTextViewText(R.id.autofill_icon, "😎")
-            setTextViewText(R.id.autofill_title, "Idk baby, figure it out")
-        }
-        val dataset1 = Dataset.Builder()
-            .setValue(
-                autofillId,
-                AutofillValue.forText("idk baby. your password you should remember it."),
-                views1
+        passwords.forEach { password ->
+            responseBuilder.addDataset(
+                createDataset(
+                    passwordId = passwordId,
+                    password = password
+                )
             )
-            .build()
-
-        // --- Dataset 2: The Main Character ---
-        val views2 = RemoteViews(packageName, R.layout.autofill_item).apply {
-            setTextViewText(R.id.autofill_icon, "🔥")
-            setTextViewText(R.id.autofill_title, "Not my vault, not my problem")
         }
-        val dataset2 = Dataset.Builder()
-            .setValue(
-                autofillId,
-                AutofillValue.forText("you really thought I had this saved? wild."),
-                views2
-            )
-            .build()
 
-        // 4. Attach datasets and deliver response
-        val fillResponse = responseBuilder
-            .addDataset(dataset1)
-            .addDataset(dataset2)
-            .build()
-
-        callback.onSuccess(fillResponse)
+        callback.onSuccess(
+            responseBuilder.build()
+        )
     }
 
-    override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
-        // Acknowledge save request
+    override fun onSaveRequest(
+        request: SaveRequest,
+        callback: SaveCallback
+    ) {
+        /*
+         * Saving credentials is intentionally not implemented yet.
+         *
+         * This service currently only provides existing credentials
+         * from Passcodes.
+         */
         callback.onSuccess()
     }
 
     /**
-     * Recursively traverses the view tree to find the node currently focused by the user.
+     * Recursively walks the AssistStructure and indexes ViewNodes
+     * by their Autofill hints.
      */
-    private fun findFocusedAutofillId(node: AssistStructure.ViewNode): AutofillId? {
-        if (node.isFocused && node.autofillId != null) {
-            return node.autofillId
+    private fun parseStructure(
+        node: AssistStructure.ViewNode,
+        viewNodes: MutableMap<String, AssistStructure.ViewNode>
+    ) {
+        node.autofillHints?.forEach { hint ->
+            viewNodes.putIfAbsent(hint, node)
         }
 
-        for (i in 0 until node.childCount) {
-            val child = node.getChildAt(i)
-            val id = findFocusedAutofillId(child)
-            if (id != null) return id
+        for (index in 0 until node.childCount) {
+            parseStructure(
+                node = node.getChildAt(index),
+                viewNodes = viewNodes
+            )
+        }
+    }
+
+    /**
+     * Creates an Autofill Dataset for a single Passcodes entry.
+     */
+    private fun createDataset(
+        passwordId: AutofillId,
+        password: PasscodesDatabase.PasswordEntry
+    ): Dataset {
+
+        val presentation = RemoteViews(
+            packageName,
+            R.layout.autofill_item
+        ).apply {
+            setTextViewText(
+                R.id.autofill_icon,
+                "🔐"
+            )
+
+            setTextViewText(
+                R.id.autofill_title,
+                "${password.domain} (${password.username})"
+            )
         }
 
-        return null
+        return Dataset.Builder()
+            .setValue(
+                passwordId,
+                AutofillValue.forText(password.password),
+                presentation
+            )
+            .build()
+    }
+
+    companion object {
+        private const val AUTOFILL_HINT_PASSWORD = "password"
     }
 }
