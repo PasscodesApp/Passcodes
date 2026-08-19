@@ -9,8 +9,7 @@ import { router, Stack } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useMemo, useState } from "react";
 import { Alert, Pressable, StyleSheet, View } from "react-native";
-import { Button, FAB, IconButton, useTheme } from "react-native-paper";
-import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
+import { FAB, IconButton, useTheme } from "react-native-paper";
 
 export default function LoadPasswordScreen() {
   const [forceGrid, setForceGrid] = useState(false);
@@ -116,19 +115,6 @@ export default function LoadPasswordScreen() {
           }}
         />
       </Stack.Screen>
-
-      <Text>
-        Autofill:
-        {PasscodesAutofillServiceModule.isAutofillServiceEnabled()
-          ? " Avaliable"
-          : " Not Avaliable"}
-      </Text>
-
-      <Button
-        onPress={() => PasscodesAutofillServiceModule.openAutofillSettings()}
-      >
-        Open Settings
-      </Button>
 
       <FlashList
         data={filteredPasswords}
