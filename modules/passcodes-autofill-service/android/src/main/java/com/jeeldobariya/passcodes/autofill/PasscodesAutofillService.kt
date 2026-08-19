@@ -24,33 +24,57 @@ class PasscodesAutofillService : AutofillService() {
         callback: FillCallback
     ) {
         cancellationSignal.setOnCancelListener {
-            // The current implementation does not have any cancellable
-            // background work to clean up.
+            // No cancellable background work at the moment.
         }
 
         val fillContext = request.fillContexts.lastOrNull()
             ?: return callback.onSuccess(null)
 
-        val rootNode = fillContext.structure
-            .getWindowNodeAt(0)
-            .rootViewNode
+        val structure = fillContext.structure
 
         val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
 
         parseStructure(
-            node = rootNode,
+            node = structure.getWindowNodeAt(0).rootViewNode,
             viewNodes = viewNodes
         )
 
         /*
-         * Only provide suggestions when Android has identified
-         * a password field.
+         * Android applications and HTML forms can expose different
+         * autofill hints for the same logical field.
+         *
+         * Username:
+         *   username
+         *   emailAddress
+         *
+         * Password:
+         *   password
+         *   current-password
+         *   new-password
          */
-        val passwordNode = viewNodes[AUTOFILL_HINT_PASSWORD]
-            ?: return callback.onSuccess(null)
+        val usernameNode =
+            viewNodes[AUTOFILL_HINT_USERNAME]
+                ?: viewNodes[AUTOFILL_HINT_EMAIL_ADDRESS]
 
-        val passwordId = passwordNode.autofillId
-            ?: return callback.onSuccess(null)
+        val passwordNode =
+            viewNodes[AUTOFILL_HINT_PASSWORD]
+                ?: viewNodes[AUTOFILL_HINT_CURRENT_PASSWORD]
+                ?: viewNodes[AUTOFILL_HINT_NEW_PASSWORD]
+
+        /*
+         * If this isn't a login/account form that we understand,
+         * don't return any datasets.
+         */
+        if (usernameNode == null && passwordNode == null) {
+            return callback.onSuccess(null)
+        }
+
+        val usernameId = usernameNode?.autofillId
+        val passwordId = passwordNode?.autofillId
+
+        if (usernameId == null && passwordId == null) {
+            return callback.onSuccess(null)
+        }
 
         if (cancellationSignal.isCanceled) {
             return
@@ -69,6 +93,7 @@ class PasscodesAutofillService : AutofillService() {
         passwords.forEach { password ->
             responseBuilder.addDataset(
                 createDataset(
+                    usernameId = usernameId,
                     passwordId = passwordId,
                     password = password
                 )
@@ -87,8 +112,8 @@ class PasscodesAutofillService : AutofillService() {
         /*
          * Saving credentials is intentionally not implemented yet.
          *
-         * This service currently only provides existing credentials
-         * from Passcodes.
+         * The current Autofill implementation only reads existing
+         * credentials from Passcodes.
          */
         callback.onSuccess()
     }
@@ -114,10 +139,19 @@ class PasscodesAutofillService : AutofillService() {
     }
 
     /**
-     * Creates an Autofill Dataset for a single Passcodes entry.
+     * Creates a Dataset containing whichever login fields were
+     * exposed by the current application / web page.
+     *
+     * If both username and password fields exist:
+     *
+     *     username -> username
+     *     password -> password
+     *
+     * If only one exists, only that field is populated.
      */
     private fun createDataset(
-        passwordId: AutofillId,
+        usernameId: AutofillId?,
+        passwordId: AutofillId?,
         password: PasscodesDatabase.PasswordEntry
     ): Dataset {
 
@@ -125,27 +159,73 @@ class PasscodesAutofillService : AutofillService() {
             packageName,
             R.layout.autofill_item
         ).apply {
-            setTextViewText(
+            setImageViewResource(
                 R.id.autofill_icon,
-                "🔐"
+                R.drawable.ic_autofill_lock
             )
 
             setTextViewText(
-                R.id.autofill_title,
-                "${password.domain} (${password.username})"
+                R.id.autofill_domain,
+                password.domain
+            )
+
+            setTextViewText(
+                R.id.autofill_username,
+                password.username
             )
         }
 
-        return Dataset.Builder()
-            .setValue(
-                passwordId,
+        val datasetBuilder = Dataset.Builder()
+
+        usernameId?.let { id ->
+            datasetBuilder.setValue(
+                id,
+                AutofillValue.forText(password.username),
+                presentation
+            )
+        }
+
+        passwordId?.let { id ->
+            datasetBuilder.setValue(
+                id,
                 AutofillValue.forText(password.password),
                 presentation
             )
-            .build()
+        }
+
+        return datasetBuilder.build()
     }
 
     companion object {
+
+        /**
+         * Android Autofill hint:
+         * A username / account identifier.
+         */
+        private const val AUTOFILL_HINT_USERNAME = "username"
+
+        /**
+         * Android Autofill hint:
+         * An email address.
+         */
+        private const val AUTOFILL_HINT_EMAIL_ADDRESS = "emailAddress"
+
+        /**
+         * Android Autofill hint:
+         * A generic password.
+         */
         private const val AUTOFILL_HINT_PASSWORD = "password"
+
+        /**
+         * W3C autocomplete value:
+         * The password used to authenticate an existing account.
+         */
+        private const val AUTOFILL_HINT_CURRENT_PASSWORD = "current-password"
+
+        /**
+         * W3C autocomplete value:
+         * A new password being created or changed.
+         */
+        private const val AUTOFILL_HINT_NEW_PASSWORD = "new-password"
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Passcodes Autofill -->
+    <color name="passcodes_primary">#34597F</color>
+    <color name="passcodes_primary_variant">#C7D4E8</color>
+
+    <color name="passcodes_on_primary">#FFFFFF</color>
+    <color name="passcodes_on_primary_variant">#E7EEF7</color>
+
+</resources>
