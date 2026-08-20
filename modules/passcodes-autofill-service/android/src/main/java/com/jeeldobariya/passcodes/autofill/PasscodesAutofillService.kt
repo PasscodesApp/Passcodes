@@ -14,9 +14,25 @@ import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
+import androidx.autofill.HintConstants
 
 @RequiresApi(Build.VERSION_CODES.O)
 class PasscodesAutofillService : AutofillService() {
+
+    private val USERNAME_HINTS = setOf(
+        HintConstants.AUTOFILL_HINT_USERNAME,
+        HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
+    )
+
+    private val PASSWORD_HINTS = setOf(
+        HintConstants.AUTOFILL_HINT_PASSWORD,
+        HintConstants.AUTOFILL_HINT_NEW_PASSWORD
+    )
+
+    enum class AutofillFieldType {
+        USERNAME,
+        PASSWORD
+    }
 
     override fun onFillRequest(
         request: FillRequest,
@@ -32,7 +48,8 @@ class PasscodesAutofillService : AutofillService() {
 
         val structure = fillContext.structure
 
-        val viewNodes = mutableMapOf<String, AssistStructure.ViewNode>()
+        val viewNodes =
+            mutableMapOf<AutofillFieldType, AssistStructure.ViewNode>()
 
         parseStructure(
             node = structure.getWindowNodeAt(0).rootViewNode,
@@ -40,26 +57,13 @@ class PasscodesAutofillService : AutofillService() {
         )
 
         /*
-         * Android applications and HTML forms can expose different
-         * autofill hints for the same logical field.
-         *
-         * Username:
-         *   username
-         *   emailAddress
-         *
-         * Password:
-         *   password
-         *   current-password
-         *   new-password
+         * Get individual autofill nodes from already parsed structure in above step.
          */
         val usernameNode =
-            viewNodes[AUTOFILL_HINT_USERNAME]
-                ?: viewNodes[AUTOFILL_HINT_EMAIL_ADDRESS]
+            viewNodes[AutofillFieldType.USERNAME]
 
         val passwordNode =
-            viewNodes[AUTOFILL_HINT_PASSWORD]
-                ?: viewNodes[AUTOFILL_HINT_CURRENT_PASSWORD]
-                ?: viewNodes[AUTOFILL_HINT_NEW_PASSWORD]
+            viewNodes[AutofillFieldType.PASSWORD]
 
         /*
          * If this isn't a login/account form that we understand,
@@ -120,14 +124,32 @@ class PasscodesAutofillService : AutofillService() {
 
     /**
      * Recursively walks the AssistStructure and indexes ViewNodes
-     * by their Autofill hints.
+     * by Autofill hints into AutofillFieldType.
      */
     private fun parseStructure(
         node: AssistStructure.ViewNode,
-        viewNodes: MutableMap<String, AssistStructure.ViewNode>
+        viewNodes: MutableMap<
+            AutofillFieldType,
+            AssistStructure.ViewNode
+        >
     ) {
+
         node.autofillHints?.forEach { hint ->
-            viewNodes.putIfAbsent(hint, node)
+            when {
+                hint in USERNAME_HINTS -> {
+                    viewNodes.putIfAbsent(
+                        AutofillFieldType.USERNAME,
+                        node
+                    )
+                }
+
+                hint in PASSWORD_HINTS -> {
+                    viewNodes.putIfAbsent(
+                        AutofillFieldType.PASSWORD,
+                        node
+                    )
+                }
+            }
         }
 
         for (index in 0 until node.childCount) {
@@ -194,38 +216,5 @@ class PasscodesAutofillService : AutofillService() {
         }
 
         return datasetBuilder.build()
-    }
-
-    companion object {
-
-        /**
-         * Android Autofill hint:
-         * A username / account identifier.
-         */
-        private const val AUTOFILL_HINT_USERNAME = "username"
-
-        /**
-         * Android Autofill hint:
-         * An email address.
-         */
-        private const val AUTOFILL_HINT_EMAIL_ADDRESS = "emailAddress"
-
-        /**
-         * Android Autofill hint:
-         * A generic password.
-         */
-        private const val AUTOFILL_HINT_PASSWORD = "password"
-
-        /**
-         * W3C autocomplete value:
-         * The password used to authenticate an existing account.
-         */
-        private const val AUTOFILL_HINT_CURRENT_PASSWORD = "current-password"
-
-        /**
-         * W3C autocomplete value:
-         * A new password being created or changed.
-         */
-        private const val AUTOFILL_HINT_NEW_PASSWORD = "new-password"
     }
 }
