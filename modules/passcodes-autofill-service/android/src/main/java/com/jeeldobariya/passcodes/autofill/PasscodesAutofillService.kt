@@ -16,23 +16,10 @@ import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.autofill.HintConstants
 
+import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.AutofillFieldType
+
 @RequiresApi(Build.VERSION_CODES.O)
 class PasscodesAutofillService : AutofillService() {
-
-    private val USERNAME_HINTS = setOf(
-        HintConstants.AUTOFILL_HINT_USERNAME,
-        HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
-    )
-
-    private val PASSWORD_HINTS = setOf(
-        HintConstants.AUTOFILL_HINT_PASSWORD,
-        HintConstants.AUTOFILL_HINT_NEW_PASSWORD
-    )
-
-    enum class AutofillFieldType {
-        USERNAME,
-        PASSWORD
-    }
 
     override fun onFillRequest(
         request: FillRequest,
@@ -48,22 +35,18 @@ class PasscodesAutofillService : AutofillService() {
 
         val structure = fillContext.structure
 
-        val viewNodes =
-            mutableMapOf<AutofillFieldType, AssistStructure.ViewNode>()
-
-        parseStructure(
-            node = structure.getWindowNodeAt(0).rootViewNode,
-            viewNodes = viewNodes
-        )
+        val parser = AutofillRequestParser()
+        val parsedAutofillStructure =
+                parser.parse(structure)
 
         /*
          * Get individual autofill nodes from already parsed structure in above step.
          */
         val usernameNode =
-            viewNodes[AutofillFieldType.USERNAME]
+            parsedAutofillStructure.fields[AutofillFieldType.USERNAME]
 
         val passwordNode =
-            viewNodes[AutofillFieldType.PASSWORD]
+            parsedAutofillStructure.fields[AutofillFieldType.PASSWORD]
 
         /*
          * If this isn't a login/account form that we understand,
@@ -120,44 +103,6 @@ class PasscodesAutofillService : AutofillService() {
          * credentials from Passcodes.
          */
         callback.onSuccess()
-    }
-
-    /**
-     * Recursively walks the AssistStructure and indexes ViewNodes
-     * by Autofill hints into AutofillFieldType.
-     */
-    private fun parseStructure(
-        node: AssistStructure.ViewNode,
-        viewNodes: MutableMap<
-            AutofillFieldType,
-            AssistStructure.ViewNode
-        >
-    ) {
-
-        node.autofillHints?.forEach { hint ->
-            when {
-                hint in USERNAME_HINTS -> {
-                    viewNodes.putIfAbsent(
-                        AutofillFieldType.USERNAME,
-                        node
-                    )
-                }
-
-                hint in PASSWORD_HINTS -> {
-                    viewNodes.putIfAbsent(
-                        AutofillFieldType.PASSWORD,
-                        node
-                    )
-                }
-            }
-        }
-
-        for (index in 0 until node.childCount) {
-            parseStructure(
-                node = node.getChildAt(index),
-                viewNodes = viewNodes
-            )
-        }
     }
 
     /**
