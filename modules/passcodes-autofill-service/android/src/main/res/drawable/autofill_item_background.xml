@@ -3,8 +3,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <solid android:color="@color/passcodes_primary" />
+    <solid android:color="#34597F" />
 
-    <corners android:radius="12dp" />
+    <corners android:radius="16dp" />
 
 </shape>
