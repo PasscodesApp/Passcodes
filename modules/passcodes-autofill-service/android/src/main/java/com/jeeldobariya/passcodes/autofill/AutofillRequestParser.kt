@@ -2,20 +2,53 @@ package com.jeeldobariya.passcodes.autofill
 
 import android.app.assist.AssistStructure
 import android.text.InputType
+import android.view.View
 import androidx.autofill.HintConstants
 
+/**
+ * Parses an Autofill [AssistStructure] into the fields we care about.
+ *
+ * Instead of taking the first node that looks like a match, every node
+ * is scored as a candidate and the highest-confidence candidate per
+ * field type wins. This avoids false positives from unrelated fields
+ * (hidden inputs, disabled fields, unrelated text boxes) stealing a
+ * slot from the real username/password field.
+ */
 class AutofillRequestParser {
 
     data class ParsedAutofillRequest(
-        val fields: Map<AutofillFieldType, AssistStructure.ViewNode>,
+        val packageName: String?,
         val webDomain: String?,
         val webScheme: String?,
-        val hasHtmlNodes: Boolean
-    )
+        /** Best pick per field type. */
+        val fields: Map<AutofillFieldType, FieldCandidate>,
+        /** All web domains seen across nodes — >1 distinct value can indicate
+         *  a cross-origin iframe, which is worth treating cautiously. */
+        val distinctWebDomains: Set<String>
+    ) {
+        fun node(type: AutofillFieldType) = fields[type]?.node
+        fun autofillId(type: AutofillFieldType) = fields[type]?.node?.autofillId
+    }
 
-    enum class AutofillFieldType {
-        USERNAME,
-        PASSWORD
+    data class FieldCandidate(
+        val node: AssistStructure.ViewNode,
+        val type: AutofillFieldType,
+        val source: HintSource,
+        val isFocused: Boolean
+    ) {
+        val confidence: Int get() = source.weight + if (isFocused) FOCUS_BONUS else 0
+        companion object { private const val FOCUS_BONUS = 5 }
+    }
+
+    enum class AutofillFieldType { USERNAME, PASSWORD, NEW_PASSWORD }
+
+    /** Higher weight = more trustworthy signal. Ties broken by focus. */
+    enum class HintSource(val weight: Int) {
+        ANDROID_AUTOFILL_HINT(100),   // explicit android:autofillHints
+        HTML_AUTOCOMPLETE(90),        // autocomplete="username" / "current-password" etc.
+        HTML_TYPE_OR_NAME(80),        // <input type="password"> / name="password"
+        ANDROID_INPUT_TYPE(60),       // TYPE_TEXT_VARIATION_PASSWORD
+        VIEW_ID_OR_HINT_TEXT(40)      // idEntry/hint text contains "password"/"username"
     }
 
     private val usernameHints = setOf(
@@ -23,345 +56,150 @@ class AutofillRequestParser {
         HintConstants.AUTOFILL_HINT_EMAIL_ADDRESS
     )
 
-    private val passwordHints = setOf(
-        HintConstants.AUTOFILL_HINT_PASSWORD,
-        HintConstants.AUTOFILL_HINT_NEW_PASSWORD
-    )
-
-    fun parse(
-        structure: AssistStructure
-    ): ParsedAutofillRequest {
-
-        val fields = mutableMapOf<
-            AutofillFieldType,
-            AssistStructure.ViewNode
-        >()
-
-        var webDomain: String? = null
+    fun parse(structure: AssistStructure): ParsedAutofillRequest {
+        val packageName = structure.activityComponent?.packageName
+        val candidates = mutableListOf<FieldCandidate>()
+        val webDomains = mutableSetOf<String>()
         var webScheme: String? = null
-        var hasHtmlNodes = false
 
         for (windowIndex in 0 until structure.windowNodeCount) {
-
-            val rootNode =
-                structure
-                    .getWindowNodeAt(windowIndex)
-                    .rootViewNode
-
-            val result = parseNode(
-                node = rootNode,
-                fields = fields
-            )
-
-            if (webDomain == null) {
-                webDomain = result.webDomain
-            }
-
-            if (webScheme == null) {
-                webScheme = result.webScheme
-            }
-
-            if (result.hasHtmlNodes) {
-                hasHtmlNodes = true
-            }
+            val root = structure.getWindowNodeAt(windowIndex).rootViewNode
+            webScheme = webScheme ?: root.webScheme
+            walk(root, candidates, webDomains)
         }
+
+        val best = pickBestPerType(candidates)
 
         return ParsedAutofillRequest(
-            fields = fields,
-            webDomain = webDomain,
+            packageName = packageName,
+            webDomain = webDomains.firstOrNull(),
             webScheme = webScheme,
-            hasHtmlNodes = hasHtmlNodes
+            fields = best,
+            distinctWebDomains = webDomains
         )
     }
 
-    private data class NodeParseResult(
-        val webDomain: String?,
-        val webScheme: String?,
-        val hasHtmlNodes: Boolean
-    )
+    // ---------------------------------------------------------------
+    // Tree walk
+    // ---------------------------------------------------------------
 
-    private fun parseNode(
+    private fun walk(
         node: AssistStructure.ViewNode,
-        fields: MutableMap<
-            AutofillFieldType,
-            AssistStructure.ViewNode
-        >
-    ): NodeParseResult {
-
-        var webDomain: String? = null
-        var webScheme: String? = null
-        var hasHtmlNodes = false
-
-        // ------------------------------------------------------------
-        // 1. Website information
-        // ------------------------------------------------------------
-
-        if (node.webDomain != null) {
-            webDomain = node.webDomain
-        }
-
-        if (node.webScheme != null) {
-            webScheme = node.webScheme
-        }
-
-        // ------------------------------------------------------------
-        // 2. HTML information
-        // ------------------------------------------------------------
-
-        if (node.htmlInfo != null) {
-            hasHtmlNodes = true
-        }
-
-        // ------------------------------------------------------------
-        // 3. Official Android Autofill hints
-        // ------------------------------------------------------------
-
-        detectFromAutofillHints(
-            node = node,
-            fields = fields
-        )
-
-        // ------------------------------------------------------------
-        // 4. Basic fallback detection
-        // ------------------------------------------------------------
-
-        detectFromFallbacks(
-            node = node,
-            fields = fields
-        )
-
-        // ------------------------------------------------------------
-        // 5. Continue through child nodes
-        // ------------------------------------------------------------
-
-        for (index in 0 until node.childCount) {
-
-            val childResult = parseNode(
-                node = node.getChildAt(index),
-                fields = fields
-            )
-
-            if (webDomain == null) {
-                webDomain = childResult.webDomain
-            }
-
-            if (webScheme == null) {
-                webScheme = childResult.webScheme
-            }
-
-            if (childResult.hasHtmlNodes) {
-                hasHtmlNodes = true
-            }
-        }
-
-        return NodeParseResult(
-            webDomain = webDomain,
-            webScheme = webScheme,
-            hasHtmlNodes = hasHtmlNodes
-        )
-    }
-
-    private fun detectFromAutofillHints(
-        node: AssistStructure.ViewNode,
-        fields: MutableMap<
-            AutofillFieldType,
-            AssistStructure.ViewNode
-        >
+        candidates: MutableList<FieldCandidate>,
+        webDomains: MutableSet<String>
     ) {
+        node.webDomain?.let { webDomains.add(it) }
 
+        if (isFillable(node)) {
+            collectCandidates(node).forEach(candidates::add)
+        }
+
+        for (i in 0 until node.childCount) {
+            walk(node.getChildAt(i), candidates, webDomains)
+        }
+    }
+
+    /** Skip nodes that can never sensibly receive an autofill value. */
+    private fun isFillable(node: AssistStructure.ViewNode): Boolean {
+        if (node.autofillId == null) return false
+        if (node.autofillType == View.AUTOFILL_TYPE_NONE) return false
+        if (node.visibility != View.VISIBLE) return false
+        if (!node.isEnabled) return false
+        val importance = node.importantForAutofill
+        if (importance == View.IMPORTANT_FOR_AUTOFILL_NO ||
+            importance == View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS) return false
+        return true
+    }
+
+    // ---------------------------------------------------------------
+    // Per-node candidate detection — every applicable signal is recorded,
+    // scoring sorts out which one to trust later.
+    // ---------------------------------------------------------------
+
+    private fun collectCandidates(node: AssistStructure.ViewNode): List<FieldCandidate> {
+        val focused = node.isFocused
+        val found = mutableListOf<FieldCandidate>()
+
+        // 1. Official Android autofill hints — most trustworthy signal.
         node.autofillHints?.forEach { hint ->
-
             when {
-                hint in usernameHints -> {
-                    fields.putIfAbsent(
-                        AutofillFieldType.USERNAME,
-                        node
-                    )
+                hint == HintConstants.AUTOFILL_HINT_NEW_PASSWORD ->
+                    found += FieldCandidate(node, AutofillFieldType.NEW_PASSWORD, HintSource.ANDROID_AUTOFILL_HINT, focused)
+                hint == HintConstants.AUTOFILL_HINT_PASSWORD ->
+                    found += FieldCandidate(node, AutofillFieldType.PASSWORD, HintSource.ANDROID_AUTOFILL_HINT, focused)
+                hint in usernameHints ->
+                    found += FieldCandidate(node, AutofillFieldType.USERNAME, HintSource.ANDROID_AUTOFILL_HINT, focused)
+            }
+        }
+
+        // 2. HTML attributes (WebView forms).
+        node.htmlInfo?.let { html ->
+            if (html.tag?.trim()?.equals("input", ignoreCase = true) == true) {
+                val attrs = html.attributes
+                    ?.associate { it.first.trim().lowercase() to it.second.trim().lowercase() }
+                    .orEmpty()
+
+                val type = attrs["type"]
+                val autocomplete = attrs["autocomplete"]
+                val name = attrs["name"]
+
+                when {
+                    autocomplete == "new-password" ->
+                        found += FieldCandidate(node, AutofillFieldType.NEW_PASSWORD, HintSource.HTML_AUTOCOMPLETE, focused)
+                    autocomplete == "current-password" ->
+                        found += FieldCandidate(node, AutofillFieldType.PASSWORD, HintSource.HTML_AUTOCOMPLETE, focused)
+                    autocomplete == "username" || autocomplete == "email" ->
+                        found += FieldCandidate(node, AutofillFieldType.USERNAME, HintSource.HTML_AUTOCOMPLETE, focused)
+
+                    type == "password" || name == "password" ->
+                        found += FieldCandidate(node, AutofillFieldType.PASSWORD, HintSource.HTML_TYPE_OR_NAME, focused)
+                    name in setOf("username", "user", "email") ->
+                        found += FieldCandidate(node, AutofillFieldType.USERNAME, HintSource.HTML_TYPE_OR_NAME, focused)
                 }
-
-                hint in passwordHints -> {
-                    fields.putIfAbsent(
-                        AutofillFieldType.PASSWORD,
-                        node
-                    )
-                }
-            }
-        }
-    }
-
-    private fun detectFromFallbacks(
-        node: AssistStructure.ViewNode,
-        fields: MutableMap<
-            AutofillFieldType,
-            AssistStructure.ViewNode
-        >
-    ) {
-
-        // Don't try to guess from obviously non-fillable nodes.
-        if (node.autofillId == null) {
-            return
-        }
-
-        // ------------------------------------------------------------
-        // HTML fallback
-        // ------------------------------------------------------------
-
-        detectFromHtmlInfo(
-            node = node,
-            fields = fields
-        )
-
-        // ------------------------------------------------------------
-        // Android input type fallback
-        // ------------------------------------------------------------
-
-        if (!fields.containsKey(AutofillFieldType.PASSWORD)) {
-
-            if (isPasswordInput(node)) {
-                fields.putIfAbsent(
-                    AutofillFieldType.PASSWORD,
-                    node
-                )
             }
         }
 
-        // ------------------------------------------------------------
-        // Android View metadata fallback
-        // ------------------------------------------------------------
+        // 3. Native Android input type.
+        if (isPasswordInputType(node.inputType)) {
+            found += FieldCandidate(node, AutofillFieldType.PASSWORD, HintSource.ANDROID_INPUT_TYPE, focused)
+        }
 
-        detectFromViewMetadata(
-            node = node,
-            fields = fields
-        )
+        // 4. Weakest signal: view id / hint text guessing.
+        val hintText = node.hint?.toString()?.trim()?.lowercase()
+        val idEntry = node.idEntry?.trim()?.lowercase()
+        val idOrHintSuggestsPassword = listOf(hintText, idEntry).any {
+            it == "password" || it?.contains("password") == true
+        }
+        val idOrHintSuggestsUsername = listOf(hintText, idEntry).any {
+            it == "username" || it == "email" ||
+                it?.contains("username") == true || it?.contains("email") == true
+        }
+        if (idOrHintSuggestsPassword) {
+            found += FieldCandidate(node, AutofillFieldType.PASSWORD, HintSource.VIEW_ID_OR_HINT_TEXT, focused)
+        } else if (idOrHintSuggestsUsername) {
+            found += FieldCandidate(node, AutofillFieldType.USERNAME, HintSource.VIEW_ID_OR_HINT_TEXT, focused)
+        }
+
+        return found
     }
 
-    private fun detectFromHtmlInfo(
-        node: AssistStructure.ViewNode,
-        fields: MutableMap<
-            AutofillFieldType,
-            AssistStructure.ViewNode
-        >
-    ) {
-
-        val htmlInfo = node.htmlInfo ?: return
-
-        val tag = htmlInfo.tag
-            ?.trim()
-            ?.lowercase()
-
-        if (tag != "input") {
-            return
-        }
-
-        val attributes = htmlInfo.attributes
-            ?.associate {
-                it.first
-                    .trim()
-                    .lowercase() to it.second
-            }
-            .orEmpty()
-
-        val type = attributes["type"]
-            ?.trim()
-            ?.lowercase()
-
-        val autocomplete = attributes["autocomplete"]
-            ?.trim()
-            ?.lowercase()
-
-        val name = attributes["name"]
-            ?.trim()
-            ?.lowercase()
-
-        // Password
-        if (
-            type == "password" ||
-            autocomplete == "current-password" ||
-            autocomplete == "new-password" ||
-            name == "password"
-        ) {
-            fields.putIfAbsent(
-                AutofillFieldType.PASSWORD,
-                node
-            )
-
-            return
-        }
-
-        // Username
-        if (
-            autocomplete == "username" ||
-            autocomplete == "email" ||
-            name == "username" ||
-            name == "user" ||
-            name == "email"
-        ) {
-            fields.putIfAbsent(
-                AutofillFieldType.USERNAME,
-                node
-            )
-        }
+    private fun isPasswordInputType(inputType: Int): Boolean {
+        val variation = inputType and InputType.TYPE_MASK_VARIATION
+        return variation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
+            variation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD ||
+            variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ||
+            variation == InputType.TYPE_NUMBER_VARIATION_PASSWORD
     }
 
-    private fun isPasswordInput(
-        node: AssistStructure.ViewNode
-    ): Boolean {
+    // ---------------------------------------------------------------
+    // Resolve: highest-confidence candidate wins per type.
+    // ---------------------------------------------------------------
 
-        val inputType = node.inputType
-
-        return (
-            inputType and
-                (
-                    InputType.TYPE_TEXT_VARIATION_PASSWORD or
-                    InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD
-                )
-            ) != 0
-    }
-
-    private fun detectFromViewMetadata(
-        node: AssistStructure.ViewNode,
-        fields: MutableMap<
-            AutofillFieldType,
-            AssistStructure.ViewNode
-        >
-    ) {
-
-        val hint = node.hint
-            ?.toString()
-            ?.trim()
-            ?.lowercase()
-
-        val id = node.idEntry
-            ?.trim()
-            ?.lowercase()
-
-        // Username / email
-        if (
-            hint == "username" ||
-            hint == "email" ||
-            id == "username" ||
-            id == "email" ||
-            id?.contains("username") == true ||
-            id?.contains("email") == true
-        ) {
-            fields.putIfAbsent(
-                AutofillFieldType.USERNAME,
-                node
-            )
-
-            return
-        }
-
-        // Password
-        if (
-            hint == "password" ||
-            id == "password" ||
-            id?.contains("password") == true
-        ) {
-            fields.putIfAbsent(
-                AutofillFieldType.PASSWORD,
-                node
-            )
-        }
+    private fun pickBestPerType(
+        candidates: List<FieldCandidate>
+    ): Map<AutofillFieldType, FieldCandidate> {
+        return candidates
+            .groupBy { it.type }
+            .mapValues { (_, group) -> group.maxBy { it.confidence } }
     }
 }

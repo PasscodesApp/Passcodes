@@ -43,10 +43,10 @@ class PasscodesAutofillService : AutofillService() {
          * Get individual autofill nodes from already parsed structure in above step.
          */
         val usernameNode =
-            parsedAutofillStructure.fields[AutofillFieldType.USERNAME]
+            parsedAutofillStructure.node(AutofillFieldType.USERNAME)
 
         val passwordNode =
-            parsedAutofillStructure.fields[AutofillFieldType.PASSWORD]
+            parsedAutofillStructure.node(AutofillFieldType.PASSWORD)
 
         /*
          * If this isn't a login/account form that we understand,
