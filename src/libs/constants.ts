@@ -1,8 +1,8 @@
 export default {
   appname: "Passcodes",
-  version: "v4.0.0 - RC9",
+  version: "v4.0.0 - RC.1",
   build: {
-    version: "v4.0.0-RC9",
+    version: "v4.0.0-RC.1",
     versionCodeAndroid: 10,
     versionCodeIos: "1.0.0",
   },
