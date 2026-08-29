@@ -1,68 +1,130 @@
-interface PasswordOptions {
+export const MIN_PASSWORD_LENGTH = 8;
+export const MAX_PASSWORD_LENGTH = 64;
+
+const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+const NUMBERS = "0123456789";
+const SYMBOLS = "!@#$%^&*()-_=+[]{};:,.<>?";
+
+export type PasswordGeneratorOptions = {
   length: number;
-  letters?: boolean; // A-Z + a-z (one option)
-  numbers?: boolean; // 0-9
-  symbols?: boolean; // !@#$%^&* etc.
+  uppercase: boolean;
+  lowercase: boolean;
+  numbers: boolean;
+  symbols: boolean;
+};
+
+export type PasswordStrength = {
+  score: number;
+  label: "Weak" | "Medium" | "Strong";
+};
+
+export type CharacterType = keyof Omit<PasswordGeneratorOptions, "length">;
+
+function randomCharacter(characters: string): string {
+  return characters[Math.floor(Math.random() * characters.length)];
 }
 
-export function generatePassword(options: PasswordOptions): string {
-  // Default: everything enabled
-  const { length, letters = true, numbers = true, symbols = true } = options;
+export function generatePassword(options: PasswordGeneratorOptions): string {
+  const characterSets: string[] = [];
 
-  const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lower = "abcdefghijklmnopqrstuvwxyz";
-  const nums = "0123456789";
-  const syms = "!@#$%^&*()_+-=[]{}|;:,.<>?";
-
-  let allChars = "";
-  const guaranteed: string[] = [];
-
-  if (letters) {
-    allChars += upper + lower;
-    // Guarantee at least one upper and one lower
-    guaranteed.push(upper[secureRandom(upper.length)]);
-    guaranteed.push(lower[secureRandom(lower.length)]);
+  if (options.uppercase) {
+    characterSets.push(UPPERCASE);
   }
 
-  // Numbers
-  if (numbers) {
-    allChars += nums;
-    guaranteed.push(nums[secureRandom(nums.length)]);
+  if (options.lowercase) {
+    characterSets.push(LOWERCASE);
   }
 
-  // Symbols
-  if (symbols) {
-    allChars += syms;
-    guaranteed.push(syms[secureRandom(syms.length)]);
+  if (options.numbers) {
+    characterSets.push(NUMBERS);
   }
 
-  // Validation
-  if (!allChars) {
-    throw new Error("Please select at least one character type.");
+  if (options.symbols) {
+    characterSets.push(SYMBOLS);
   }
 
-  if (guaranteed.length > length) {
-    throw new Error("Too many required character types for the fixed length.");
+  if (characterSets.length === 0) {
+    return "";
   }
 
-  // Fill remaining characters
-  const passwordChars = [...guaranteed];
-  while (passwordChars.length < length) {
-    passwordChars.push(allChars[secureRandom(allChars.length)]);
+  const allCharacters = characterSets.join("");
+
+  const characters: string[] = [];
+
+  // Guarantee that every selected character type
+  // appears at least once.
+  for (const characterSet of characterSets) {
+    characters.push(randomCharacter(characterSet));
   }
 
-  // Shuffle so guaranteed characters are not always at the start
-  for (let i = passwordChars.length - 1; i > 0; i--) {
-    const j = secureRandom(i + 1);
-    [passwordChars[i], passwordChars[j]] = [passwordChars[j], passwordChars[i]];
+  while (characters.length < options.length) {
+    characters.push(randomCharacter(allCharacters));
   }
 
-  return passwordChars.join("");
+  // Fisher-Yates shuffle.
+  for (let i = characters.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [characters[i], characters[j]] = [characters[j], characters[i]];
+  }
+
+  return characters.join("");
 }
 
-// Cryptographically secure random number
-function secureRandom(max: number): number {
-  const array = new Uint32Array(1);
-  crypto.getRandomValues(array);
-  return array[0] % max;
+export function getPasswordStrength(
+  options: PasswordGeneratorOptions,
+): PasswordStrength {
+  let score = 0;
+
+  if (options.length >= 12) {
+    score++;
+  }
+
+  if (options.length >= 20) {
+    score++;
+  }
+
+  if (options.uppercase) {
+    score++;
+  }
+
+  if (options.lowercase) {
+    score++;
+  }
+
+  if (options.numbers) {
+    score++;
+  }
+
+  if (options.symbols) {
+    score++;
+  }
+
+  if (score <= 2) {
+    return {
+      score,
+      label: "Weak",
+    };
+  }
+
+  if (score <= 4) {
+    return {
+      score,
+      label: "Medium",
+    };
+  }
+
+  return {
+    score,
+    label: "Strong",
+  };
 }
+
+export const DEFAULT_PASSWORD_OPTIONS: PasswordGeneratorOptions = {
+  length: 20,
+  uppercase: true,
+  lowercase: true,
+  numbers: true,
+  symbols: true,
+};

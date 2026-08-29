@@ -16,6 +16,20 @@ export default function TabLayout() {
           title: "Passcodes",
           tabBarIcon: ({ size, color }) => (
             <FontAwesome6
+              name="house-user"
+              size={size}
+              color={color}
+              iconStyle="solid"
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="password-generator"
+        options={{
+          title: "Generate",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6
               name="key"
               size={size}
               color={color}
