@@ -33,7 +33,7 @@
             android:id="@+id/autofill_domain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="@color/md_on_primary"
             android:textSize="16sp"
             android:textStyle="bold"
             android:maxLines="1"
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="?attr/colorPrimaryContainer"
+            android:textColor="@color/md_primary_container"
             android:textSize="14sp"
             android:maxLines="1"
             android:ellipsize="end" />
