@@ -18,12 +18,14 @@
     "deploy:x86_64": "eas build --profile deploy-x86_64 --platform android --local"
   },
   "dependencies": {
+    "@react-native-community/slider": "5.2.0",
     "@react-native-vector-icons/fontawesome6": "^13.1.2",
     "@shopify/flash-list": "2.0.2",
     "babel-plugin-inline-import": "^3.0.0",
     "drizzle-orm": "^0.45.2",
     "expo": "~57.0.18",
     "expo-build-properties": "~57.0.15",
+    "expo-clipboard": "~57.0.1",
     "expo-constants": "~57.0.3",
     "expo-dev-client": "~57.0.16",
     "expo-file-system": "~57.0.0",
