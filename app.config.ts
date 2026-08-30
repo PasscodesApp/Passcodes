@@ -145,8 +145,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     expoScreenOrientationPlugin({
       initialOrientation: "PORTRAIT",
     }),
-    "./plugins/withProtectUserData.ts",
     "@react-native-vector-icons/fontawesome6",
+    "./plugins/withProtectUserData.ts",
   ],
   experiments: {
     typedRoutes: true,

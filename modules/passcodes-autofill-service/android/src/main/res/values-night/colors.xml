@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ========================================================= -->
+    <!-- Passcodes Material 3 - Dark Color Scheme                  -->
+    <!-- ========================================================= -->
+
+    <!-- Primary -->
+    <color name="md_primary">#9ECAFF</color>
+    <color name="md_on_primary">#003258</color>
+    <color name="md_primary_container">#17496F</color>
+    <color name="md_on_primary_container">#D1E4FF</color>
+
+    <!-- Secondary -->
+    <color name="md_secondary">#BBC7DA</color>
+    <color name="md_on_secondary">#253140</color>
+    <color name="md_secondary_container">#3B4858</color>
+    <color name="md_on_secondary_container">#D7E3F7</color>
+
+    <!-- Tertiary -->
+    <color name="md_tertiary">#D6BDE5</color>
+    <color name="md_on_tertiary">#3B2948</color>
+    <color name="md_tertiary_container">#523F5F</color>
+    <color name="md_on_tertiary_container">#F2DAFF</color>
+
+    <!-- Error -->
+    <color name="md_error">#FFB4AB</color>
+    <color name="md_on_error">#690005</color>
+    <color name="md_error_container">#93000A</color>
+    <color name="md_on_error_container">#FFDAD6</color>
+
+    <!-- Background -->
+    <color name="md_background">#111416</color>
+    <color name="md_on_background">#E1E2E5</color>
+
+    <!-- Surface -->
+    <color name="md_surface">#111416</color>
+    <color name="md_on_surface">#E1E2E5</color>
+
+    <color name="md_surface_variant">#43474E</color>
+    <color name="md_on_surface_variant">#C3C7CF</color>
+
+    <!-- Outline -->
+    <color name="md_outline">#8D9199</color>
+    <color name="md_outline_variant">#43474E</color>
+
+    <!-- Inverse -->
+    <color name="md_inverse_surface">#E1E2E5</color>
+    <color name="md_inverse_on_surface">#2E3033</color>
+    <color name="md_inverse_primary">#34597F</color>
+
+    <!-- System -->
+    <color name="md_shadow">#000000</color>
+    <color name="md_scrim">#000000</color>
+    <color name="md_surface_tint">#9ECAFF</color>
+
+</resources>

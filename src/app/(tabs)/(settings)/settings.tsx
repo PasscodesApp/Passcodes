@@ -30,6 +30,8 @@ import { Alert, ScrollView } from "react-native";
 import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
+
 export default function SettingsScreen() {
   const [isAppLockEnabled, setIsAppLockEnabled] = useState(
     isBiometricsAuthEnabled(),
@@ -42,6 +44,10 @@ export default function SettingsScreen() {
   );
   const toggleScreenshotPreventSwitch = () =>
     setIsScreenshotPreventEnabled(toggleScreenshotPreventionFeature());
+
+  const [isAutofillEnabled, setIsAutofillEnabled] = useState(
+    PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
+  );
 
   const theme = useTheme();
   let db = useSQLiteContext();
@@ -205,6 +211,69 @@ export default function SettingsScreen() {
                     "Exporting passwords is protected by App Lock.",
                   );
                 }
+              }}
+            />
+          </List.Section>
+        </Card>
+
+        <Card>
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              title="Autofill"
+              description={
+                isAutofillEnabled
+                  ? "Passcodes is your active Autofill Service"
+                  : "Passcodes Autofill is not enabled"
+              }
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="key"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={() => (
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    color: isAutofillEnabled
+                      ? theme.colors.primary
+                      : theme.colors.onSurfaceVariant,
+                    fontWeight: "600",
+                  }}
+                >
+                  {isAutofillEnabled ? "Enabled" : "Disabled"}
+                </Text>
+              )}
+              onPress={() => {
+                PasscodesAutofillServiceModule.openAutofillSettings();
+              }}
+            />
+
+            <Divider />
+
+            <List.Item
+              title="Autofill Settings"
+              description="Choose Passcodes as your Autofill Service"
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="gear"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="chevron-right"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              onPress={() => {
+                PasscodesAutofillServiceModule.openAutofillSettings();
               }}
             />
           </List.Section>

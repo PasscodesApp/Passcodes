@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- ========================================================= -->
+    <!-- Passcodes Material 3 - Light Color Scheme                 -->
+    <!-- ========================================================= -->
+
+    <!-- Primary -->
+    <color name="md_primary">#34597F</color>
+    <color name="md_on_primary">#FFFFFF</color>
+    <color name="md_primary_container">#C7D4E8</color>
+    <color name="md_on_primary_container">#0F1D2A</color>
+
+    <!-- Secondary -->
+    <color name="md_secondary">#535F70</color>
+    <color name="md_on_secondary">#FFFFFF</color>
+    <color name="md_secondary_container">#D7E3F7</color>
+    <color name="md_on_secondary_container">#101C2B</color>
+
+    <!-- Tertiary -->
+    <color name="md_tertiary">#6B5778</color>
+    <color name="md_on_tertiary">#FFFFFF</color>
+    <color name="md_tertiary_container">#F2DAFF</color>
+    <color name="md_on_tertiary_container">#251431</color>
+
+    <!-- Error -->
+    <color name="md_error">#BA1A1A</color>
+    <color name="md_on_error">#FFFFFF</color>
+    <color name="md_error_container">#FFDAD6</color>
+    <color name="md_on_error_container">#410002</color>
+
+    <!-- Background -->
+    <color name="md_background">#FDFCFF</color>
+    <color name="md_on_background">#1A1C1E</color>
+
+    <!-- Surface -->
+    <color name="md_surface">#FDFCFF</color>
+    <color name="md_on_surface">#1A1C1E</color>
+
+    <color name="md_surface_variant">#DFE2EB</color>
+    <color name="md_on_surface_variant">#43474E</color>
+
+    <!-- Outline -->
+    <color name="md_outline">#73777F</color>
+    <color name="md_outline_variant">#C3C7CF</color>
+
+    <!-- Inverse -->
+    <color name="md_inverse_surface">#2F3033</color>
+    <color name="md_inverse_on_surface">#F1F0F4</color>
+    <color name="md_inverse_primary">#9ECAFF</color>
+
+    <!-- System -->
+    <color name="md_shadow">#000000</color>
+    <color name="md_scrim">#000000</color>
+    <color name="md_surface_tint">#34597F</color>
+
+</resources>
