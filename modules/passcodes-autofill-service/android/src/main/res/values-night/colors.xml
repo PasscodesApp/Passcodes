@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Primary -->
+    <color name="md_primary">#9ECAFF</color>
+    <color name="md_on_primary">#003258</color>
+    <color name="md_primary_container">#00497D</color>
+    <color name="md_on_primary_container">#D1E4FF</color>
+
+    <!-- Secondary -->
+    <color name="md_secondary">#BBC7DB</color>
+    <color name="md_on_secondary">#253140</color>
+    <color name="md_secondary_container">#3B4858</color>
+    <color name="md_on_secondary_container">#D7E3F7</color>
+
+    <!-- Tertiary -->
+    <color name="md_tertiary">#D6BEE4</color>
+    <color name="md_on_tertiary">#3B2948</color>
+    <color name="md_tertiary_container">#523F5F</color>
+    <color name="md_on_tertiary_container">#F2DAFF</color>
+
+    <!-- Error -->
+    <color name="md_error">#FFB4AB</color>
+    <color name="md_on_error">#690005</color>
+    <color name="md_error_container">#93000A</color>
+    <color name="md_on_error_container">#FFDAD6</color>
+
+    <!-- Background / Surface -->
+    <color name="md_background">#1A1C1E</color>
+    <color name="md_on_background">#E2E2E6</color>
+    <color name="md_surface">#1A1C1E</color>
+    <color name="md_on_surface">#E2E2E6</color>
+    <color name="md_surface_variant">#43474E</color>
+    <color name="md_on_surface_variant">#C3C7CF</color>
+
+    <!-- Outline -->
+    <color name="md_outline">#8D9199</color>
+    <color name="md_outline_variant">#43474E</color>
+
+    <!-- Misc -->
+    <color name="md_shadow">#000000</color>
+    <color name="md_scrim">#000000</color>
+    <color name="md_inverse_surface">#E2E2E6</color>
+    <color name="md_inverse_on_surface">#2F3033</color>
+    <color name="md_inverse_primary">#0061A4</color>
+    <color name="md_surface_tint">#9ECAFF</color>
+
+</resources>
