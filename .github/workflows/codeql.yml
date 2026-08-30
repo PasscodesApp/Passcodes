@@ -31,14 +31,32 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
+      # Node is required for Expo CLI / prebuild
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      # Install package.json dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Generate android/ from app.config.ts + config plugins
+      - name: Expo Prebuild
+        if: matrix.language == 'java-kotlin'
+        run: npx expo prebuild --clean --no-install
+
+      # Initialize CodeQL BEFORE compiling Kotlin
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
 
+      # CodeQL watches this compilation
       - name: Build Android
         if: matrix.language == 'java-kotlin'
         working-directory: android
@@ -46,6 +64,7 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
+      # Analyze what CodeQL observed
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
