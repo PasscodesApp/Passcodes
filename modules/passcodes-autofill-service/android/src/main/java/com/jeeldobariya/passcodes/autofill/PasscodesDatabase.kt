@@ -29,7 +29,7 @@ class PasscodesDatabase(context: Context) {
         if (!databaseFile.exists()) return emptyList()
         
         return try {
-            openDatabase(readOnly = true).use { db -> queryAll(db) }
+            openDatabase().use { db -> queryAll(db) }
         } catch (e: Exception) {
             Log.e(TAG, "getAllPasswords failed", e)
             emptyList()
@@ -62,7 +62,7 @@ class PasscodesDatabase(context: Context) {
         }
 
         return try {
-            openDatabase(readOnly = true).use { db ->
+            openDatabase().use { db ->
                 val matches = queryFiltered(db, normalizedWebDomain, normalizedPackage)
                 if (matches.isEmpty() && fallbackToAll) queryAll(db) else matches
             }
@@ -263,7 +263,7 @@ class PasscodesDatabase(context: Context) {
 
     private fun Cursor.getStringOrNull(index: Int): String? = if (isNull(index)) null else getString(index)
 
-    private fun openDatabase(readOnly: Boolean): SQLiteDatabase {
+    private fun openDatabase(readOnly: Boolean = true): SQLiteDatabase {
         val flags = if (readOnly) SQLiteDatabase.OPEN_READONLY else SQLiteDatabase.OPEN_READWRITE
         return SQLiteDatabase.openDatabase(
             databaseFile.absolutePath,
