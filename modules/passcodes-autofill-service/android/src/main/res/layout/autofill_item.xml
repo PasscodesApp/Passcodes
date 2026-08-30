@@ -33,7 +33,7 @@
             android:id="@+id/autofill_domain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/passcodes_on_primary"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
             android:maxLines="1"
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="@color/passcodes_on_primary_variant"
+            android:textColor="?attr/colorPrimaryContainer"
             android:textSize="14sp"
             android:maxLines="1"
             android:ellipsize="end" />

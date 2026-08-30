@@ -176,10 +176,12 @@
 
                         </LinearLayout>
 
-                        <com.google.android.material.switchmaterial.SwitchMaterial
+                        <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/autofill_authentication_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:checked="false"
                             android:contentDescription="Require authentication before autofill" />
 
                     </LinearLayout>
@@ -223,10 +225,11 @@
 
                         </LinearLayout>
 
-                        <com.google.android.material.switchmaterial.SwitchMaterial
+                        <com.google.android.material.materialswitch.MaterialSwitch
                             android:id="@+id/autofill_inline_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:checked="true"
                             android:contentDescription="Show inline Autofill suggestions" />
 
