@@ -1,0 +1,109 @@
+name: CodeQL
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # ============================================================
+  # JavaScript / TypeScript
+  # ============================================================
+
+  analyze-javascript:
+    name: Analyze JavaScript / TypeScript
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:javascript-typescript"
+
+  # ============================================================
+  # Kotlin / Android
+  # ============================================================
+
+  analyze-kotlin:
+    name: Analyze Kotlin / Android
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Check whether Kotlin-related files changed
+        id: changes
+        uses: dorny/paths-filter@v4
+        with:
+          filters: |
+            kotlin:
+              - 'modules/**'
+              - 'plugins/**'
+
+      - name: Setup Node
+        if: steps.changes.outputs.kotlin == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Setup Java
+        if: steps.changes.outputs.kotlin == 'true'
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install dependencies
+        if: steps.changes.outputs.kotlin == 'true'
+        run: npm ci
+
+      - name: Expo Prebuild
+        if: steps.changes.outputs.kotlin == 'true'
+        run: npx expo prebuild --clean --no-install
+
+      - name: Initialize CodeQL
+        if: steps.changes.outputs.kotlin == 'true'
+        uses: github/codeql-action/init@v4
+        with:
+          languages: java-kotlin
+          build-mode: manual
+
+      - name: Build Android
+        if: steps.changes.outputs.kotlin == 'true'
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Perform CodeQL Analysis
+        if: steps.changes.outputs.kotlin == 'true'
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:java-kotlin"
