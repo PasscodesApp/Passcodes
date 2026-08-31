@@ -1,5 +1,6 @@
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
+import { useToast } from "@/contexts/ToastContext";
 
 import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
@@ -12,10 +13,10 @@ import { Href, router, useLocalSearchParams } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
 import { useSQLiteContext } from "expo-sqlite";
 
-import { useEffect, useRef, useState } from "react";
-import { Animated, Keyboard, ScrollView, TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Keyboard, ScrollView, TextInput, View } from "react-native";
 
-import { Button, FAB, Text } from "react-native-paper";
+import { Button, FAB } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
@@ -33,13 +34,7 @@ export default function PasswordDetailsScreen() {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  /*
-   * Toast state
-   */
-  const [toastMessage, setToastMessage] = useState("");
-
-  const toastOpacity = useRef(new Animated.Value(0)).current;
-  const toastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { showToast } = useToast();
 
   getScreenShotSecureScreen();
 
@@ -54,33 +49,6 @@ export default function PasswordDetailsScreen() {
   function unfocusAllFields() {
     TextInput.State.currentlyFocusedInput()?.blur();
     Keyboard.dismiss();
-  }
-
-  /**
-   * Show a small cross-platform feedback message.
-   */
-  function showToast(message: string) {
-    if (toastTimeout.current) {
-      clearTimeout(toastTimeout.current);
-    }
-
-    setToastMessage(message);
-
-    Animated.timing(toastOpacity, {
-      toValue: 1,
-      duration: 150,
-      useNativeDriver: true,
-    }).start();
-
-    toastTimeout.current = setTimeout(() => {
-      Animated.timing(toastOpacity, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start(() => {
-        setToastMessage("");
-      });
-    }, 2200);
   }
 
   async function loadAndRefreshPassword() {
@@ -157,12 +125,6 @@ export default function PasswordDetailsScreen() {
 
   useEffect(() => {
     loadAndRefreshPassword();
-
-    return () => {
-      if (toastTimeout.current) {
-        clearTimeout(toastTimeout.current);
-      }
-    };
   }, []);
 
   return (
@@ -279,60 +241,6 @@ export default function PasswordDetailsScreen() {
         )}
         onPress={handleFabPress}
       />
-
-      {/*
-       * Cross-platform feedback toast
-       */}
-      {toastMessage !== "" && (
-        <Animated.View
-          pointerEvents="none"
-          style={{
-            position: "absolute",
-            left: 20,
-            right: 20,
-            bottom: 35,
-            alignItems: "center",
-            opacity: toastOpacity,
-            transform: [
-              {
-                translateY: toastOpacity.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [10, 0],
-                }),
-              },
-            ],
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 8,
-              paddingHorizontal: 16,
-              paddingVertical: 10,
-              borderRadius: 24,
-              elevation: 4,
-              backgroundColor: "#323232",
-            }}
-          >
-            <FontAwesome6
-              name="check"
-              size={16}
-              color="#ffffff"
-              iconStyle="solid"
-            />
-
-            <Text
-              variant="bodyMedium"
-              style={{
-                color: "#ffffff",
-              }}
-            >
-              {toastMessage}
-            </Text>
-          </View>
-        </Animated.View>
-      )}
     </SafeAreaView>
   );
 }
