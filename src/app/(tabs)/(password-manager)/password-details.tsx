@@ -1,17 +1,21 @@
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
+
 import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
 import formatDate from "@/utils/formating";
+
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Href, router, useLocalSearchParams } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
 import { useSQLiteContext } from "expo-sqlite";
-import { useEffect, useState } from "react";
-import { Keyboard, ScrollView, View } from "react-native";
-import { Button } from "react-native-paper";
+
+import { useEffect, useRef, useState } from "react";
+import { Animated, Keyboard, ScrollView, TextInput, View } from "react-native";
+
+import { Button, FAB, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
@@ -29,7 +33,55 @@ export default function PasswordDetailsScreen() {
 
   const [isEditing, setIsEditing] = useState(false);
 
+  /*
+   * Toast state
+   */
+  const [toastMessage, setToastMessage] = useState("");
+
+  const toastOpacity = useRef(new Animated.Value(0)).current;
+  const toastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   getScreenShotSecureScreen();
+
+  /**
+   * Remove focus from whichever TextInput is currently focused
+   * and dismiss the keyboard.
+   *
+   * This is important because Keyboard.dismiss() alone can leave
+   * the native TextInput focused, which can leave the focus outline
+   * visible after leaving edit mode.
+   */
+  function unfocusAllFields() {
+    TextInput.State.currentlyFocusedInput()?.blur();
+    Keyboard.dismiss();
+  }
+
+  /**
+   * Show a small cross-platform feedback message.
+   */
+  function showToast(message: string) {
+    if (toastTimeout.current) {
+      clearTimeout(toastTimeout.current);
+    }
+
+    setToastMessage(message);
+
+    Animated.timing(toastOpacity, {
+      toValue: 1,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+
+    toastTimeout.current = setTimeout(() => {
+      Animated.timing(toastOpacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start(() => {
+        setToastMessage("");
+      });
+    }, 2200);
+  }
 
   async function loadAndRefreshPassword() {
     const result = await drizzleDb
@@ -50,6 +102,14 @@ export default function PasswordDetailsScreen() {
   }
 
   async function updatePassword() {
+    /*
+     * Blur BEFORE changing isEditing.
+     *
+     * This prevents the TextInput from remaining focused when
+     * it becomes read-only.
+     */
+    unfocusAllFields();
+
     await drizzleDb
       .update(passwords)
       .set({
@@ -62,26 +122,58 @@ export default function PasswordDetailsScreen() {
       })
       .where(eq(passwords.id, Number(id)));
 
-    Keyboard.dismiss();
     setIsEditing(false);
-    router.back();
+
+    await loadAndRefreshPassword();
+
+    showToast("Password saved successfully");
+  }
+
+  function handleCancel() {
+    /*
+     * Remove focus before switching the inputs to read-only.
+     */
+    unfocusAllFields();
+
+    setIsEditing(false);
+
+    /*
+     * Restore the values from the database.
+     */
+    loadAndRefreshPassword();
+
+    showToast("Changes discarded");
+  }
+
+  function handleFabPress() {
+    if (isEditing) {
+      updatePassword();
+    } else {
+      setIsEditing(true);
+    }
   }
 
   usePreventRemove(isEditing, () => {
-    Keyboard.dismiss();
+    /*
+     * If the user uses the Android back gesture/button while editing,
+     * make sure the active TextInput loses focus first.
+     */
+    unfocusAllFields();
+
     setIsEditing(false);
+
     loadAndRefreshPassword();
   });
 
   useEffect(() => {
     loadAndRefreshPassword();
-  }, []);
 
-  function handleCancel() {
-    Keyboard.dismiss();
-    setIsEditing(false);
-    loadAndRefreshPassword();
-  }
+    return () => {
+      if (toastTimeout.current) {
+        clearTimeout(toastTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -89,6 +181,7 @@ export default function PasswordDetailsScreen() {
         contentContainerStyle={{
           margin: 20,
           gap: 24,
+          paddingBottom: 100,
         }}
         keyboardShouldPersistTaps="handled"
       >
@@ -146,69 +239,110 @@ export default function PasswordDetailsScreen() {
             gap: 4,
           }}
         >
-          {!isEditing ? (
-            <>
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome6
-                    name="pencil"
-                    size={size}
-                    color={color}
-                    iconStyle="solid"
-                  />
-                )}
-                onPress={() => setIsEditing(true)}
-              >
-                Edit
-              </Button>
+          {!isEditing && (
+            <Button
+              icon={({ size, color }) => (
+                <FontAwesome6
+                  name="link"
+                  size={size}
+                  color={color}
+                  iconStyle="solid"
+                />
+              )}
+              onPress={() => router.navigate(url as Href)}
+            >
+              Open
+            </Button>
+          )}
 
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome6
-                    name="link"
-                    size={size}
-                    color={color}
-                    iconStyle="solid"
-                  />
-                )}
-                onPress={() => router.navigate(url as Href)}
-              >
-                Open
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome6
-                    name="store"
-                    size={size}
-                    color={color}
-                    iconStyle="solid"
-                  />
-                )}
-                onPress={updatePassword}
-              >
-                Save
-              </Button>
-
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome6
-                    name="xmark"
-                    size={size}
-                    color={color}
-                    iconStyle="solid"
-                  />
-                )}
-                onPress={handleCancel}
-              >
-                Cancel
-              </Button>
-            </>
+          {isEditing && (
+            <Button
+              icon={({ size, color }) => (
+                <FontAwesome6
+                  name="xmark"
+                  size={size}
+                  color={color}
+                  iconStyle="solid"
+                />
+              )}
+              onPress={handleCancel}
+            >
+              Cancel
+            </Button>
           )}
         </View>
       </ScrollView>
+
+      <FAB
+        style={{
+          position: "absolute",
+          bottom: 35,
+          right: 35,
+        }}
+        icon={({ size, color }) => (
+          <FontAwesome6
+            name={isEditing ? "check" : "pencil"}
+            size={size}
+            color={color}
+            iconStyle="solid"
+          />
+        )}
+        onPress={handleFabPress}
+      />
+
+      {/*
+       * Cross-platform feedback toast
+       */}
+      {toastMessage !== "" && (
+        <Animated.View
+          pointerEvents="none"
+          style={{
+            position: "absolute",
+            left: 20,
+            right: 20,
+            bottom: 35,
+            alignItems: "center",
+            opacity: toastOpacity,
+            transform: [
+              {
+                translateY: toastOpacity.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [10, 0],
+                }),
+              },
+            ],
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+              paddingHorizontal: 16,
+              paddingVertical: 10,
+              borderRadius: 24,
+              elevation: 4,
+              backgroundColor: "#323232",
+            }}
+          >
+            <FontAwesome6
+              name="check"
+              size={16}
+              color="#ffffff"
+              iconStyle="solid"
+            />
+
+            <Text
+              variant="bodyMedium"
+              style={{
+                color: "#ffffff",
+              }}
+            >
+              {toastMessage}
+            </Text>
+          </View>
+        </Animated.View>
+      )}
     </SafeAreaView>
   );
 }
