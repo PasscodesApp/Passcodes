@@ -1,4 +1,5 @@
 import ScreenHeading from "@/components/ScreenHeading";
+import { ToastProvider } from "@/contexts/ToastContext";
 import DatabaseProvider from "@/db/provider";
 import {
   isBiometricsAuthEnabled,
@@ -97,7 +98,9 @@ function AppContent() {
   return (
     <ThemeProvider value={isDarkScheme ? DarkTheme : DefaultTheme}>
       <PaperProvider>
-        <Slot />
+        <ToastProvider>
+          <Slot />
+        </ToastProvider>
       </PaperProvider>
     </ThemeProvider>
   );

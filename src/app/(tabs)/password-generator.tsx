@@ -312,9 +312,8 @@ function StrengthIndicator({ score }: { score: number }) {
       </View>
 
       <View style={styles.strengthLabels}>
-        <Text variant="labelSmall">Weak</Text>
-
-        <Text variant="labelSmall">Strong</Text>
+        <Text variant="labelSmall">Weak </Text>
+        <Text variant="labelSmall">Strong </Text>
       </View>
     </View>
   );

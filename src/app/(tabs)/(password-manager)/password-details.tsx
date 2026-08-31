@@ -1,17 +1,22 @@
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
+import { useToast } from "@/contexts/ToastContext";
+
 import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
 import formatDate from "@/utils/formating";
+
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Href, router, useLocalSearchParams } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
 import { useSQLiteContext } from "expo-sqlite";
+
 import { useEffect, useState } from "react";
-import { Keyboard, ScrollView, View } from "react-native";
-import { Button } from "react-native-paper";
+import { Keyboard, ScrollView, TextInput, View } from "react-native";
+
+import { Button, FAB } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
@@ -29,7 +34,22 @@ export default function PasswordDetailsScreen() {
 
   const [isEditing, setIsEditing] = useState(false);
 
+  const { showToast } = useToast();
+
   getScreenShotSecureScreen();
+
+  /**
+   * Remove focus from whichever TextInput is currently focused
+   * and dismiss the keyboard.
+   *
+   * This is important because Keyboard.dismiss() alone can leave
+   * the native TextInput focused, which can leave the focus outline
+   * visible after leaving edit mode.
+   */
+  function unfocusAllFields() {
+    TextInput.State.currentlyFocusedInput()?.blur();
+    Keyboard.dismiss();
+  }
 
   async function loadAndRefreshPassword() {
     const result = await drizzleDb
@@ -50,38 +70,67 @@ export default function PasswordDetailsScreen() {
   }
 
   async function updatePassword() {
-    await drizzleDb
-      .update(passwords)
-      .set({
-        domain,
-        username,
-        password,
-        url,
-        notes,
-        updatedAt: new Date().toISOString(),
-      })
-      .where(eq(passwords.id, Number(id)));
+    /*
+     * Blur BEFORE changing isEditing.
+     *
+     * This prevents the TextInput from remaining focused when
+     * it becomes read-only.
+     */
+    unfocusAllFields();
 
-    Keyboard.dismiss();
-    setIsEditing(false);
-    router.back();
+    try {
+      await drizzleDb
+        .update(passwords)
+        .set({
+          domain,
+          username,
+          password,
+          url,
+          notes,
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(passwords.id, Number(id)));
+
+      setIsEditing(false);
+
+      await loadAndRefreshPassword();
+
+      showToast("Password updated successfully");
+    } catch (error) {
+      showToast("Failed to update; please try again", "error");
+      console.error("Failed to update password:", error);
+    }
   }
 
-  usePreventRemove(isEditing, () => {
-    Keyboard.dismiss();
+  function handleCancel() {
+    /*
+     * Remove focus before switching the inputs to read-only.
+     */
+    unfocusAllFields();
+
     setIsEditing(false);
+
+    /*
+     * Restore the values from the database.
+     */
     loadAndRefreshPassword();
-  });
+
+    showToast("Changes discarded");
+  }
+
+  function handleFabPress() {
+    if (isEditing) {
+      updatePassword();
+    } else {
+      setIsEditing(true);
+    }
+  }
+
+  usePreventRemove(isEditing, () => handleCancel());
 
   useEffect(() => {
     loadAndRefreshPassword();
   }, []);
-
-  function handleCancel() {
-    Keyboard.dismiss();
-    setIsEditing(false);
-    loadAndRefreshPassword();
-  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -89,6 +138,7 @@ export default function PasswordDetailsScreen() {
         contentContainerStyle={{
           margin: 20,
           gap: 24,
+          paddingBottom: 100,
         }}
         keyboardShouldPersistTaps="handled"
       >
@@ -146,69 +196,56 @@ export default function PasswordDetailsScreen() {
             gap: 4,
           }}
         >
-          {!isEditing ? (
-            <>
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome6
-                    name="pencil"
-                    size={size}
-                    color={color}
-                    iconStyle="solid"
-                  />
-                )}
-                onPress={() => setIsEditing(true)}
-              >
-                Edit
-              </Button>
+          {!isEditing && (
+            <Button
+              icon={({ size, color }) => (
+                <FontAwesome6
+                  name="link"
+                  size={size}
+                  color={color}
+                  iconStyle="solid"
+                />
+              )}
+              onPress={() => router.navigate(url as Href)}
+            >
+              Open
+            </Button>
+          )}
 
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome6
-                    name="link"
-                    size={size}
-                    color={color}
-                    iconStyle="solid"
-                  />
-                )}
-                onPress={() => router.navigate(url as Href)}
-              >
-                Open
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome6
-                    name="store"
-                    size={size}
-                    color={color}
-                    iconStyle="solid"
-                  />
-                )}
-                onPress={updatePassword}
-              >
-                Save
-              </Button>
-
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome6
-                    name="xmark"
-                    size={size}
-                    color={color}
-                    iconStyle="solid"
-                  />
-                )}
-                onPress={handleCancel}
-              >
-                Cancel
-              </Button>
-            </>
+          {isEditing && (
+            <Button
+              icon={({ size, color }) => (
+                <FontAwesome6
+                  name="xmark"
+                  size={size}
+                  color={color}
+                  iconStyle="solid"
+                />
+              )}
+              onPress={handleCancel}
+            >
+              Cancel
+            </Button>
           )}
         </View>
       </ScrollView>
+
+      <FAB
+        style={{
+          position: "absolute",
+          bottom: 35,
+          right: 35,
+        }}
+        icon={({ size, color }) => (
+          <FontAwesome6
+            name={isEditing ? "check" : "pencil"}
+            size={size}
+            color={color}
+            iconStyle="solid"
+          />
+        )}
+        onPress={handleFabPress}
+      />
     </SafeAreaView>
   );
 }
