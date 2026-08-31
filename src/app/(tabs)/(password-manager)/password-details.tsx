@@ -153,17 +153,7 @@ export default function PasswordDetailsScreen() {
     }
   }
 
-  usePreventRemove(isEditing, () => {
-    /*
-     * If the user uses the Android back gesture/button while editing,
-     * make sure the active TextInput loses focus first.
-     */
-    unfocusAllFields();
-
-    setIsEditing(false);
-
-    loadAndRefreshPassword();
-  });
+  usePreventRemove(isEditing, () => handleCancel());
 
   useEffect(() => {
     loadAndRefreshPassword();
