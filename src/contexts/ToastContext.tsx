@@ -1,6 +1,4 @@
-// contexts/ToastContext.tsx
-
-import ToastMessage from "@/components/ToastMessage";
+import ToastMessage, { ToastType } from "@/components/ToastMessage";
 
 import {
   createContext,
@@ -12,19 +10,24 @@ import {
 } from "react";
 
 type ToastContextValue = {
-  showToast: (message: string, duration?: number) => void;
+  showToast: (message: string, type?: ToastType, duration?: number) => void;
 };
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
 export function ToastProvider({ children }: PropsWithChildren) {
   const [message, setMessage] = useState("");
+  const [type, setType] = useState<ToastType>("success");
   const [duration, setDuration] = useState(2200);
 
-  const showToast = useCallback((message: string, duration = 2200) => {
-    setMessage(message);
-    setDuration(duration);
-  }, []);
+  const showToast = useCallback(
+    (message: string, type: ToastType = "success", duration = 2200) => {
+      setMessage(message);
+      setType(type);
+      setDuration(duration);
+    },
+    [],
+  );
 
   const hideToast = useCallback(() => {
     setMessage("");
@@ -43,6 +46,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
 
       <ToastMessage
         message={message}
+        type={type}
         visible={message !== ""}
         duration={duration}
         onHide={hideToast}

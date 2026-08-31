@@ -1,5 +1,6 @@
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
+import { useToast } from "@/contexts/ToastContext";
 import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
@@ -20,6 +21,8 @@ export default function SavePasswordScreen() {
 
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db);
+
+  const { showToast } = useToast();
 
   getScreenShotSecureScreen();
 
@@ -110,9 +113,13 @@ export default function SavePasswordScreen() {
                   notes,
                   url,
                 })
-                .then(() => router.back())
+                .then(() => {
+                  showToast("Password saved successfully");
+                  router.back();
+                })
                 .catch((err) => {
                   console.error(err);
+                  showToast("Failed to save, please try again!!", "error");
                   Alert.alert("Error", "Failed to save password.");
                 });
             }}

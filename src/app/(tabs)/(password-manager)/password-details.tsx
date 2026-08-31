@@ -78,23 +78,28 @@ export default function PasswordDetailsScreen() {
      */
     unfocusAllFields();
 
-    await drizzleDb
-      .update(passwords)
-      .set({
-        domain,
-        username,
-        password,
-        url,
-        notes,
-        updatedAt: new Date().toISOString(),
-      })
-      .where(eq(passwords.id, Number(id)));
+    try {
+      await drizzleDb
+        .update(passwords)
+        .set({
+          domain,
+          username,
+          password,
+          url,
+          notes,
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(passwords.id, Number(id)));
 
-    setIsEditing(false);
+      setIsEditing(false);
 
-    await loadAndRefreshPassword();
+      await loadAndRefreshPassword();
 
-    showToast("Password saved successfully");
+      showToast("Password updated successfully");
+    } catch (error) {
+      showToast("Failed to update; please try again", "error");
+      console.error("Failed to update password:", error);
+    }
   }
 
   function handleCancel() {

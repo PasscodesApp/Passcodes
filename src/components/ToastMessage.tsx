@@ -1,13 +1,14 @@
-// components/ToastMessage.tsx
-
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { useEffect, useRef } from "react";
 import { Animated, View } from "react-native";
 import { Text } from "react-native-paper";
 
+export type ToastType = "success" | "error";
+
 type ToastMessageProps = {
   message: string;
   visible: boolean;
+  type?: ToastType;
   duration?: number;
   onHide: () => void;
 };
@@ -15,6 +16,7 @@ type ToastMessageProps = {
 export default function ToastMessage({
   message,
   visible,
+  type = "success",
   duration = 2200,
   onHide,
 }: ToastMessageProps) {
@@ -56,6 +58,8 @@ export default function ToastMessage({
     return null;
   }
 
+  const isError = type === "error";
+
   return (
     <Animated.View
       pointerEvents="none"
@@ -85,11 +89,11 @@ export default function ToastMessage({
           paddingVertical: 10,
           borderRadius: 24,
           elevation: 4,
-          backgroundColor: "#323232",
+          backgroundColor: isError ? "#7f1e19" : "#323232",
         }}
       >
         <FontAwesome6
-          name="check"
+          name={isError ? "xmark" : "check"}
           size={16}
           color="#ffffff"
           iconStyle="solid"
