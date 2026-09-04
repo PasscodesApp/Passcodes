@@ -12,6 +12,7 @@ import sharingPlugin from "expo-sharing/plugin";
 import splashScreenPlugin from "expo-splash-screen/plugin";
 import sqlitePlugin from "expo-sqlite/plugin";
 import statusBarPlugin from "expo-status-bar/plugin";
+import withProtectUserDataPlugin from "./plugins/withProtectUserData/plugin";
 
 const IS_DEV_BUILD = process.env.APP_VARIANT === "development";
 const IS_PREVIEW_BUILD = process.env.APP_VARIANT === "preview";
@@ -145,8 +146,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     expoScreenOrientationPlugin({
       initialOrientation: "PORTRAIT",
     }),
+    withProtectUserDataPlugin({ allowBackup: false }), // TODO: we make it to allow backup when we have encryption.
+
     "@react-native-vector-icons/fontawesome6",
-    "./plugins/withProtectUserData.ts",
   ],
   experiments: {
     typedRoutes: true,
