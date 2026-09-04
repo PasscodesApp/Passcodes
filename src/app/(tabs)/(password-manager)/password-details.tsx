@@ -6,7 +6,7 @@ import { useToast } from "@/contexts/ToastContext";
 
 import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
-import formatDate from "@/utils/formating";
+import { formatDate } from "@passcodes/passalgo";
 
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { eq } from "drizzle-orm";

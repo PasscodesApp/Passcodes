@@ -1,5 +1,5 @@
 import Text from "@/components/Text";
-import formatDate from "@/utils/formating";
+import { formatDate } from "@passcodes/passalgo";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 
