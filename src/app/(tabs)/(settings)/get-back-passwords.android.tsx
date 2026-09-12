@@ -1,6 +1,6 @@
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
-import { DEFAULT_DATABASE_NAME } from "@/db/provider";
+import Config from "@/config";
 import roomDrizzleMigration from "@/libs/room_drizzle_migration";
 import { withSQLiteDatabase } from "@/libs/withSQLiteDatabase";
 import AsyncStorage from "expo-sqlite/kv-store";
@@ -50,7 +50,7 @@ export default function GetBackPasswordsScreen() {
 
         // Run migration
         const result = await withSQLiteDatabase(
-          DEFAULT_DATABASE_NAME,
+          Config.DATABASE_NAME,
           async (expoDb) => {
             return await roomDrizzleMigration(expoDb);
           },

@@ -1,5 +1,6 @@
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
+import Config from "@/config";
 import dataRecoveryFromTestDB from "@/libs/data_recovery_test_db_mess";
 import { withSQLiteDatabase } from "@/libs/withSQLiteDatabase";
 import { useEffect, useState } from "react";
@@ -10,8 +11,6 @@ type MigrationResult = {
   message: string;
 };
 
-const OLD_DATABASE_NAME = "test2.db";
-
 export default function DataRecoveryScreen() {
   const [result, setResult] = useState<MigrationResult>({
     state: "Running",
@@ -20,7 +19,7 @@ export default function DataRecoveryScreen() {
 
   useEffect(() => {
     async function runMigration() {
-      await withSQLiteDatabase(OLD_DATABASE_NAME, async (expoDb) => {
+      await withSQLiteDatabase(Config.DATABASE_NAME, async (expoDb) => {
         await dataRecoveryFromTestDB(expoDb);
       });
     }

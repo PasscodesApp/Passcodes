@@ -2,7 +2,7 @@ import "tsx/cjs";
 
 import { ConfigContext, ExpoConfig } from "expo/config";
 
-import constants from "@/libs/constants";
+import AppConfig from "@/config";
 import buildPropertiesPlugin from "expo-build-properties/plugin";
 import devBuildPlugin from "expo-dev-client/plugin";
 import localAuthenticationPlugin from "expo-local-authentication/plugin";
@@ -70,9 +70,9 @@ if (!IS_PRODUCTION_BUILD) {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: constants.appname + appNameSuffix,
+  name: AppConfig.APP_NAME + appNameSuffix,
   slug: "passcodes",
-  version: constants.build.version + versionNameSuffix,
+  version: AppConfig.BUILD_VERSION + versionNameSuffix,
 
   orientation: "default",
   icon: launcherAppIcon,
@@ -82,8 +82,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   platforms: ["android", "ios"],
 
   ios: {
-    buildNumber: constants.build.versionCodeIos,
-    version: constants.build.version,
+    buildNumber: AppConfig.BUILD_IOS_VERSIONCODE,
+    version: AppConfig.BUILD_VERSION,
     icon: launcherAppIcon,
     bundleIdentifier:
       "com.jeeldobariya.passcodes.earlybeta" + packageNameSuffix,
@@ -94,8 +94,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
 
   android: {
-    versionCode: constants.build.versionCodeAndroid,
-    version: constants.build.version + versionNameSuffix,
+    versionCode: AppConfig.BUILD_ANDROID_VERSIONCODE,
+    version: AppConfig.BUILD_VERSION,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
     adaptiveIcon: {

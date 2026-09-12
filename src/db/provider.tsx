@@ -15,15 +15,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import migrations from "./drizzle/migrations";
 import * as schema from "./schema";
 
-export const DEFAULT_DATABASE_NAME = "master.db";
-
-type DrizzleDatabase = ReturnType<typeof drizzle>;
+export type DrizzleDatabase = ReturnType<typeof drizzle>;
 
 const DrizzleDatabaseContext = createContext<DrizzleDatabase | undefined>(
   undefined,
 );
 
-export interface DrizzleDatabaseProviderProps extends PropsWithChildren {
+interface DrizzleDatabaseProviderProps extends PropsWithChildren {
   /**
    * Name of the SQLite database file.
    */
@@ -59,7 +57,7 @@ export interface DrizzleDatabaseProviderProps extends PropsWithChildren {
  * </DrizzleDatabaseProvider>
  * ```
  */
-export function DrizzleDatabaseProvider({
+export default function DrizzleDatabaseProvider({
   children,
   databaseName,
 }: DrizzleDatabaseProviderProps) {

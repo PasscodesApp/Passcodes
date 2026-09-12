@@ -1,6 +1,7 @@
 import ScreenHeading from "@/components/ScreenHeading";
+import Config from "@/config";
 import { ToastProvider } from "@/contexts/ToastContext";
-import { DEFAULT_DATABASE_NAME, DrizzleDatabaseProvider } from "@/db/provider";
+import DrizzleDatabaseProvider from "@/db/provider";
 import {
   isBiometricsAuthEnabled,
   unlockWithBiometricsApp,
@@ -25,7 +26,7 @@ export default function RootLayout() {
   }, [systemScheme]);
 
   return (
-    <DrizzleDatabaseProvider databaseName={DEFAULT_DATABASE_NAME}>
+    <DrizzleDatabaseProvider databaseName={Config.DATABASE_NAME}>
       <AppContent />
     </DrizzleDatabaseProvider>
   );

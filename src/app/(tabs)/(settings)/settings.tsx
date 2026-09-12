@@ -1,13 +1,13 @@
 import LinkButton from "@/components/LinkButton";
 import { LinkIconButton } from "@/components/LinkIconButton";
 import Text from "@/components/Text";
+import Config from "@/config";
 import { passwords } from "@/db/schema";
 import {
   isBiometricsAuthEnabled,
   toggleBiometricsFeature,
   unlockWithBiometricsApp,
 } from "@/libs/biometric";
-import constants from "@/libs/constants";
 import {
   getGooglePasswordsCSVContent,
   type PasswordCSVFormat,
@@ -303,10 +303,10 @@ export default function SettingsScreen() {
         <Card>
           <Card.Content style={{ gap: 12 }}>
             <Card.Title
-              title={constants.appname}
+              title={Config.APP_NAME}
               titleVariant="headlineLarge"
               titleStyle={{ textAlign: "center" }}
-              subtitle={constants.version}
+              subtitle={Config.VERSION}
               subtitleVariant="labelMedium"
               subtitleStyle={{ textAlign: "center" }}
               style={{ marginBlock: 24 }}
@@ -314,7 +314,7 @@ export default function SettingsScreen() {
 
             <Card.Actions style={{ justifyContent: "center", gap: 12 }}>
               <LinkIconButton
-                href="mailto:jeeldobariya38@gmail.com"
+                href={Config.SOCIAL_EMAIL_US}
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="envelope"
@@ -326,7 +326,7 @@ export default function SettingsScreen() {
                 darkModeColor="#2a4759"
               />
               <LinkIconButton
-                href="https://github.com/PasscodesApp/Passcodes"
+                href={Config.SOCIAL_GITHUB}
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="github"
@@ -338,7 +338,7 @@ export default function SettingsScreen() {
                 darkModeColor="#3a424b"
               />
               <LinkIconButton
-                href="https://t.me/passcodescommunity"
+                href={Config.SOCIAL_TELEGRAM}
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="telegram"
@@ -350,7 +350,7 @@ export default function SettingsScreen() {
                 darkModeColor="#0088cc"
               />
               <LinkIconButton
-                href="https://discord.gg/kSSkYq7KAQ"
+                href={Config.SOCIAL_DISCORD}
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="discord"

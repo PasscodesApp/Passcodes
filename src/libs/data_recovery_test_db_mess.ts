@@ -1,6 +1,5 @@
+import Config from "@/config";
 import * as SQLite from "expo-sqlite";
-
-const OLD_DATABASE_NAME = "test2.db";
 
 export default async function dataRecoveryFromTestDB(
   expoDb: SQLite.SQLiteDatabase,
@@ -8,7 +7,7 @@ export default async function dataRecoveryFromTestDB(
   let oldDb: SQLite.SQLiteDatabase | undefined = undefined;
 
   try {
-    oldDb = await SQLite.openDatabaseAsync(OLD_DATABASE_NAME);
+    oldDb = await SQLite.openDatabaseAsync(Config.OLD_MISTAKEN_DATABASE_NAME);
 
     // Verify passwords table exists
     const tableExists = await oldDb.getFirstAsync(
@@ -20,7 +19,7 @@ export default async function dataRecoveryFromTestDB(
 
     if (!tableExists) {
       await oldDb.closeAsync();
-      await SQLite.deleteDatabaseAsync(OLD_DATABASE_NAME);
+      await SQLite.deleteDatabaseAsync(Config.OLD_MISTAKEN_DATABASE_NAME);
       return;
     }
 
