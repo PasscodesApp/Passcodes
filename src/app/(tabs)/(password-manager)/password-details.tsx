@@ -1,37 +1,29 @@
-import FormTextField from "@/components/FormTextField";
-import SecureTextField from "@/components/SecureTextField";
+import PasswordDetailCardActions from "@/components/PasswordDetailCardActions";
+import PasswordFormCard, {
+  usePasswordForm,
+} from "@/components/PasswordFormCard";
+import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
 
-import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
-import formatDate from "@/utils/formating";
+import { formatDate } from "@passcodes/passalgo";
 
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
-import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Href, router, useLocalSearchParams } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
-import { useSQLiteContext } from "expo-sqlite";
 
 import { useEffect, useState } from "react";
-import { Keyboard, ScrollView, TextInput, View } from "react-native";
+import { Keyboard, ScrollView, TextInput } from "react-native";
 
-import { Button, FAB } from "react-native-paper";
+import { FAB } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
   const { id } = useLocalSearchParams();
 
-  const db = useSQLiteContext();
-  const drizzleDb = drizzle(db);
+  const passwordRepository = usePasswordRepository();
 
-  const [domain, setDomain] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [url, setUrl] = useState("");
-  const [notes, setNotes] = useState("");
-  const [lastupdateAt, setLastupdateAt] = useState("");
-
+  const { state, setState, updateField } = usePasswordForm();
   const [isEditing, setIsEditing] = useState(false);
 
   const { showToast } = useToast();
@@ -52,21 +44,24 @@ export default function PasswordDetailsScreen() {
   }
 
   async function loadAndRefreshPassword() {
-    const result = await drizzleDb
-      .select()
-      .from(passwords)
-      .where(eq(passwords.id, Number(id)));
+    const password = await passwordRepository.getById(Number(id));
 
-    if (result.length > 0) {
-      const data = result[0];
-
-      setDomain(data.domain || "");
-      setUsername(data.username || "");
-      setPassword(data.password || "");
-      setUrl(data.url || "");
-      setNotes(data.notes || "");
-      setLastupdateAt(data.updatedAt ? formatDate(data.updatedAt) : "just now");
+    if (!password) {
+      // Password doesn't exist
+      // TODO: redirect to error or go back().
+      return;
     }
+
+    setState({
+      domain: password.domain,
+      username: password.username,
+      password: password.password,
+      url: password.url || "",
+      notes: password.notes || "",
+      updatedAt: password.updatedAt
+        ? formatDate(password.updatedAt)
+        : "just now",
+    });
   }
 
   async function updatePassword() {
@@ -79,17 +74,7 @@ export default function PasswordDetailsScreen() {
     unfocusAllFields();
 
     try {
-      await drizzleDb
-        .update(passwords)
-        .set({
-          domain,
-          username,
-          password,
-          url,
-          notes,
-          updatedAt: new Date().toISOString(),
-        })
-        .where(eq(passwords.id, Number(id)));
+      await passwordRepository.update(Number(id), state);
 
       setIsEditing(false);
 
@@ -142,92 +127,17 @@ export default function PasswordDetailsScreen() {
         }}
         keyboardShouldPersistTaps="handled"
       >
-        <FormTextField
-          label="Domain"
-          value={domain}
-          onChangeText={setDomain}
+        <PasswordFormCard
+          value={state}
           editable={isEditing}
+          onChange={updateField}
         />
 
-        <FormTextField
-          label="Username"
-          value={username}
-          onChangeText={setUsername}
-          editable={isEditing}
-          autoCapitalize="none"
-          autoCorrect={false}
+        <PasswordDetailCardActions
+          isEditing={isEditing}
+          onOpen={() => router.navigate(state.url as Href)}
+          onCancel={handleCancel}
         />
-
-        <SecureTextField
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          editable={isEditing}
-        />
-
-        <FormTextField
-          label="URL"
-          value={url}
-          onChangeText={setUrl}
-          editable={isEditing}
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-
-        <FormTextField
-          label="Notes"
-          value={notes}
-          onChangeText={setNotes}
-          editable={isEditing}
-          multiline
-          numberOfLines={3}
-        />
-
-        <FormTextField
-          label="UpdatedAt"
-          value={lastupdateAt}
-          editable={false}
-        />
-
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row-reverse",
-            gap: 4,
-          }}
-        >
-          {!isEditing && (
-            <Button
-              icon={({ size, color }) => (
-                <FontAwesome6
-                  name="link"
-                  size={size}
-                  color={color}
-                  iconStyle="solid"
-                />
-              )}
-              onPress={() => router.navigate(url as Href)}
-            >
-              Open
-            </Button>
-          )}
-
-          {isEditing && (
-            <Button
-              icon={({ size, color }) => (
-                <FontAwesome6
-                  name="xmark"
-                  size={size}
-                  color={color}
-                  iconStyle="solid"
-                />
-              )}
-              onPress={handleCancel}
-            >
-              Cancel
-            </Button>
-          )}
-        </View>
       </ScrollView>
 
       <FAB

@@ -1,7 +1,8 @@
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
+import Config from "@/config";
 import dataRecoveryFromTestDB from "@/libs/data_recovery_test_db_mess";
-import * as SQLite from "expo-sqlite";
+import { withSQLiteDatabase } from "@/libs/withSQLiteDatabase";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,15 +12,16 @@ type MigrationResult = {
 };
 
 export default function DataRecoveryScreen() {
-  const expoDb = SQLite.useSQLiteContext();
   const [result, setResult] = useState<MigrationResult>({
     state: "Running",
-    message: "please wait...",
+    message: "Please wait...",
   });
 
   useEffect(() => {
     async function runMigration() {
-      await dataRecoveryFromTestDB(expoDb);
+      await withSQLiteDatabase(Config.DATABASE_NAME, async (expoDb) => {
+        await dataRecoveryFromTestDB(expoDb);
+      });
     }
 
     runMigration()
@@ -29,10 +31,10 @@ export default function DataRecoveryScreen() {
           message: "Done!! PROBLEM FIXED",
         });
       })
-      .catch((e) => {
+      .catch((error) => {
         setResult({
           state: "Error",
-          message: e.toString(),
+          message: error instanceof Error ? error.message : String(error),
         });
       });
   }, []);
@@ -50,7 +52,12 @@ export default function DataRecoveryScreen() {
       <ScreenHeading title="Data Recovery" />
 
       <Text style={{ fontSize: 16 }}>{result.state}</Text>
-      <Text style={{ color: result.state === "Error" ? "#ef1713" : "#1aadf1" }}>
+
+      <Text
+        style={{
+          color: result.state === "Error" ? "#ef1713" : "#1aadf1",
+        }}
+      >
         {result.message}
       </Text>
     </SafeAreaView>

@@ -1,14 +1,12 @@
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
+import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
-import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import { router } from "expo-router";
-import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Alert, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -19,8 +17,30 @@ export default function SavePasswordScreen() {
   let [url, setUrl] = useState("");
   let [notes, setNotes] = useState("");
 
-  const db = useSQLiteContext();
-  const drizzleDb = drizzle(db);
+  const passwordRepository = usePasswordRepository();
+
+  async function handleSavePassword() {
+    if (!domain || !username || !password) {
+      showToast("Domain, Username and Password are required.", "error");
+      return;
+    }
+
+    try {
+      await passwordRepository.create({
+        domain,
+        username,
+        password,
+        notes,
+        url,
+      });
+
+      showToast("Password saved successfully");
+      router.back();
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to save, please try again!!", "error");
+    }
+  }
 
   const { showToast } = useToast();
 
@@ -95,34 +115,7 @@ export default function SavePasswordScreen() {
                 iconStyle="solid"
               />
             )}
-            onPress={() => {
-              if (!domain || !username || !password) {
-                Alert.alert(
-                  "Missing Fields",
-                  "Domain, Username and Password are required.",
-                );
-                return;
-              }
-
-              drizzleDb
-                .insert(passwords)
-                .values({
-                  domain,
-                  username,
-                  password,
-                  notes,
-                  url,
-                })
-                .then(() => {
-                  showToast("Password saved successfully");
-                  router.back();
-                })
-                .catch((err) => {
-                  console.error(err);
-                  showToast("Failed to save, please try again!!", "error");
-                  Alert.alert("Error", "Failed to save password.");
-                });
-            }}
+            onPress={handleSavePassword}
           >
             Save Password
           </Button>

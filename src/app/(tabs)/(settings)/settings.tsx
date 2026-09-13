@@ -1,13 +1,12 @@
 import LinkButton from "@/components/LinkButton";
 import { LinkIconButton } from "@/components/LinkIconButton";
 import Text from "@/components/Text";
-import { passwords } from "@/db/schema";
+import Config from "@/config";
 import {
   isBiometricsAuthEnabled,
   toggleBiometricsFeature,
   unlockWithBiometricsApp,
 } from "@/libs/biometric";
-import constants from "@/libs/constants";
 import {
   getGooglePasswordsCSVContent,
   type PasswordCSVFormat,
@@ -22,14 +21,13 @@ import {
   toggleScreenshotPreventionFeature,
 } from "@/libs/screenshot_prevention";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import { LinearGradient } from "expo-linear-gradient";
-import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { Alert, ScrollView } from "react-native";
 import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
 
 export default function SettingsScreen() {
@@ -45,38 +43,21 @@ export default function SettingsScreen() {
   const toggleScreenshotPreventSwitch = () =>
     setIsScreenshotPreventEnabled(toggleScreenshotPreventionFeature());
 
-  const [isAutofillEnabled, setIsAutofillEnabled] = useState(
-    PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
-  );
+  const isAutofillEnabled =
+    PasscodesAutofillServiceModule.isAutofillServiceEnabled();
 
   const theme = useTheme();
-  let db = useSQLiteContext();
-  const drizzleDb = drizzle(db);
+  const passwordRepository = usePasswordRepository();
 
   async function handleImportPasswords() {
     let content = await getCSVPasswordString();
     let importPasswordList: PasswordCSVFormat[] =
       convertRawCSVToPasswords(content);
-
-    drizzleDb.transaction((tx) => {
-      importPasswordList.forEach((importablePassword) => {
-        tx.insert(passwords)
-          .values({
-            domain: importablePassword.domain,
-            username: importablePassword.username,
-            password: importablePassword.password,
-            notes: importablePassword.notes,
-            url: importablePassword.url,
-          })
-          .execute();
-      });
-    });
+    await passwordRepository.importAll(importPasswordList);
   }
 
   async function handleExportPasswords() {
-    const result: PasswordCSVFormat[] = await drizzleDb
-      .select()
-      .from(passwords);
+    const result: PasswordCSVFormat[] = await passwordRepository.getAll();
 
     let content = await getGooglePasswordsCSVContent(result);
     sharePasswordAsCSV(content);
@@ -307,10 +288,10 @@ export default function SettingsScreen() {
         <Card>
           <Card.Content style={{ gap: 12 }}>
             <Card.Title
-              title={constants.appname}
+              title={Config.APP_NAME}
               titleVariant="headlineLarge"
               titleStyle={{ textAlign: "center" }}
-              subtitle={constants.version}
+              subtitle={Config.VERSION}
               subtitleVariant="labelMedium"
               subtitleStyle={{ textAlign: "center" }}
               style={{ marginBlock: 24 }}
@@ -318,7 +299,7 @@ export default function SettingsScreen() {
 
             <Card.Actions style={{ justifyContent: "center", gap: 12 }}>
               <LinkIconButton
-                href="mailto:jeeldobariya38@gmail.com"
+                href={Config.SOCIAL_EMAIL_US}
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="envelope"
@@ -330,7 +311,7 @@ export default function SettingsScreen() {
                 darkModeColor="#2a4759"
               />
               <LinkIconButton
-                href="https://github.com/PasscodesApp/Passcodes"
+                href={Config.SOCIAL_GITHUB}
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="github"
@@ -342,7 +323,7 @@ export default function SettingsScreen() {
                 darkModeColor="#3a424b"
               />
               <LinkIconButton
-                href="https://t.me/passcodescommunity"
+                href={Config.SOCIAL_TELEGRAM}
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="telegram"
@@ -354,7 +335,7 @@ export default function SettingsScreen() {
                 darkModeColor="#0088cc"
               />
               <LinkIconButton
-                href="https://discord.gg/kSSkYq7KAQ"
+                href={Config.SOCIAL_DISCORD}
                 icon={({ size, color }) => (
                   <FontAwesome6
                     name="discord"

@@ -1,6 +1,7 @@
 import ScreenHeading from "@/components/ScreenHeading";
+import Config from "@/config";
+import { RepositoryProvider } from "@/contexts/RepositoryContext";
 import { ToastProvider } from "@/contexts/ToastContext";
-import DatabaseProvider from "@/db/provider";
 import {
   isBiometricsAuthEnabled,
   unlockWithBiometricsApp,
@@ -25,9 +26,9 @@ export default function RootLayout() {
   }, [systemScheme]);
 
   return (
-    <DatabaseProvider>
+    <RepositoryProvider dbName={Config.DATABASE_NAME}>
       <AppContent />
-    </DatabaseProvider>
+    </RepositoryProvider>
   );
 }
 

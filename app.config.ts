@@ -2,7 +2,7 @@ import "tsx/cjs";
 
 import { ConfigContext, ExpoConfig } from "expo/config";
 
-import constants from "@/libs/constants";
+import AppConfig from "@/config";
 import buildPropertiesPlugin from "expo-build-properties/plugin";
 import devBuildPlugin from "expo-dev-client/plugin";
 import localAuthenticationPlugin from "expo-local-authentication/plugin";
@@ -12,6 +12,7 @@ import sharingPlugin from "expo-sharing/plugin";
 import splashScreenPlugin from "expo-splash-screen/plugin";
 import sqlitePlugin from "expo-sqlite/plugin";
 import statusBarPlugin from "expo-status-bar/plugin";
+import withProtectUserDataPlugin from "./plugins/withProtectUserData/plugin";
 
 const IS_DEV_BUILD = process.env.APP_VARIANT === "development";
 const IS_PREVIEW_BUILD = process.env.APP_VARIANT === "preview";
@@ -69,9 +70,9 @@ if (!IS_PRODUCTION_BUILD) {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: constants.appname + appNameSuffix,
+  name: AppConfig.APP_NAME + appNameSuffix,
   slug: "passcodes",
-  version: constants.build.version + versionNameSuffix,
+  version: AppConfig.BUILD_VERSION + versionNameSuffix,
 
   orientation: "default",
   icon: launcherAppIcon,
@@ -81,8 +82,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   platforms: ["android", "ios"],
 
   ios: {
-    buildNumber: constants.build.versionCodeIos,
-    version: constants.build.version,
+    buildNumber: AppConfig.BUILD_IOS_VERSIONCODE,
+    version: AppConfig.BUILD_VERSION,
     icon: launcherAppIcon,
     bundleIdentifier:
       "com.jeeldobariya.passcodes.earlybeta" + packageNameSuffix,
@@ -93,8 +94,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
 
   android: {
-    versionCode: constants.build.versionCodeAndroid,
-    version: constants.build.version + versionNameSuffix,
+    versionCode: AppConfig.BUILD_ANDROID_VERSIONCODE,
+    version: AppConfig.BUILD_VERSION,
     package: "com.jeeldobariya.passcodes" + packageNameSuffix,
     icon: launcherAppIcon,
     adaptiveIcon: {
@@ -145,8 +146,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     expoScreenOrientationPlugin({
       initialOrientation: "PORTRAIT",
     }),
+    withProtectUserDataPlugin({ allowBackup: false }), // TODO: we make it to allow backup when we have encryption.
+
     "@react-native-vector-icons/fontawesome6",
-    "./plugins/withProtectUserData.ts",
   ],
   experiments: {
     typedRoutes: true,

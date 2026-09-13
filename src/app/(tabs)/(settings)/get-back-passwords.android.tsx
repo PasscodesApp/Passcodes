@@ -1,7 +1,8 @@
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
+import Config from "@/config";
 import roomDrizzleMigration from "@/libs/room_drizzle_migration";
-import * as SQLite from "expo-sqlite";
+import { withSQLiteDatabase } from "@/libs/withSQLiteDatabase";
 import AsyncStorage from "expo-sqlite/kv-store";
 import { useEffect, useState } from "react";
 import { Button } from "react-native";
@@ -20,8 +21,6 @@ export default function GetBackPasswordsScreen() {
     message: "Task Idle",
     isError: false,
   });
-
-  const expoDb = SQLite.useSQLiteContext();
 
   useEffect(() => {
     async function runMigration() {
@@ -50,7 +49,12 @@ export default function GetBackPasswordsScreen() {
         });
 
         // Run migration
-        const result = await roomDrizzleMigration(expoDb);
+        const result = await withSQLiteDatabase(
+          Config.DATABASE_NAME,
+          async (expoDb) => {
+            return await roomDrizzleMigration(expoDb);
+          },
+        );
 
         await AsyncStorage.setItem(MIGRATION_KEY, MIGRATION_STATUS.SUCCESS);
 
