@@ -10,4 +10,17 @@ export const passwords = sqliteTable("passwords", {
   url: text("url"),
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
   updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+
+  /*
+   * Suggested Updates:-
+   *
+   *  createdAt: text("created_at")
+   *    .notNull()
+   *    .default(sql`CURRENT_TIMESTAMP`),
+   *
+   *  updatedAt: text("updated_at")
+   *    .notNull()
+   *    .default(sql`CURRENT_TIMESTAMP`)
+   *    .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
+   */
 });
