@@ -108,9 +108,13 @@ function DrizzleDatabaseLoading() {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#020221",
       }}
     >
-      <ActivityIndicator size="large" />
+      <ActivityIndicator size="large" style={{ margin: 20 }} />
+
+      <Text style={{ color: "lightblue", fontSize: 30 }}>Please Wait.....</Text>
+      <Text style={{ color: "lightblue" }}>Opening Local Database...</Text>
     </SafeAreaView>
   );
 }
@@ -122,6 +126,7 @@ function DrizzleDatabaseError({ error }: { error: unknown }) {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#020221",
         paddingHorizontal: 24,
       }}
     >
@@ -129,7 +134,6 @@ function DrizzleDatabaseError({ error }: { error: unknown }) {
         style={{
           width: "100%",
           maxWidth: 420,
-          backgroundColor: "#020221",
           padding: 24,
           borderRadius: 24,
           alignItems: "center",

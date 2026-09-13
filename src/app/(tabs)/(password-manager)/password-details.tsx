@@ -5,12 +5,11 @@ import PasswordFormCard, {
 import { useToast } from "@/contexts/ToastContext";
 import { useDrizzleDatabase } from "@/db/provider";
 
-import { passwords } from "@/db/schema";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
+import { PasswordRepository } from "@/repositories/PasswordRepository";
 import { formatDate } from "@passcodes/passalgo";
 
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
-import { eq } from "drizzle-orm";
 import { Href, router, useLocalSearchParams } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
 
@@ -24,6 +23,7 @@ export default function PasswordDetailsScreen() {
   const { id } = useLocalSearchParams();
 
   const db = useDrizzleDatabase();
+  const passwordRepository = new PasswordRepository(db);
 
   const { state, setState, updateField } = usePasswordForm();
   const [isEditing, setIsEditing] = useState(false);
@@ -46,23 +46,24 @@ export default function PasswordDetailsScreen() {
   }
 
   async function loadAndRefreshPassword() {
-    const result = await db
-      .select()
-      .from(passwords)
-      .where(eq(passwords.id, Number(id)));
+    const password = await passwordRepository.getById(Number(id));
 
-    if (result.length > 0) {
-      const data = result[0];
-
-      setState({
-        domain: data.domain || "",
-        username: data.username || "",
-        password: data.password || "",
-        url: data.url || "",
-        notes: data.notes || "",
-        updatedAt: data.updatedAt ? formatDate(data.updatedAt) : "just now",
-      });
+    if (!password) {
+      // Password doesn't exist
+      // TODO: redirect to error or go back().
+      return;
     }
+
+    setState({
+      domain: password.domain,
+      username: password.username,
+      password: password.password,
+      url: password.url || "",
+      notes: password.notes || "",
+      updatedAt: password.updatedAt
+        ? formatDate(password.updatedAt)
+        : "just now",
+    });
   }
 
   async function updatePassword() {
@@ -75,10 +76,7 @@ export default function PasswordDetailsScreen() {
     unfocusAllFields();
 
     try {
-      await db
-        .update(passwords)
-        .set({ ...state, updatedAt: new Date().toISOString() })
-        .where(eq(passwords.id, Number(id)));
+      await passwordRepository.update(Number(id), state);
 
       setIsEditing(false);
 

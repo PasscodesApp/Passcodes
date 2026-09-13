@@ -29,6 +29,7 @@ import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useDrizzleDatabase } from "@/db/provider";
+import { PasswordRepository } from "@/repositories/PasswordRepository";
 import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
 
 export default function SettingsScreen() {
@@ -50,6 +51,7 @@ export default function SettingsScreen() {
 
   const theme = useTheme();
   let db = useDrizzleDatabase();
+  const passwordRepository = new PasswordRepository(db);
 
   async function handleImportPasswords() {
     let content = await getCSVPasswordString();
@@ -72,7 +74,7 @@ export default function SettingsScreen() {
   }
 
   async function handleExportPasswords() {
-    const result: PasswordCSVFormat[] = await db.select().from(passwords);
+    const result: PasswordCSVFormat[] = await passwordRepository.getAll();
 
     let content = await getGooglePasswordsCSVContent(result);
     sharePasswordAsCSV(content);

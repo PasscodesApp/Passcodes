@@ -1,10 +1,9 @@
 import PasswordItemCard from "@/components/PasswordItemCard";
 import Text from "@/components/Text";
 import { useDrizzleDatabase } from "@/db/provider";
-import { passwords } from "@/db/schema";
+import { PasswordRepository } from "@/repositories/PasswordRepository";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { FlashList } from "@shopify/flash-list";
-import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { router, Stack } from "expo-router";
 import { useMemo, useState } from "react";
@@ -22,9 +21,10 @@ export default function LoadPasswordScreen() {
   const theme = useTheme();
 
   const db = useDrizzleDatabase();
+  const passwordRepository = new PasswordRepository(db);
 
   const { data: passwordList = [] } = useLiveQuery(
-    db.select().from(passwords),
+    passwordRepository.observeAll(),
     [refreshKey],
   );
 
@@ -65,7 +65,7 @@ export default function LoadPasswordScreen() {
       {
         text: "Delete",
         onPress: async () => {
-          await db.delete(passwords).where(eq(passwords.id, password.id));
+          await passwordRepository.delete(password.id);
         },
         style: "destructive",
       },
