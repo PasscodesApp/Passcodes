@@ -1,9 +1,8 @@
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
+import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
-import { useDrizzleDatabase } from "@/db/provider";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
-import { PasswordRepository } from "@/repositories/PasswordRepository";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -18,8 +17,7 @@ export default function SavePasswordScreen() {
   let [url, setUrl] = useState("");
   let [notes, setNotes] = useState("");
 
-  const db = useDrizzleDatabase();
-  const passwordRepository = new PasswordRepository(db);
+  const passwordRepository = usePasswordRepository();
 
   async function handleSavePassword() {
     if (!domain || !username || !password) {

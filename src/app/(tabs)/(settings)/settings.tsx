@@ -2,7 +2,6 @@ import LinkButton from "@/components/LinkButton";
 import { LinkIconButton } from "@/components/LinkIconButton";
 import Text from "@/components/Text";
 import Config from "@/config";
-import { passwords } from "@/db/schema";
 import {
   isBiometricsAuthEnabled,
   toggleBiometricsFeature,
@@ -28,8 +27,7 @@ import { Alert, ScrollView } from "react-native";
 import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useDrizzleDatabase } from "@/db/provider";
-import { PasswordRepository } from "@/repositories/PasswordRepository";
+import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
 
 export default function SettingsScreen() {
@@ -45,32 +43,17 @@ export default function SettingsScreen() {
   const toggleScreenshotPreventSwitch = () =>
     setIsScreenshotPreventEnabled(toggleScreenshotPreventionFeature());
 
-  const [isAutofillEnabled, setIsAutofillEnabled] = useState(
-    PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
-  );
+  const isAutofillEnabled =
+    PasscodesAutofillServiceModule.isAutofillServiceEnabled();
 
   const theme = useTheme();
-  let db = useDrizzleDatabase();
-  const passwordRepository = new PasswordRepository(db);
+  const passwordRepository = usePasswordRepository();
 
   async function handleImportPasswords() {
     let content = await getCSVPasswordString();
     let importPasswordList: PasswordCSVFormat[] =
       convertRawCSVToPasswords(content);
-
-    db.transaction((tx) => {
-      importPasswordList.forEach((importablePassword) => {
-        tx.insert(passwords)
-          .values({
-            domain: importablePassword.domain,
-            username: importablePassword.username,
-            password: importablePassword.password,
-            notes: importablePassword.notes,
-            url: importablePassword.url,
-          })
-          .execute();
-      });
-    });
+    await passwordRepository.importAll(importPasswordList);
   }
 
   async function handleExportPasswords() {

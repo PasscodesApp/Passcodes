@@ -53,6 +53,23 @@ export class PasswordRepository {
     return createdPassword;
   }
 
+  // TODO: temporary solution we will create a upsert all method
+  async importAll(data: CreatePasswordInput[]) {
+    this.db.transaction((tx) => {
+      data.forEach((importablePassword) => {
+        tx.insert(passwords)
+          .values({
+            domain: importablePassword.domain,
+            username: importablePassword.username,
+            password: importablePassword.password,
+            notes: importablePassword.notes,
+            url: importablePassword.url,
+          })
+          .execute();
+      });
+    });
+  }
+
   async update(id: number, data: UpdatePasswordInput) {
     const [updatedPassword] = await this.db
       .update(passwords)

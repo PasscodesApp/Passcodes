@@ -2,11 +2,10 @@ import PasswordDetailCardActions from "@/components/PasswordDetailCardActions";
 import PasswordFormCard, {
   usePasswordForm,
 } from "@/components/PasswordFormCard";
+import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
-import { useDrizzleDatabase } from "@/db/provider";
 
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
-import { PasswordRepository } from "@/repositories/PasswordRepository";
 import { formatDate } from "@passcodes/passalgo";
 
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
@@ -22,8 +21,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function PasswordDetailsScreen() {
   const { id } = useLocalSearchParams();
 
-  const db = useDrizzleDatabase();
-  const passwordRepository = new PasswordRepository(db);
+  const passwordRepository = usePasswordRepository();
 
   const { state, setState, updateField } = usePasswordForm();
   const [isEditing, setIsEditing] = useState(false);

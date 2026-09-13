@@ -1,7 +1,6 @@
 import PasswordItemCard from "@/components/PasswordItemCard";
 import Text from "@/components/Text";
-import { useDrizzleDatabase } from "@/db/provider";
-import { PasswordRepository } from "@/repositories/PasswordRepository";
+import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { FlashList } from "@shopify/flash-list";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
@@ -20,8 +19,7 @@ export default function LoadPasswordScreen() {
 
   const theme = useTheme();
 
-  const db = useDrizzleDatabase();
-  const passwordRepository = new PasswordRepository(db);
+  const passwordRepository = usePasswordRepository();
 
   const { data: passwordList = [] } = useLiveQuery(
     passwordRepository.observeAll(),

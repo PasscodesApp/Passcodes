@@ -29,7 +29,9 @@ export function convertRawCSVToPasswords(
   lines.shift();
 
   return lines.map((line) => {
-    const [domain, url, username, password, notes = ""] = line.split(",");
+    // TODO: Assigning empty string is tempoary solution, we will improve this later.
+    const [domain = "", url = "", username = "", password = "", notes = ""] =
+      line.split(",");
 
     return {
       domain: domain,
