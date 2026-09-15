@@ -1,5 +1,5 @@
+import Text from "@/components/Text";
 import { StyleSheet, View } from "react-native";
-import Text from "./Text";
 
 type StrengthIndicatorProps = {
   /**
