@@ -1,4 +1,5 @@
 import FormTextField from "@/components/FormTextField";
+import StrengthIndicator from "@/components/StrengthIndicator";
 import Text from "@/components/Text";
 import {
   DEFAULT_PASSWORD_OPTIONS,
@@ -296,29 +297,6 @@ function GeneratorOption({
   );
 }
 
-function StrengthIndicator({ score }: { score: number }) {
-  return (
-    <View style={styles.strengthContainer}>
-      <View style={styles.strengthBars}>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.strengthBar,
-              index < score && styles.strengthBarActive,
-            ]}
-          />
-        ))}
-      </View>
-
-      <View style={styles.strengthLabels}>
-        <Text variant="labelSmall">Weak </Text>
-        <Text variant="labelSmall">Strong </Text>
-      </View>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -389,31 +367,5 @@ const styles = StyleSheet.create({
 
   optionButtonContent: {
     justifyContent: "flex-start",
-  },
-
-  strengthContainer: {
-    gap: 8,
-  },
-
-  strengthBars: {
-    flexDirection: "row",
-    gap: 5,
-  },
-
-  strengthBar: {
-    flex: 1,
-    height: 7,
-    borderRadius: 4,
-    backgroundColor: "#ddd",
-  },
-
-  strengthBarActive: {
-    backgroundColor: "#236636",
-  },
-
-  strengthLabels: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    opacity: 0.6,
   },
 });
