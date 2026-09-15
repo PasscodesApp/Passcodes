@@ -255,6 +255,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     }),
 
     "@react-native-vector-icons/fontawesome6",
+    "react-native-quick-crypto",
   ],
 
   experiments: {
