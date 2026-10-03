@@ -1,10 +1,11 @@
+import CategoryField from "@/components/CategoryField";
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
 import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Button } from "react-native-paper";
@@ -16,6 +17,16 @@ export default function SavePasswordScreen() {
   let [password, setPassword] = useState("");
   let [url, setUrl] = useState("");
   let [notes, setNotes] = useState("");
+
+  // Preselect the category the user was viewing when they pressed "+".
+  // (missing / invalid param = Uncategorized)
+  const { categoryId: categoryIdParam } = useLocalSearchParams<{
+    categoryId?: string;
+  }>();
+  let [categoryId, setCategoryId] = useState<number | null>(() => {
+    const parsed = Number(categoryIdParam);
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+  });
 
   const passwordRepository = usePasswordRepository();
 
@@ -32,6 +43,7 @@ export default function SavePasswordScreen() {
         password,
         notes,
         url,
+        categoryId,
       });
 
       showToast("Password saved successfully");
@@ -79,6 +91,8 @@ export default function SavePasswordScreen() {
           placeholder="************"
           placeholderTextColor={"#9e9e9e"}
         />
+
+        <CategoryField value={categoryId} onChange={setCategoryId} />
 
         <FormTextField
           label="URL"

@@ -1,10 +1,12 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react";
 
 import DrizzleDatabaseProvider, { useDrizzleDatabase } from "@/db/provider";
+import { CategoryRepository } from "@/repositories/CategoryRepository";
 import { PasswordRepository } from "@/repositories/PasswordRepository";
 
 type Repositories = {
   password: PasswordRepository;
+  category: CategoryRepository;
 };
 
 const RepositoryContext = createContext<Repositories | undefined>(undefined);
@@ -19,6 +21,7 @@ function RepositoryProviderContent({
   const repositories = useMemo(
     () => ({
       password: new PasswordRepository(db),
+      category: new CategoryRepository(db),
     }),
     [db],
   );
@@ -51,4 +54,16 @@ export function usePasswordRepository(): PasswordRepository {
   }
 
   return repositories.password;
+}
+
+export function useCategoryRepository(): CategoryRepository {
+  const repositories = useContext(RepositoryContext);
+
+  if (!repositories) {
+    throw new Error(
+      "useCategoryRepository must be used inside RepositoryProvider",
+    );
+  }
+
+  return repositories.category;
 }

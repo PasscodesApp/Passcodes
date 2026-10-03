@@ -11,6 +11,7 @@
     "build": "bash scripts/build-all-cloud.sh",
     "build:develop": "eas build --profile development --platform android --local",
     "build:preview": "eas build --profile preview --platform android --local",
+    "db:generate": "drizzle-kit generate",
     "deploy": "eas build --profile deploy --platform android --local",
     "deploy:arm64": "eas build --profile deploy-arm64 --platform android --local",
     "deploy:armv7": "eas build --profile deploy-armv7 --platform android --local",

@@ -1,6 +1,6 @@
 import type { DrizzleDatabase } from "@/db/provider";
 import { passwords } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq, isNull, sql } from "drizzle-orm";
 
 export interface CreatePasswordInput {
   domain: string;
@@ -8,6 +8,8 @@ export interface CreatePasswordInput {
   password: string;
   notes?: string | null;
   url?: string | null;
+  /** `null` / omitted = Uncategorized. */
+  categoryId?: number | null;
 }
 
 export interface UpdatePasswordInput {
@@ -16,6 +18,8 @@ export interface UpdatePasswordInput {
   password?: string;
   notes?: string | null;
   url?: string | null;
+  /** `null` = move to Uncategorized. */
+  categoryId?: number | null;
 }
 
 export class PasswordRepository {
@@ -29,6 +33,29 @@ export class PasswordRepository {
    */
   observeAll() {
     return this.db.select().from(passwords);
+  }
+
+  /**
+   * Creates a query for observing the passwords of ONE category.
+   * `null` = Uncategorized (`category_id IS NULL`).
+   */
+  observeByCategory(categoryId: number | null) {
+    return this.db
+      .select()
+      .from(passwords)
+      .where(
+        categoryId === null
+          ? isNull(passwords.categoryId)
+          : eq(passwords.categoryId, categoryId),
+      );
+  }
+
+  /**
+   * Lightweight query for counting passwords per category.
+   * Selects ONLY `category_id`, so no password secrets are loaded.
+   */
+  observeCategoryIds() {
+    return this.db.select({ categoryId: passwords.categoryId }).from(passwords);
   }
 
   async getAll() {
