@@ -5,6 +5,13 @@ import { and, asc, eq, ne, sql } from "drizzle-orm";
 export const CATEGORY_NAME_MAX_LENGTH = 40;
 
 /**
+ * Display name of the virtual group of passwords WITHOUT a category
+ * (`category_id IS NULL`), the "leftovers", not "all passwords".
+ * Change it here and it changes everywhere.
+ */
+export const UNCATEGORIZED_LABEL = "Unsorted";
+
+/**
  * Thrown for invalid user input (empty / too long / duplicate name).
  * The message is safe to show to the user in a toast.
  */
@@ -117,7 +124,7 @@ export class CategoryRepository {
    * (no extra query, no N+1).
    */
   static countPasswordsByCategory(
-    passwordList: ReadonlyArray<{ categoryId: number | null }>,
+    passwordList: readonly { categoryId: number | null }[],
   ): Map<number | null, number> {
     const counts = new Map<number | null, number>();
 
@@ -143,10 +150,15 @@ export class CategoryRepository {
       );
     }
 
-    // "Uncategorized" is reserved for the virtual NULL group.
-    if (cleanName.toLowerCase() === "uncategorized") {
+    // The name of the virtual NULL group is reserved.
+    const lowerName = cleanName.toLowerCase();
+
+    if (
+      lowerName === UNCATEGORIZED_LABEL.toLowerCase() ||
+      lowerName === "uncategorized"
+    ) {
       throw new CategoryValidationError(
-        '"Uncategorized" is reserved, please pick another name.',
+        `"${cleanName}" is reserved, please pick another name.`,
       );
     }
 

@@ -20,8 +20,11 @@ export default function SavePasswordScreen() {
 
   // Preselect the category the user was viewing when they pressed "+".
   // (missing / invalid param = Uncategorized)
-  const { categoryId: categoryIdParam } = useLocalSearchParams<{
+  // `lockCategory=1` (opened from inside a folder): the folder is the
+  // category, so the field is hidden.
+  const { categoryId: categoryIdParam, lockCategory } = useLocalSearchParams<{
     categoryId?: string;
+    lockCategory?: string;
   }>();
   let [categoryId, setCategoryId] = useState<number | null>(() => {
     const parsed = Number(categoryIdParam);
@@ -92,7 +95,9 @@ export default function SavePasswordScreen() {
           placeholderTextColor={"#9e9e9e"}
         />
 
-        <CategoryField value={categoryId} onChange={setCategoryId} />
+        {lockCategory !== "1" && (
+          <CategoryField value={categoryId} onChange={setCategoryId} />
+        )}
 
         <FormTextField
           label="URL"

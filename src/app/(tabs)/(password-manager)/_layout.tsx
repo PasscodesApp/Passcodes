@@ -16,11 +16,6 @@ export default function PasswordManagerLayout() {
       />
 
       <Stack.Screen
-        name="manage-categories"
-        options={{ title: "Manage Categories", headerShown: true }}
-      />
-
-      <Stack.Screen
         name="save-password"
         options={{
           title: "New Password",
