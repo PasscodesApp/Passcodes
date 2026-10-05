@@ -1,3 +1,4 @@
+import CategoryField from "@/components/CategoryField";
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { useState } from "react";
@@ -8,6 +9,8 @@ type PasswordFormValue = {
   domain: string;
   username: string;
   password: string;
+  /** `null` = Uncategorized. */
+  categoryId: number | null;
   url: string;
   notes: string;
   updatedAt: string;
@@ -55,6 +58,12 @@ export default function PasswordFormCard({
         editable={editable}
       />
 
+      <CategoryField
+        value={value.categoryId}
+        onChange={(categoryId) => onChange("categoryId", categoryId)}
+        editable={editable}
+      />
+
       <FormTextField
         label="URL"
         value={value.url}
@@ -89,6 +98,7 @@ export function usePasswordForm() {
     domain: "",
     username: "",
     password: "",
+    categoryId: null,
     url: "",
     notes: "",
     updatedAt: "",

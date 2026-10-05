@@ -1,15 +1,23 @@
-import PasswordItemCard from "@/components/PasswordItemCard";
-import Text from "@/components/Text";
-import { usePasswordRepository } from "@/contexts/RepositoryContext";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
-import { FlashList } from "@shopify/flash-list";
-import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { router, Stack } from "expo-router";
-import { useMemo, useState } from "react";
-import { Alert, Pressable } from "react-native";
-import { FAB, IconButton, useTheme } from "react-native-paper";
+import FolderList from "@/components/FolderList";
+import GridToggleButton from "@/components/GridToggleButton";
+import GroupedPasswordList from "@/components/GroupedPasswordList";
+import HomeFab from "@/components/HomeFab";
+import SelectionBar from "@/components/SelectionBar";
+import { useCategoryActions, type CategoryNoun } from "@/libs/category_actions";
+import { UNCATEGORIZED_KEY, useCategoryGroups } from "@/libs/category_groups";
+import { useHomeLayout } from "@/libs/home_layout";
+import {
+  clearSelection,
+  useSelectionBackHandler,
+} from "@/libs/selection_store";
+import { router, Stack, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { useTheme } from "react-native-paper";
 
 export default function LoadPasswordScreen() {
+  const layout = useHomeLayout();
+  const noun: CategoryNoun = layout === "folders" ? "folder" : "category";
+
   const [forceGrid, setForceGrid] = useState(false);
   const numColumns = forceGrid ? 2 : 1;
 
@@ -19,77 +27,55 @@ export default function LoadPasswordScreen() {
 
   const theme = useTheme();
 
-  const passwordRepository = usePasswordRepository();
+  const query = searchQuery.trim().toLowerCase();
+  const isSearching = query !== "";
 
-  const { data: passwordList = [] } = useLiveQuery(
-    passwordRepository.observeAll(),
-    [refreshKey],
+  // Search finds passwords, so while searching always show the matches.
+  const showFolders = layout === "folders" && !isSearching;
+
+  const { groups, folders, visibleIds, hasCategories } = useCategoryGroups(
+    query,
+    refreshKey,
   );
 
-  const filteredPasswords = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
+  const { openCreate, openActions, dialogElement } = useCategoryActions(noun);
 
-    if (!query) {
-      return passwordList;
-    }
+  // Leaving the screen ends multi-select; Android back leaves it first.
+  useFocusEffect(useCallback(() => clearSelection, []));
+  useSelectionBackHandler();
 
-    return passwordList.filter((password) => {
-      const domain = password.domain?.toLowerCase() ?? "";
-      const username = password.username?.toLowerCase() ?? "";
-      const url = password.url?.toLowerCase() ?? "";
-      const notes = password.notes?.toLowerCase() ?? "";
+  const toggleGrid = useCallback(() => setForceGrid((g) => !g), []);
 
-      return (
-        domain.includes(query) ||
-        username.includes(query) ||
-        url.includes(query) ||
-        notes.includes(query)
-      );
-    });
-  }, [passwordList, searchQuery]);
-
-  async function onRefresh() {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     setRefreshKey((k) => k + 1);
     setRefreshing(false);
-  }
+  }, []);
 
-  function deletePassword(password: any) {
-    Alert.alert("Delete?", `${password.domain} : ${password.username}`, [
-      {
-        text: "Cancel",
-        style: "cancel",
+  const onOpenFolder = useCallback((categoryId: number | null) => {
+    router.push({
+      pathname: "/category-passwords",
+      params: {
+        categoryId: categoryId === null ? UNCATEGORIZED_KEY : categoryId,
       },
-      {
-        text: "Delete",
-        onPress: async () => {
-          await passwordRepository.delete(password.id);
-        },
-        style: "destructive",
-      },
-    ]);
-  }
+    });
+  }, []);
 
   return (
     <>
       <Stack.Screen
         options={{
           title: "Password Manager",
-          headerRight: (props) => (
-            <IconButton
-              icon={() => (
-                <FontAwesome6
-                  name={numColumns === 1 ? "grip" : "list"}
-                  iconStyle="solid"
-                  size={20}
-                  color={props.tintColor}
-                />
-              )}
-              onPress={() => {
-                setForceGrid((g) => !g);
-              }}
-            />
-          ),
+          // Always set (never omitted): the header keeps old options
+          // otherwise. Folders have no list/grid switch, so render nothing.
+          headerRight: (props) =>
+            showFolders ? null : (
+              <GridToggleButton
+                isGrid={numColumns === 2}
+                color={props.tintColor}
+                onPress={toggleGrid}
+              />
+            ),
         }}
       >
         <Stack.Screen.Title>Password Manager</Stack.Screen.Title>
@@ -111,68 +97,34 @@ export default function LoadPasswordScreen() {
         />
       </Stack.Screen>
 
-      <FlashList
-        data={filteredPasswords}
-        key={numColumns}
-        numColumns={numColumns}
-        keyExtractor={(item) => item.id.toString()}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        contentContainerStyle={{
-          padding: 20,
-        }}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <Text
-            style={{
-              textAlign: "center",
-              marginTop: 40,
-              fontSize: 12,
-              color: "gray",
-            }}
-          >
-            {searchQuery.trim() ? "No passwords found!!" : "No data!!"}
-          </Text>
-        }
-        renderItem={({ item }) => (
-          <Pressable
-            style={{ margin: 2 }}
-            onPress={() =>
-              router.push({
-                pathname: "/password-details",
-                params: { id: item.id },
-              })
-            }
-            onLongPress={() => deletePassword(item)}
-          >
-            <PasswordItemCard
-              {...item}
-              style={{
-                height: "100%",
-              }}
-            />
-          </Pressable>
-        )}
-      />
-
-      <FAB
-        style={{
-          position: "absolute",
-          bottom: 35,
-          right: 35,
-        }}
-        icon={({ size, color }) => (
-          <FontAwesome6
-            name="plus"
-            size={size}
-            color={color}
-            iconStyle="solid"
+      {showFolders ? (
+        <FolderList
+          folders={folders}
+          hasCategories={hasCategories}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          onOpenFolder={onOpenFolder}
+          onOpenActions={openActions}
+        />
+      ) : (
+        <>
+          <GroupedPasswordList
+            groups={groups}
+            numColumns={numColumns}
+            forceExpanded={isSearching}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            emptyText={isSearching ? "No passwords found!!" : "No data!!"}
+            onOpenActions={openActions}
           />
-        )}
-        onPress={() => {
-          router.push("/save-password");
-        }}
-      />
+
+          <SelectionBar allIds={visibleIds} />
+        </>
+      )}
+
+      <HomeFab layout={layout} noun={noun} onCreateCategory={openCreate} />
+
+      {dialogElement}
     </>
   );
 }

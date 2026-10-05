@@ -1,6 +1,19 @@
 import type { DrizzleDatabase } from "@/db/provider";
 import { passwords } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq, inArray, isNull, sql } from "drizzle-orm";
+
+/** SQLite limits the number of bound variables, so big batches are chunked. */
+const BATCH_SIZE = 500;
+
+function chunk<T>(items: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size));
+  }
+
+  return chunks;
+}
 
 export interface CreatePasswordInput {
   domain: string;
@@ -8,6 +21,8 @@ export interface CreatePasswordInput {
   password: string;
   notes?: string | null;
   url?: string | null;
+  /** `null` / omitted = Uncategorized. */
+  categoryId?: number | null;
 }
 
 export interface UpdatePasswordInput {
@@ -16,6 +31,8 @@ export interface UpdatePasswordInput {
   password?: string;
   notes?: string | null;
   url?: string | null;
+  /** `null` = move to Uncategorized. */
+  categoryId?: number | null;
 }
 
 export class PasswordRepository {
@@ -29,6 +46,29 @@ export class PasswordRepository {
    */
   observeAll() {
     return this.db.select().from(passwords);
+  }
+
+  /**
+   * Creates a query for observing the passwords of ONE category.
+   * `null` = Uncategorized (`category_id IS NULL`).
+   */
+  observeByCategory(categoryId: number | null) {
+    return this.db
+      .select()
+      .from(passwords)
+      .where(
+        categoryId === null
+          ? isNull(passwords.categoryId)
+          : eq(passwords.categoryId, categoryId),
+      );
+  }
+
+  /**
+   * Lightweight query for counting passwords per category.
+   * Selects ONLY `category_id`, so no password secrets are loaded.
+   */
+  observeCategoryIds() {
+    return this.db.select({ categoryId: passwords.categoryId }).from(passwords);
   }
 
   async getAll() {
@@ -90,5 +130,48 @@ export class PasswordRepository {
       .returning();
 
     return deletedPassword;
+  }
+
+  /** Number of passwords in ONE category. */
+  async countByCategory(categoryId: number) {
+    const [row] = await this.db
+      .select({ count: sql<number>`count(*)` })
+      .from(passwords)
+      .where(eq(passwords.categoryId, categoryId));
+
+    return Number(row?.count ?? 0);
+  }
+
+  /**
+   * Moves many passwords to a category (`null` = Uncategorized) in one
+   * transaction. Only `category_id` changes, `updated_at` is left alone
+   * because the password itself did not change.
+   */
+  async moveToCategory(ids: number[], categoryId: number | null) {
+    if (ids.length === 0) {
+      return;
+    }
+
+    this.db.transaction((tx) => {
+      for (const idChunk of chunk(ids, BATCH_SIZE)) {
+        tx.update(passwords)
+          .set({ categoryId })
+          .where(inArray(passwords.id, idChunk))
+          .run();
+      }
+    });
+  }
+
+  /** Deletes many passwords in one transaction. */
+  async deleteMany(ids: number[]) {
+    if (ids.length === 0) {
+      return;
+    }
+
+    this.db.transaction((tx) => {
+      for (const idChunk of chunk(ids, BATCH_SIZE)) {
+        tx.delete(passwords).where(inArray(passwords.id, idChunk)).run();
+      }
+    });
   }
 }

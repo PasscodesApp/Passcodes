@@ -56,6 +56,7 @@ export default function PasswordDetailsScreen() {
       domain: password.domain,
       username: password.username,
       password: password.password,
+      categoryId: password.categoryId ?? null,
       url: password.url || "",
       notes: password.notes || "",
       updatedAt: password.updatedAt

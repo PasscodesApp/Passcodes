@@ -17,6 +17,11 @@ import {
   getCSVPasswordString,
 } from "@/libs/importing";
 import {
+  setHomeLayout,
+  useHomeLayout,
+  type HomeLayout,
+} from "@/libs/home_layout";
+import {
   isScreenshotPreventionEnabled,
   toggleScreenshotPreventionFeature,
 } from "@/libs/screenshot_prevention";
@@ -24,7 +29,14 @@ import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { Alert, ScrollView } from "react-native";
-import { Card, Divider, List, Switch, useTheme } from "react-native-paper";
+import {
+  Card,
+  Divider,
+  List,
+  SegmentedButtons,
+  Switch,
+  useTheme,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
@@ -45,6 +57,8 @@ export default function SettingsScreen() {
 
   const isAutofillEnabled =
     PasscodesAutofillServiceModule.isAutofillServiceEnabled();
+
+  const homeLayout = useHomeLayout();
 
   const theme = useTheme();
   const passwordRepository = usePasswordRepository();
@@ -132,6 +146,35 @@ export default function SettingsScreen() {
                   onValueChange={toggleScreenshotPreventSwitch}
                 />
               )}
+            />
+          </List.Section>
+        </Card>
+
+        <Card>
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              style={{ paddingRight: 0 }}
+              title="Password layout"
+              description="How passwords are organised on the home screen"
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  style={[props.style, { marginVertical: "auto" }]}
+                  name="layer-group"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+            />
+
+            <SegmentedButtons
+              style={{ marginTop: 12 }}
+              value={homeLayout}
+              onValueChange={(value) => setHomeLayout(value as HomeLayout)}
+              buttons={[
+                { value: "grouped", label: "Grouped list" },
+                { value: "folders", label: "Folders" },
+              ]}
             />
           </List.Section>
         </Card>
