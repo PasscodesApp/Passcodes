@@ -5,17 +5,7 @@ import Config from "@/config";
 import {
   isBiometricsAuthEnabled,
   toggleBiometricsFeature,
-  unlockWithBiometricsApp,
 } from "@/libs/biometric";
-import {
-  getGooglePasswordsCSVContent,
-  type PasswordCSVFormat,
-  sharePasswordAsCSV,
-} from "@/libs/exporting";
-import {
-  convertRawCSVToPasswords,
-  getCSVPasswordString,
-} from "@/libs/importing";
 import {
   setHomeLayout,
   useHomeLayout,
@@ -27,8 +17,9 @@ import {
 } from "@/libs/screenshot_prevention";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import { useState } from "react";
-import { Alert, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import {
   Card,
   Divider,
@@ -39,7 +30,6 @@ import {
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
 
 export default function SettingsScreen() {
@@ -61,21 +51,6 @@ export default function SettingsScreen() {
   const homeLayout = useHomeLayout();
 
   const theme = useTheme();
-  const passwordRepository = usePasswordRepository();
-
-  async function handleImportPasswords() {
-    let content = await getCSVPasswordString();
-    let importPasswordList: PasswordCSVFormat[] =
-      convertRawCSVToPasswords(content);
-    await passwordRepository.importAll(importPasswordList);
-  }
-
-  async function handleExportPasswords() {
-    const result: PasswordCSVFormat[] = await passwordRepository.getAll();
-
-    let content = await getGooglePasswordsCSVContent(result);
-    sharePasswordAsCSV(content);
-  }
 
   return (
     <SafeAreaView style={{ flex: 1, paddingVertical: 12 }}>
@@ -183,7 +158,7 @@ export default function SettingsScreen() {
           <List.Section style={{ margin: 15 }}>
             <List.Item
               title="Import passwords"
-              description="Import a Google Password CSV"
+              description="From a Google Password CSV or a Passcodes backup"
               left={(props) => (
                 <FontAwesome6
                   {...props}
@@ -200,14 +175,14 @@ export default function SettingsScreen() {
                   size={20}
                 />
               )}
-              onPress={handleImportPasswords}
+              onPress={() => router.navigate("/import-passwords")}
             />
 
             <Divider />
 
             <List.Item
               title="Export passwords"
-              description="Share as Google Password CSV"
+              description="As a Google Password CSV or a Passcodes backup"
               left={(props) => (
                 <FontAwesome6
                   {...props}
@@ -224,18 +199,7 @@ export default function SettingsScreen() {
                   size={20}
                 />
               )}
-              onPress={async () => {
-                const result = await unlockWithBiometricsApp();
-
-                if (result) {
-                  handleExportPasswords();
-                } else {
-                  Alert.alert(
-                    "Authentication Failed",
-                    "Exporting passwords is protected by App Lock.",
-                  );
-                }
-              }}
+              onPress={() => router.navigate("/export-passwords")}
             />
           </List.Section>
         </Card>

@@ -21,6 +21,7 @@
   "dependencies": {
     "@passcodes/passalgo": "github:PasscodesApp/PassAlgo#main",
     "@react-native-community/slider": "5.2.0",
+    "@react-native-documents/picker": "^12.0.2",
     "@react-native-vector-icons/fontawesome6": "^13.1.5",
     "@shopify/flash-list": "2.0.2",
     "babel-plugin-inline-import": "^3.0.0",
@@ -43,6 +44,7 @@
     "expo-sqlite": "~57.0.4",
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
+    "papaparse": "^5.7.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
