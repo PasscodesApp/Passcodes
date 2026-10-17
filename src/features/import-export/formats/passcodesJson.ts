@@ -180,7 +180,11 @@ export function parsePasscodesJson(text: string): ParseResult {
 
   const version = document["version"];
 
-  if (typeof version !== "number" || !Number.isInteger(version) || version < 1) {
+  if (
+    typeof version !== "number" ||
+    !Number.isInteger(version) ||
+    version < 1
+  ) {
     return { ok: false, error: "The backup's version number is invalid." };
   }
 

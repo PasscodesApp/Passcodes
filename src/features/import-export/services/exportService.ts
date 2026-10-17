@@ -36,7 +36,9 @@ export async function exportPasswords(
   save: SaveFile,
   now: Date = new Date(),
 ): Promise<ExportOutcome> {
-  let passwordRows: Awaited<ReturnType<ExportRepositories["passwords"]["getAll"]>>;
+  let passwordRows: Awaited<
+    ReturnType<ExportRepositories["passwords"]["getAll"]>
+  >;
 
   try {
     passwordRows = await repositories.passwords.getAll();

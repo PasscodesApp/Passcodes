@@ -139,8 +139,8 @@ export default function ImportReviewScreenContent() {
                   already have (or appear twice in the file) but with a
                   different password. By default both versions are kept so you
                   can clean up later. Switch "Import" off to leave a version
-                  out, or "Remove" on to delete the version on this device
-                  once the imported one is saved.
+                  out, or "Remove" on to delete the version on this device once
+                  the imported one is saved.
                 </Text>
                 <Text variant="bodySmall" style={muted}>
                   {`${plan.fresh.length} other ${plan.fresh.length === 1 ? "password is" : "passwords are"} new and will be imported. ${plan.duplicates} exact ${plan.duplicates === 1 ? "duplicate is" : "duplicates are"} skipped. ${parsed.failures.filter((f) => f.table === "passwords").length} invalid ${parsed.failures.filter((f) => f.table === "passwords").length === 1 ? "record" : "records"} will not be imported.`}

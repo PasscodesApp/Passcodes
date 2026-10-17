@@ -2,7 +2,13 @@ import Text from "@/components/Text";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { useState } from "react";
 import { View } from "react-native";
-import { Card, Divider, IconButton, Switch, useTheme } from "react-native-paper";
+import {
+  Card,
+  Divider,
+  IconButton,
+  Switch,
+  useTheme,
+} from "react-native-paper";
 
 import type {
   CandidatePassword,
@@ -134,9 +140,7 @@ export default function ConflictGroupCard({
               />
             )}
             onPress={() => setRevealed((value) => !value)}
-            accessibilityLabel={
-              revealed ? "Hide passwords" : "Show passwords"
-            }
+            accessibilityLabel={revealed ? "Hide passwords" : "Show passwords"}
           />
         </View>
 

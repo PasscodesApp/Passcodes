@@ -89,15 +89,21 @@ export default function ImportScreenContent() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
-      <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+      <Text
+        variant="bodyMedium"
+        style={{ color: theme.colors.onSurfaceVariant }}
+      >
         Choose a format, then select the file to import. Imported passwords are
         added to the ones you already have.
       </Text>
 
-      <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
-        Passwords that already exist with the same domain, username and
-        password are skipped. If the same domain and username has a different
-        password, you can review those before anything is imported.
+      <Text
+        variant="bodySmall"
+        style={{ color: theme.colors.onSurfaceVariant }}
+      >
+        Passwords that already exist with the same domain, username and password
+        are skipped. If the same domain and username has a different password,
+        you can review those before anything is imported.
       </Text>
 
       <FormatSelector value={format} onChange={setFormat} disabled={busy} />

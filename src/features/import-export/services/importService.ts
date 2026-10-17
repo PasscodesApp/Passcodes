@@ -9,9 +9,7 @@
  * from the file.
  */
 
-import type {
-  CategoryRepository,
-} from "@/repositories/CategoryRepository";
+import type { CategoryRepository } from "@/repositories/CategoryRepository";
 import type {
   ImportPasswordRow,
   PasswordRepository,
@@ -134,7 +132,11 @@ function normalizeCategoryName(name: string): string {
 async function resolveCategories(
   candidates: readonly CandidateCategory[],
   repository: ImportRepositories["categories"],
-): Promise<{ idBySource: Map<number, number>; created: number; failed: number }> {
+): Promise<{
+  idBySource: Map<number, number>;
+  created: number;
+  failed: number;
+}> {
   const idBySource = new Map<number, number>();
 
   if (candidates.length === 0) {

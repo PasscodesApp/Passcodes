@@ -49,7 +49,9 @@ export function placeholderUrl(domain: string): string {
   return `https://local.${domain}`;
 }
 
-export function serializeGoogleCsv(rows: readonly GoogleCsvExportRow[]): string {
+export function serializeGoogleCsv(
+  rows: readonly GoogleCsvExportRow[],
+): string {
   // Papa quotes a field only when needed (comma, quote, newline, edge
   // whitespace) and doubles embedded quotes. `escapeFormulae` stays off on
   // purpose: it would rewrite passwords that start with `=`, `+`, `-` or `@`.
@@ -107,7 +109,9 @@ export function parseGoogleCsv(text: string): ParseResult {
     };
   }
 
-  const missing = REQUIRED_COLUMNS.filter((column) => !headers.includes(column));
+  const missing = REQUIRED_COLUMNS.filter(
+    (column) => !headers.includes(column),
+  );
 
   if (missing.length > 0) {
     return {
