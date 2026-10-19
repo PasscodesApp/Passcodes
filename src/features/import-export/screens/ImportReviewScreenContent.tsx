@@ -134,14 +134,15 @@ export default function ImportReviewScreenContent() {
                 <Text variant="titleMedium">
                   {`${plan.conflicts.length} ${plan.conflicts.length === 1 ? "account has" : "accounts have"} more than one version`}
                 </Text>
+
                 <Text variant="bodySmall" style={muted}>
-                  These have the same domain and username as a password you
-                  already have (or appear twice in the file) but with a
-                  different password. By default both versions are kept so you
-                  can clean up later. Switch "Import" off to leave a version
-                  out, or "Remove" on to delete the version on this device once
-                  the imported one is saved.
+                  These passwords share the same domain and username but have
+                  different passwords. This can happen if a password appears
+                  more than once in the file or differs from one already saved
+                  on your device. By default, both versions are kept so you can
+                  review them later.
                 </Text>
+
                 <Text variant="bodySmall" style={muted}>
                   {`${plan.fresh.length} other ${plan.fresh.length === 1 ? "password is" : "passwords are"} new and will be imported. ${plan.duplicates} exact ${plan.duplicates === 1 ? "duplicate is" : "duplicates are"} skipped. ${parsed.failures.filter((f) => f.table === "passwords").length} invalid ${parsed.failures.filter((f) => f.table === "passwords").length === 1 ? "record" : "records"} will not be imported.`}
                 </Text>
