@@ -56,6 +56,7 @@ export default function PasswordFormCard({
         value={value.password}
         onChangeText={(text) => onChange("password", text)}
         editable={editable}
+        screenCaptureKey="password-form"
       />
 
       <CategoryField
