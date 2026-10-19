@@ -1,9 +1,12 @@
 import * as ScreenCapture from "expo-screen-capture";
+import { isScreenshotPreventionEnabled } from "./store";
 
 export async function preventScreenShots(key?: string) {
-  await ScreenCapture.preventScreenCaptureAsync(key);
+  isScreenshotPreventionEnabled() &&
+    (await ScreenCapture.preventScreenCaptureAsync(key));
 }
 
 export async function allowScreenShots(key?: string) {
-  await ScreenCapture.allowScreenCaptureAsync(key);
+  isScreenshotPreventionEnabled() &&
+    (await ScreenCapture.allowScreenCaptureAsync(key));
 }

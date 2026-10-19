@@ -5,7 +5,7 @@ import Config from "@/config";
 import {
   isScreenshotPreventionEnabled,
   toggleScreenshotPreventionFeature,
-} from "@/features/screenshot-prevention/screenshot_prevention";
+} from "@/features/screenshot-prevention";
 import {
   isBiometricsAuthEnabled,
   toggleBiometricsFeature,
