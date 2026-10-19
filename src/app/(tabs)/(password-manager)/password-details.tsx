@@ -4,8 +4,8 @@ import PasswordFormCard, {
 } from "@/components/PasswordFormCard";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
+import { useSecretScreenController } from "@/features/screenshot-prevention";
 
-import { getScreenShotSecureScreen } from "@/libs/screenshot_prevention";
 import { formatDate } from "@passcodes/passalgo";
 
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
@@ -28,7 +28,7 @@ export default function PasswordDetailsScreen() {
 
   const { showToast } = useToast();
 
-  getScreenShotSecureScreen();
+  useSecretScreenController("password-details");
 
   /**
    * Remove focus from whichever TextInput is currently focused

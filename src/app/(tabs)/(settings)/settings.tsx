@@ -3,6 +3,10 @@ import { LinkIconButton } from "@/components/LinkIconButton";
 import Text from "@/components/Text";
 import Config from "@/config";
 import {
+  isScreenshotPreventionEnabled,
+  toggleScreenshotPreventionFeature,
+} from "@/features/screenshot-prevention/screenshot_prevention";
+import {
   isBiometricsAuthEnabled,
   toggleBiometricsFeature,
 } from "@/libs/biometric";
@@ -11,10 +15,6 @@ import {
   useHomeLayout,
   type HomeLayout,
 } from "@/libs/home_layout";
-import {
-  isScreenshotPreventionEnabled,
-  toggleScreenshotPreventionFeature,
-} from "@/libs/screenshot_prevention";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
