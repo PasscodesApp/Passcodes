@@ -167,7 +167,11 @@ export default async function roomDrizzleMigration(
     await expoDb.withTransactionAsync(async () => {
       insertStatement = await expoDb.prepareAsync(
         `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
-        VALUES ($domain, $username, $password, $notes, $url, $created_at, $updated_at)`,
+        VALUES (
+          $domain, $username, $password, $notes, $url,
+          COALESCE($created_at, CURRENT_TIMESTAMP),
+          COALESCE($updated_at, $created_at, CURRENT_TIMESTAMP)
+        )`,
       );
 
       for (const data of intermediateDataRepresentation) {
