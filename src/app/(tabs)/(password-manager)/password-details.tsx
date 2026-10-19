@@ -4,7 +4,6 @@ import PasswordFormCard, {
 } from "@/components/PasswordFormCard";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
-import { useSecretScreen } from "@/features/screenshot-prevention";
 
 import { formatDate } from "@passcodes/passalgo";
 
@@ -27,8 +26,6 @@ export default function PasswordDetailsScreen() {
   const [isEditing, setIsEditing] = useState(false);
 
   const { showToast } = useToast();
-
-  useSecretScreen("password-details");
 
   /**
    * Remove focus from whichever TextInput is currently focused

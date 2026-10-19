@@ -3,7 +3,6 @@ import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
-import { useSecretScreen } from "@/features/screenshot-prevention";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -59,8 +58,6 @@ export default function SavePasswordScreen() {
 
   const { showToast } = useToast();
 
-  useSecretScreen("save-password");
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
@@ -93,6 +90,7 @@ export default function SavePasswordScreen() {
           onChangeText={setPassword}
           placeholder="************"
           placeholderTextColor={"#9e9e9e"}
+          screenCaptureKey="save-password"
         />
 
         {lockCategory !== "1" && (
