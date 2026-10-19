@@ -114,9 +114,15 @@ export function serializePasscodesJson(
 
 const KNOWN_TABLES = ["passwords", "categories"];
 
-/** `YYYY-MM-DD HH:MM:SS` (SQLite) or ISO 8601, optional fraction and zone. */
+/**
+ * What `created_at` / `updated_at` can hold:
+ * - `YYYY-MM-DD HH:MM:SS` (SQLite) or ISO 8601, optional fraction and zone;
+ * - an epoch number as text (9-13 digits, SQLite may add ".0" when it turns a
+ *   JS number into text): passwords migrated from the old Room database can
+ *   carry these, and they must survive a backup unchanged.
+ */
 const TIMESTAMP_PATTERN =
-  /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/;
+  /^(?:\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?|\d{9,13}(?:\.\d+)?)$/;
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   return typeof value === "object" && value !== null && !Array.isArray(value)
@@ -180,11 +186,7 @@ export function parsePasscodesJson(text: string): ParseResult {
 
   const version = document["version"];
 
-  if (
-    typeof version !== "number" ||
-    !Number.isInteger(version) ||
-    version < 1
-  ) {
+  if (typeof version !== "number" || !Number.isInteger(version) || version < 1) {
     return { ok: false, error: "The backup's version number is invalid." };
   }
 
