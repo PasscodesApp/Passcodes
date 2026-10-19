@@ -6,7 +6,7 @@ enum SCREENSHOT_PREVENTION_KV {
   DISABLED = "false",
 }
 
-export function toggleScreenshotPreventionFeature() {
+export function toggleScreenshotPrevention() {
   let isEnabled = isScreenshotPreventionEnabled();
 
   AsyncStorage.setItemAsync(

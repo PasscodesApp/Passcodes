@@ -4,7 +4,7 @@ import Text from "@/components/Text";
 import Config from "@/config";
 import {
   isScreenshotPreventionEnabled,
-  toggleScreenshotPreventionFeature,
+  toggleScreenshotPrevention,
 } from "@/features/screenshot-prevention";
 import {
   isBiometricsAuthEnabled,
@@ -39,11 +39,11 @@ export default function SettingsScreen() {
   const toggleInAppLockSwitch = () =>
     setIsAppLockEnabled(toggleBiometricsFeature());
 
-  const [isScreenshotPreventEnabled, setIsScreenshotPreventEnabled] = useState(
+  const [isScreenshotPreventOn, setIsScreenshotPreventOn] = useState(
     isScreenshotPreventionEnabled(),
   );
   const toggleScreenshotPreventSwitch = () =>
-    setIsScreenshotPreventEnabled(toggleScreenshotPreventionFeature());
+    setIsScreenshotPreventOn(toggleScreenshotPrevention());
 
   const isAutofillEnabled =
     PasscodesAutofillServiceModule.isAutofillServiceEnabled();
@@ -117,7 +117,7 @@ export default function SettingsScreen() {
               right={() => (
                 <Switch
                   style={{ alignSelf: "flex-end" }}
-                  value={isScreenshotPreventEnabled}
+                  value={isScreenshotPreventOn}
                   onValueChange={toggleScreenshotPreventSwitch}
                 />
               )}
