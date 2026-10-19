@@ -3,7 +3,7 @@ import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
-import { useSecretScreenController } from "@/features/screenshot-prevention";
+import { useSecretScreen } from "@/features/screenshot-prevention";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -59,7 +59,7 @@ export default function SavePasswordScreen() {
 
   const { showToast } = useToast();
 
-  useSecretScreenController("save-password");
+  useSecretScreen("save-password");
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

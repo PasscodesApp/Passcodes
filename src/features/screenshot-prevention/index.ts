@@ -1,7 +1,7 @@
 import * as ScreenCapture from "expo-screen-capture";
 import { useEffect } from "react";
 
-export function useSecretScreenController(key: string) {
+export function useSecretScreen(key: string) {
   useEffect(() => {
     ScreenCapture.preventScreenCaptureAsync(key);
 
