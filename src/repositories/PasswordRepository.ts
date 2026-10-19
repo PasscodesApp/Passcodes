@@ -5,6 +5,9 @@ import { eq, inArray, isNull, sql } from "drizzle-orm";
 /** SQLite limits the number of bound variables, so big batches are chunked. */
 const BATCH_SIZE = 500;
 
+/** Rows per transaction when importing. */
+const IMPORT_CHUNK_SIZE = 200;
+
 function chunk<T>(items: T[], size: number): T[][] {
   const chunks: T[][] = [];
 
@@ -23,6 +26,25 @@ export interface CreatePasswordInput {
   url?: string | null;
   /** `null` / omitted = Uncategorized. */
   categoryId?: number | null;
+}
+
+/** One password to import. Timestamps are kept as given; `null` = now. */
+export interface ImportPasswordRow {
+  domain: string;
+  username: string;
+  password: string;
+  notes: string | null;
+  url: string | null;
+  categoryId: number | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
+export interface ImportManyResult {
+  /** Indexes (into the rows passed in) that were committed. */
+  insertedIndexes: number[];
+  /** Indexes that could not be written. */
+  failedIndexes: number[];
 }
 
 export interface UpdatePasswordInput {
@@ -75,6 +97,15 @@ export class PasswordRepository {
     return this.observeAll();
   }
 
+  /** Total number of stored passwords. */
+  async count() {
+    const [row] = await this.db
+      .select({ count: sql<number>`count(*)` })
+      .from(passwords);
+
+    return Number(row?.count ?? 0);
+  }
+
   async getById(id: number) {
     const [password] = await this.db
       .select()
@@ -93,21 +124,57 @@ export class PasswordRepository {
     return createdPassword;
   }
 
-  // TODO: temporary solution we will create a upsert all method
-  async importAll(data: CreatePasswordInput[]) {
-    this.db.transaction((tx) => {
-      data.forEach((importablePassword) => {
-        tx.insert(passwords)
-          .values({
-            domain: importablePassword.domain,
-            username: importablePassword.username,
-            password: importablePassword.password,
-            notes: importablePassword.notes,
-            url: importablePassword.url,
-          })
-          .execute();
-      });
+  /**
+   * Inserts imported passwords, preserving their timestamps (`null` = use
+   * the database default, i.e. now).
+   *
+   * Rows are written in chunks, one transaction per chunk. If a chunk fails
+   * it is rolled back and retried row by row, so one bad row never costs the
+   * others. The result reports what was REALLY committed, as indexes into
+   * `rows`.
+   */
+  async importMany(rows: readonly ImportPasswordRow[]): Promise<ImportManyResult> {
+    const insertedIndexes: number[] = [];
+    const failedIndexes: number[] = [];
+
+    const toValues = (row: ImportPasswordRow) => ({
+      domain: row.domain,
+      username: row.username,
+      password: row.password,
+      notes: row.notes,
+      url: row.url,
+      categoryId: row.categoryId,
+      createdAt: row.createdAt ?? undefined,
+      updatedAt: row.updatedAt ?? undefined,
     });
+
+    for (let start = 0; start < rows.length; start += IMPORT_CHUNK_SIZE) {
+      const slice = rows.slice(start, start + IMPORT_CHUNK_SIZE);
+
+      try {
+        this.db.transaction((tx) => {
+          for (const row of slice) {
+            tx.insert(passwords).values(toValues(row)).run();
+          }
+        });
+
+        slice.forEach((_, offset) => insertedIndexes.push(start + offset));
+      } catch {
+        slice.forEach((row, offset) => {
+          try {
+            this.db.insert(passwords).values(toValues(row)).run();
+            insertedIndexes.push(start + offset);
+          } catch {
+            failedIndexes.push(start + offset);
+          }
+        });
+      }
+
+      // The SQLite driver is synchronous: give the UI thread a turn.
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    }
+
+    return { insertedIndexes, failedIndexes };
   }
 
   async update(id: number, data: UpdatePasswordInput) {

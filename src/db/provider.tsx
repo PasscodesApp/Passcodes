@@ -181,8 +181,8 @@ function DrizzleDatabaseError({ error }: { error: unknown }) {
             textAlign: "center",
           }}
         >
-          Passcodes couldn't prepare its local database. Please close and reopen
-          the app.
+          Passcodes couldn&apos;t prepare its local database. Please close and
+          reopen the app.
         </Text>
       </View>
     </SafeAreaView>
