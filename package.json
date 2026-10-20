@@ -19,7 +19,7 @@
     "deploy:x86_64": "eas build --profile deploy-x86_64 --platform android --local"
   },
   "dependencies": {
-    "@passcodes/passalgo": "github:PasscodesApp/PassAlgo#v1.0.0",
+    "@passcodes/passalgo": "git+https://github.com/PasscodesApp/PassAlgo.git#v1.0.0",
     "@react-native-community/slider": "5.2.0",
     "@react-native-documents/picker": "^12.0.2",
     "@react-native-vector-icons/fontawesome6": "^13.1.5",
@@ -44,7 +44,6 @@
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
     "install": "^0.13.0",
-    "npm": "^12.2.0",
     "papaparse": "^5.7.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
