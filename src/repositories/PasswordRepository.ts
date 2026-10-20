@@ -2,6 +2,8 @@ import type { DrizzleDatabase } from "@/db/provider";
 import { passwords } from "@/db/schema";
 import { eq, inArray, isNull, sql } from "drizzle-orm";
 
+import { pickEditablePasswordFields } from "./passwordChanges";
+
 /** SQLite limits the number of bound variables, so big batches are chunked. */
 const BATCH_SIZE = 500;
 
@@ -133,7 +135,9 @@ export class PasswordRepository {
    * others. The result reports what was REALLY committed, as indexes into
    * `rows`.
    */
-  async importMany(rows: readonly ImportPasswordRow[]): Promise<ImportManyResult> {
+  async importMany(
+    rows: readonly ImportPasswordRow[],
+  ): Promise<ImportManyResult> {
     const insertedIndexes: number[] = [];
     const failedIndexes: number[] = [];
 
@@ -180,10 +184,12 @@ export class PasswordRepository {
   async update(id: number, data: UpdatePasswordInput) {
     const [updatedPassword] = await this.db
       .update(passwords)
-      .set({
-        ...data,
-        updatedAt: sql`CURRENT_TIMESTAMP`, // TODO: It will no longer be required, once drizzle `$onUpdate()` will be used.
-      })
+      // TODO:
+      // `updated_at` is refreshed by the schema's `$onUpdateFn`. Only the
+      // editable fields are passed on: callers may hand over more (e.g. the
+      // form state with its formatted "Updated" text), and that must never be
+      // written into a column.
+      .set(pickEditablePasswordFields(data))
       .where(eq(passwords.id, id))
       .returning();
 
@@ -211,8 +217,7 @@ export class PasswordRepository {
 
   /**
    * Moves many passwords to a category (`null` = Uncategorized) in one
-   * transaction. Only `category_id` changes, `updated_at` is left alone
-   * because the password itself did not change.
+   * transaction. Only `category_id` changes.
    */
   async moveToCategory(ids: number[], categoryId: number | null) {
     if (ids.length === 0) {

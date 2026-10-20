@@ -16,8 +16,13 @@ import {
 export const categories = sqliteTable("categories", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
-  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at")
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`)
+    .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
 });
 
 export const passwords = sqliteTable(
@@ -29,8 +34,13 @@ export const passwords = sqliteTable(
     password: text("password").notNull(),
     notes: text("notes"),
     url: text("url"),
-    createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
-    updatedAt: text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`)
+      .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
 
     /*
      * NULL = Uncategorized.
@@ -43,19 +53,6 @@ export const passwords = sqliteTable(
       (): AnySQLiteColumn => categories.id,
       { onDelete: "set null" },
     ),
-
-    /*
-     * Suggested Updates:-
-     *
-     *  createdAt: text("created_at")
-     *    .notNull()
-     *    .default(sql`CURRENT_TIMESTAMP`),
-     *
-     *  updatedAt: text("updated_at")
-     *    .notNull()
-     *    .default(sql`CURRENT_TIMESTAMP`)
-     *    .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
-     */
   },
   (table) => [index("passwords_category_id_idx").on(table.categoryId)],
 );

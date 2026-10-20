@@ -83,7 +83,7 @@ export class CategoryRepository {
 
     const [updated] = await this.db
       .update(categories)
-      .set({ name: cleanName, updatedAt: sql`CURRENT_TIMESTAMP` })
+      .set({ name: cleanName })
       .where(eq(categories.id, id))
       .returning();
 
@@ -100,10 +100,7 @@ export class CategoryRepository {
    * Passwords are never deleted unless `mode === "delete"` is passed
    * explicitly.
    */
-  async delete(
-    id: number,
-    mode: DeleteCategoryPasswordsMode = "uncategorize",
-  ) {
+  async delete(id: number, mode: DeleteCategoryPasswordsMode = "uncategorize") {
     this.db.transaction((tx) => {
       if (mode === "delete") {
         tx.delete(passwords).where(eq(passwords.categoryId, id)).run();
@@ -121,7 +118,7 @@ export class CategoryRepository {
   /**
    * Number of passwords per category id, with `null` = Uncategorized.
    * Pure helper so it can run on the already-loaded live password list
-   * (no extra query, no N+1).
+   * (no extra query).
    */
   static countPasswordsByCategory(
     passwordList: readonly { categoryId: number | null }[],
