@@ -57,7 +57,7 @@ export default function PasswordDetailsScreen() {
       url: password.url || "",
       notes: password.notes || "",
       updatedAt: password.updatedAt
-        ? formatDate(password.updatedAt)
+        ? formatDate(password.updatedAt * 1000)
         : "just now",
     });
   }

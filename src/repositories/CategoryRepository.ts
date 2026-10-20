@@ -1,5 +1,6 @@
 import type { DrizzleDatabase } from "@/db/provider";
 import { categories, passwords } from "@/db/schema";
+import { CURRENT_TIMESTAMP_SQL } from "@/libs/timestamp_unixepoch_utils";
 import { and, asc, eq, isNull, ne, sql } from "drizzle-orm";
 
 export const CATEGORY_NAME_MAX_LENGTH = 40;
@@ -99,7 +100,7 @@ export class CategoryRepository {
       // TODO: migrate this password table code to password repository.
       if (mode === "delete") {
         tx.update(passwords)
-          .set({ categoryId: null, deletedAt: sql`CURRENT_TIMESTAMP` })
+          .set({ categoryId: null, deletedAt: sql`${CURRENT_TIMESTAMP_SQL}` })
           .where(and(eq(passwords.categoryId, id), isNull(passwords.deletedAt)))
           .run();
       } else {

@@ -120,7 +120,7 @@ export interface ExistingPassword {
   domain: string;
   username: string;
   password: string;
-  updatedAt: string | null;
+  updatedAt: number | null;
 }
 
 /**

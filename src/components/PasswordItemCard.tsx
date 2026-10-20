@@ -6,7 +6,7 @@ import { useTheme } from "react-native-paper";
 type Props = {
   domain: string;
   username: string;
-  updatedAt: string | null;
+  updatedAt: number | null;
   style?: ViewStyle;
 };
 
@@ -53,7 +53,7 @@ export default function PasswordItemCard({
       <Text style={[styles.label, { color: theme.colors.onSurface }]}>
         Updated At:{" "}
         <Text style={[styles.value, { color: theme.colors.tertiary }]}>
-          {updatedAt ? formatDate(updatedAt) : "just now"}
+          {updatedAt ? formatDate(updatedAt * 1000) : "just now"}
         </Text>
       </Text>
     </View>
