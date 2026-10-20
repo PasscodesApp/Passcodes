@@ -8,7 +8,7 @@ import {
   type PasswordGeneratorOptions,
 } from "@passcodes/passalgo/passwords";
 import Slider from "@react-native-community/slider";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import * as Clipboard from "expo-clipboard";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";

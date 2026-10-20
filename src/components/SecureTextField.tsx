@@ -44,7 +44,7 @@ export default function SecureTextField({
               name={isPasswordVisible ? "eye-slash" : "eye"}
               size={size}
               color={color}
-              iconStyle="regular"
+              iconStyle="solid"
             />
           )}
           forceTextInputFocus={false}

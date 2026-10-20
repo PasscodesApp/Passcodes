@@ -1,4 +1,4 @@
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { useEffect, useRef } from "react";
 import { Animated, View } from "react-native";
 import { Text } from "react-native-paper";

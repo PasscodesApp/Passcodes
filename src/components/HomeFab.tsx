@@ -2,7 +2,7 @@ import SpeedDialFab, { type SpeedDialAction } from "@/components/SpeedDialFab";
 import type { CategoryNoun } from "@/libs/category_actions";
 import type { HomeLayout } from "@/libs/home_layout";
 import { useIsSelecting } from "@/libs/selection_store";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { router } from "expo-router";
 import { memo, useMemo } from "react";
 import { FAB } from "react-native-paper";
@@ -13,7 +13,12 @@ const renderPlus = (size: number, color: string) => (
 );
 
 const renderFolderPlus = (size: number, color: string) => (
-  <FontAwesome6 name="folder-plus" size={size} color={color} iconStyle="solid" />
+  <FontAwesome6
+    name="folder-plus"
+    size={size}
+    color={color}
+    iconStyle="solid"
+  />
 );
 
 const FolderPlusIcon = ({ size, color }: { size: number; color: string }) =>

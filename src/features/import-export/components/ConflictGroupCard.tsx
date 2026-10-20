@@ -1,5 +1,5 @@
 import Text from "@/components/Text";
-import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
 import { useState } from "react";
 import { View } from "react-native";
 import {

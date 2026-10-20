@@ -5,10 +5,16 @@ import {
   toggleSelected,
   useSelectionState,
 } from "@/libs/selection_store";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { router } from "expo-router";
 import { memo, useCallback } from "react";
-import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 import { useTheme } from "react-native-paper";
 
 /**
@@ -93,7 +99,9 @@ function PasswordListItem({
               borderColor: isSelected
                 ? theme.colors.primary
                 : theme.colors.outline,
-              backgroundColor: isSelected ? theme.colors.primary : "transparent",
+              backgroundColor: isSelected
+                ? theme.colors.primary
+                : "transparent",
               alignItems: "center",
               justifyContent: "center",
             }}
