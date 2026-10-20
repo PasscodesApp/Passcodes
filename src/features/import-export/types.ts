@@ -44,7 +44,7 @@ export interface CandidatePassword {
   username: string;
   password: string;
   notes: string | null;
-  /** `_id` of the category in the same file. `null` = Unsorted. */
+  /** `_id` of the category in the same file. `null` = Uncategorized. */
   categorySourceId: number | null;
   /** Raw stored timestamp, or `null` to use the import time. */
   createdAt: string | null;

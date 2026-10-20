@@ -35,6 +35,7 @@
  *   added) and strict about structure (format, version, counts).
  */
 
+import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
 import type {
   CandidateCategory,
   CandidatePassword,
@@ -186,7 +187,11 @@ export function parsePasscodesJson(text: string): ParseResult {
 
   const version = document["version"];
 
-  if (typeof version !== "number" || !Number.isInteger(version) || version < 1) {
+  if (
+    typeof version !== "number" ||
+    !Number.isInteger(version) ||
+    version < 1
+  ) {
     return { ok: false, error: "The backup's version number is invalid." };
   }
 
@@ -367,7 +372,7 @@ export function parsePasscodesJson(text: string): ParseResult {
   });
 
   // A password that points at a category that is not in the file is still a
-  // valid password: import it as Unsorted instead of losing it.
+  // valid password: import it as uncategorized instead of losing it.
   const knownCategoryIds = new Set(categories.map((c) => c.sourceId));
   let danglingReferences = 0;
 
@@ -383,7 +388,7 @@ export function parsePasscodesJson(text: string): ParseResult {
 
   if (danglingReferences > 0) {
     warnings.push(
-      `${danglingReferences} password(s) referred to a category that isn't in the file and will be imported as Unsorted.`,
+      `${danglingReferences} password(s) referred to a category that isn't in the file and will be imported as ${UNCATEGORIZED_LABEL}.`,
     );
   }
 

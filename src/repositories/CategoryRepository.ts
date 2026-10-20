@@ -9,7 +9,7 @@ export const CATEGORY_NAME_MAX_LENGTH = 40;
  * (`category_id IS NULL`), the "leftovers", not "all passwords".
  * Change it here and it changes everywhere.
  */
-export const UNCATEGORIZED_LABEL = "Unsorted";
+export const UNCATEGORIZED_LABEL = "Uncategorized";
 
 /**
  * Thrown for invalid user input (empty / too long / duplicate name).
