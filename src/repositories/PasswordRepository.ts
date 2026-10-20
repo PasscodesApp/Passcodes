@@ -38,8 +38,8 @@ export interface ImportPasswordRow {
   notes: string | null;
   url: string | null;
   categoryId: number | null;
-  createdAt: string | null;
-  updatedAt: string | null;
+  createdAt: number | null;
+  updatedAt: number | null;
 }
 
 export interface ImportManyResult {

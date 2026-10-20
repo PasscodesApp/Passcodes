@@ -47,16 +47,16 @@ export interface CandidatePassword {
   /** `_id` of the category in the same file. `null` = Uncategorized. */
   categorySourceId: number | null;
   /** Raw stored timestamp, or `null` to use the import time. */
-  createdAt: string | null;
-  updatedAt: string | null;
+  createdAt: number | null;
+  updatedAt: number | null;
 }
 
 export interface CandidateCategory {
   /** `_id` of the category in the file. */
   sourceId: number;
   name: string;
-  createdAt: string | null;
-  updatedAt: string | null;
+  createdAt: number | null;
+  updatedAt: number | null;
 }
 
 /**
