@@ -1,6 +1,6 @@
 import type { DrizzleDatabase } from "@/db/provider";
 import { passwords } from "@/db/schema";
-import { eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 
 import { pickEditablePasswordFields } from "./passwordChanges";
 
@@ -63,56 +63,64 @@ export class PasswordRepository {
   constructor(private readonly db: DrizzleDatabase) {}
 
   /**
-   * Creates a query for observing all passwords.
-   *
-   * This does not execute the query. Pass the returned query
-   * to a reactive consumer such as `useLiveQuery`.
+   * Observes active passwords only.
    */
   observeAll() {
-    return this.db.select().from(passwords);
+    return this.db.select().from(passwords).where(isNull(passwords.deletedAt));
   }
 
   /**
-   * Creates a query for observing the passwords of ONE category.
-   * `null` = Uncategorized (`category_id IS NULL`).
+   * Observes active passwords in ONE category.
+   *
+   * null = Uncategorized.
    */
   observeByCategory(categoryId: number | null) {
     return this.db
       .select()
       .from(passwords)
       .where(
-        categoryId === null
-          ? isNull(passwords.categoryId)
-          : eq(passwords.categoryId, categoryId),
+        and(
+          isNull(passwords.deletedAt),
+          categoryId === null
+            ? isNull(passwords.categoryId)
+            : eq(passwords.categoryId, categoryId),
+        ),
       );
   }
 
   /**
-   * Lightweight query for counting passwords per category.
-   * Selects ONLY `category_id`, so no password secrets are loaded.
+   * Returns category IDs for active passwords only.
    */
   observeCategoryIds() {
-    return this.db.select({ categoryId: passwords.categoryId }).from(passwords);
+    return this.db
+      .select({ categoryId: passwords.categoryId })
+      .from(passwords)
+      .where(isNull(passwords.deletedAt));
   }
 
   async getAll() {
     return this.observeAll();
   }
 
-  /** Total number of stored passwords. */
+  /** Total number of active passwords. */
   async count() {
     const [row] = await this.db
       .select({ count: sql<number>`count(*)` })
-      .from(passwords);
+      .from(passwords)
+      .where(isNull(passwords.deletedAt));
 
     return Number(row?.count ?? 0);
   }
 
+  /**
+   * Returns an active password, or undefined if it doesn't exist
+   * or has been soft-deleted.
+   */
   async getById(id: number) {
     const [password] = await this.db
       .select()
       .from(passwords)
-      .where(eq(passwords.id, id));
+      .where(and(eq(passwords.id, id), isNull(passwords.deletedAt)));
 
     return password;
   }
@@ -127,13 +135,8 @@ export class PasswordRepository {
   }
 
   /**
-   * Inserts imported passwords, preserving their timestamps (`null` = use
-   * the database default, i.e. now).
-   *
-   * Rows are written in chunks, one transaction per chunk. If a chunk fails
-   * it is rolled back and retried row by row, so one bad row never costs the
-   * others. The result reports what was REALLY committed, as indexes into
-   * `rows`.
+   * Imports passwords in chunks, preserving their timestamps.
+   * Newly imported rows use the default NULL deletedAt.
    */
   async importMany(
     rows: readonly ImportPasswordRow[],
@@ -181,6 +184,9 @@ export class PasswordRepository {
     return { insertedIndexes, failedIndexes };
   }
 
+  /**
+   * Updates active passwords only.
+   */
   async update(id: number, data: UpdatePasswordInput) {
     const [updatedPassword] = await this.db
       .update(passwords)
@@ -190,34 +196,41 @@ export class PasswordRepository {
       // form state with its formatted "Updated" text), and that must never be
       // written into a column.
       .set(pickEditablePasswordFields(data))
-      .where(eq(passwords.id, id))
+      .where(and(eq(passwords.id, id), isNull(passwords.deletedAt)))
       .returning();
 
     return updatedPassword;
   }
 
+  /**
+   * Soft-deletes one password.
+   *
+   * Returns the updated row, or undefined if it isn't active.
+   */
   async delete(id: number) {
     const [deletedPassword] = await this.db
-      .delete(passwords)
-      .where(eq(passwords.id, id))
+      .update(passwords)
+      .set({ deletedAt: sql`CURRENT_TIMESTAMP` })
+      .where(and(eq(passwords.id, id), isNull(passwords.deletedAt)))
       .returning();
 
     return deletedPassword;
   }
 
-  /** Number of passwords in ONE category. */
+  /** Number of active passwords in ONE category. */
   async countByCategory(categoryId: number) {
     const [row] = await this.db
       .select({ count: sql<number>`count(*)` })
       .from(passwords)
-      .where(eq(passwords.categoryId, categoryId));
+      .where(
+        and(eq(passwords.categoryId, categoryId), isNull(passwords.deletedAt)),
+      );
 
     return Number(row?.count ?? 0);
   }
 
   /**
-   * Moves many passwords to a category (`null` = Uncategorized) in one
-   * transaction. Only `category_id` changes.
+   * Moves active passwords to a category (null = Uncategorized).
    */
   async moveToCategory(ids: number[], categoryId: number | null) {
     if (ids.length === 0) {
@@ -228,13 +241,17 @@ export class PasswordRepository {
       for (const idChunk of chunk(ids, BATCH_SIZE)) {
         tx.update(passwords)
           .set({ categoryId })
-          .where(inArray(passwords.id, idChunk))
+          .where(
+            and(inArray(passwords.id, idChunk), isNull(passwords.deletedAt)),
+          )
           .run();
       }
     });
   }
 
-  /** Deletes many passwords in one transaction. */
+  /**
+   * Soft-deletes many active passwords in one transaction.
+   */
   async deleteMany(ids: number[]) {
     if (ids.length === 0) {
       return;
@@ -242,7 +259,12 @@ export class PasswordRepository {
 
     this.db.transaction((tx) => {
       for (const idChunk of chunk(ids, BATCH_SIZE)) {
-        tx.delete(passwords).where(inArray(passwords.id, idChunk)).run();
+        tx.update(passwords)
+          .set({ deletedAt: sql`CURRENT_TIMESTAMP` })
+          .where(
+            and(inArray(passwords.id, idChunk), isNull(passwords.deletedAt)),
+          )
+          .run();
       }
     });
   }

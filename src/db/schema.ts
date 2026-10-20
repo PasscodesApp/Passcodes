@@ -8,8 +8,6 @@ import {
 } from "drizzle-orm/sqlite-core";
 
 /**
- * Flat password categories (no hierarchy).
- *
  * "Uncategorized" is NOT a row here, it is the virtual state
  * for, passwords.category_id IS NULL.
  */
@@ -25,6 +23,9 @@ export const categories = sqliteTable("categories", {
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`)
     .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
+
+  // TODO: soft delete category
+  // deletedAt: text("deleted_at"),
 });
 
 export const passwords = sqliteTable(
@@ -45,6 +46,8 @@ export const passwords = sqliteTable(
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`)
       .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
+
+    deletedAt: text("deleted_at"),
 
     /*
      * NULL = Uncategorized.
