@@ -11,14 +11,16 @@ import {
  * Flat password categories (no hierarchy).
  *
  * "Uncategorized" is NOT a row here, it is the virtual state
- * `passwords.category_id IS NULL`.
+ * for, passwords.category_id IS NULL.
  */
 export const categories = sqliteTable("categories", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
+
   createdAt: text("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
+
   updatedAt: text("updated_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`)
@@ -34,9 +36,11 @@ export const passwords = sqliteTable(
     password: text("password").notNull(),
     notes: text("notes"),
     url: text("url"),
+
     createdAt: text("created_at")
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
+
     updatedAt: text("updated_at")
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`)
@@ -44,10 +48,8 @@ export const passwords = sqliteTable(
 
     /*
      * NULL = Uncategorized.
-     *
-     * NOTE: SQLite only enforces foreign keys when `PRAGMA foreign_keys = ON`.
-     * The app does not rely on it, CategoryRepository.delete() explicitly
-     * handles the passwords of a deleted category inside a transaction.
+     * CategoryRepository.delete() handles reassignment
+     * inside a transaction.
      */
     categoryId: integer("category_id").references(
       (): AnySQLiteColumn => categories.id,
