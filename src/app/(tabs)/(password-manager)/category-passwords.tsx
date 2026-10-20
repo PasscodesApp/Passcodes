@@ -7,12 +7,12 @@ import {
   useCategoryRepository,
   usePasswordRepository,
 } from "@/contexts/RepositoryContext";
-import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
 import { useCategoryActions } from "@/libs/category_actions";
 import {
   clearSelection,
   useSelectionBackHandler,
 } from "@/libs/selection_store";
+import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { FlashList } from "@shopify/flash-list";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
@@ -86,7 +86,7 @@ export default function CategoryPasswordsScreen() {
               />
 
               {/* Overflow menu last (far right), like every Android app bar.
-                  Unsorted has none: it can't be renamed or deleted. */}
+                  uncategorized has none: it can't be renamed or deleted. */}
               {categoryId !== null && (
                 <IconButton
                   accessibilityLabel="Folder actions"

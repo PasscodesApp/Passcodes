@@ -1,6 +1,8 @@
 import type { DrizzleDatabase } from "@/db/provider";
 import { passwords } from "@/db/schema";
-import { eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql } from "drizzle-orm";
+
+import { pickEditablePasswordFields } from "./passwordChanges";
 
 /** SQLite limits the number of bound variables, so big batches are chunked. */
 const BATCH_SIZE = 500;
@@ -61,56 +63,64 @@ export class PasswordRepository {
   constructor(private readonly db: DrizzleDatabase) {}
 
   /**
-   * Creates a query for observing all passwords.
-   *
-   * This does not execute the query. Pass the returned query
-   * to a reactive consumer such as `useLiveQuery`.
+   * Observes active passwords only.
    */
   observeAll() {
-    return this.db.select().from(passwords);
+    return this.db.select().from(passwords).where(isNull(passwords.deletedAt));
   }
 
   /**
-   * Creates a query for observing the passwords of ONE category.
-   * `null` = Uncategorized (`category_id IS NULL`).
+   * Observes active passwords in ONE category.
+   *
+   * null = Uncategorized.
    */
   observeByCategory(categoryId: number | null) {
     return this.db
       .select()
       .from(passwords)
       .where(
-        categoryId === null
-          ? isNull(passwords.categoryId)
-          : eq(passwords.categoryId, categoryId),
+        and(
+          isNull(passwords.deletedAt),
+          categoryId === null
+            ? isNull(passwords.categoryId)
+            : eq(passwords.categoryId, categoryId),
+        ),
       );
   }
 
   /**
-   * Lightweight query for counting passwords per category.
-   * Selects ONLY `category_id`, so no password secrets are loaded.
+   * Returns category IDs for active passwords only.
    */
   observeCategoryIds() {
-    return this.db.select({ categoryId: passwords.categoryId }).from(passwords);
+    return this.db
+      .select({ categoryId: passwords.categoryId })
+      .from(passwords)
+      .where(isNull(passwords.deletedAt));
   }
 
   async getAll() {
     return this.observeAll();
   }
 
-  /** Total number of stored passwords. */
+  /** Total number of active passwords. */
   async count() {
     const [row] = await this.db
       .select({ count: sql<number>`count(*)` })
-      .from(passwords);
+      .from(passwords)
+      .where(isNull(passwords.deletedAt));
 
     return Number(row?.count ?? 0);
   }
 
+  /**
+   * Returns an active password, or undefined if it doesn't exist
+   * or has been soft-deleted.
+   */
   async getById(id: number) {
     const [password] = await this.db
       .select()
       .from(passwords)
-      .where(eq(passwords.id, id));
+      .where(and(eq(passwords.id, id), isNull(passwords.deletedAt)));
 
     return password;
   }
@@ -118,22 +128,19 @@ export class PasswordRepository {
   async create(data: CreatePasswordInput) {
     const [createdPassword] = await this.db
       .insert(passwords)
-      .values(data)
+      .values({ source: "APPLICATION", ...data })
       .returning();
 
     return createdPassword;
   }
 
   /**
-   * Inserts imported passwords, preserving their timestamps (`null` = use
-   * the database default, i.e. now).
-   *
-   * Rows are written in chunks, one transaction per chunk. If a chunk fails
-   * it is rolled back and retried row by row, so one bad row never costs the
-   * others. The result reports what was REALLY committed, as indexes into
-   * `rows`.
+   * Imports passwords in chunks, preserving their timestamps.
+   * Newly imported rows use the default NULL deletedAt.
    */
-  async importMany(rows: readonly ImportPasswordRow[]): Promise<ImportManyResult> {
+  async importMany(
+    rows: readonly ImportPasswordRow[],
+  ): Promise<ImportManyResult> {
     const insertedIndexes: number[] = [];
     const failedIndexes: number[] = [];
 
@@ -154,7 +161,9 @@ export class PasswordRepository {
       try {
         this.db.transaction((tx) => {
           for (const row of slice) {
-            tx.insert(passwords).values(toValues(row)).run();
+            tx.insert(passwords)
+              .values({ source: "IMPORTED", ...toValues(row) })
+              .run();
           }
         });
 
@@ -162,7 +171,10 @@ export class PasswordRepository {
       } catch {
         slice.forEach((row, offset) => {
           try {
-            this.db.insert(passwords).values(toValues(row)).run();
+            this.db
+              .insert(passwords)
+              .values({ source: "IMPORTED", ...toValues(row) })
+              .run();
             insertedIndexes.push(start + offset);
           } catch {
             failedIndexes.push(start + offset);
@@ -177,42 +189,53 @@ export class PasswordRepository {
     return { insertedIndexes, failedIndexes };
   }
 
+  /**
+   * Updates active passwords only.
+   */
   async update(id: number, data: UpdatePasswordInput) {
     const [updatedPassword] = await this.db
       .update(passwords)
-      .set({
-        ...data,
-        updatedAt: sql`CURRENT_TIMESTAMP`, // TODO: It will no longer be required, once drizzle `$onUpdate()` will be used.
-      })
-      .where(eq(passwords.id, id))
+      // TODO:
+      // `updated_at` is refreshed by the schema's `$onUpdateFn`. Only the
+      // editable fields are passed on: callers may hand over more (e.g. the
+      // form state with its formatted "Updated" text), and that must never be
+      // written into a column.
+      .set(pickEditablePasswordFields(data))
+      .where(and(eq(passwords.id, id), isNull(passwords.deletedAt)))
       .returning();
 
     return updatedPassword;
   }
 
+  /**
+   * Soft-deletes one password.
+   *
+   * Returns the updated row, or undefined if it isn't active.
+   */
   async delete(id: number) {
     const [deletedPassword] = await this.db
-      .delete(passwords)
-      .where(eq(passwords.id, id))
+      .update(passwords)
+      .set({ deletedAt: sql`CURRENT_TIMESTAMP` })
+      .where(and(eq(passwords.id, id), isNull(passwords.deletedAt)))
       .returning();
 
     return deletedPassword;
   }
 
-  /** Number of passwords in ONE category. */
+  /** Number of active passwords in ONE category. */
   async countByCategory(categoryId: number) {
     const [row] = await this.db
       .select({ count: sql<number>`count(*)` })
       .from(passwords)
-      .where(eq(passwords.categoryId, categoryId));
+      .where(
+        and(eq(passwords.categoryId, categoryId), isNull(passwords.deletedAt)),
+      );
 
     return Number(row?.count ?? 0);
   }
 
   /**
-   * Moves many passwords to a category (`null` = Uncategorized) in one
-   * transaction. Only `category_id` changes, `updated_at` is left alone
-   * because the password itself did not change.
+   * Moves active passwords to a category (null = Uncategorized).
    */
   async moveToCategory(ids: number[], categoryId: number | null) {
     if (ids.length === 0) {
@@ -223,13 +246,17 @@ export class PasswordRepository {
       for (const idChunk of chunk(ids, BATCH_SIZE)) {
         tx.update(passwords)
           .set({ categoryId })
-          .where(inArray(passwords.id, idChunk))
+          .where(
+            and(inArray(passwords.id, idChunk), isNull(passwords.deletedAt)),
+          )
           .run();
       }
     });
   }
 
-  /** Deletes many passwords in one transaction. */
+  /**
+   * Soft-deletes many active passwords in one transaction.
+   */
   async deleteMany(ids: number[]) {
     if (ids.length === 0) {
       return;
@@ -237,7 +264,12 @@ export class PasswordRepository {
 
     this.db.transaction((tx) => {
       for (const idChunk of chunk(ids, BATCH_SIZE)) {
-        tx.delete(passwords).where(inArray(passwords.id, idChunk)).run();
+        tx.update(passwords)
+          .set({ deletedAt: sql`CURRENT_TIMESTAMP` })
+          .where(
+            and(inArray(passwords.id, idChunk), isNull(passwords.deletedAt)),
+          )
+          .run();
       }
     });
   }

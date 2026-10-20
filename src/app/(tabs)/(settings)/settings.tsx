@@ -2,14 +2,11 @@ import LinkButton from "@/components/LinkButton";
 import { LinkIconButton } from "@/components/LinkIconButton";
 import Text from "@/components/Text";
 import Config from "@/config";
+import { isAppLockEnabled, toggleAppLock } from "@/features/biometrics";
 import {
   isScreenshotPreventionEnabled,
-  toggleScreenshotPreventionFeature,
+  toggleScreenshotPrevention,
 } from "@/features/screenshot-prevention";
-import {
-  isBiometricsAuthEnabled,
-  toggleBiometricsFeature,
-} from "@/libs/biometric";
 import {
   setHomeLayout,
   useHomeLayout,
@@ -33,17 +30,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
 
 export default function SettingsScreen() {
-  const [isAppLockEnabled, setIsAppLockEnabled] = useState(
-    isBiometricsAuthEnabled(),
-  );
-  const toggleInAppLockSwitch = () =>
-    setIsAppLockEnabled(toggleBiometricsFeature());
+  const [isAppLockOn, setIsAppLockOn] = useState(isAppLockEnabled());
+  const toggleInAppLockSwitch = () => setIsAppLockOn(toggleAppLock());
 
-  const [isScreenshotPreventEnabled, setIsScreenshotPreventEnabled] = useState(
+  const [isScreenshotPreventOn, setIsScreenshotPreventOn] = useState(
     isScreenshotPreventionEnabled(),
   );
   const toggleScreenshotPreventSwitch = () =>
-    setIsScreenshotPreventEnabled(toggleScreenshotPreventionFeature());
+    setIsScreenshotPreventOn(toggleScreenshotPrevention());
 
   const isAutofillEnabled =
     PasscodesAutofillServiceModule.isAutofillServiceEnabled();
@@ -91,7 +85,7 @@ export default function SettingsScreen() {
               right={() => (
                 <Switch
                   style={{ alignSelf: "flex-end" }}
-                  value={isAppLockEnabled}
+                  value={isAppLockOn}
                   onValueChange={toggleInAppLockSwitch}
                 />
               )}
@@ -117,7 +111,7 @@ export default function SettingsScreen() {
               right={() => (
                 <Switch
                   style={{ alignSelf: "flex-end" }}
-                  value={isScreenshotPreventEnabled}
+                  value={isScreenshotPreventOn}
                   onValueChange={toggleScreenshotPreventSwitch}
                 />
               )}

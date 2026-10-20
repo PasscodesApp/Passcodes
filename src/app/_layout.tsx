@@ -1,18 +1,13 @@
-import ScreenHeading from "@/components/ScreenHeading";
 import Config from "@/config";
 import { RepositoryProvider } from "@/contexts/RepositoryContext";
 import { ToastProvider } from "@/contexts/ToastContext";
-import {
-  isBiometricsAuthEnabled,
-  unlockWithBiometricsApp,
-} from "@/libs/biometric";
+import { LockScreen, useAppLock } from "@/features/biometrics";
 import { NavigationBar } from "expo-navigation-bar";
 import { DarkTheme, DefaultTheme, Slot, ThemeProvider } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
-import { AppState, Button, useColorScheme } from "react-native";
+import { useEffect } from "react";
+import { useColorScheme } from "react-native";
 import { PaperProvider } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   let systemScheme = useColorScheme();
@@ -35,64 +30,14 @@ export default function RootLayout() {
 function AppContent() {
   let systemScheme = useColorScheme();
   let isDarkScheme = systemScheme === "dark";
-  const appState = useRef(AppState.currentState);
-  const backgroundTimestamp = useRef<number | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    isBiometricsAuthEnabled() ? false : true,
-  );
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (
-        appState.current === "active" &&
-        nextAppState.match(/inactive|background/)
-      ) {
-        backgroundTimestamp.current = Date.now();
-      }
+  // All App Lock behaviour (when to lock, re-locking after the app was in
+  // the background, the unlock prompt) lives in the biometrics feature.
+  const { locked, authenticating, message, unlock } = useAppLock();
 
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
-      ) {
-        const elapsedMilliseconds =
-          Date.now() - (backgroundTimestamp.current ?? Date.now());
-
-        if (elapsedMilliseconds / 1000 > 120) {
-          setIsAuthenticated(false);
-          unlock();
-        }
-      }
-
-      appState.current = nextAppState;
-    });
-
-    return () => subscription.remove();
-  }, []);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      unlock();
-    }
-  }, [isAuthenticated]);
-
-  async function unlock() {
-    let result = await unlockWithBiometricsApp();
-    setIsAuthenticated(result);
-  }
-
-  if (!isAuthenticated) {
+  if (locked) {
     return (
-      <SafeAreaView
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-        }}
-      >
-        <ScreenHeading title="App Locked!!" style={{ marginBlock: 12 }} />
-        <Button title="Unlock" onPress={unlock}></Button>
-      </SafeAreaView>
+      <LockScreen onUnlock={unlock} busy={authenticating} message={message} />
     );
   }
 

@@ -9,7 +9,10 @@
  * from the file.
  */
 
-import type { CategoryRepository } from "@/repositories/CategoryRepository";
+import {
+  UNCATEGORIZED_LABEL,
+  type CategoryRepository,
+} from "@/repositories/CategoryRepository";
 import type {
   ImportPasswordRow,
   PasswordRepository,
@@ -171,7 +174,7 @@ async function resolveCategories(
       idBySource.set(candidate.sourceId, category.id);
       created += 1;
     } catch {
-      // Invalid or reserved name: its passwords are imported as Unsorted.
+      // Invalid or reserved name: its passwords are imported as uncategorized.
       failed += 1;
     }
   }
@@ -211,7 +214,7 @@ export async function commitImport(
 
   if (categories.failed > 0) {
     warnings.push(
-      `${categories.failed} categor${categories.failed === 1 ? "y" : "ies"} couldn't be created; their passwords were imported as Unsorted.`,
+      `${categories.failed} categor${categories.failed === 1 ? "y" : "ies"} couldn't be created; their passwords were imported as ${UNCATEGORIZED_LABEL}.`,
     );
   }
 

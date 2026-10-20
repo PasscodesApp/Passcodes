@@ -35,6 +35,7 @@
  *   added) and strict about structure (format, version, counts).
  */
 
+import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
 import type {
   CandidateCategory,
   CandidatePassword,
@@ -44,7 +45,10 @@ import type {
 } from "../types";
 
 export const PASSCODES_FORMAT = "passcodes";
-export const PASSCODES_JSON_VERSION = 1;
+
+// the format will be change v1 after stablity of feature...
+// and, also make v0 invalid in code. refer `parsePasscodesJson()`
+export const PASSCODES_JSON_VERSION = 0;
 
 export interface PasswordExportRow {
   id: number;
@@ -114,9 +118,15 @@ export function serializePasscodesJson(
 
 const KNOWN_TABLES = ["passwords", "categories"];
 
-/** `YYYY-MM-DD HH:MM:SS` (SQLite) or ISO 8601, optional fraction and zone. */
+/**
+ * What `created_at` / `updated_at` can hold:
+ * - `YYYY-MM-DD HH:MM:SS` (SQLite) or ISO 8601, optional fraction and zone;
+ * - an epoch number as text (9-13 digits, SQLite may add ".0" when it turns a
+ *   JS number into text): passwords migrated from the old Room database can
+ *   carry these, and they must survive a backup unchanged.
+ */
 const TIMESTAMP_PATTERN =
-  /^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/;
+  /^(?:\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?|\d{9,13}(?:\.\d+)?)$/;
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   return typeof value === "object" && value !== null && !Array.isArray(value)
@@ -180,10 +190,12 @@ export function parsePasscodesJson(text: string): ParseResult {
 
   const version = document["version"];
 
+  // TODO: we will make version < 1. zero will be invalid.
+  // once we have stable import-export version.
   if (
     typeof version !== "number" ||
     !Number.isInteger(version) ||
-    version < 1
+    version < 0
   ) {
     return { ok: false, error: "The backup's version number is invalid." };
   }
@@ -365,7 +377,7 @@ export function parsePasscodesJson(text: string): ParseResult {
   });
 
   // A password that points at a category that is not in the file is still a
-  // valid password: import it as Unsorted instead of losing it.
+  // valid password: import it as uncategorized instead of losing it.
   const knownCategoryIds = new Set(categories.map((c) => c.sourceId));
   let danglingReferences = 0;
 
@@ -381,7 +393,7 @@ export function parsePasscodesJson(text: string): ParseResult {
 
   if (danglingReferences > 0) {
     warnings.push(
-      `${danglingReferences} password(s) referred to a category that isn't in the file and will be imported as Unsorted.`,
+      `${danglingReferences} password(s) referred to a category that isn't in the file and will be imported as ${UNCATEGORIZED_LABEL}.`,
     );
   }
 

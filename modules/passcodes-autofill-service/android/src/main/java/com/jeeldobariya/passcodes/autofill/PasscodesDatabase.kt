@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import java.io.File
 
+// TODO: make it compatible for applicationIds, source in passwords table.
+
 /**
  * Native read/write access to the Passcodes SQLite database managed by
  * Expo SQLite / Drizzle. This class never runs migrations — only reads

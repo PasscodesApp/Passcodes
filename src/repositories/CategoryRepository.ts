@@ -1,6 +1,6 @@
 import type { DrizzleDatabase } from "@/db/provider";
 import { categories, passwords } from "@/db/schema";
-import { and, asc, eq, ne, sql } from "drizzle-orm";
+import { and, asc, eq, isNull, ne, sql } from "drizzle-orm";
 
 export const CATEGORY_NAME_MAX_LENGTH = 40;
 
@@ -9,7 +9,7 @@ export const CATEGORY_NAME_MAX_LENGTH = 40;
  * (`category_id IS NULL`), the "leftovers", not "all passwords".
  * Change it here and it changes everywhere.
  */
-export const UNCATEGORIZED_LABEL = "Unsorted";
+export const UNCATEGORIZED_LABEL = "Uncategorized";
 
 /**
  * Thrown for invalid user input (empty / too long / duplicate name).
@@ -34,12 +34,7 @@ export class CategoryRepository {
   constructor(private readonly db: DrizzleDatabase) {}
 
   /**
-   * Creates a query for observing all categories (sorted by name).
-   *
-   * Pass the returned query to `useLiveQuery`. Password counts are
-   * intentionally NOT joined here: `useLiveQuery` only re-runs when the
-   * `from()` table changes, so a join would give stale counts. Derive counts
-   * from the (live) password list instead, see `countPasswordsByCategory`.
+   * Observes categories, sort them by name.
    */
   observeAll() {
     return this.db
@@ -74,8 +69,7 @@ export class CategoryRepository {
   }
 
   /**
-   * Renames a category. Passwords reference the category by id, so no
-   * password row is touched.
+   * Renames category.
    */
   async rename(id: number, name: string) {
     const cleanName = this.validateName(name);
@@ -83,7 +77,7 @@ export class CategoryRepository {
 
     const [updated] = await this.db
       .update(categories)
-      .set({ name: cleanName, updatedAt: sql`CURRENT_TIMESTAMP` })
+      .set({ name: cleanName })
       .where(eq(categories.id, id))
       .returning();
 
@@ -100,17 +94,18 @@ export class CategoryRepository {
    * Passwords are never deleted unless `mode === "delete"` is passed
    * explicitly.
    */
-  async delete(
-    id: number,
-    mode: DeleteCategoryPasswordsMode = "uncategorize",
-  ) {
+  async delete(id: number, mode: DeleteCategoryPasswordsMode = "uncategorize") {
     this.db.transaction((tx) => {
+      // TODO: migrate this password table code to password repository.
       if (mode === "delete") {
-        tx.delete(passwords).where(eq(passwords.categoryId, id)).run();
+        tx.update(passwords)
+          .set({ categoryId: null, deletedAt: sql`CURRENT_TIMESTAMP` })
+          .where(and(eq(passwords.categoryId, id), isNull(passwords.deletedAt)))
+          .run();
       } else {
         tx.update(passwords)
           .set({ categoryId: null })
-          .where(eq(passwords.categoryId, id))
+          .where(and(eq(passwords.categoryId, id), isNull(passwords.deletedAt)))
           .run();
       }
 
@@ -119,9 +114,8 @@ export class CategoryRepository {
   }
 
   /**
-   * Number of passwords per category id, with `null` = Uncategorized.
-   * Pure helper so it can run on the already-loaded live password list
-   * (no extra query, no N+1).
+   * Number of passwords per category id,
+   * with null representing Uncategorized.
    */
   static countPasswordsByCategory(
     passwordList: readonly { categoryId: number | null }[],

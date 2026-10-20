@@ -3,7 +3,11 @@ import {
   useCategoryRepository,
   usePasswordRepository,
 } from "@/contexts/RepositoryContext";
-import { unlockWithBiometricsApp } from "@/libs/biometric";
+import {
+  confirmIdentity,
+  describeAuthFailure,
+  isAuthenticated,
+} from "@/features/biometrics";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, FlatList, View } from "react-native";
@@ -88,13 +92,18 @@ export default function ImportReviewScreenContent() {
 
     try {
       if (removeIds.size > 0) {
-        const unlocked = await unlockWithBiometricsApp();
+        const identity = await confirmIdentity(
+          "Authenticate to remove existing passwords",
+        );
 
-        if (!unlocked) {
-          Alert.alert(
-            "Authentication Failed",
-            "Removing passwords is protected by App Lock.",
-          );
+        if (!isAuthenticated(identity)) {
+          // `null` = the user simply cancelled: nothing to tell them.
+          const reason = describeAuthFailure(identity);
+
+          if (reason) {
+            Alert.alert("Authentication Failed", reason);
+          }
+
           return;
         }
       }
@@ -134,15 +143,14 @@ export default function ImportReviewScreenContent() {
                 <Text variant="titleMedium">
                   {`${plan.conflicts.length} ${plan.conflicts.length === 1 ? "account has" : "accounts have"} more than one version`}
                 </Text>
-
                 <Text variant="bodySmall" style={muted}>
-                  These passwords share the same domain and username but have
-                  different passwords. This can happen if a password appears
-                  more than once in the file or differs from one already saved
-                  on your device. By default, both versions are kept so you can
-                  review them later.
+                  These have the same domain and username as a password you
+                  already have (or appear twice in the file) but with a
+                  different password. By default both versions are kept so you
+                  can clean up later. Switch &ldquo;Import&rdquo; off to leave
+                  a version out, or &ldquo;Remove&rdquo; on to delete the
+                  version on this device once the imported one is saved.
                 </Text>
-
                 <Text variant="bodySmall" style={muted}>
                   {`${plan.fresh.length} other ${plan.fresh.length === 1 ? "password is" : "passwords are"} new and will be imported. ${plan.duplicates} exact ${plan.duplicates === 1 ? "duplicate is" : "duplicates are"} skipped. ${parsed.failures.filter((f) => f.table === "passwords").length} invalid ${parsed.failures.filter((f) => f.table === "passwords").length === 1 ? "record" : "records"} will not be imported.`}
                 </Text>

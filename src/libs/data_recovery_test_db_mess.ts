@@ -60,8 +60,8 @@ export default async function dataRecoveryFromTestDB(
           $password,
           $notes,
           $url,
-          $created_at,
-          $updated_at
+          COALESCE($created_at, CURRENT_TIMESTAMP),
+          COALESCE($updated_at, $created_at, CURRENT_TIMESTAMP)
         )
       `);
 
