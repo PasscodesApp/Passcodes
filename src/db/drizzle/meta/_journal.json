@@ -36,6 +36,13 @@
       "when": 1792493468989,
       "tag": "0004_add_appliction_ids_and_source_detection",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1792511619441,
+      "tag": "0005_migrate_from_timestamp_to_unix_timestamp",
+      "breakpoints": true
     }
   ]
 }
