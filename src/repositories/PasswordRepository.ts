@@ -2,6 +2,7 @@ import type { DrizzleDatabase } from "@/db/provider";
 import { passwords } from "@/db/schema";
 import { and, eq, inArray, isNull, sql } from "drizzle-orm";
 
+import { CURRENT_TIMESTAMP_SQL } from "@/libs/timestamp_unixepoch_utils";
 import { pickEditablePasswordFields } from "./passwordChanges";
 
 /** SQLite limits the number of bound variables, so big batches are chunked. */
@@ -38,8 +39,8 @@ export interface ImportPasswordRow {
   notes: string | null;
   url: string | null;
   categoryId: number | null;
-  createdAt: string | null;
-  updatedAt: string | null;
+  createdAt: number | null;
+  updatedAt: number | null;
 }
 
 export interface ImportManyResult {
@@ -215,7 +216,7 @@ export class PasswordRepository {
   async delete(id: number) {
     const [deletedPassword] = await this.db
       .update(passwords)
-      .set({ deletedAt: sql`CURRENT_TIMESTAMP` })
+      .set({ deletedAt: sql`${CURRENT_TIMESTAMP_SQL}` })
       .where(and(eq(passwords.id, id), isNull(passwords.deletedAt)))
       .returning();
 
@@ -265,7 +266,7 @@ export class PasswordRepository {
     this.db.transaction((tx) => {
       for (const idChunk of chunk(ids, BATCH_SIZE)) {
         tx.update(passwords)
-          .set({ deletedAt: sql`CURRENT_TIMESTAMP` })
+          .set({ deletedAt: sql`${CURRENT_TIMESTAMP_SQL}` })
           .where(
             and(inArray(passwords.id, idChunk), isNull(passwords.deletedAt)),
           )

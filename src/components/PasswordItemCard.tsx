@@ -1,12 +1,12 @@
 import Text from "@/components/Text";
-import { formatDate } from "@passcodes/passalgo";
+import { formatTimestamp } from "@passcodes/passalgo";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 
 type Props = {
   domain: string;
   username: string;
-  updatedAt: string | null;
+  updatedAt: number | null;
   style?: ViewStyle;
 };
 
@@ -53,7 +53,7 @@ export default function PasswordItemCard({
       <Text style={[styles.label, { color: theme.colors.onSurface }]}>
         Updated At:{" "}
         <Text style={[styles.value, { color: theme.colors.tertiary }]}>
-          {updatedAt ? formatDate(updatedAt) : "just now"}
+          {updatedAt ? formatTimestamp(updatedAt) : "just now"}
         </Text>
       </Text>
     </View>

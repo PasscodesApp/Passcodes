@@ -13,10 +13,10 @@
  *     "passwords": [
  *       { "_id": 1, "domain": "...", "url": null, "username": "...",
  *         "password": "...", "notes": null, "category-id": 2,
- *         "created-at": "2026-01-01 12:00:00", "updated-at": "2026-02-01 12:00:00" }
+ *         "created-at": 1767268800, "updated-at": 1769947200 }
  *     ],
  *     "categories": [
- *       { "_id": 2, "name": "...", "created-at": "...", "updated-at": "..." }
+ *       { "_id": 2, "name": "...", "created-at": 1767268800, "updated-at": 1769947200 }
  *     ]
  *   }
  * }
@@ -27,7 +27,8 @@
  *   unique across the WHOLE file (passwords are numbered 1..n, categories
  *   continue at n+1). `_id`s are file-local: they are never database ids.
  * - References use the target's `_id` (`category-id`), `null` = Unsorted.
- * - Timestamps are the raw stored strings, never replaced by the import time.
+ * - Record timestamps are Unix epoch seconds represented as JSON numbers.
+ *   Missing timestamps remain null; invalid timestamps are reported as warnings.
  * - New tables = new keys under `data` plus a `counts` entry. Additive
  *   changes keep `version`; breaking changes increase it.
  * - The importer is lenient about cosmetic problems (bad timestamp, dangling
@@ -35,6 +36,10 @@
  *   added) and strict about structure (format, version, counts).
  */
 
+import {
+  MAX_UNIX_TIMESTAMP_SECONDS,
+  MIN_UNIX_TIMESTAMP_SECONDS,
+} from "@/libs/timestamp_unixepoch_utils";
 import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
 import type {
   CandidateCategory,
@@ -57,16 +62,16 @@ export interface PasswordExportRow {
   password: string;
   notes: string | null;
   url: string | null;
-  createdAt: string | null;
-  updatedAt: string | null;
+  createdAt: number | null;
+  updatedAt: number | null;
   categoryId: number | null;
 }
 
 export interface CategoryExportRow {
   id: number;
   name: string;
-  createdAt: string | null;
-  updatedAt: string | null;
+  createdAt: number | null;
+  updatedAt: number | null;
 }
 
 export function serializePasscodesJson(
@@ -118,16 +123,6 @@ export function serializePasscodesJson(
 
 const KNOWN_TABLES = ["passwords", "categories"];
 
-/**
- * What `created_at` / `updated_at` can hold:
- * - `YYYY-MM-DD HH:MM:SS` (SQLite) or ISO 8601, optional fraction and zone;
- * - an epoch number as text (9-13 digits, SQLite may add ".0" when it turns a
- *   JS number into text): passwords migrated from the old Room database can
- *   carry these, and they must survive a backup unchanged.
- */
-const TIMESTAMP_PATTERN =
-  /^(?:\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?|\d{9,13}(?:\.\d+)?)$/;
-
 function asRecord(value: unknown): Record<string, unknown> | null {
   return typeof value === "object" && value !== null && !Array.isArray(value)
     ? (value as Record<string, unknown>)
@@ -153,18 +148,29 @@ function readOptionalString(raw: unknown): Read<string | null> {
   return { ok: true, value: raw.trim() === "" ? null : raw };
 }
 
-/** Never fails: an unreadable timestamp becomes `null` and is counted. */
-function readTimestamp(raw: unknown, counter: { bad: number }): string | null {
+/**
+ * Read a Unix epoch timestamp in seconds.
+ *
+ * Missing/null values remain null. Invalid values (including strings,
+ * fractional seconds, milliseconds, and dates outside the supported range)
+ * become null and increment the warning counter.
+ */
+function readTimestamp(raw: unknown, counter: { bad: number }): number | null {
   if (raw === undefined || raw === null) {
     return null;
   }
 
-  if (typeof raw === "string" && TIMESTAMP_PATTERN.test(raw.trim())) {
-    return raw.trim();
+  if (
+    typeof raw !== "number" ||
+    !Number.isSafeInteger(raw) ||
+    raw < MIN_UNIX_TIMESTAMP_SECONDS ||
+    raw > MAX_UNIX_TIMESTAMP_SECONDS
+  ) {
+    counter.bad += 1;
+    return null;
   }
 
-  counter.bad += 1;
-  return null;
+  return raw;
 }
 
 export function parsePasscodesJson(text: string): ParseResult {
@@ -399,7 +405,7 @@ export function parsePasscodesJson(text: string): ParseResult {
 
   if (badTimestamps.bad > 0) {
     warnings.push(
-      `${badTimestamps.bad} timestamp(s) couldn't be read; the import time was used instead.`,
+      `${badTimestamps.bad} timestamp(s) were invalid and need a fallback during import.`,
     );
   }
 

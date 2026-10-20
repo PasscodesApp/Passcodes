@@ -1,5 +1,9 @@
 import { Directory, File, Paths } from "expo-file-system";
 import * as SQLite from "expo-sqlite";
+import {
+  CURRENT_TIMESTAMP_SQL,
+  normalizeTimestamp,
+} from "./timestamp_unixepoch_utils";
 
 const ROOM_DB_NAME = "master";
 
@@ -55,9 +59,8 @@ export default async function roomDrizzleMigration(
       expoSqliteDir.create();
     }
 
-    for (const fileName of filesToProcess.keys()) {
+    for (const [fileName, targetName] of filesToProcess) {
       const sourceFile = new File(androidNativeDbDir.uri, fileName);
-      let targetName = filesToProcess.get(fileName) as string; // I know, cuz, code guarantees its string.
       const targetFile = new File(expoSqliteDir.uri, targetName);
 
       if (sourceFile.exists) {
@@ -76,27 +79,27 @@ export default async function roomDrizzleMigration(
       "[Expo-SQLite Workspace]: CRITICAL ERROR DURING MOVE TO WORKSPACE PHASE:",
       error,
     );
-    // Halt execution immediately to prevent data loss or manipulation
+    // Halt execution immediately to prevent data loss or manipulation.
     throw new Error(
       "[Expo-SQLite Workspace]: Migration stopped: file move to expo-sqlite workspace could not be verified safely.",
     );
   }
 
   // ==========================================
-  // STEP 4: Extracting Data: open room database & extracted data
+  // STEP 4: Extracting Data: open Room database & extract data
   // ==========================================
 
   let intermediateDataRepresentation: any[] = [];
   let sourceResult: { count: number } | null = null;
 
-  let roomExpoSqliteDb: SQLite.SQLiteDatabase | undefined = undefined;
+  let roomExpoSqliteDb: SQLite.SQLiteDatabase | undefined;
   try {
     console.log(
-      "[Extracting Data]: Opening working room database instance via Expo SQLite...",
+      "[Extracting Data]: Opening working Room database instance via Expo SQLite...",
     );
     roomExpoSqliteDb = await SQLite.openDatabaseAsync(EXPO_TEMP_ROOM_DB_NAME);
 
-    // 1. Fetch Room database version via user_version PRAGMA
+    // 1. Fetch Room database version via user_version PRAGMA.
     const versionResult = await roomExpoSqliteDb.getFirstAsync<{
       user_version: number;
     }>("PRAGMA user_version;");
@@ -111,12 +114,12 @@ export default async function roomDrizzleMigration(
 
     console.log(`[Extracting Data] Room User Version Detected: v${dbVersion}`);
 
-    // 2. Total Count Of Passswords
-    sourceResult = await roomExpoSqliteDb.getFirstAsync<{
-      count: number;
-    }>("SELECT COUNT(*) as count FROM passwords;");
+    // 2. Total count of passwords.
+    sourceResult = await roomExpoSqliteDb.getFirstAsync<{ count: number }>(
+      "SELECT COUNT(*) as count FROM passwords;",
+    );
 
-    // 3. Conditional Extraction Routing
+    // 3. Conditional extraction routing.
     if (dbVersion === 2) {
       console.log(
         "[Extracting Data]: Processing Version 2 database structure extraction...",
@@ -130,7 +133,6 @@ export default async function roomDrizzleMigration(
       intermediateDataRepresentation =
         await extractVersion1Data(roomExpoSqliteDb);
     } else {
-      // This is likely unreachable point, but just satisfy typescript correctness..
       throw new Error(
         `[Extracting Data]: Unexpected database schema version encountered: v${dbVersion}`,
       );
@@ -141,21 +143,21 @@ export default async function roomDrizzleMigration(
     );
   } catch (error) {
     console.error(
-      "[Extracting Data]: CRITICAL ERROR ENCOUNTERED DURING DATA MID-REPRESENTATION PHRASE:",
+      "[Extracting Data]: CRITICAL ERROR ENCOUNTERED DURING DATA REPRESENTATION PHASE:",
       error,
     );
 
     throw new Error(
-      "[Extracting Data]: Migration stopped: room database's intermediate representation could not be verified safely.",
+      "[Extracting Data]: Migration stopped: Room database's intermediate representation could not be verified safely.",
     );
   } finally {
     await roomExpoSqliteDb?.closeAsync();
   }
 
   // ==========================================
-  // STEP 5: Migrating Data: room database -> expo database
+  // STEP 5: Migrating Data: Room database -> Expo database
   // ==========================================
-  console.log("[Migrating Data]: Moving Data.... it might take few minutes");
+  console.log("[Migrating Data]: Moving data... it might take a few minutes.");
 
   let insertStatement: SQLite.SQLiteStatement | undefined;
 
@@ -166,32 +168,37 @@ export default async function roomDrizzleMigration(
 
     await expoDb.withTransactionAsync(async () => {
       insertStatement = await expoDb.prepareAsync(
-        `INSERT INTO passwords (domain, username, password, notes, url, created_at, updated_at) 
+        `INSERT INTO passwords
+          (domain, username, password, notes, url, created_at, updated_at)
         VALUES (
           $domain, $username, $password, $notes, $url,
-          COALESCE($created_at, CURRENT_TIMESTAMP),
-          COALESCE($updated_at, $created_at, CURRENT_TIMESTAMP)
+          COALESCE($created_at, ${CURRENT_TIMESTAMP_SQL}),
+          COALESCE($updated_at, $created_at, ${CURRENT_TIMESTAMP_SQL})
         )`,
       );
 
       for (const data of intermediateDataRepresentation) {
-        let statementData = {
+        // Room may have stored timestamps as epoch seconds, epoch milliseconds,
+        // or SQLite datetime strings. Normalize them before inserting so the
+        // destination INTEGER columns always receive Unix epoch seconds.
+        const createdAt = normalizeTimestamp(data.created_at);
+        const updatedAt = normalizeTimestamp(data.updated_at);
+
+        await insertStatement.executeAsync({
           $domain: data.domain,
           $username: data.username,
           $password: data.password,
           $notes: data.notes,
           $url: data.url,
-          $created_at: data.created_at,
-          $updated_at: data.updated_at,
-        };
-
-        await insertStatement.executeAsync(statementData);
+          $created_at: createdAt,
+          $updated_at: updatedAt,
+        });
       }
     });
 
-    const rowsAfter = await expoDb.getFirstAsync<{
-      count: number;
-    }>("SELECT COUNT(*) as count FROM passwords;");
+    const rowsAfter = await expoDb.getFirstAsync<{ count: number }>(
+      "SELECT COUNT(*) as count FROM passwords;",
+    );
 
     const sourceRows = sourceResult?.count ?? 0;
     const inserted = (rowsAfter?.count ?? 0) - (rowsBefore?.count ?? 0);
@@ -203,45 +210,43 @@ export default async function roomDrizzleMigration(
     }
   } catch (error) {
     console.error(
-      "[Migrating Data]: CRITICAL ERROR ENCOUNTERED DATA MOVING TO EXPO SQLITE PHRASE:",
+      "[Migrating Data]: CRITICAL ERROR ENCOUNTERED WHILE MOVING DATA TO EXPO SQLITE:",
       error,
     );
 
     throw new Error(
-      "[Migrating Data]: Migration stopped: expo database's data migrated could not be verified safely.",
+      "[Migrating Data]: Migration stopped: Expo database data migration could not be verified safely.",
     );
   } finally {
     await insertStatement?.finalizeAsync();
   }
 
-  console.log("[Migrating Data]: Successfully moved data to expo-sqlite db...");
-
+  console.log("[Migrating Data]: Successfully moved data to Expo SQLite.");
   console.log(
-    "[Almost Success]: Successfully Migrated Data, Now just clean up is left...",
+    "[Almost Success]: Data migration succeeded. Cleaning up temporary files...",
   );
 
   // ==========================================
-  // STEP 6: CLEAN MESS: cleaning up
+  // STEP 6: Clean up temporary database files
   // ==========================================
 
-  console.log("[CLEAN MESS]: cleaning...");
+  console.log("[CLEAN MESS]: Cleaning...");
 
-  for (const fileName of filesToProcess.keys()) {
-    let targetName = filesToProcess.get(fileName) as string; // I know, cuz, code guarantees its string.
+  for (const [fileName, targetName] of filesToProcess) {
     const targetFile = new File(expoSqliteDir.uri, targetName);
 
     if (targetFile.exists) {
       targetFile.delete();
-      console.log(`[CLEAN MESS]: Delete (' ${fileName} '): ${targetFile.uri}`);
+      console.log(`[CLEAN MESS]: Deleted (' ${fileName} '): ${targetFile.uri}`);
     }
   }
 
-  console.log("[CLEAN MESS]: cleaned all backup files...");
+  console.log("[CLEAN MESS]: Cleaned all temporary database files.");
 
   // ==========================================
-  // SUCCESS!!!
+  // SUCCESS
   // ==========================================
-  const successMessage = "SUCCESSFULLY MIGRATED All OLD DATA!!";
+  const successMessage = "SUCCESSFULLY MIGRATED ALL OLD DATA!";
   console.log(successMessage);
   console.log("task exit 0;");
 
@@ -249,7 +254,7 @@ export default async function roomDrizzleMigration(
 }
 
 async function extractVersion2Data(db: SQLite.SQLiteDatabase) {
-  let rows: any[] = await db.getAllAsync(
+  const rows: any[] = await db.getAllAsync(
     `SELECT domain, username, password, notes, url, created_at, updated_at FROM passwords`,
   );
   console.log(`Extracted rows from v2 passwords table: ${rows.length}`);
@@ -257,17 +262,16 @@ async function extractVersion2Data(db: SQLite.SQLiteDatabase) {
 }
 
 async function extractVersion1Data(db: SQLite.SQLiteDatabase) {
-  let dataRows: any[] = await db.getAllAsync(
+  const dataRows: any[] = await db.getAllAsync(
     `SELECT domain, username, password, notes, created_at, updated_at FROM passwords`,
   );
   console.log(`Extracted rows from v1 passwords table: ${dataRows.length}`);
 
-  const updatedRows = dataRows.map((dataRow) => {
-    let domain = dataRow.domain;
-    return { ...dataRow, url: `https://local.${domain}` };
-  });
+  const updatedRows = dataRows.map((dataRow) => ({
+    ...dataRow,
+    url: `https://local.${dataRow.domain}`,
+  }));
 
-  console.log("Successfully generated urls for v1 to make it compatible...");
-
+  console.log("Successfully generated URLs for v1 compatibility.");
   return updatedRows;
 }

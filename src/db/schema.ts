@@ -8,24 +8,28 @@ import {
 } from "drizzle-orm/sqlite-core";
 
 /**
- * "Uncategorized" is NOT a row here, it is the virtual state
- * for, passwords.category_id IS NULL.
+ * Timestamps are Unix epoch seconds (UTC).
+ */
+
+/**
+ * Uncategorized is a virtual state represented by
+ * passwords.category_id IS NULL.
  */
 export const categories = sqliteTable("categories", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
 
-  createdAt: text("created_at")
+  createdAt: integer("created_at")
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .default(sql`(CAST(strftime('%s', 'now') AS INTEGER))`),
 
-  updatedAt: text("updated_at")
+  updatedAt: integer("updated_at")
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`)
-    .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
+    .default(sql`(CAST(strftime('%s', 'now') AS INTEGER))`)
+    .$onUpdateFn(() => sql`(CAST(strftime('%s', 'now') AS INTEGER))`),
 
   // TODO: soft delete category
-  // deletedAt: text("deleted_at"),
+  // deletedAt: integer("deleted_at"),
 });
 
 export const passwords = sqliteTable(
@@ -38,16 +42,16 @@ export const passwords = sqliteTable(
     notes: text("notes"),
     url: text("url"),
 
-    createdAt: text("created_at")
+    createdAt: integer("created_at")
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+      .default(sql`(CAST(strftime('%s', 'now') AS INTEGER))`),
 
-    updatedAt: text("updated_at")
+    updatedAt: integer("updated_at")
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`)
-      .$onUpdateFn(() => sql`CURRENT_TIMESTAMP`),
+      .default(sql`(CAST(strftime('%s', 'now') AS INTEGER))`)
+      .$onUpdateFn(() => sql`(CAST(strftime('%s', 'now') AS INTEGER))`),
 
-    deletedAt: text("deleted_at"),
+    deletedAt: integer("deleted_at"),
 
     // Comma-separated Android package names and/or iOS bundle IDs.
     applicationIds: text("application_ids"),
