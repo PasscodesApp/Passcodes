@@ -256,8 +256,8 @@ class PasscodesDatabase(context: Context) {
                 password = cursor.getString(passwordIdx),
                 notes = cursor.getStringOrNull(notesIdx),
                 url = cursor.getStringOrNull(urlIdx),
-                createdAt = cursor.getStringOrNull(createdIdx),
-                updatedAt = cursor.getStringOrNull(updatedIdx)
+                createdAt = cursor.getLong(createdIdx),
+                updatedAt = cursor.getLong(updatedIdx)
             )
         }
         return list
@@ -281,8 +281,8 @@ class PasscodesDatabase(context: Context) {
         val password: String,
         val notes: String?,
         val url: String?,
-        val createdAt: String?,
-        val updatedAt: String?
+        val createdAt: Long,
+        val updatedAt: Long
     )
 
     companion object {
