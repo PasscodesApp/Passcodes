@@ -4,8 +4,7 @@ import PasswordFormCard, {
 } from "@/components/PasswordFormCard";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
-
-import { formatDate } from "@passcodes/passalgo";
+import { formatTimestamp } from "@passcodes/passalgo";
 
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { Href, router, useLocalSearchParams } from "expo-router";
@@ -57,7 +56,7 @@ export default function PasswordDetailsScreen() {
       url: password.url || "",
       notes: password.notes || "",
       updatedAt: password.updatedAt
-        ? formatDate(password.updatedAt * 1000)
+        ? formatTimestamp(password.updatedAt)
         : "just now",
     });
   }
