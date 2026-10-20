@@ -1,73 +1,9 @@
 import Config from "@/config";
 import * as SQLite from "expo-sqlite";
-
-const MIN_TIMESTAMP_SECONDS = 0;
-const MAX_TIMESTAMP_SECONDS = 253_402_300_799;
-const CURRENT_TIMESTAMP_SQL = "CAST(strftime('%s', 'now') AS INTEGER)";
-
-/**
- * Normalize timestamps from the old test database to Unix epoch seconds.
- * Supports epoch seconds, epoch milliseconds, and legacy SQLite/ISO date strings.
- * Invalid or missing values return null so SQLite can apply the current-time fallback.
- */
-function normalizeRoomTimestamp(raw: unknown): number | null {
-  if (raw === null || raw === undefined) {
-    return null;
-  }
-
-  let seconds: number;
-
-  if (typeof raw === "number") {
-    if (!Number.isFinite(raw) || raw < 0) {
-      return null;
-    }
-
-    seconds = raw >= 100_000_000_000 ? Math.floor(raw / 1000) : Math.floor(raw);
-  } else if (typeof raw === "string") {
-    const value = raw.trim();
-
-    if (!value) {
-      return null;
-    }
-
-    // Numeric strings may come from SQLite affinity or an older export.
-    if (/^\d+(?:\.\d+)?$/.test(value)) {
-      const numeric = Number(value);
-      if (!Number.isFinite(numeric) || numeric < 0) {
-        return null;
-      }
-
-      seconds =
-        numeric >= 100_000_000_000
-          ? Math.floor(numeric / 1000)
-          : Math.floor(numeric);
-    } else {
-      // SQLite CURRENT_TIMESTAMP has no timezone suffix and represents UTC.
-      const hasTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(value);
-      const normalized = value.includes(" ") ? value.replace(" ", "T") : value;
-      const dateText = hasTimezone ? normalized : `${normalized}Z`;
-      const milliseconds = Date.parse(dateText);
-
-      if (!Number.isFinite(milliseconds) || milliseconds < 0) {
-        return null;
-      }
-
-      seconds = Math.floor(milliseconds / 1000);
-    }
-  } else {
-    return null;
-  }
-
-  if (
-    !Number.isSafeInteger(seconds) ||
-    seconds < MIN_TIMESTAMP_SECONDS ||
-    seconds > MAX_TIMESTAMP_SECONDS
-  ) {
-    return null;
-  }
-
-  return seconds;
-}
+import {
+  CURRENT_TIMESTAMP_SQL,
+  normalizeTimestamp,
+} from "./timestamp_unixepoch_utils";
 
 export default async function dataRecoveryFromTestDB(
   expoDb: SQLite.SQLiteDatabase,
@@ -136,8 +72,8 @@ export default async function dataRecoveryFromTestDB(
     try {
       await expoDb.withTransactionAsync(async () => {
         for (const row of rows) {
-          const createdAt = normalizeRoomTimestamp(row.created_at);
-          const updatedAt = normalizeRoomTimestamp(row.updated_at);
+          const createdAt = normalizeTimestamp(row.created_at);
+          const updatedAt = normalizeTimestamp(row.updated_at);
 
           await insertStatement.executeAsync({
             $domain: row.domain,

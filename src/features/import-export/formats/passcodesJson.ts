@@ -36,6 +36,10 @@
  *   added) and strict about structure (format, version, counts).
  */
 
+import {
+  MAX_UNIX_TIMESTAMP_SECONDS,
+  MIN_UNIX_TIMESTAMP_SECONDS,
+} from "@/libs/timestamp_unixepoch_utils";
 import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
 import type {
   CandidateCategory,
@@ -119,13 +123,6 @@ export function serializePasscodesJson(
 
 const KNOWN_TABLES = ["passwords", "categories"];
 
-/**
- * Backup record timestamps must be Unix epoch seconds represented as JSON
- * numbers. The supported range is 1970-01-01 through 9999-12-31 UTC.
- */
-const MIN_TIMESTAMP_SECONDS = 0;
-const MAX_TIMESTAMP_SECONDS = 253_402_300_799; // 9999-12-31T23:59:59Z
-
 function asRecord(value: unknown): Record<string, unknown> | null {
   return typeof value === "object" && value !== null && !Array.isArray(value)
     ? (value as Record<string, unknown>)
@@ -166,8 +163,8 @@ function readTimestamp(raw: unknown, counter: { bad: number }): number | null {
   if (
     typeof raw !== "number" ||
     !Number.isSafeInteger(raw) ||
-    raw < MIN_TIMESTAMP_SECONDS ||
-    raw > MAX_TIMESTAMP_SECONDS
+    raw < MIN_UNIX_TIMESTAMP_SECONDS ||
+    raw > MAX_UNIX_TIMESTAMP_SECONDS
   ) {
     counter.bad += 1;
     return null;

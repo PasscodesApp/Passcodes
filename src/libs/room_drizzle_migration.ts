@@ -1,12 +1,11 @@
 import { Directory, File, Paths } from "expo-file-system";
 import * as SQLite from "expo-sqlite";
+import {
+  CURRENT_TIMESTAMP_SQL,
+  normalizeTimestamp,
+} from "./timestamp_unixepoch_utils";
 
 const ROOM_DB_NAME = "master";
-
-const SQLITE_NOW_SECONDS = "CAST(strftime('%s', 'now') AS INTEGER)";
-
-const MIN_TIMESTAMP_SECONDS = 0;
-const MAX_TIMESTAMP_SECONDS = 253_402_300_799; // 9999-12-31 23:59:59 UTC
 
 export default async function roomDrizzleMigration(
   expoDb: SQLite.SQLiteDatabase,
@@ -173,8 +172,8 @@ export default async function roomDrizzleMigration(
           (domain, username, password, notes, url, created_at, updated_at)
         VALUES (
           $domain, $username, $password, $notes, $url,
-          COALESCE($created_at, ${SQLITE_NOW_SECONDS}),
-          COALESCE($updated_at, $created_at, ${SQLITE_NOW_SECONDS})
+          COALESCE($created_at, ${CURRENT_TIMESTAMP_SQL}),
+          COALESCE($updated_at, $created_at, ${CURRENT_TIMESTAMP_SQL})
         )`,
       );
 
@@ -182,8 +181,8 @@ export default async function roomDrizzleMigration(
         // Room may have stored timestamps as epoch seconds, epoch milliseconds,
         // or SQLite datetime strings. Normalize them before inserting so the
         // destination INTEGER columns always receive Unix epoch seconds.
-        const createdAt = normalizeRoomTimestamp(data.created_at);
-        const updatedAt = normalizeRoomTimestamp(data.updated_at);
+        const createdAt = normalizeTimestamp(data.created_at);
+        const updatedAt = normalizeTimestamp(data.updated_at);
 
         await insertStatement.executeAsync({
           $domain: data.domain,
@@ -252,61 +251,6 @@ export default async function roomDrizzleMigration(
   console.log("task exit 0;");
 
   return successMessage;
-}
-
-/**
- * Convert a legacy Room timestamp into Unix epoch seconds.
- *
- * Accepts seconds, milliseconds, or SQLite/ISO datetime strings. Missing or
- * invalid values return null so the INSERT statement can use the current time.
- */
-function normalizeRoomTimestamp(raw: unknown): number | null {
-  if (raw === null || raw === undefined || raw === "") {
-    return null;
-  }
-
-  let seconds: number;
-
-  if (typeof raw === "number") {
-    if (!Number.isFinite(raw) || raw < 0) {
-      return null;
-    }
-
-    seconds = raw >= 100_000_000_000 ? Math.floor(raw / 1000) : Math.floor(raw);
-  } else if (typeof raw === "string") {
-    const value = raw.trim();
-    if (value === "") return null;
-
-    // Numeric strings may represent seconds or milliseconds.
-    if (/^\d+(?:\.\d+)?$/.test(value)) {
-      const numeric = Number(value);
-      if (!Number.isFinite(numeric) || numeric < 0) return null;
-      seconds =
-        numeric >= 100_000_000_000
-          ? Math.floor(numeric / 1000)
-          : Math.floor(numeric);
-    } else {
-      // SQLite CURRENT_TIMESTAMP strings have no timezone; interpret them as UTC.
-      const normalized = !/(?:Z|[+-]\d{2}:?\d{2})$/i.test(value)
-        ? `${value.replace(" ", "T")}Z`
-        : value.replace(" ", "T");
-      const milliseconds = Date.parse(normalized);
-      if (!Number.isFinite(milliseconds) || milliseconds < 0) return null;
-      seconds = Math.floor(milliseconds / 1000);
-    }
-  } else {
-    return null;
-  }
-
-  if (
-    !Number.isSafeInteger(seconds) ||
-    seconds < MIN_TIMESTAMP_SECONDS ||
-    seconds > MAX_TIMESTAMP_SECONDS
-  ) {
-    return null;
-  }
-
-  return seconds;
 }
 
 async function extractVersion2Data(db: SQLite.SQLiteDatabase) {
