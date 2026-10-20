@@ -3,7 +3,7 @@ import {
   useCategoryRepository,
   usePasswordRepository,
 } from "@/contexts/RepositoryContext";
-import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { ScrollView } from "react-native";

@@ -8,7 +8,7 @@ import {
   selectMany,
   useSelectionCount,
 } from "@/libs/selection_store";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { memo, useState } from "react";
 import { Alert } from "react-native";
 import { IconButton, Surface, useTheme } from "react-native-paper";

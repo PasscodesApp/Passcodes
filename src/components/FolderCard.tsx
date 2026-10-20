@@ -1,6 +1,6 @@
 import Text from "@/components/Text";
 import type { FolderData } from "@/libs/category_groups";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { memo } from "react";
 import { Pressable } from "react-native";
 import { useTheme } from "react-native-paper";

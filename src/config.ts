@@ -5,13 +5,13 @@ const config = {
   // Main Config
   // ----------------------
   APP_NAME: "Passcodes",
-  VERSION: "v4.0.0 - RC.3",
+  VERSION: "v4.0.0",
 
   // ----------------------
   // Build Config
   // ----------------------
-  BUILD_VERSION: "v4.0.0-RC.3", // same as VERSION, just without spaces.
-  BUILD_ANDROID_VERSIONCODE: 10,
+  BUILD_VERSION: "v4.0.0", // same as VERSION, just without spaces.
+  BUILD_ANDROID_VERSIONCODE: 11,
   BUILD_IOS_VERSIONCODE: "1.0.0",
 
   // ----------------------

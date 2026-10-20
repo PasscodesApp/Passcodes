@@ -1,1 +1,0 @@
-ALTER TABLE `passwords` ADD `deleted_at` text;

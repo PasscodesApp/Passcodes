@@ -8,7 +8,7 @@ import {
   describeAuthFailure,
   isAuthenticated,
 } from "@/features/biometrics";
-import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import { Alert, ScrollView } from "react-native";
@@ -94,7 +94,10 @@ export default function ExportScreenContent() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
-      <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+      <Text
+        variant="bodyMedium"
+        style={{ color: theme.colors.onSurfaceVariant }}
+      >
         Choose a format. All of your stored passwords are exported
         {format === "passcodes-json" ? ", together with your categories" : ""}.
       </Text>
@@ -162,9 +165,7 @@ function ExportStatus({ outcome }: { outcome: ExportOutcome }) {
         ) : outcome.status === "cancelled" ? (
           <>
             <Text variant="titleMedium">Export cancelled</Text>
-            <Text accessibilityLiveRegion="polite">
-              Nothing was saved.
-            </Text>
+            <Text accessibilityLiveRegion="polite">Nothing was saved.</Text>
           </>
         ) : (
           <>

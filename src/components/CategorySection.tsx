@@ -1,10 +1,10 @@
 import Collapsible from "@/components/Collapsible";
 import PasswordCardGrid from "@/components/PasswordCardGrid";
 import Text from "@/components/Text";
-import { toggleCollapsed, useIsCollapsed } from "@/libs/collapse_store";
 import type { CategoryRef } from "@/libs/category_actions";
 import type { CategoryGroup } from "@/libs/category_groups";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import { toggleCollapsed, useIsCollapsed } from "@/libs/collapse_store";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { memo, useEffect } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { IconButton, useTheme } from "react-native-paper";

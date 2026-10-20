@@ -13,7 +13,7 @@ import {
   useSelectionBackHandler,
 } from "@/libs/selection_store";
 import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { FlashList } from "@shopify/flash-list";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import {

@@ -12,7 +12,7 @@ import {
   useHomeLayout,
   type HomeLayout,
 } from "@/libs/home_layout";
-import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -306,7 +306,7 @@ export default function SettingsScreen() {
                     name="envelope"
                     size={size}
                     color={color}
-                    iconStyle="regular"
+                    iconStyle="solid"
                   />
                 )}
                 darkModeColor="#2a4759"

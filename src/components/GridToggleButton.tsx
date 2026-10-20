@@ -1,4 +1,4 @@
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import type { ColorValue } from "react-native";
 import { IconButton } from "react-native-paper";
 

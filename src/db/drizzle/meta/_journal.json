@@ -12,36 +12,8 @@
     {
       "idx": 1,
       "version": "6",
-      "when": 1791028800000,
-      "tag": "0001_add_categories",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1792473335445,
-      "tag": "0002_created_at_and_updated_at_not_nullable",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1792484159994,
-      "tag": "0003_add_delete_at_for_soft_deletes",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1792493468989,
-      "tag": "0004_add_appliction_ids_and_source_detection",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1792511619441,
-      "tag": "0005_migrate_from_timestamp_to_unix_timestamp",
+      "when": 1792519678207,
+      "tag": "0001_v2_unixtimestamp_softdelete_applictionids",
       "breakpoints": true
     }
   ]

@@ -2,7 +2,7 @@ import CategoryPickerSheet from "@/components/CategoryPickerSheet";
 import FormTextField from "@/components/FormTextField";
 import { useCategoryRepository } from "@/contexts/RepositoryContext";
 import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
-import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
