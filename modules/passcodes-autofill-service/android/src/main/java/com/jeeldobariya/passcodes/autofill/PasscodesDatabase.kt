@@ -143,7 +143,7 @@ class PasscodesDatabase(context: Context) {
                 SET $COLUMN_PASSWORD = ?,
                     $COLUMN_URL = ?,
                     $COLUMN_NOTES = ?,
-                    $COLUMN_UPDATED_AT = CURRENT_TIMESTAMP
+                    $COLUMN_UPDATED_AT = (CAST(strftime('%s', 'now') AS INTEGER))
                 WHERE $COLUMN_ID = ?
                 """.trimIndent(),
                 arrayOf(password, resolvedUrl, mergedNotes, existing.id)
