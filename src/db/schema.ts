@@ -49,6 +49,13 @@ export const passwords = sqliteTable(
 
     deletedAt: text("deleted_at"),
 
+    // Comma-separated Android package names and/or iOS bundle IDs.
+    applicationIds: text("application_ids"),
+
+    source: text("source", {
+      enum: ["IMPORTED", "APPLICATION", "AUTOFILL"],
+    }),
+
     /*
      * NULL = Uncategorized.
      * CategoryRepository.delete() handles reassignment

@@ -128,7 +128,7 @@ export class PasswordRepository {
   async create(data: CreatePasswordInput) {
     const [createdPassword] = await this.db
       .insert(passwords)
-      .values(data)
+      .values({ source: "APPLICATION", ...data })
       .returning();
 
     return createdPassword;
@@ -161,7 +161,9 @@ export class PasswordRepository {
       try {
         this.db.transaction((tx) => {
           for (const row of slice) {
-            tx.insert(passwords).values(toValues(row)).run();
+            tx.insert(passwords)
+              .values({ source: "IMPORTED", ...toValues(row) })
+              .run();
           }
         });
 
@@ -169,7 +171,10 @@ export class PasswordRepository {
       } catch {
         slice.forEach((row, offset) => {
           try {
-            this.db.insert(passwords).values(toValues(row)).run();
+            this.db
+              .insert(passwords)
+              .values({ source: "IMPORTED", ...toValues(row) })
+              .run();
             insertedIndexes.push(start + offset);
           } catch {
             failedIndexes.push(start + offset);

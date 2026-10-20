@@ -45,7 +45,10 @@ import type {
 } from "../types";
 
 export const PASSCODES_FORMAT = "passcodes";
-export const PASSCODES_JSON_VERSION = 1;
+
+// the format will be change v1 after stablity of feature...
+// and, also make v0 invalid in code. refer `parsePasscodesJson()`
+export const PASSCODES_JSON_VERSION = 0;
 
 export interface PasswordExportRow {
   id: number;
@@ -187,10 +190,12 @@ export function parsePasscodesJson(text: string): ParseResult {
 
   const version = document["version"];
 
+  // TODO: we will make version < 1. zero will be invalid.
+  // once we have stable import-export version.
   if (
     typeof version !== "number" ||
     !Number.isInteger(version) ||
-    version < 1
+    version < 0
   ) {
     return { ok: false, error: "The backup's version number is invalid." };
   }

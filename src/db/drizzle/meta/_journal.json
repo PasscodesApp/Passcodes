@@ -29,6 +29,13 @@
       "when": 1792484159994,
       "tag": "0003_add_delete_at_for_soft_deletes",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1792493468989,
+      "tag": "0004_add_appliction_ids_and_source_detection",
+      "breakpoints": true
     }
   ]
 }
