@@ -12,10 +12,13 @@ import java.io.File
  * Expo SQLite / Drizzle. This class never runs migrations — only reads
  * and writes rows into a schema the RN side already owns.
  *
- * Public surface is intentionally just three functions:
+ * Public surface is intentionally small:
  *  - getAllPasswords   : everything, unfiltered (soft-deleted rows excluded).
  *  - filterPasswords   : scoped to a site/app; empty by default if unsure.
  *  - savePassword      : upsert-by-(domain, username), autofill-flagged.
+ *  - getPasswordById   : single-row lookup, used only by the biometric
+ *                        unlock flow to re-fetch real values for exactly
+ *                        the one credential the user chose to unlock.
  */
 class PasscodesDatabase(context: Context) {
 
@@ -77,6 +80,29 @@ class PasscodesDatabase(context: Context) {
         } catch (e: Exception) {
             Log.e(TAG, "filterPasswords failed", e)
             emptyList()
+        }
+    }
+
+    /**
+     * Looks up a single credential by id. Deliberately narrow — the only
+     * caller is AutofillUnlockActivity, re-reading exactly the one row
+     * the user authenticated to unlock, after the locked placeholder
+     * dataset (no real values attached) is what was originally shown.
+     */
+    fun getPasswordById(id: Long): PasswordEntry? {
+        if (!databaseFile.exists()) return null
+
+        return try {
+            openDatabase(readOnly = true).use { db ->
+                db.rawQuery(
+                    "SELECT $COLUMNS_CSV FROM $TABLE_PASSWORDS " +
+                        "WHERE $COLUMN_ID = ? AND $COLUMN_DELETED_AT IS NULL LIMIT 1",
+                    arrayOf(id.toString())
+                ).use { cursor -> mapCursor(cursor).firstOrNull() }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "getPasswordById failed", e)
+            null
         }
     }
 

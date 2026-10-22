@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Shown in the locked-entry dropdown row in place of the username,
+         before the user authenticates. -->
+    <string name="autofill_tap_to_unlock">Tap to unlock</string>
+
+    <!-- BiometricPrompt title/subtitle shown while unlocking a credential. -->
+    <string name="autofill_unlock_title">Unlock Passcodes</string>
+    <string name="autofill_unlock_subtitle">Authenticate to fill your saved credentials</string>
+
+</resources>

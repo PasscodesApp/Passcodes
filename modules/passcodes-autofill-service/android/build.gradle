@@ -32,4 +32,7 @@ dependencies {
   // Preferences DataStore — backs the inline-suggestions toggle shared
   // between the native Autofill service and the RN module bridge.
   implementation "androidx.datastore:datastore-preferences:1.1.1"
+
+  // BiometricPrompt for the "tap to unlock" flow in AutofillUnlockActivity.
+  implementation 'androidx.biometric:biometric:1.1.0'
 }

@@ -1,5 +1,7 @@
 package com.jeeldobariya.passcodes.autofill
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.CancellationSignal
@@ -17,6 +19,7 @@ import android.view.autofill.AutofillValue
 import android.view.inputmethod.InlineSuggestionsRequest
 import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricManager
 import java.util.concurrent.Executors
 
 import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.AutofillFieldType
@@ -27,7 +30,7 @@ import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.ParsedAutofillR
  *
  * Both callbacks follow the same shape: parse the on-screen structure
  * into the fields we care about (see [AutofillRequestParser]), then do
- * the actual database work off the main thread via [executor].
+ * the actual database/biometric work off the main thread via [executor].
  */
 @RequiresApi(Build.VERSION_CODES.O)
 class PasscodesAutofillService : AutofillService() {
@@ -81,6 +84,7 @@ class PasscodesAutofillService : AutofillService() {
         callback: FillCallback
     ) {
         val inlineRequest = resolveInlineSuggestionsRequest(request)
+        val biometricGateActive = resolveBiometricGateActive()
 
         // Explicit opt-in: if the site/app can't be identified, show
         // every saved credential and let the user pick. This is a
@@ -108,8 +112,13 @@ class PasscodesAutofillService : AutofillService() {
         }
 
         matches.forEachIndexed { index, entry ->
-            val inlineSpec = inlineRequest?.let { pickInlineSpec(it, index) }
-            responseBuilder.addDataset(buildDataset(fields, entry, inlineSpec))
+            val dataset = if (biometricGateActive) {
+                buildLockedDataset(fields, entry)
+            } else {
+                val inlineSpec = inlineRequest?.let { pickInlineSpec(it, index) }
+                buildDataset(fields, entry, inlineSpec)
+            }
+            responseBuilder.addDataset(dataset)
         }
 
         attachSaveInfo(responseBuilder, fields)
@@ -121,6 +130,22 @@ class PasscodesAutofillService : AutofillService() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return null
         val enabled = AutofillPreferences.isInlineSuggestionsEnabledBlocking(applicationContext)
         return if (enabled) request.inlineSuggestionsRequest else null
+    }
+
+    /**
+     * The biometric gate only activates when BOTH the user wants it
+     * (preference, default on) AND the device can actually satisfy it
+     * (something enrolled). A device with no lock screen security at
+     * all never blocks the user from their own vault — there's nothing
+     * meaningful to gate behind.
+     */
+    private fun resolveBiometricGateActive(): Boolean {
+        val preferenceEnabled = AutofillPreferences.isBiometricLockEnabledBlocking(applicationContext)
+        if (!preferenceEnabled) return false
+
+        val canAuthenticate = BiometricManager.from(applicationContext)
+            .canAuthenticate(AutofillUnlockActivity.ALLOWED_AUTHENTICATORS)
+        return canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS
     }
 
     private fun attachSaveInfo(builder: FillResponse.Builder, fields: LoginFieldIds) {
@@ -145,6 +170,40 @@ class PasscodesAutofillService : AutofillService() {
         }
 
         return datasetBuilder.build()
+    }
+
+    /**
+     * Builds a dataset with no real values attached — only a "tap to
+     * unlock" presentation — guarded by setAuthentication so the system
+     * launches AutofillUnlockActivity when the user taps it. The real
+     * values are supplied only after that Activity confirms biometric/
+     * device-credential authentication.
+     */
+    private fun buildLockedDataset(fields: LoginFieldIds, entry: PasscodesDatabase.PasswordEntry): Dataset {
+        val datasetBuilder = Dataset.Builder()
+
+        fields.usernameId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, entry) }
+        fields.passwordId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, entry) }
+
+        datasetBuilder.setAuthentication(buildUnlockPendingIntent(entry, fields).intentSender)
+        return datasetBuilder.build()
+    }
+
+    private fun buildUnlockPendingIntent(entry: PasscodesDatabase.PasswordEntry, fields: LoginFieldIds): PendingIntent {
+        val intent = Intent(applicationContext, AutofillUnlockActivity::class.java).apply {
+            putExtra(AutofillUnlockActivity.EXTRA_ROW_ID, entry.id)
+            fields.usernameId?.let { putExtra(AutofillUnlockActivity.EXTRA_USERNAME_AUTOFILL_ID, it) }
+            fields.passwordId?.let { putExtra(AutofillUnlockActivity.EXTRA_PASSWORD_AUTOFILL_ID, it) }
+        }
+
+        // Request code unique per row so Android never collapses two
+        // different rows' unlock intents into one stale PendingIntent.
+        return PendingIntent.getActivity(
+            applicationContext,
+            entry.id.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -225,7 +284,12 @@ class PasscodesAutofillService : AutofillService() {
         if (packageName.isNullOrBlank()) return null
         return try {
             val pm = applicationContext.packageManager
-            val appInfo = pm.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
+            val appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                pm.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
+            } else {
+                @Suppress("DEPRECATION")
+                pm.getApplicationInfo(packageName, 0)
+            }
             pm.getApplicationLabel(appInfo)?.toString()?.takeIf { it.isNotBlank() }
         } catch (e: Exception) {
             null

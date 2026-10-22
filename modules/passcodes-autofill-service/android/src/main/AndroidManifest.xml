@@ -5,7 +5,17 @@
             android:name="com.jeeldobariya.passcodes.autofill.AutofillSettingsActivity"
             android:theme="@style/Theme.PasscodesAutofill"
             android:exported="true" />
-        
+
+        <!-- Host for the biometric "tap to unlock" step. Not exported:
+             it's only ever launched via the PendingIntent this app
+             creates itself in Dataset.Builder#setAuthentication. -->
+        <activity
+            android:name="com.jeeldobariya.passcodes.autofill.AutofillUnlockActivity"
+            android:theme="@style/Theme.PasscodesAutofill.Unlock"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance" />
+
         <service
             android:name=".PasscodesAutofillService"
             android:exported="true"
