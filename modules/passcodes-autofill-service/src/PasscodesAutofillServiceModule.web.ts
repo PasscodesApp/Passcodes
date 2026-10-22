@@ -9,6 +9,15 @@ const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
       "Autofill settings are only available on Android native builds.",
     );
   },
+
+  async isInlineSuggestionsEnabled(): Promise<boolean> {
+    return true; // Not applicable outside Android native builds.
+  },
+  async setInlineSuggestionsEnabled(): Promise<void> {
+    console.warn(
+      "Inline suggestions are only configurable on Android native builds.",
+    );
+  },
 };
 
 export default PasscodesAutofillServiceWeb;

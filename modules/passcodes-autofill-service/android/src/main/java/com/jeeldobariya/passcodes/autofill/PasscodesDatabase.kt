@@ -7,15 +7,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import java.io.File
 
-// TODO: make it compatible for applicationIds, source in passwords table.
-
 /**
  * Native read/write access to the Passcodes SQLite database managed by
  * Expo SQLite / Drizzle. This class never runs migrations — only reads
  * and writes rows into a schema the RN side already owns.
  *
  * Public surface is intentionally just three functions:
- *  - getAllPasswords   : everything, unfiltered.
+ *  - getAllPasswords   : everything, unfiltered (soft-deleted rows excluded).
  *  - filterPasswords   : scoped to a site/app; empty by default if unsure.
  *  - savePassword      : upsert-by-(domain, username), autofill-flagged.
  */
@@ -29,9 +27,9 @@ class PasscodesDatabase(context: Context) {
 
     fun getAllPasswords(): List<PasswordEntry> {
         if (!databaseFile.exists()) return emptyList()
-        
+
         return try {
-            openDatabase().use { db -> queryAll(db) }
+            openDatabase(readOnly = true).use { db -> queryAll(db) }
         } catch (e: Exception) {
             Log.e(TAG, "getAllPasswords failed", e)
             emptyList()
@@ -40,14 +38,22 @@ class PasscodesDatabase(context: Context) {
 
     /**
      * Returns credentials relevant to [webDomain] and/or [packageName].
-     * Matching allows a stored domain to cover its own subdomains (a
-     * stored "google.com" matches a request for "accounts.google.com"),
-     * but not the reverse — we don't surface a narrower stored entry
-     * (e.g. "login.google.com") just because the request is broader.
+     *
+     * - [webDomain] matches [COLUMN_DOMAIN], allowing a stored domain to
+     *   cover its own subdomains (stored "google.com" matches a request
+     *   for "accounts.google.com") but not the reverse.
+     * - [packageName] matches against the comma-delimited
+     *   [COLUMN_APPLICATION_IDS] column, as an exact segment — never
+     *   against [COLUMN_DOMAIN], which holds site/app display names,
+     *   not package identifiers.
+     *
+     * Soft-deleted rows ([COLUMN_DELETED_AT] not null) are always
+     * excluded.
      *
      * [fallbackToAll] defaults to false: if identity can't be resolved,
      * we show nothing rather than the entire vault. Only flip this on
-     * for an explicit, user-initiated "show all credentials" action.
+     * for an explicit, user-initiated "show all credentials" action
+     * (the fill picker in [PasscodesAutofillService] opts in deliberately).
      */
     fun filterPasswords(
         webDomain: String?,
@@ -64,7 +70,7 @@ class PasscodesDatabase(context: Context) {
         }
 
         return try {
-            openDatabase().use { db ->
+            openDatabase(readOnly = true).use { db ->
                 val matches = queryFiltered(db, normalizedWebDomain, normalizedPackage)
                 if (matches.isEmpty() && fallbackToAll) queryAll(db) else matches
             }
@@ -78,13 +84,22 @@ class PasscodesDatabase(context: Context) {
      * Inserts a new credential or updates the existing one matched by
      * (normalized domain, username). Rows created/updated this way are
      * flagged in `notes` as autofill-originated so the user can review
-     * them in-app. Returns the row id on success, null on failure.
+     * them in-app.
+     *
+     * [packageId] — pass the reporting app's package name only when
+     * this save came from a native app form (no web domain). It's
+     * merged into [COLUMN_APPLICATION_IDS]; pass null for a web form
+     * save, where the "app" (e.g. the browser) isn't meaningfully tied
+     * to the credential.
+     *
+     * Returns the row id on success, null on failure.
      */
     fun savePassword(
         domain: String,
         username: String,
         password: String,
-        url: String? = null
+        url: String? = null,
+        packageId: String? = null
     ): Long? {
         if (!databaseFile.exists()) return null
 
@@ -99,7 +114,7 @@ class PasscodesDatabase(context: Context) {
             openDatabase(readOnly = false).use { db ->
                 db.beginTransaction()
                 try {
-                    val id = upsert(db, normalizedDomain, trimmedUsername, password, url)
+                    val id = upsert(db, normalizedDomain, trimmedUsername, password, url, packageId)
                     db.setTransactionSuccessful()
                     id
                 } finally {
@@ -116,14 +131,20 @@ class PasscodesDatabase(context: Context) {
     // Save internals
     // -----------------------------------------------------------------
 
-    private data class ExistingRecord(val id: Long, val notes: String?, val url: String?)
+    private data class ExistingRecord(
+        val id: Long,
+        val notes: String?,
+        val url: String?,
+        val applicationIds: String?
+    )
 
     private fun upsert(
         db: SQLiteDatabase,
         normalizedDomain: String,
         username: String,
         password: String,
-        url: String?
+        url: String?,
+        packageId: String?
     ): Long {
         val existing = findExisting(db, normalizedDomain, username)
         val explicitUrl = url?.trim()?.takeIf { it.isNotBlank() }
@@ -136,6 +157,7 @@ class PasscodesDatabase(context: Context) {
                 ?: explicitUrl
                 ?: DomainHelper.buildFallbackUrl(normalizedDomain)
             val mergedNotes = mergeNotesForUpdate(existing.notes)
+            val mergedAppIds = AppIdentifierHelper.merge(existing.applicationIds, packageId)
 
             db.execSQL(
                 """
@@ -143,21 +165,26 @@ class PasscodesDatabase(context: Context) {
                 SET $COLUMN_PASSWORD = ?,
                     $COLUMN_URL = ?,
                     $COLUMN_NOTES = ?,
+                    $COLUMN_APPLICATION_IDS = ?,
                     $COLUMN_UPDATED_AT = (CAST(strftime('%s', 'now') AS INTEGER))
                 WHERE $COLUMN_ID = ?
                 """.trimIndent(),
-                arrayOf(password, resolvedUrl, mergedNotes, existing.id)
+                arrayOf(password, resolvedUrl, mergedNotes, mergedAppIds, existing.id)
             )
             existing.id
         } else {
             val resolvedUrl = explicitUrl ?: DomainHelper.buildFallbackUrl(normalizedDomain)
+            val mergedAppIds = AppIdentifierHelper.merge(existing = null, identifier = packageId)
+
             val values = ContentValues().apply {
                 put(COLUMN_DOMAIN, normalizedDomain)
                 put(COLUMN_USERNAME, username)
                 put(COLUMN_PASSWORD, password)
                 put(COLUMN_URL, resolvedUrl)
                 put(COLUMN_NOTES, NOTE_SAVED)
-                // created_at / updated_at use the column defaults.
+                put(COLUMN_SOURCE, SOURCE_AUTOFILL)
+                if (mergedAppIds != null) put(COLUMN_APPLICATION_IDS, mergedAppIds)
+                // created_at / updated_at / deleted_at use column defaults.
             }
             db.insertOrThrow(TABLE_PASSWORDS, null, values)
         }
@@ -165,21 +192,26 @@ class PasscodesDatabase(context: Context) {
 
     /**
      * If duplicate (domain, username) rows ever exist — the schema has
-     * no UNIQUE constraint enforcing this yet — the most recently
-     * updated row wins deterministically, rather than an arbitrary one.
+     * no UNIQUE constraint enforcing this — the most recently updated,
+     * non-deleted row wins deterministically rather than an arbitrary one.
      */
     private fun findExisting(db: SQLiteDatabase, normalizedDomain: String, username: String): ExistingRecord? {
         db.rawQuery(
-            "SELECT $COLUMN_ID, $COLUMN_NOTES, $COLUMN_URL FROM $TABLE_PASSWORDS " +
-                "WHERE $COLUMN_DOMAIN = ? AND $COLUMN_USERNAME = ? " +
-                "ORDER BY $COLUMN_UPDATED_AT DESC, $COLUMN_ID DESC LIMIT 1",
+            """
+            SELECT $COLUMN_ID, $COLUMN_NOTES, $COLUMN_URL, $COLUMN_APPLICATION_IDS
+            FROM $TABLE_PASSWORDS
+            WHERE $COLUMN_DOMAIN = ? AND $COLUMN_USERNAME = ? AND $COLUMN_DELETED_AT IS NULL
+            ORDER BY $COLUMN_UPDATED_AT DESC, $COLUMN_ID DESC
+            LIMIT 1
+            """.trimIndent(),
             arrayOf(normalizedDomain, username)
         ).use { c ->
             if (!c.moveToFirst()) return null
             return ExistingRecord(
                 id = c.getLong(0),
                 notes = c.getStringOrNull(1),
-                url = c.getStringOrNull(2)
+                url = c.getStringOrNull(2),
+                applicationIds = c.getStringOrNull(3)
             )
         }
     }
@@ -205,34 +237,38 @@ class PasscodesDatabase(context: Context) {
     // -----------------------------------------------------------------
 
     private fun queryAll(db: SQLiteDatabase): List<PasswordEntry> =
-        db.query(TABLE_PASSWORDS, COLUMNS, null, null, null, null, ORDER_BY_ID).use(::mapCursor)
+        db.query(TABLE_PASSWORDS, COLUMNS, "$COLUMN_DELETED_AT IS NULL", null, null, null, ORDER_BY)
+            .use(::mapCursor)
 
     private fun queryFiltered(
         db: SQLiteDatabase,
         webDomain: String?,
         packageName: String?
     ): List<PasswordEntry> {
-        val conditions = mutableListOf<String>()
+        val orConditions = mutableListOf<String>()
         val args = mutableListOf<String>()
 
         if (webDomain != null) {
-            conditions += "$COLUMN_DOMAIN = ?"
+            orConditions += "$COLUMN_DOMAIN = ?"
             args += webDomain
-            // Request is a subdomain of a stored, broader domain —
-            // e.g. stored "google.com" covers "accounts.google.com".
-            // Deliberately NOT bidirectional: we don't match a stored
-            // narrower entry against a broader request (see review notes).
-            conditions += "? LIKE ('%.' || $COLUMN_DOMAIN)"
+            // Request is a subdomain of a stored, broader domain — e.g.
+            // stored "google.com" covers "accounts.google.com". NOT
+            // bidirectional: a narrower stored entry doesn't match a
+            // broader request.
+            orConditions += "? LIKE ('%.' || $COLUMN_DOMAIN)"
             args += webDomain
         }
 
         if (packageName != null) {
-            conditions += "$COLUMN_DOMAIN = ?"
+            orConditions += AppIdentifierHelper.containsSqlFragment(COLUMN_APPLICATION_IDS)
             args += packageName
         }
 
-        val sql = "SELECT $COLUMNS_CSV FROM $TABLE_PASSWORDS WHERE ${conditions.joinToString(" OR ")} " +
-            "ORDER BY $ORDER_BY_ID"
+        val sql = """
+            SELECT $COLUMNS_CSV FROM $TABLE_PASSWORDS
+            WHERE $COLUMN_DELETED_AT IS NULL AND (${orConditions.joinToString(" OR ")})
+            ORDER BY $ORDER_BY
+        """.trimIndent()
 
         return db.rawQuery(sql, args.toTypedArray()).use(::mapCursor)
     }
@@ -244,6 +280,8 @@ class PasscodesDatabase(context: Context) {
         val passwordIdx = cursor.getColumnIndexOrThrow(COLUMN_PASSWORD)
         val notesIdx = cursor.getColumnIndexOrThrow(COLUMN_NOTES)
         val urlIdx = cursor.getColumnIndexOrThrow(COLUMN_URL)
+        val appIdsIdx = cursor.getColumnIndexOrThrow(COLUMN_APPLICATION_IDS)
+        val sourceIdx = cursor.getColumnIndexOrThrow(COLUMN_SOURCE)
         val createdIdx = cursor.getColumnIndexOrThrow(COLUMN_CREATED_AT)
         val updatedIdx = cursor.getColumnIndexOrThrow(COLUMN_UPDATED_AT)
 
@@ -256,6 +294,8 @@ class PasscodesDatabase(context: Context) {
                 password = cursor.getString(passwordIdx),
                 notes = cursor.getStringOrNull(notesIdx),
                 url = cursor.getStringOrNull(urlIdx),
+                applicationIds = cursor.getStringOrNull(appIdsIdx),
+                source = cursor.getStringOrNull(sourceIdx),
                 createdAt = cursor.getLong(createdIdx),
                 updatedAt = cursor.getLong(updatedIdx)
             )
@@ -265,13 +305,19 @@ class PasscodesDatabase(context: Context) {
 
     private fun Cursor.getStringOrNull(index: Int): String? = if (isNull(index)) null else getString(index)
 
-    private fun openDatabase(readOnly: Boolean = true): SQLiteDatabase {
+    /**
+     * Only the write connection sets a busy_timeout — PRAGMA statements
+     * are a write operation and throw against a read-only connection.
+     * Reads don't need it: in WAL mode (the common case) readers don't
+     * block on a concurrent writer anyway.
+     */
+    private fun openDatabase(readOnly: Boolean): SQLiteDatabase {
         val flags = if (readOnly) SQLiteDatabase.OPEN_READONLY else SQLiteDatabase.OPEN_READWRITE
-        return SQLiteDatabase.openDatabase(
-            databaseFile.absolutePath,
-            null,
-            flags
-        )
+        val db = SQLiteDatabase.openDatabase(databaseFile.absolutePath, null, flags)
+        if (!readOnly) {
+            db.execSQL("PRAGMA busy_timeout = $BUSY_TIMEOUT_MS")
+        }
+        return db
     }
 
     data class PasswordEntry(
@@ -281,6 +327,8 @@ class PasscodesDatabase(context: Context) {
         val password: String,
         val notes: String?,
         val url: String?,
+        val applicationIds: String?,
+        val source: String?,
         val createdAt: Long,
         val updatedAt: Long
     )
@@ -301,19 +349,26 @@ class PasscodesDatabase(context: Context) {
         private const val COLUMN_PASSWORD = "password"
         private const val COLUMN_NOTES = "notes"
         private const val COLUMN_URL = "url"
+        private const val COLUMN_APPLICATION_IDS = "application_ids"
+        private const val COLUMN_SOURCE = "source"
         private const val COLUMN_CREATED_AT = "created_at"
         private const val COLUMN_UPDATED_AT = "updated_at"
+        private const val COLUMN_DELETED_AT = "deleted_at"
 
-        private const val ORDER_BY_ID = "$COLUMN_ID DESC"
+        private const val ORDER_BY = "$COLUMN_UPDATED_AT DESC, $COLUMN_ID DESC"
 
         private const val BUSY_TIMEOUT_MS = 5000
 
         private const val NOTE_SAVED = "saved using autofill; needs user review."
         private const val NOTE_UPDATED = "updated using autofill; needs user review."
 
+        // Matches the Drizzle `source` enum: IMPORTED | APPLICATION | AUTOFILL.
+        private const val SOURCE_AUTOFILL = "AUTOFILL"
+
         private val COLUMNS = arrayOf(
             COLUMN_ID, COLUMN_DOMAIN, COLUMN_USERNAME, COLUMN_PASSWORD,
-            COLUMN_NOTES, COLUMN_URL, COLUMN_CREATED_AT, COLUMN_UPDATED_AT
+            COLUMN_NOTES, COLUMN_URL, COLUMN_APPLICATION_IDS, COLUMN_SOURCE,
+            COLUMN_CREATED_AT, COLUMN_UPDATED_AT
         )
         private val COLUMNS_CSV = COLUMNS.joinToString(", ")
     }
