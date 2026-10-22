@@ -30,26 +30,47 @@ class PasscodesAutofillServiceModule : Module() {
       context.startActivity(intent)
     }
 
-    // Shared with the native Autofill service via AutofillPreferences —
-    // reading/writing here changes the exact same DataStore file the
-    // fill-request path reads from.
+    // -------
+
+    // The functions below all read/write the same DataStore file that
+    // PasscodesAutofillService and AutofillSettingsActivity use — one
+    // source of truth regardless of which side changes it.
+
     AsyncFunction("isInlineSuggestionsEnabled") {
       val context = appContext.reactContext ?: return@AsyncFunction true
       runBlocking(Dispatchers.IO) {
-          AutofillPreferences.isInlineSuggestionsEnabled(context)
-        }
+        AutofillPreferences.isInlineSuggestionsEnabled(context)
+      }
     }
 
     AsyncFunction("setInlineSuggestionsEnabled") { enabled: Boolean ->
-        val context = appContext.reactContext
-            ?: return@AsyncFunction enabled
+      val context = appContext.reactContext
+        ?: return@AsyncFunction enabled
 
-        runBlocking(Dispatchers.IO) {
-            AutofillPreferences.setInlineSuggestionsEnabled(
-                context,
-                enabled
-            )
-        }
+      runBlocking(Dispatchers.IO) {
+        AutofillPreferences.setInlineSuggestionsEnabled(
+          context,
+          enabled
+        )
+      }
+    }
+
+    AsyncFunction("isBiometricLockEnabled") {
+      val context = appContext.reactContext ?: return@AsyncFunction true
+      runBlocking(Dispatchers.IO) {
+        AutofillPreferences.isBiometricLockEnabled(context)
+      }
+    }
+
+    AsyncFunction("setBiometricLockEnabled") { enabled: Boolean ->
+      val context = appContext.reactContext ?: return@AsyncFunction
+      
+      runBlocking(Dispatchers.IO) {
+        AutofillPreferences.setBiometricLockEnabled(
+          context,
+          enabled
+        )
+      }
     }
   }
 }
