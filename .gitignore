@@ -43,3 +43,5 @@ app-example
 /android
 
 *.apk
+*.aab
+*.sign.md
