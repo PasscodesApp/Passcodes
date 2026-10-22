@@ -340,9 +340,6 @@ class PasscodesDatabase(context: Context) {
     private fun openDatabase(readOnly: Boolean): SQLiteDatabase {
         val flags = if (readOnly) SQLiteDatabase.OPEN_READONLY else SQLiteDatabase.OPEN_READWRITE
         val db = SQLiteDatabase.openDatabase(databaseFile.absolutePath, null, flags)
-        if (!readOnly) {
-            db.execSQL("PRAGMA busy_timeout = $BUSY_TIMEOUT_MS")
-        }
         return db
     }
 
@@ -383,7 +380,7 @@ class PasscodesDatabase(context: Context) {
 
         private const val ORDER_BY = "$COLUMN_UPDATED_AT DESC, $COLUMN_ID DESC"
 
-        private const val BUSY_TIMEOUT_MS = 5000
+        // private const val BUSY_TIMEOUT_MS = 5000
 
         private const val NOTE_SAVED = "saved using autofill; needs user review."
         private const val NOTE_UPDATED = "updated using autofill; needs user review."

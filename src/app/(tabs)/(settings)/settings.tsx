@@ -14,7 +14,7 @@ import {
 } from "@/libs/home_layout";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useState } from "react";
 import { ScrollView } from "react-native";
 import {
@@ -39,8 +39,13 @@ export default function SettingsScreen() {
   const toggleScreenshotPreventSwitch = () =>
     setIsScreenshotPreventOn(toggleScreenshotPrevention());
 
-  const isAutofillEnabled =
+  let isAutofillEnabled =
     PasscodesAutofillServiceModule.isAutofillServiceEnabled();
+
+  useFocusEffect(() => {
+    isAutofillEnabled =
+      PasscodesAutofillServiceModule.isAutofillServiceEnabled();
+  });
 
   const homeLayout = useHomeLayout();
 
