@@ -14,9 +14,9 @@ import {
 } from "@/libs/home_layout";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useFocusEffect } from "expo-router";
-import { useState } from "react";
-import { ScrollView } from "react-native";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { AppState, ScrollView } from "react-native";
 import {
   Card,
   Divider,
@@ -30,6 +30,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
 
 export default function SettingsScreen() {
+  const [appState, setAppState] = useState(AppState.currentState);
+
   const [isAppLockOn, setIsAppLockOn] = useState(isAppLockEnabled());
   const toggleInAppLockSwitch = () => setIsAppLockOn(toggleAppLock());
 
@@ -43,11 +45,20 @@ export default function SettingsScreen() {
     PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
   );
 
-  useFocusEffect(() => {
-    setIsAutofillEnabled(
-      PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
-    );
-  });
+  // to maintain autofill state that is correct.
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      setIsAutofillEnabled(
+        PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
+      );
+
+      setAppState(nextAppState);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [appState]);
 
   const homeLayout = useHomeLayout();
 
