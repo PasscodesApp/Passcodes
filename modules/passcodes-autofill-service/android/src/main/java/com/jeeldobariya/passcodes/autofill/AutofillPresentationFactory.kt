@@ -87,21 +87,32 @@ class AutofillPresentationFactory(
      * Dataset.Builder#setAuthentication by PasscodesAutofillService
      * when the biometric lock is active.
      *
-     * Deliberately dropdown-only (no inline suggestion tier) — an
-     * inline chip that still needs a follow-up unlock step is a more
-     * confusing tap target than a clear "tap to unlock" row in the
-     * dropdown, so locked entries skip inline entirely.
+     * If [inlineSpec] is supplied (the user kept inline suggestions on),
+     * the locked row is also offered as a keyboard chip. It shows the
+     * site name and "Tap to unlock" only — the username stays hidden
+     * until authentication succeeds, which is why the settings screen
+     * recommends turning inline off when the lock is on.
      */
     fun applyLockedPlaceholder(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
-        entry: PasscodesDatabase.PasswordEntry
+        entry: PasscodesDatabase.PasswordEntry,
+        inlineSpec: InlinePresentationSpec?
     ) {
-        datasetBuilder.setValue(
-            id,
-            null,
-            buildMenuPresentation(entry, locked = true)
-        )
+        val menuPresentation = buildMenuPresentation(entry, locked = true)
+
+        val inlinePresentation =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && inlineSpec != null) {
+                buildInlinePresentation(inlineSpec, entry, locked = true)
+            } else {
+                null
+            }
+
+        if (inlinePresentation != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            datasetBuilder.setValue(id, null, menuPresentation, inlinePresentation)
+        } else {
+            datasetBuilder.setValue(id, null, menuPresentation)
+        }
     }
 
     private fun buildMenuPresentation(
@@ -114,7 +125,7 @@ class AutofillPresentationFactory(
         ).apply {
             setImageViewResource(
                 R.id.autofill_icon,
-                R.drawable.ic_autofill_lock
+                if (locked) R.drawable.ic_autofill_lock else R.drawable.ic_autofill_key
             )
 
             setTextViewText(
@@ -143,7 +154,7 @@ class AutofillPresentationFactory(
             .setDialogPresentation(menuPresentation)
 
         inlineSpec?.let { spec ->
-            buildInlinePresentation(spec, entry)?.let {
+            buildInlinePresentation(spec, entry, locked = false)?.let {
                 presentationsBuilder.setInlinePresentation(it)
             }
         }
@@ -173,7 +184,8 @@ class AutofillPresentationFactory(
         val inlinePresentation =
             buildInlinePresentation(
                 inlineSpec,
-                entry
+                entry,
+                locked = false
             )
 
         if (inlinePresentation != null) {
@@ -195,7 +207,8 @@ class AutofillPresentationFactory(
     @RequiresApi(Build.VERSION_CODES.R)
     private fun buildInlinePresentation(
         spec: InlinePresentationSpec,
-        entry: PasscodesDatabase.PasswordEntry
+        entry: PasscodesDatabase.PasswordEntry,
+        locked: Boolean
     ): InlinePresentation? {
 
         if (
@@ -208,17 +221,24 @@ class AutofillPresentationFactory(
             return null
         }
 
+        // The vector drawables are plain black shapes meant to be tinted;
+        // untinted they'd be invisible on a dark keyboard strip. The tint
+        // colour has a night variant, so it follows the system theme.
         val icon = Icon.createWithResource(
             context,
-            R.drawable.ic_autofill_lock
-        )
+            if (locked) R.drawable.ic_autofill_lock else R.drawable.ic_autofill_key
+        ).setTint(context.getColor(R.color.autofill_inline_icon))
+
+        val title = if (locked) entry.domain else entry.username.ifBlank { entry.domain }
+        val subtitle = if (locked) context.getString(R.string.autofill_tap_to_unlock) else entry.domain
 
         val content =
             InlineSuggestionUi
                 .newContentBuilder(createInlineSuggestionIntent(entry))
-                .setTitle(entry.username)
-                .setSubtitle(entry.domain)
+                .setTitle(title)
+                .setSubtitle(subtitle)
                 .setStartIcon(icon)
+                .setContentDescription("$title, $subtitle")
                 .build()
 
         return InlinePresentation(

@@ -1,4 +1,7 @@
-import { PasscodesAutofillServiceModuleInterface } from "./PasscodesAutofillService.types";
+import {
+  FillMode,
+  PasscodesAutofillServiceModuleInterface,
+} from "./PasscodesAutofillService.types";
 
 const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
   isAutofillServiceEnabled(): boolean {
@@ -12,7 +15,7 @@ const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
   },
 
   async isInlineSuggestionsEnabled(): Promise<boolean> {
-    return true; // Not applicable outside Android native builds.
+    return false; // Not applicable outside Android native builds.
   },
 
   async setInlineSuggestionsEnabled(enabled: boolean): Promise<boolean> {
@@ -25,7 +28,7 @@ const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
   },
 
   async isBiometricLockEnabled(): Promise<boolean> {
-    return true; // Not applicable outside Android native builds.
+    return false; // Not applicable outside Android native builds.
   },
 
   async setBiometricLockEnabled(enabled: boolean): Promise<boolean> {
@@ -35,6 +38,19 @@ const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
 
     // Not applicable outside Android native builds; return the requested value.
     return enabled;
+  },
+
+  async getFillMode(): Promise<FillMode> {
+    return "auto"; // Not applicable outside Android native builds.
+  },
+
+  async setFillMode(mode: FillMode): Promise<FillMode> {
+    console.warn(
+      "The fill mode is only configurable on Android native builds.",
+    );
+
+    // Not applicable outside Android native builds; return the requested value.
+    return mode;
   },
 };
 

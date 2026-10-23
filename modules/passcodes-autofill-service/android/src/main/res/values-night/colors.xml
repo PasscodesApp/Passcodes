@@ -54,4 +54,12 @@
     <color name="md_scrim">#000000</color>
     <color name="md_surface_tint">#9ECAFF</color>
 
+    <color name="md_surface_container_lowest">#0B0E10</color>
+    <color name="md_surface_container_low">#191C1E</color>
+    <color name="md_surface_container">#1D2022</color>
+    <color name="md_surface_container_high">#272A2D</color>
+    <color name="md_surface_container_highest">#323537</color>
+
+    <color name="autofill_inline_icon">@color/md_primary</color>
+
 </resources>

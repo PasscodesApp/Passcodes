@@ -27,7 +27,7 @@ export interface PasscodesAutofillServiceModuleInterface {
 
   /**
    * Whether a biometric/device-credential prompt is required before a
-   * saved credential is filled in. Defaults to true. If the device has
+   * saved credential is filled in. Defaults to false (opt-in). If the device has
    * no biometric or PIN/pattern/password configured, the gate is
    * skipped automatically regardless of this setting.
    */
@@ -38,4 +38,20 @@ export interface PasscodesAutofillServiceModuleInterface {
    * Resolves after the preference has been updated.
    */
   setBiometricLockEnabled(enabled: boolean): Promise<boolean>;
+
+  /**
+   * Which saved credentials the fill picker offers:
+   *  - "smart": only credentials matching the site/app; nothing if none match.
+   *  - "auto" (default): matching credentials first, else everything.
+   *  - "dumb": always everything (capped to the most recent entries).
+   * Unknown values are treated as "auto".
+   */
+  getFillMode(): Promise<FillMode>;
+
+  /**
+   * Updates the fill mode. Resolves to the value read back after the update.
+   */
+  setFillMode(mode: FillMode): Promise<FillMode>;
 }
+
+export type FillMode = "smart" | "auto" | "dumb";

@@ -1,54 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- Autofill dropdown row. Inflated inside the system's process through
+     RemoteViews, so: only RemoteViews-safe widgets, and explicit colour
+     resources (which have night variants) instead of ?attr/ theme
+     lookups, which are not reliably resolved there. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/autofill_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="4dp"
     android:layout_marginHorizontal="8dp"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
+    android:layout_marginVertical="4dp"
     android:background="@drawable/autofill_item_background"
-    android:padding="12dp">
+    android:gravity="center_vertical"
+    android:minHeight="64dp"
+    android:orientation="horizontal"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="10dp">
 
-    <!-- Lock icon -->
+    <!-- Icon badge: key (ready to fill) or lock (needs unlocking) -->
     <ImageView
         android:id="@+id/autofill_icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:src="@drawable/ic_autofill_lock"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/autofill_icon_badge"
         android:contentDescription="@null"
-        android:scaleType="centerInside" />
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_autofill_key"
+        android:tint="@color/md_on_primary_container" />
 
-    <!-- Credential information -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
         android:layout_weight="1"
-        android:layout_marginStart="12dp"
         android:orientation="vertical">
 
-        <!-- Domain -->
+        <!-- Site / app name -->
         <TextView
             android:id="@+id/autofill_domain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/md_on_primary"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:ellipsize="end"
             android:maxLines="1"
-            android:ellipsize="end" />
+            android:textColor="@color/md_on_surface"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <!-- Username -->
+        <!-- Username, or "Tap to unlock" when the lock is on -->
         <TextView
             android:id="@+id/autofill_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textColor="@color/md_primary_container"
-            android:textSize="14sp"
+            android:ellipsize="end"
             android:maxLines="1"
-            android:ellipsize="end" />
+            android:textColor="@color/md_on_surface_variant"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

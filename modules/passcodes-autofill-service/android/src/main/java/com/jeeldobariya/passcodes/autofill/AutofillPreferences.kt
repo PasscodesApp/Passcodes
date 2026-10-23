@@ -3,6 +3,7 @@ package com.jeeldobariya.passcodes.autofill
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -29,6 +30,8 @@ object AutofillPreferences {
 
     private val KEY_INLINE_SUGGESTIONS_ENABLED = booleanPreferencesKey("inline_suggestions_enabled")
     private val KEY_BIOMETRIC_LOCK_ENABLED = booleanPreferencesKey("biometric_lock_enabled")
+
+    private val KEY_FILL_MODE = stringPreferencesKey("fill_mode")
 
     private const val DEFAULT_INLINE_SUGGESTIONS_ENABLED = true
     private const val DEFAULT_BIOMETRIC_LOCK_ENABLED = false
@@ -67,6 +70,19 @@ object AutofillPreferences {
         return isBiometricLockEnabled(context)
     }
 
+    // -- Fill mode (smart / auto / dumb) --------------------------------
+
+    suspend fun getFillMode(context: Context): FillMode =
+        FillMode.fromStorage(context.autofillDataStore.data.first()[KEY_FILL_MODE])
+
+    suspend fun setFillMode(context: Context, mode: FillMode): FillMode {
+        context.autofillDataStore.edit { prefs ->
+            prefs[KEY_FILL_MODE] = mode.storageValue
+        }
+
+        return getFillMode(context)
+    }
+
     // -- Blocking convenience for non-coroutine call sites ---------------
     //
     // Only call these from a background thread. PasscodesAutofillService
@@ -85,4 +101,10 @@ object AutofillPreferences {
 
     fun setBiometricLockEnabledBlocking(context: Context, enabled: Boolean) =
         runBlocking { setBiometricLockEnabled(context, enabled) }
+
+    fun getFillModeBlocking(context: Context): FillMode =
+        runBlocking { getFillMode(context) }
+
+    fun setFillModeBlocking(context: Context, mode: FillMode) =
+        runBlocking { setFillMode(context, mode) }
 }
