@@ -1,6 +1,8 @@
 {
   "platforms": ["android"],
   "android": {
-    "modules": ["com.jeeldobariya.passcodes.autofill.PasscodesAutofillServiceModule"]
+    "modules": [
+      "com.jeeldobariya.passcodes.autofill.PasscodesAutofillServiceModule"
+    ]
   }
 }

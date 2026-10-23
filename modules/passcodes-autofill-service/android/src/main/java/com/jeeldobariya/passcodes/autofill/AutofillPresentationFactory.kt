@@ -18,10 +18,20 @@ import androidx.annotation.RequiresApi
 import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
 
+/**
+ * Builds the on-screen presentation for a single Autofill dataset value.
+ *
+ * Three tiers, each isolated behind its own @RequiresApi check so newer
+ * API types are never referenced on an OS version that doesn't have them:
+ *  - the classic dropdown, a RemoteViews — API 26+.
+ *  - inline suggestions in the keyboard strip — API 30+.
+ *  - the API 34+ Presentations bundle (menu + inline + dialog together).
+ */
 class AutofillPresentationFactory(
     private val context: Context
 ) {
 
+    /** Applies a real, fillable value with the full tiered presentation. */
     fun applyValue(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
@@ -29,10 +39,14 @@ class AutofillPresentationFactory(
         entry: PasscodesDatabase.PasswordEntry,
         inlineSpec: InlinePresentationSpec?
     ) {
-        val menuPresentation = buildMenuPresentation(entry)
+        val menuPresentation = buildMenuPresentation(entry, locked = false)
 
         when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> {
+            // Presentations/Field/Dataset.Builder#setField were added in
+            // API 34 (UPSIDE_DOWN_CAKE), NOT API 33 (TIRAMISU) — using
+            // the wrong constant here throws NoSuchMethodError on real
+            // Android 13 devices even though it compiles fine.
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> {
                 applyWithPresentations(
                     datasetBuilder = datasetBuilder,
                     id = id,
@@ -66,8 +80,33 @@ class AutofillPresentationFactory(
         }
     }
 
-    private fun buildMenuPresentation(
+    /**
+     * Applies a "locked" placeholder for a field: no real value is
+     * attached (null), only a presentation showing the credential is
+     * available but requires unlocking first. Used together with
+     * Dataset.Builder#setAuthentication by PasscodesAutofillService
+     * when the biometric lock is active.
+     *
+     * Deliberately dropdown-only (no inline suggestion tier) — an
+     * inline chip that still needs a follow-up unlock step is a more
+     * confusing tap target than a clear "tap to unlock" row in the
+     * dropdown, so locked entries skip inline entirely.
+     */
+    fun applyLockedPlaceholder(
+        datasetBuilder: Dataset.Builder,
+        id: AutofillId,
         entry: PasscodesDatabase.PasswordEntry
+    ) {
+        datasetBuilder.setValue(
+            id,
+            null,
+            buildMenuPresentation(entry, locked = true)
+        )
+    }
+
+    private fun buildMenuPresentation(
+        entry: PasscodesDatabase.PasswordEntry,
+        locked: Boolean
     ): RemoteViews {
         return RemoteViews(
             context.packageName,
@@ -85,12 +124,12 @@ class AutofillPresentationFactory(
 
             setTextViewText(
                 R.id.autofill_username,
-                entry.username
+                if (locked) context.getString(R.string.autofill_tap_to_unlock) else entry.username
             )
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private fun applyWithPresentations(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,

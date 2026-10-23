@@ -58,4 +58,16 @@
 
     </style>
 
+    <!-- Used only by AutofillUnlockActivity: an invisible host for the
+         BiometricPrompt system dialog. Nothing in this theme is ever
+         actually seen — the prompt itself is a separate system overlay. -->
+    <style name="Theme.PasscodesAutofill.Unlock" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
 </resources>

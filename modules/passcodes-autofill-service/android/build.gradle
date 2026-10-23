@@ -28,4 +28,11 @@ dependencies {
   
   // Optional: AndroidX Autofill helper library for field hint constants
   implementation 'androidx.autofill:autofill:1.3.0'
+
+  // Preferences DataStore — backs the inline-suggestions toggle shared
+  // between the native Autofill service and the RN module bridge.
+  implementation "androidx.datastore:datastore-preferences:1.1.1"
+
+  // BiometricPrompt for the "tap to unlock" flow in AutofillUnlockActivity.
+  implementation 'androidx.biometric:biometric:1.1.0'
 }
