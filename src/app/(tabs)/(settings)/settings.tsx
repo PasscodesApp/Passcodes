@@ -39,12 +39,14 @@ export default function SettingsScreen() {
   const toggleScreenshotPreventSwitch = () =>
     setIsScreenshotPreventOn(toggleScreenshotPrevention());
 
-  let isAutofillEnabled =
-    PasscodesAutofillServiceModule.isAutofillServiceEnabled();
+  let [isAutofillEnabled, setIsAutofillEnabled] = useState(
+    PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
+  );
 
   useFocusEffect(() => {
-    isAutofillEnabled =
-      PasscodesAutofillServiceModule.isAutofillServiceEnabled();
+    setIsAutofillEnabled(
+      PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
+    );
   });
 
   const homeLayout = useHomeLayout();
