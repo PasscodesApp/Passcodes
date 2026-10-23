@@ -8,8 +8,6 @@
     android:id="@+id/autofill_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
     android:background="@drawable/autofill_item_background"
     android:gravity="center_vertical"
     android:minHeight="64dp"
