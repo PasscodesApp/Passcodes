@@ -10,7 +10,7 @@
 
   <img width="512" height="250" alt="passcodes play store banner" src="https://github.com/user-attachments/assets/88e63483-9930-4ce0-a01e-4564e18b3c71" />
 
-![Static Badge](https://img.shields.io/badge/Release-Prototype-blue)
+![Static Badge](https://img.shields.io/badge/Release-BETA-pink)
 ![Visitor Counter (@hehuapei/visitor-badge)](https://visitor-badge.laobi.icu/badge?page_id=JeelDobariya38.Passcodes&format=true)
 
 <a href="https://komistore.app/app/?repo=PasscodesApp/Passcodes"><img height="60" src="assets/images/komi-store.png" /></a>
@@ -80,7 +80,7 @@ with a access token in [star-history.com](https://www.star-history.com))
 - [x] Intuitive UI.
 - [ ] Update Checkers & Manager.
 - [x] Password Management.
-- [ ] Autofill.
+- [x] Autofill.
 - [ ] Secure File. (Least Priority, Because it includes permission. Which, I am as developer not
       familiar with 😂)
   - Could be Image. (JPG. PNG ....)
@@ -119,6 +119,29 @@ with a access token in [star-history.com](https://www.star-history.com))
 It was most shortest and sweetest description (I have ever crafted), For more detailed description,
 see the file [installing.md](https://passcodesapp.github.io/Passcodes-Docs/user-docs/installing/)
 in `PasscodesApp/Passcodes-Docs`.
+
+## Download Verification
+
+Passcodes publishes Android builds through its official GitHub repository and supported distribution channels. You can verify the signing certificate of a downloaded binary to check whether it matches the expected Passcodes signing identity.
+
+**Official download sources**
+
+- [GitHub Releases](https://github.com/PasscodesApp/Passcodes/releases/latest)
+- [Komi Store](https://komistore.app/app/?repo=PasscodesApp/Passcodes)
+
+### Official signing certificate
+
+Production APKs and Android App Bundles (AABs) signed with the project's current release key should match the following certificate fingerprints.
+
+| Property            | Value                                                                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------- |
+| Certificate owner   | `CN=Jeel Dobariya, OU=Community, O=Community, L=Rajkot, ST=Gujarat, C=IN`                         |
+| Signature algorithm | `SHA256withRSA`                                                                                   |
+| Public key          | RSA, 2048-bit                                                                                     |
+| SHA-256 fingerprint | `84:10:8E:1E:49:3B:8C:02:7D:ED:99:BD:73:64:B9:9F:0E:41:8D:8B:D2:2F:06:B8:C4:3C:1A:76:5B:CD:30:8F` |
+| SHA-1 fingerprint   | `F9:55:65:08:7E:BD:15:17:15:C6:CE:D6:FB:27:18:76:EF:34:33:0E`                                     |
+
+These fingerprints identify the expected signing certificate, not the individual APK or AAB file.
 
 ## Upgrading Steps
 
