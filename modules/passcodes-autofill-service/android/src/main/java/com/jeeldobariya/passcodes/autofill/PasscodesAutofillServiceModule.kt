@@ -63,13 +63,32 @@ class PasscodesAutofillServiceModule : Module() {
     }
 
     AsyncFunction("setBiometricLockEnabled") { enabled: Boolean ->
-      val context = appContext.reactContext ?: return@AsyncFunction
-      
+      val context = appContext.reactContext
+        ?: return@AsyncFunction enabled
+
       runBlocking(Dispatchers.IO) {
         AutofillPreferences.setBiometricLockEnabled(
           context,
           enabled
         )
+      }
+    }
+
+    // "smart" | "auto" | "dumb" — see FillMode.
+    AsyncFunction("getFillMode") {
+      val context = appContext.reactContext ?: return@AsyncFunction FillMode.DEFAULT.storageValue
+      runBlocking(Dispatchers.IO) {
+        AutofillPreferences.getFillMode(context).storageValue
+      }
+    }
+
+    AsyncFunction("setFillMode") { mode: String ->
+      val requested = FillMode.fromStorage(mode)
+      val context = appContext.reactContext
+        ?: return@AsyncFunction requested.storageValue
+
+      runBlocking(Dispatchers.IO) {
+        AutofillPreferences.setFillMode(context, requested).storageValue
       }
     }
   }

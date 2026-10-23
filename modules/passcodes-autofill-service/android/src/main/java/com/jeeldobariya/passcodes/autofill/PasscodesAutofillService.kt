@@ -21,6 +21,7 @@ import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricManager
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicBoolean
 
 import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.AutofillFieldType
 import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.ParsedAutofillRequest
@@ -67,12 +68,20 @@ class PasscodesAutofillService : AutofillService() {
             return
         }
 
-        var cancelled = false
-        cancellationSignal.setOnCancelListener { cancelled = true }
+        val cancelled = AtomicBoolean(false)
+        cancellationSignal.setOnCancelListener { cancelled.set(true) }
 
         executor.execute {
-            if (cancelled) return@execute
-            handleFillRequest(request, fields, parsed, cancelled = { cancelled }, callback)
+            if (cancelled.get()) return@execute
+            // An exception escaping an executor task would take the
+            // whole app process down (and the RN app shares it), so
+            // anything unexpected degrades to "no suggestions".
+            try {
+                handleFillRequest(request, fields, parsed, cancelled = { cancelled.get() }, callback)
+            } catch (t: Throwable) {
+                Log.e(TAG, "Fill request failed", t)
+                runCatching { callback.onSuccess(null) }
+            }
         }
     }
 
@@ -85,15 +94,10 @@ class PasscodesAutofillService : AutofillService() {
     ) {
         val inlineRequest = resolveInlineSuggestionsRequest(request)
         val biometricGateActive = resolveBiometricGateActive()
+        val fillMode = AutofillPreferences.getFillModeBlocking(applicationContext)
 
-        // Explicit opt-in: if the site/app can't be identified, show
-        // every saved credential and let the user pick. This is a
-        // deliberate call for the fill picker specifically — see
-        // PasscodesDatabase.filterPasswords' default, which is the
-        // opposite for stricter callers.
         val matches = try {
-            PasscodesDatabase(applicationContext)
-                .filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = true)
+            selectCredentials(fillMode, parsed).take(MAX_DATASETS)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to load credentials", e)
             emptyList()
@@ -103,26 +107,41 @@ class PasscodesAutofillService : AutofillService() {
 
         val responseBuilder = FillResponse.Builder()
 
-        if (matches.isEmpty()) {
-            // Nothing to offer, but still let the user save whatever
-            // they type into this form.
-            attachSaveInfo(responseBuilder, fields)
-            callback.onSuccess(responseBuilder.build())
-            return
-        }
-
         matches.forEachIndexed { index, entry ->
+            val inlineSpec = inlineRequest?.let { pickInlineSpec(it, index) }
             val dataset = if (biometricGateActive) {
-                buildLockedDataset(fields, entry)
+                buildLockedDataset(fields, entry, inlineSpec)
             } else {
-                val inlineSpec = inlineRequest?.let { pickInlineSpec(it, index) }
                 buildDataset(fields, entry, inlineSpec)
             }
             responseBuilder.addDataset(dataset)
         }
 
-        attachSaveInfo(responseBuilder, fields)
+        // Even with nothing to offer, still let the user save whatever
+        // they type into this form.
+        val hasSaveInfo = attachSaveInfo(responseBuilder, fields)
+
+        // FillResponse.Builder#build() throws if it holds neither a
+        // dataset nor SaveInfo — answer "nothing here" instead.
+        if (matches.isEmpty() && !hasSaveInfo) {
+            callback.onSuccess(null)
+            return
+        }
+
         callback.onSuccess(responseBuilder.build())
+    }
+
+    /** Picks which saved credentials to offer, per the user's fill-mode setting. */
+    private fun selectCredentials(
+        mode: FillMode,
+        parsed: ParsedAutofillRequest
+    ): List<PasscodesDatabase.PasswordEntry> {
+        val db = PasscodesDatabase(applicationContext)
+        return when (mode) {
+            FillMode.SMART -> db.filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = false)
+            FillMode.AUTO -> db.filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = true)
+            FillMode.DUMB -> db.getAllPasswords()
+        }
     }
 
     /** Honors the user's inline-suggestions preference on top of OS/API support. */
@@ -148,11 +167,13 @@ class PasscodesAutofillService : AutofillService() {
         return canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS
     }
 
-    private fun attachSaveInfo(builder: FillResponse.Builder, fields: LoginFieldIds) {
-        val requiredId = fields.passwordId ?: return
+    /** Returns true if SaveInfo was attached (needs a password field to key off). */
+    private fun attachSaveInfo(builder: FillResponse.Builder, fields: LoginFieldIds): Boolean {
+        val requiredId = fields.passwordId ?: return false
         val saveInfoBuilder = SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_PASSWORD, arrayOf(requiredId))
         fields.usernameId?.let { saveInfoBuilder.setOptionalIds(arrayOf(it)) }
         builder.setSaveInfo(saveInfoBuilder.build())
+        return true
     }
 
     private fun buildDataset(
@@ -178,12 +199,20 @@ class PasscodesAutofillService : AutofillService() {
      * launches AutofillUnlockActivity when the user taps it. The real
      * values are supplied only after that Activity confirms biometric/
      * device-credential authentication.
+     *
+     * [inlineSpec] is non-null only when the user left inline
+     * suggestions on, in which case the locked row also shows up as a
+     * keyboard chip (domain + "Tap to unlock", never the username).
      */
-    private fun buildLockedDataset(fields: LoginFieldIds, entry: PasscodesDatabase.PasswordEntry): Dataset {
+    private fun buildLockedDataset(
+        fields: LoginFieldIds,
+        entry: PasscodesDatabase.PasswordEntry,
+        inlineSpec: InlinePresentationSpec?
+    ): Dataset {
         val datasetBuilder = Dataset.Builder()
 
-        fields.usernameId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, entry) }
-        fields.passwordId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, entry) }
+        fields.usernameId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, entry, inlineSpec) }
+        fields.passwordId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, entry, inlineSpec) }
 
         datasetBuilder.setAuthentication(buildUnlockPendingIntent(entry, fields).intentSender)
         return datasetBuilder.build()
@@ -240,7 +269,12 @@ class PasscodesAutofillService : AutofillService() {
         val username = AutofillValues.textOf(parsed.node(AutofillFieldType.USERNAME)).orEmpty()
 
         executor.execute {
-            handleSaveRequest(parsed, username, passwordValue, callback)
+            try {
+                handleSaveRequest(parsed, username, passwordValue, callback)
+            } catch (t: Throwable) {
+                Log.e(TAG, "Save request failed", t)
+                runCatching { callback.onFailure("Could not save credentials") }
+            }
         }
     }
 
@@ -318,5 +352,11 @@ class PasscodesAutofillService : AutofillService() {
 
     companion object {
         private const val TAG = "PasscodesAutofillService"
+
+        // Datasets travel to the system over Binder (~1 MB shared
+        // transaction limit, each one carrying RemoteViews), so a huge
+        // vault in "dumb" mode must not be sent whole. Rows are already
+        // ordered most-recently-updated first.
+        private const val MAX_DATASETS = 20
     }
 }

@@ -55,4 +55,16 @@
     <color name="md_scrim">#000000</color>
     <color name="md_surface_tint">#34597F</color>
 
+    <!-- Surface container roles (M3 tonal elevation), used for cards and
+         the dropdown row. Explicit colours, not theme attrs, because the
+         dropdown RemoteViews is inflated inside another process. -->
+    <color name="md_surface_container_lowest">#FFFFFF</color>
+    <color name="md_surface_container_low">#F7F6FA</color>
+    <color name="md_surface_container">#F1F0F4</color>
+    <color name="md_surface_container_high">#EBEAEE</color>
+    <color name="md_surface_container_highest">#E5E4E9</color>
+
+    <!-- Tint for the inline-suggestion chip icon (follows light/dark). -->
+    <color name="autofill_inline_icon">@color/md_primary</color>
+
 </resources>

@@ -1,12 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Shown in the locked-entry dropdown row in place of the username,
-         before the user authenticates. -->
+    <!-- Shown in the locked-entry dropdown row / inline chip in place of
+         the username, before the user authenticates. -->
     <string name="autofill_tap_to_unlock">Tap to unlock</string>
 
     <!-- BiometricPrompt title/subtitle shown while unlocking a credential. -->
     <string name="autofill_unlock_title">Unlock Passcodes</string>
     <string name="autofill_unlock_subtitle">Authenticate to fill your saved credentials</string>
+
+    <!-- Settings screen -->
+    <string name="autofill_settings_title">Autofill</string>
+    <string name="autofill_back">Back</string>
+    <string name="autofill_header_title">Passcodes Autofill</string>
+    <string name="autofill_header_body">Use Passcodes to securely fill usernames and passwords in supported apps and websites.</string>
+
+    <string name="autofill_status_title">Autofill service</string>
+    <string name="autofill_status_checking">Checking Autofill status…</string>
+    <string name="autofill_status_enabled">Passcodes is your Autofill service.</string>
+    <string name="autofill_status_disabled">Passcodes is not your Autofill service.</string>
+    <string name="autofill_status_unsupported">Autofill is not supported on this Android version.</string>
+    <string name="autofill_button_enable">Enable Passcodes Autofill</string>
+    <string name="autofill_button_change">Change Autofill service</string>
+
+    <string name="autofill_section_security">Security</string>
+    <string name="autofill_authentication_title">Authentication</string>
+    <string name="autofill_authentication_body">Require authentication before filling credentials</string>
+    <string name="autofill_authentication_description">Require authentication before autofill</string>
+    <string name="autofill_authentication_no_lock">No screen lock is set up on this device, so authentication is skipped until you add one.</string>
+
+    <string name="autofill_inline_title">Inline suggestions</string>
+    <string name="autofill_inline_body">Show Passcodes suggestions above the keyboard</string>
+    <string name="autofill_inline_description">Show inline Autofill suggestions</string>
+
+    <string name="autofill_section_matching">Suggestions</string>
+    <string name="autofill_fill_mode_title">Which passwords to show</string>
+    <string name="autofill_fill_mode_smart">Smart</string>
+    <string name="autofill_fill_mode_auto">Auto</string>
+    <string name="autofill_fill_mode_dumb">Dumb</string>
+    <string name="autofill_fill_mode_smart_description">Only passwords that match the site or app. If nothing matches, nothing is shown.</string>
+    <string name="autofill_fill_mode_auto_description">Matching passwords first. If nothing matches, all your passwords are shown.</string>
+    <string name="autofill_fill_mode_dumb_description">Always shows all your passwords (the 20 most recently updated), whatever the site or app.</string>
+
+    <!-- Recommendation shown when authentication is switched on while inline suggestions are on. -->
+    <string name="autofill_recommend_title">Turn off inline suggestions?</string>
+    <string name="autofill_recommend_message">With authentication on, an inline suggestion can only say \"Tap to unlock\" — it can\'t show which account it will fill, because the username stays hidden until you unlock.\n\nWe recommend turning inline suggestions off and using the dropdown instead. It\'s your choice, and you can change it any time.</string>
+    <string name="autofill_recommend_turn_off">Turn off inline</string>
+    <string name="autofill_recommend_keep">Keep inline</string>
+
+    <string name="autofill_how_title">How Autofill works</string>
+    <string name="autofill_how_body_1">When you focus a login field, Android asks Passcodes for matching credentials. Passcodes then provides matching entries as Autofill suggestions.</string>
+    <string name="autofill_how_body_2">Your passwords remain inside Passcodes and are only provided when Android requests an Autofill operation.</string>
 
 </resources>
