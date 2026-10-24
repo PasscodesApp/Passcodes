@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.service
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -23,8 +23,17 @@ import androidx.biometric.BiometricManager
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 
-import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.AutofillFieldType
-import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.ParsedAutofillRequest
+
+import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser
+import com.jeeldobariya.passcodes.autofill.parser.AutofillValues
+import com.jeeldobariya.passcodes.autofill.presentation.AutofillPresentationFactory
+import com.jeeldobariya.passcodes.autofill.settings.AutofillPreferences
+import com.jeeldobariya.passcodes.autofill.settings.FillMode
+import com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity
+import com.jeeldobariya.passcodes.database.PasscodesDatabase
+import com.jeeldobariya.passcodes.database.model.PasswordEntry
+import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser.AutofillFieldType
+import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser.ParsedAutofillRequest
 
 /**
  * Android Autofill entry point for Passcodes.
@@ -135,7 +144,7 @@ class PasscodesAutofillService : AutofillService() {
     private fun selectCredentials(
         mode: FillMode,
         parsed: ParsedAutofillRequest
-    ): List<PasscodesDatabase.PasswordEntry> {
+    ): List<PasswordEntry> {
         val db = PasscodesDatabase(applicationContext)
         return when (mode) {
             FillMode.SMART -> db.filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = false)
@@ -178,7 +187,7 @@ class PasscodesAutofillService : AutofillService() {
 
     private fun buildDataset(
         fields: LoginFieldIds,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         inlineSpec: InlinePresentationSpec?
     ): Dataset {
         val datasetBuilder = Dataset.Builder()
@@ -206,7 +215,7 @@ class PasscodesAutofillService : AutofillService() {
      */
     private fun buildLockedDataset(
         fields: LoginFieldIds,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         inlineSpec: InlinePresentationSpec?
     ): Dataset {
         val datasetBuilder = Dataset.Builder()
@@ -218,7 +227,7 @@ class PasscodesAutofillService : AutofillService() {
         return datasetBuilder.build()
     }
 
-    private fun buildUnlockPendingIntent(entry: PasscodesDatabase.PasswordEntry, fields: LoginFieldIds): PendingIntent {
+    private fun buildUnlockPendingIntent(entry: PasswordEntry, fields: LoginFieldIds): PendingIntent {
         val intent = Intent(applicationContext, AutofillUnlockActivity::class.java).apply {
             putExtra(AutofillUnlockActivity.EXTRA_ROW_ID, entry.id)
             fields.usernameId?.let { putExtra(AutofillUnlockActivity.EXTRA_USERNAME_AUTOFILL_ID, it) }

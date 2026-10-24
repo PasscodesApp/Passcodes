@@ -21,6 +21,11 @@ dependencies {
   // Required standard Expo Module core library
   implementation project(':expo-modules-core')
 
+  // Shared native database layer (queries, saves, schema mirror). The
+  // Autofill module never touches SQLite directly. The project name is
+  // the folder name of the passcodes-native-database-service module.
+  implementation project(':passcodes-native-database-service')
+
   implementation "androidx.core:core-ktx:1.19.1"
   
   implementation "com.google.android.material:material:1.14.0"

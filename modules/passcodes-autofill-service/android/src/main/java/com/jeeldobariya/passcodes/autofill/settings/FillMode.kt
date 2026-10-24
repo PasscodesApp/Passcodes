@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.settings
 
 /**
  * Which saved credentials the fill picker offers for a form.

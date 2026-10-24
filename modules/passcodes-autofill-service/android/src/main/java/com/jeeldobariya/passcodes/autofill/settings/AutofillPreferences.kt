@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.settings
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey

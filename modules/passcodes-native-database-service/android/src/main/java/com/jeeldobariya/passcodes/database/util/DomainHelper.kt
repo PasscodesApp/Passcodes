@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.database.util
 
 /**
  * Stateless helpers for normalizing domain-like strings so values coming

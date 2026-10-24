@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -9,7 +9,6 @@ import android.view.View
 import android.view.autofill.AutofillManager
 import android.widget.ImageView
 import android.widget.TextView
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.core.view.WindowCompat
@@ -18,6 +17,9 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
+
+import com.jeeldobariya.passcodes.autofill.R
+import com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity
 
 class AutofillSettingsActivity : AppCompatActivity() {
 

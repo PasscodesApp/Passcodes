@@ -1,5 +1,8 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.unlock
 
+import com.jeeldobariya.passcodes.autofill.R
+import com.jeeldobariya.passcodes.database.PasscodesDatabase
+import com.jeeldobariya.passcodes.database.model.PasswordEntry
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -89,7 +92,17 @@ class AutofillUnlockActivity : AppCompatActivity() {
     }
 
     private fun completeWithCredential(rowId: Long, usernameId: AutofillId?, passwordId: AutofillId?) {
-        val entry = PasscodesDatabase(applicationContext).getPasswordById(rowId)
+        // The row lookup is file I/O, so keep it off the main thread and
+        // come back to deliver the result.
+        Thread {
+            val entry = PasscodesDatabase(applicationContext).getPasswordById(rowId)
+            runOnUiThread { deliverCredential(entry, usernameId, passwordId) }
+        }.start()
+    }
+
+    private fun deliverCredential(entry: PasswordEntry?, usernameId: AutofillId?, passwordId: AutofillId?) {
+        if (isFinishing || isDestroyed) return
+
         if (entry == null) {
             finishCancelled()
             return

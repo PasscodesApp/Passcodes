@@ -8,6 +8,10 @@ import expo.modules.kotlin.modules.ModuleDefinition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
+import com.jeeldobariya.passcodes.autofill.settings.AutofillPreferences
+import com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity
+import com.jeeldobariya.passcodes.autofill.settings.FillMode
+
 
 class PasscodesAutofillServiceModule : Module() {
   override fun definition() = ModuleDefinition {
