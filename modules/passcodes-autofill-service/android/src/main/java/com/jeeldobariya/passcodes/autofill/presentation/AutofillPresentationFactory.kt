@@ -1,5 +1,8 @@
 package com.jeeldobariya.passcodes.autofill.presentation
 
+import com.jeeldobariya.passcodes.autofill.R
+import com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity
+import com.jeeldobariya.passcodes.database.model.PasswordEntry
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -17,11 +20,6 @@ import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
 import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
-
-import com.jeeldobariya.passcodes.autofill.R
-import com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity
-import com.jeeldobariya.passcodes.database.model.PasswordEntry
-
 
 /**
  * Builds the on-screen presentation for a single Autofill dataset value.

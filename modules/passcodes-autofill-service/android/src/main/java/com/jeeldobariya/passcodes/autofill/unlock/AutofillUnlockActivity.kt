@@ -18,6 +18,10 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Transparent, non-visible host for the Autofill "tap to unlock" step.
@@ -92,17 +96,19 @@ class AutofillUnlockActivity : AppCompatActivity() {
     }
 
     private fun completeWithCredential(rowId: Long, usernameId: AutofillId?, passwordId: AutofillId?) {
-        // The row lookup is file I/O, so keep it off the main thread and
-        // come back to deliver the result.
-        Thread {
-            val entry = PasscodesDatabase(applicationContext).getPasswordById(rowId)
-            runOnUiThread { deliverCredential(entry, usernameId, passwordId) }
-        }.start()
+        lifecycleScope.launch {
+            // The row lookup is file I/O: do it on the IO dispatcher, then
+            // resume on the main thread (lifecycleScope's default) to
+            // deliver the result. If the screen is destroyed meanwhile,
+            // the coroutine is cancelled and nothing is delivered.
+            val entry = withContext(Dispatchers.IO) {
+                PasscodesDatabase(applicationContext).getPasswordById(rowId)
+            }
+            deliverCredential(entry, usernameId, passwordId)
+        }
     }
 
     private fun deliverCredential(entry: PasswordEntry?, usernameId: AutofillId?, passwordId: AutofillId?) {
-        if (isFinishing || isDestroyed) return
-
         if (entry == null) {
             finishCancelled()
             return

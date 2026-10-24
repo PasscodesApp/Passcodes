@@ -18,7 +18,7 @@ passcodes-autofill-service/          Android Autofill; depends on the database m
   PasscodesAutofillServiceModule.kt  JS bridge (settings)
   service/       PasscodesAutofillService
   parser/        AutofillRequestParser, AutofillValues
-  presentation/  AutofillPresentationFactory
+  presentation/  AutofillPresentationFactory (dropdown + inline), AutofillSaveUiFactory ("Save password?" card)
   settings/      AutofillPreferences, FillMode, AutofillSettingsActivity
   unlock/        AutofillUnlockActivity
 ```

@@ -1,5 +1,7 @@
 package com.jeeldobariya.passcodes.autofill.settings
 
+import com.jeeldobariya.passcodes.autofill.R
+import com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -9,17 +11,19 @@ import android.view.View
 import android.view.autofill.AutofillManager
 import android.widget.ImageView
 import android.widget.TextView
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.materialswitch.MaterialSwitch
-
-import com.jeeldobariya.passcodes.autofill.R
-import com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AutofillSettingsActivity : AppCompatActivity() {
 
@@ -67,24 +71,24 @@ class AutofillSettingsActivity : AppCompatActivity() {
         // Every control starts disabled (see the layout) until its real
         // stored value has loaded, so the user never sees — or taps —
         // a value we haven't confirmed yet.
-        Thread {
-            val biometricEnabled = AutofillPreferences.isBiometricLockEnabledBlocking(applicationContext)
-            val inlineEnabled = AutofillPreferences.isInlineSuggestionsEnabledBlocking(applicationContext)
-            val fillMode = AutofillPreferences.getFillModeBlocking(applicationContext)
+        lifecycleScope.launch {
+            // Suspend reads: main-safe, and cancelled automatically if the
+            // screen is closed before they finish.
+            val biometricEnabled = AutofillPreferences.isBiometricLockEnabled(applicationContext)
+            val inlineEnabled = AutofillPreferences.isInlineSuggestionsEnabled(applicationContext)
+            val fillMode = AutofillPreferences.getFillMode(applicationContext)
 
-            runOnUiThread {
-                isLoadingPreferences = true
-                authenticationSwitch.isChecked = biometricEnabled
-                inlineSwitch.isChecked = inlineEnabled
-                fillModeGroup.check(buttonIdFor(fillMode))
-                showFillModeDescription(fillMode)
+            isLoadingPreferences = true
+            authenticationSwitch.isChecked = biometricEnabled
+            inlineSwitch.isChecked = inlineEnabled
+            fillModeGroup.check(buttonIdFor(fillMode))
+            showFillModeDescription(fillMode)
 
-                authenticationSwitch.isEnabled = true
-                inlineSwitch.isEnabled = true
-                for (i in 0 until fillModeGroup.childCount) fillModeGroup.getChildAt(i).isEnabled = true
-                isLoadingPreferences = false
-            }
-        }.start()
+            authenticationSwitch.isEnabled = true
+            inlineSwitch.isEnabled = true
+            for (i in 0 until fillModeGroup.childCount) fillModeGroup.getChildAt(i).isEnabled = true
+            isLoadingPreferences = false
+        }
 
         // Tapping anywhere on a row toggles its switch, not just the thumb.
         findViewById<View>(R.id.autofill_authentication_setting).setOnClickListener {
@@ -96,7 +100,7 @@ class AutofillSettingsActivity : AppCompatActivity() {
 
         authenticationSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isLoadingPreferences) return@setOnCheckedChangeListener
-            Thread { AutofillPreferences.setBiometricLockEnabledBlocking(applicationContext, isChecked) }.start()
+            persist { AutofillPreferences.setBiometricLockEnabled(applicationContext, isChecked) }
 
             // The lock is the user's call and is already saved. If inline
             // suggestions are still on, we just *recommend* turning them
@@ -106,15 +110,24 @@ class AutofillSettingsActivity : AppCompatActivity() {
 
         inlineSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isLoadingPreferences) return@setOnCheckedChangeListener
-            Thread { AutofillPreferences.setInlineSuggestionsEnabledBlocking(applicationContext, isChecked) }.start()
+            persist { AutofillPreferences.setInlineSuggestionsEnabled(applicationContext, isChecked) }
         }
 
         fillModeGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked || isLoadingPreferences) return@addOnButtonCheckedListener
             val mode = fillModeFor(checkedId)
             showFillModeDescription(mode)
-            Thread { AutofillPreferences.setFillModeBlocking(applicationContext, mode) }.start()
+            persist { AutofillPreferences.setFillMode(applicationContext, mode) }
         }
+    }
+
+    /**
+     * Saves a setting without letting a quick "toggle, then Back" lose
+     * it: lifecycleScope would cancel the write along with the screen,
+     * so the write itself is shielded with NonCancellable.
+     */
+    private fun persist(write: suspend () -> Unit) {
+        lifecycleScope.launch { withContext(NonCancellable) { write() } }
     }
 
     /**

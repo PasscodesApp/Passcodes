@@ -3,8 +3,7 @@ package com.jeeldobariya.passcodes.database
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-
+import kotlinx.coroutines.withContext
 
 /**
  * JS-facing surface of the native database module. Deliberately small
@@ -18,11 +17,9 @@ class PasscodesNativeDatabaseModule : Module() {
 
     // Suspend-based async function: the file I/O is moved to
     // Dispatchers.IO instead of blocking the module's own thread.
-    AsyncFunction("getPasswordCount") {
-      val context = appContext.reactContext ?: return@AsyncFunction 0
-      runBlocking(Dispatchers.IO) {
-        PasscodesDatabase(context).countPasswords()
-      }
+    AsyncFunction("getPasswordCount") Coroutine { ->
+      val context = appContext.reactContext ?: return@Coroutine 0
+      withContext(Dispatchers.IO) { PasscodesDatabase(context).countPasswords() }
     }
   }
 }
