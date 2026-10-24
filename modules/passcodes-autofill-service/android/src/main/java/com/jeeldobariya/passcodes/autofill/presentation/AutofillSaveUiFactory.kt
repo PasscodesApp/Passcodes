@@ -50,8 +50,9 @@ class AutofillSaveUiFactory(
             // empty field doesn't match, so the template's "—" stays.
             builder.addChild(
                 R.id.autofill_save_username,
-                CharSequenceTransformation.Builder()
-                    .addField(usernameId, USERNAME_PATTERN, "$1")
+                // The Builder's constructor takes the first (here: only)
+                // field; addField() is for adding further ones.
+                CharSequenceTransformation.Builder(usernameId, USERNAME_PATTERN, "$1")
                     .build()
             )
         }
