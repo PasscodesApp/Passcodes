@@ -3,7 +3,7 @@ package com.jeeldobariya.passcodes.database
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -19,10 +19,10 @@ class PasscodesNativeDatabaseModule : Module() {
     // Suspend-based async function: the file I/O is moved to
     // Dispatchers.IO instead of blocking the module's own thread.
     AsyncFunction("getPasswordCount") {
-        val context = appContext.reactContext ?: return@AsyncFunction 0
-        withContext(Dispatchers.IO) { 
-            PasscodesDatabase(context).countPasswords()
-        }
+      val context = appContext.reactContext ?: return@AsyncFunction 0
+      runBlocking(Dispatchers.IO) {
+        PasscodesDatabase(context).countPasswords()
+      }
     }
   }
 }
