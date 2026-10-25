@@ -1,5 +1,14 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.service
 
+import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser
+import com.jeeldobariya.passcodes.autofill.parser.AutofillValues
+import com.jeeldobariya.passcodes.autofill.presentation.AutofillPresentationFactory
+import com.jeeldobariya.passcodes.autofill.presentation.AutofillSaveUiFactory
+import com.jeeldobariya.passcodes.autofill.settings.AutofillPreferences
+import com.jeeldobariya.passcodes.autofill.settings.FillMode
+import com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity
+import com.jeeldobariya.passcodes.database.PasscodesDatabase
+import com.jeeldobariya.passcodes.database.model.PasswordEntry
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,28 +29,44 @@ import android.view.inputmethod.InlineSuggestionsRequest
 import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricManager
-import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicBoolean
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.AutofillFieldType
-import com.jeeldobariya.passcodes.autofill.AutofillRequestParser.ParsedAutofillRequest
+import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser.AutofillFieldType
+import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser.ParsedAutofillRequest
 
 /**
  * Android Autofill entry point for Passcodes.
  *
  * Both callbacks follow the same shape: parse the on-screen structure
  * into the fields we care about (see [AutofillRequestParser]), then do
- * the actual database/biometric work off the main thread via [executor].
+ * the actual database/preferences work off the main thread on [serviceScope].
  */
 @RequiresApi(Build.VERSION_CODES.O)
 class PasscodesAutofillService : AutofillService() {
 
-    private val executor = Executors.newSingleThreadExecutor()
+    // One request at a time, off the main thread — the same ordering the
+    // old single-thread executor gave, but cancellable and structured.
+    // SupervisorJob: one failed request never cancels its siblings.
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1))
     private val presentations by lazy { AutofillPresentationFactory(applicationContext) }
+    private val saveUi by lazy { AutofillSaveUiFactory(applicationContext) }
 
     override fun onDestroy() {
         super.onDestroy()
-        executor.shutdown()
+        // Cancels in-flight fill requests. Saves are shielded from this
+        // (see handleSaveRequest) so a typed password is never dropped.
+        serviceScope.cancel()
     }
 
     // -----------------------------------------------------------------
@@ -68,33 +93,33 @@ class PasscodesAutofillService : AutofillService() {
             return
         }
 
-        val cancelled = AtomicBoolean(false)
-        cancellationSignal.setOnCancelListener { cancelled.set(true) }
-
-        executor.execute {
-            if (cancelled.get()) return@execute
-            // An exception escaping an executor task would take the
-            // whole app process down (and the RN app shares it), so
-            // anything unexpected degrades to "no suggestions".
+        val job = serviceScope.launch {
+            // An exception escaping a coroutine would take the whole app
+            // process down (and the RN app shares it), so anything
+            // unexpected degrades to "no suggestions".
             try {
-                handleFillRequest(request, fields, parsed, cancelled = { cancelled.get() }, callback)
+                handleFillRequest(request, fields, parsed, callback)
+            } catch (e: CancellationException) {
+                throw e // cancelled by the system: it no longer wants a reply
             } catch (t: Throwable) {
                 Log.e(TAG, "Fill request failed", t)
                 runCatching { callback.onSuccess(null) }
             }
         }
+
+        // The system cancels a fill request when the user moves on.
+        cancellationSignal.setOnCancelListener { job.cancel() }
     }
 
-    private fun handleFillRequest(
+    private suspend fun handleFillRequest(
         request: FillRequest,
         fields: LoginFieldIds,
         parsed: ParsedAutofillRequest,
-        cancelled: () -> Boolean,
         callback: FillCallback
     ) {
         val inlineRequest = resolveInlineSuggestionsRequest(request)
         val biometricGateActive = resolveBiometricGateActive()
-        val fillMode = AutofillPreferences.getFillModeBlocking(applicationContext)
+        val fillMode = AutofillPreferences.getFillMode(applicationContext)
 
         val matches = try {
             selectCredentials(fillMode, parsed).take(MAX_DATASETS)
@@ -103,7 +128,7 @@ class PasscodesAutofillService : AutofillService() {
             emptyList()
         }
 
-        if (cancelled()) return
+        currentCoroutineContext().ensureActive()
 
         val responseBuilder = FillResponse.Builder()
 
@@ -119,7 +144,7 @@ class PasscodesAutofillService : AutofillService() {
 
         // Even with nothing to offer, still let the user save whatever
         // they type into this form.
-        val hasSaveInfo = attachSaveInfo(responseBuilder, fields)
+        val hasSaveInfo = attachSaveInfo(responseBuilder, fields, resolveSiteLabel(parsed))
 
         // FillResponse.Builder#build() throws if it holds neither a
         // dataset nor SaveInfo — answer "nothing here" instead.
@@ -135,7 +160,7 @@ class PasscodesAutofillService : AutofillService() {
     private fun selectCredentials(
         mode: FillMode,
         parsed: ParsedAutofillRequest
-    ): List<PasscodesDatabase.PasswordEntry> {
+    ): List<PasswordEntry> {
         val db = PasscodesDatabase(applicationContext)
         return when (mode) {
             FillMode.SMART -> db.filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = false)
@@ -145,21 +170,21 @@ class PasscodesAutofillService : AutofillService() {
     }
 
     /** Honors the user's inline-suggestions preference on top of OS/API support. */
-    private fun resolveInlineSuggestionsRequest(request: FillRequest): InlineSuggestionsRequest? {
+    private suspend fun resolveInlineSuggestionsRequest(request: FillRequest): InlineSuggestionsRequest? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return null
-        val enabled = AutofillPreferences.isInlineSuggestionsEnabledBlocking(applicationContext)
+        val enabled = AutofillPreferences.isInlineSuggestionsEnabled(applicationContext)
         return if (enabled) request.inlineSuggestionsRequest else null
     }
 
     /**
      * The biometric gate only activates when BOTH the user wants it
-     * (preference, default on) AND the device can actually satisfy it
+     * (preference, default off) AND the device can actually satisfy it
      * (something enrolled). A device with no lock screen security at
      * all never blocks the user from their own vault — there's nothing
      * meaningful to gate behind.
      */
-    private fun resolveBiometricGateActive(): Boolean {
-        val preferenceEnabled = AutofillPreferences.isBiometricLockEnabledBlocking(applicationContext)
+    private suspend fun resolveBiometricGateActive(): Boolean {
+        val preferenceEnabled = AutofillPreferences.isBiometricLockEnabled(applicationContext)
         if (!preferenceEnabled) return false
 
         val canAuthenticate = BiometricManager.from(applicationContext)
@@ -168,17 +193,24 @@ class PasscodesAutofillService : AutofillService() {
     }
 
     /** Returns true if SaveInfo was attached (needs a password field to key off). */
-    private fun attachSaveInfo(builder: FillResponse.Builder, fields: LoginFieldIds): Boolean {
+    private fun attachSaveInfo(builder: FillResponse.Builder, fields: LoginFieldIds, siteLabel: String): Boolean {
         val requiredId = fields.passwordId ?: return false
         val saveInfoBuilder = SaveInfo.Builder(SaveInfo.SAVE_DATA_TYPE_PASSWORD, arrayOf(requiredId))
         fields.usernameId?.let { saveInfoBuilder.setOptionalIds(arrayOf(it)) }
+
+        // CustomDescription (API 27+) swaps the plain "Save password?"
+        // text for our own card showing the site and the typed username
+        // (the password stays masked). Older versions keep the default.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            saveInfoBuilder.setCustomDescription(saveUi.buildDescription(siteLabel, fields.usernameId))
+        }
         builder.setSaveInfo(saveInfoBuilder.build())
         return true
     }
 
     private fun buildDataset(
         fields: LoginFieldIds,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         inlineSpec: InlinePresentationSpec?
     ): Dataset {
         val datasetBuilder = Dataset.Builder()
@@ -206,7 +238,7 @@ class PasscodesAutofillService : AutofillService() {
      */
     private fun buildLockedDataset(
         fields: LoginFieldIds,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         inlineSpec: InlinePresentationSpec?
     ): Dataset {
         val datasetBuilder = Dataset.Builder()
@@ -218,7 +250,7 @@ class PasscodesAutofillService : AutofillService() {
         return datasetBuilder.build()
     }
 
-    private fun buildUnlockPendingIntent(entry: PasscodesDatabase.PasswordEntry, fields: LoginFieldIds): PendingIntent {
+    private fun buildUnlockPendingIntent(entry: PasswordEntry, fields: LoginFieldIds): PendingIntent {
         val intent = Intent(applicationContext, AutofillUnlockActivity::class.java).apply {
             putExtra(AutofillUnlockActivity.EXTRA_ROW_ID, entry.id)
             fields.usernameId?.let { putExtra(AutofillUnlockActivity.EXTRA_USERNAME_AUTOFILL_ID, it) }
@@ -268,9 +300,14 @@ class PasscodesAutofillService : AutofillService() {
 
         val username = AutofillValues.textOf(parsed.node(AutofillFieldType.USERNAME)).orEmpty()
 
-        executor.execute {
+        serviceScope.launch {
             try {
-                handleSaveRequest(parsed, username, passwordValue, callback)
+                // NonCancellable: the user has already confirmed the save,
+                // so even if the service is torn down mid-request the
+                // write runs to completion instead of losing the password.
+                withContext(NonCancellable) {
+                    handleSaveRequest(parsed, username, passwordValue, callback)
+                }
             } catch (t: Throwable) {
                 Log.e(TAG, "Save request failed", t)
                 runCatching { callback.onFailure("Could not save credentials") }
@@ -312,6 +349,13 @@ class PasscodesAutofillService : AutofillService() {
 
         if (savedId != null) callback.onSuccess() else callback.onFailure("Could not save credentials")
     }
+
+    /** What to call this form in the UI: the web domain, else the app's name. */
+    private fun resolveSiteLabel(parsed: ParsedAutofillRequest): String =
+        parsed.webDomain
+            ?: resolveAppLabel(parsed.packageName)
+            ?: parsed.packageName
+            ?: ""
 
     /** Best-effort app display name lookup, e.g. "com.outlook.android" -> "Outlook". */
     private fun resolveAppLabel(packageName: String?): String? {

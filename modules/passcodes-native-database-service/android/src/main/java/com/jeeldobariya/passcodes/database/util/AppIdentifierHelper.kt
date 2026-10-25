@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.database.util
 
 /**
  * Helpers for the `applicationIds` column: a comma-separated composite
@@ -49,7 +49,10 @@ object AppIdentifierHelper {
      * SQL fragment matching one comma-delimited segment of [column]
      * exactly (not a loose substring match), case-insensitively.
      * Expects exactly one bind arg: the lowercased identifier to find.
+     *
+     * Uses instr() rather than LIKE on purpose: `_` and `%` are LIKE
+     * wildcards, and `_` is legal in package names ("com.my_app").
      */
     fun containsSqlFragment(column: String): String =
-        "((',' || LOWER($column) || ',') LIKE ('%,' || ? || ',%'))"
+        "(instr(',' || LOWER($column) || ',', ',' || ? || ',') > 0)"
 }

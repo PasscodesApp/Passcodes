@@ -1,5 +1,8 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.presentation
 
+import com.jeeldobariya.passcodes.autofill.R
+import com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity
+import com.jeeldobariya.passcodes.database.model.PasswordEntry
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -36,7 +39,7 @@ class AutofillPresentationFactory(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
         value: AutofillValue,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         inlineSpec: InlinePresentationSpec?
     ) {
         val menuPresentation = buildMenuPresentation(entry, locked = false)
@@ -96,7 +99,7 @@ class AutofillPresentationFactory(
     fun applyLockedPlaceholder(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         inlineSpec: InlinePresentationSpec?
     ) {
         val menuPresentation = buildMenuPresentation(entry, locked = true)
@@ -116,7 +119,7 @@ class AutofillPresentationFactory(
     }
 
     private fun buildMenuPresentation(
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         locked: Boolean
     ): RemoteViews {
         return RemoteViews(
@@ -145,7 +148,7 @@ class AutofillPresentationFactory(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
         value: AutofillValue,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         menuPresentation: RemoteViews,
         inlineSpec: InlinePresentationSpec?
     ) {
@@ -177,7 +180,7 @@ class AutofillPresentationFactory(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
         value: AutofillValue,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         menuPresentation: RemoteViews,
         inlineSpec: InlinePresentationSpec
     ) {
@@ -207,7 +210,7 @@ class AutofillPresentationFactory(
     @RequiresApi(Build.VERSION_CODES.R)
     private fun buildInlinePresentation(
         spec: InlinePresentationSpec,
-        entry: PasscodesDatabase.PasswordEntry,
+        entry: PasswordEntry,
         locked: Boolean
     ): InlinePresentation? {
 
@@ -250,7 +253,7 @@ class AutofillPresentationFactory(
 
     @RequiresApi(Build.VERSION_CODES.R)
     private fun createInlineSuggestionIntent(
-        entry: PasscodesDatabase.PasswordEntry
+        entry: PasswordEntry
     ): PendingIntent {
 
         val intent = Intent(

@@ -1,4 +1,4 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.settings
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 
 /**
  * Small Autofill-related settings, stored in a DataStore Preferences
@@ -22,7 +21,8 @@ import kotlinx.coroutines.runBlocking
  *
  * DataStore handles concurrent-access safety on its own, so none of
  * these call sites need to coordinate beyond just calling these
- * functions.
+ * functions. Everything here is `suspend` and main-safe: DataStore does
+ * its disk work on its own dispatcher.
  */
 private val Context.autofillDataStore by preferencesDataStore(name = "passcodes_autofill_settings")
 
@@ -82,29 +82,4 @@ object AutofillPreferences {
 
         return getFillMode(context)
     }
-
-    // -- Blocking convenience for non-coroutine call sites ---------------
-    //
-    // Only call these from a background thread. PasscodesAutofillService
-    // already hops off the main thread before touching anything DB/
-    // DataStore-related; AutofillSettingsActivity does its own small
-    // background hop around these (see its loadPreferences()/persist()).
-
-    fun isInlineSuggestionsEnabledBlocking(context: Context): Boolean =
-        runBlocking { isInlineSuggestionsEnabled(context) }
-
-    fun setInlineSuggestionsEnabledBlocking(context: Context, enabled: Boolean) =
-        runBlocking { setInlineSuggestionsEnabled(context, enabled) }
-
-    fun isBiometricLockEnabledBlocking(context: Context): Boolean =
-        runBlocking { isBiometricLockEnabled(context) }
-
-    fun setBiometricLockEnabledBlocking(context: Context, enabled: Boolean) =
-        runBlocking { setBiometricLockEnabled(context, enabled) }
-
-    fun getFillModeBlocking(context: Context): FillMode =
-        runBlocking { getFillMode(context) }
-
-    fun setFillModeBlocking(context: Context, mode: FillMode) =
-        runBlocking { setFillMode(context, mode) }
 }

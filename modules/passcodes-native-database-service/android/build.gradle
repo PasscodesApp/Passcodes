@@ -1,0 +1,28 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'com.jeeldobariya.passcodes.database'
+version = '0.1.0'
+
+android {
+  namespace "com.jeeldobariya.passcodes.database"
+  defaultConfig {
+    versionCode 1
+    versionName "0.1.0"
+  }
+  lintOptions {
+    abortOnError false
+  }
+}
+
+dependencies {
+  // Required standard Expo Module core library
+  implementation project(':expo-modules-core')
+
+  implementation "androidx.core:core-ktx:1.19.1"
+
+  // withContext(Dispatchers.IO) in the JS bridge.
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0"
+}

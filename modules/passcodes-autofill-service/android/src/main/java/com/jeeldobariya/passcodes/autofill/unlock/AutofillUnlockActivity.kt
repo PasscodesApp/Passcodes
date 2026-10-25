@@ -1,5 +1,8 @@
-package com.jeeldobariya.passcodes.autofill
+package com.jeeldobariya.passcodes.autofill.unlock
 
+import com.jeeldobariya.passcodes.autofill.R
+import com.jeeldobariya.passcodes.database.PasscodesDatabase
+import com.jeeldobariya.passcodes.database.model.PasswordEntry
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +18,10 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Transparent, non-visible host for the Autofill "tap to unlock" step.
@@ -89,7 +96,19 @@ class AutofillUnlockActivity : AppCompatActivity() {
     }
 
     private fun completeWithCredential(rowId: Long, usernameId: AutofillId?, passwordId: AutofillId?) {
-        val entry = PasscodesDatabase(applicationContext).getPasswordById(rowId)
+        lifecycleScope.launch {
+            // The row lookup is file I/O: do it on the IO dispatcher, then
+            // resume on the main thread (lifecycleScope's default) to
+            // deliver the result. If the screen is destroyed meanwhile,
+            // the coroutine is cancelled and nothing is delivered.
+            val entry = withContext(Dispatchers.IO) {
+                PasscodesDatabase(applicationContext).getPasswordById(rowId)
+            }
+            deliverCredential(entry, usernameId, passwordId)
+        }
+    }
+
+    private fun deliverCredential(entry: PasswordEntry?, usernameId: AutofillId?, passwordId: AutofillId?) {
         if (entry == null) {
             finishCancelled()
             return

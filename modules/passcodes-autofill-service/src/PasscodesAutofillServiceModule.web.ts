@@ -15,7 +15,7 @@ const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
   },
 
   async isInlineSuggestionsEnabled(): Promise<boolean> {
-    return false; // Not applicable outside Android native builds.
+    return true; // Not applicable outside Android native builds.
   },
 
   async setInlineSuggestionsEnabled(enabled: boolean): Promise<boolean> {

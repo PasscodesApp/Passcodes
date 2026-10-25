@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <activity
-            android:name="com.jeeldobariya.passcodes.autofill.AutofillSettingsActivity"
+            android:name="com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity"
             android:theme="@style/Theme.PasscodesAutofill"
             android:exported="true" />
 
@@ -10,14 +10,14 @@
              it's only ever launched via the PendingIntent this app
              creates itself in Dataset.Builder#setAuthentication. -->
         <activity
-            android:name="com.jeeldobariya.passcodes.autofill.AutofillUnlockActivity"
+            android:name="com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity"
             android:theme="@style/Theme.PasscodesAutofill.Unlock"
             android:exported="false"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance" />
 
         <service
-            android:name=".PasscodesAutofillService"
+            android:name="com.jeeldobariya.passcodes.autofill.service.PasscodesAutofillService"
             android:exported="true"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
             <intent-filter>

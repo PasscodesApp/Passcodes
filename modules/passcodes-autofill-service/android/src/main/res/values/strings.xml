@@ -9,6 +9,14 @@
     <string name="autofill_unlock_title">Unlock Passcodes</string>
     <string name="autofill_unlock_subtitle">Authenticate to fill your saved credentials</string>
 
+    <!-- "Save password?" prompt card -->
+    <string name="autofill_save_subtitle">Review it later in Passcodes</string>
+    <string name="autofill_save_unknown_site">This app or site</string>
+    <string name="autofill_save_label_username">Username</string>
+    <string name="autofill_save_label_password">Password</string>
+    <string name="autofill_save_masked_password">••••••••</string>
+    <string name="autofill_save_empty_value">—</string>
+
     <!-- Settings screen -->
     <string name="autofill_settings_title">Autofill</string>
     <string name="autofill_back">Back</string>

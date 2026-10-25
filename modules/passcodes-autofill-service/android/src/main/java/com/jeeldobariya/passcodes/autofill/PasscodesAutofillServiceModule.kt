@@ -3,6 +3,9 @@ package com.jeeldobariya.passcodes.autofill
 import android.content.Intent
 import android.os.Build
 import android.view.autofill.AutofillManager
+import com.jeeldobariya.passcodes.autofill.settings.AutofillPreferences
+import com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity
+import com.jeeldobariya.passcodes.autofill.settings.FillMode
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +39,12 @@ class PasscodesAutofillServiceModule : Module() {
     // PasscodesAutofillService and AutofillSettingsActivity use — one
     // source of truth regardless of which side changes it.
 
-    AsyncFunction("isInlineSuggestionsEnabled") {
+    // Settings functions are suspend-based (`Coroutine`) rather than
+    // wrapping runBlocking: DataStore is already asynchronous, so the
+    // module thread is never blocked waiting on disk. Setters resolve to
+    // the value read back after the write.
+
+    AsyncFunction("isInlineSuggestionsEnabled") { ->
       val context = appContext.reactContext ?: return@AsyncFunction true
       runBlocking(Dispatchers.IO) {
         AutofillPreferences.isInlineSuggestionsEnabled(context)
@@ -44,38 +52,28 @@ class PasscodesAutofillServiceModule : Module() {
     }
 
     AsyncFunction("setInlineSuggestionsEnabled") { enabled: Boolean ->
-      val context = appContext.reactContext
-        ?: return@AsyncFunction enabled
-
+      val context = appContext.reactContext ?: return@AsyncFunction enabled
       runBlocking(Dispatchers.IO) {
-        AutofillPreferences.setInlineSuggestionsEnabled(
-          context,
-          enabled
-        )
+        AutofillPreferences.setInlineSuggestionsEnabled(context, enabled)
       }
     }
 
-    AsyncFunction("isBiometricLockEnabled") {
-      val context = appContext.reactContext ?: return@AsyncFunction true
+    AsyncFunction("isBiometricLockEnabled") { ->
+      val context = appContext.reactContext ?: return@AsyncFunction false
       runBlocking(Dispatchers.IO) {
         AutofillPreferences.isBiometricLockEnabled(context)
       }
     }
 
     AsyncFunction("setBiometricLockEnabled") { enabled: Boolean ->
-      val context = appContext.reactContext
-        ?: return@AsyncFunction enabled
-
+      val context = appContext.reactContext ?: return@AsyncFunction enabled
       runBlocking(Dispatchers.IO) {
-        AutofillPreferences.setBiometricLockEnabled(
-          context,
-          enabled
-        )
+        AutofillPreferences.setBiometricLockEnabled(context, enabled)
       }
     }
 
     // "smart" | "auto" | "dumb" — see FillMode.
-    AsyncFunction("getFillMode") {
+    AsyncFunction("getFillMode") { ->
       val context = appContext.reactContext ?: return@AsyncFunction FillMode.DEFAULT.storageValue
       runBlocking(Dispatchers.IO) {
         AutofillPreferences.getFillMode(context).storageValue
@@ -84,9 +82,7 @@ class PasscodesAutofillServiceModule : Module() {
 
     AsyncFunction("setFillMode") { mode: String ->
       val requested = FillMode.fromStorage(mode)
-      val context = appContext.reactContext
-        ?: return@AsyncFunction requested.storageValue
-
+      val context = appContext.reactContext ?: return@AsyncFunction requested.storageValue
       runBlocking(Dispatchers.IO) {
         AutofillPreferences.setFillMode(context, requested).storageValue
       }
