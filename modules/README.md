@@ -23,6 +23,6 @@ passcodes-autofill-service/          Android Autofill; depends on the database m
   unlock/        AutofillUnlockActivity
 ```
 
-A future importer/exporter module should depend on the database module
-the same way and call `PasscodesDatabase` — nothing else needs to know
+A autofill & also importer/exporter module should depend on the database module
+and call `PasscodesDatabase` — nothing else needs to know
 about SQLite.
