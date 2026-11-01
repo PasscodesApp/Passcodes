@@ -29,7 +29,15 @@ internal object PasswordsSchema {
         ID, DOMAIN, USERNAME, PASSWORD, NOTES, URL,
         APPLICATION_IDS, SOURCE, CREATED_AT, UPDATED_AT
     )
-    val READ_COLUMNS_CSV = READ_COLUMNS.joinToString(", ")
+    
+    val READ_COLUMNS_WITH_PASSWORD = READ_COLUMNS.joinToString(", ")
+    val READ_COLUMNS_WITHOUT_PASSWORD = READ_COLUMNS.joinToString(", ") { 
+        if (it == PASSWORD) "'' AS $PASSWORD" else it
+    }
+
+    /** Helper to grab the correct pre-computed string. */
+    fun readColumns(includePassword: Boolean): String =
+        if (includePassword) READ_COLUMNS_WITH_PASSWORD else READ_COLUMNS_WITHOUT_PASSWORD
 
     // Matches the Drizzle `source` enum: IMPORTED | APPLICATION | AUTOFILL.
     const val SOURCE_AUTOFILL = "AUTOFILL"

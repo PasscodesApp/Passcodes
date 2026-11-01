@@ -12,14 +12,9 @@ import com.jeeldobariya.passcodes.database.util.AppIdentifierHelper
  */
 internal object PasswordReader {
 
-    /** Column list; without the password it is replaced by an empty literal of the same name. */
-    private fun columns(includePassword: Boolean): String =
-        if (includePassword) S.READ_COLUMNS_CSV
-        else S.READ_COLUMNS.joinToString(", ") { if (it == S.PASSWORD) "'' AS ${S.PASSWORD}" else it }
-
     fun queryAll(db: SQLiteDatabase, includePassword: Boolean = true): List<PasswordEntry> =
         db.rawQuery(
-            "SELECT ${columns(includePassword)} FROM ${S.TABLE} " +
+            "SELECT ${S.readColumns(includePassword)} FROM ${S.TABLE} " +
                 "WHERE ${S.DELETED_AT} IS NULL ORDER BY ${S.ORDER_BY}",
             null
         )
@@ -27,7 +22,7 @@ internal object PasswordReader {
 
     fun queryById(db: SQLiteDatabase, id: Long): PasswordEntry? =
         db.rawQuery(
-            "SELECT ${S.READ_COLUMNS_CSV} FROM ${S.TABLE} " +
+            "SELECT ${S.READ_COLUMNS_WITH_PASSWORD} FROM ${S.TABLE} " +
                 "WHERE ${S.ID} = ? AND ${S.DELETED_AT} IS NULL LIMIT 1",
             arrayOf(id.toString())
         ).use { mapCursor(it).firstOrNull() }
@@ -69,7 +64,7 @@ internal object PasswordReader {
         }
 
         val sql = """
-            SELECT ${columns(includePassword)} FROM ${S.TABLE}
+            SELECT ${S.readColumns(includePassword)} FROM ${S.TABLE}
             WHERE ${S.DELETED_AT} IS NULL AND (${orConditions.joinToString(" OR ")})
             ORDER BY ${S.ORDER_BY}
         """.trimIndent()
