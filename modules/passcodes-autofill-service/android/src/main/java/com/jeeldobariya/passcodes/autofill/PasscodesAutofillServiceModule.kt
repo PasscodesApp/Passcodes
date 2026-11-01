@@ -5,7 +5,6 @@ import android.os.Build
 import android.view.autofill.AutofillManager
 import com.jeeldobariya.passcodes.autofill.information.AutofillInformation
 import com.jeeldobariya.passcodes.autofill.information.AutofillInformationStore
-import com.jeeldobariya.passcodes.autofill.security.DeviceSecurity
 import com.jeeldobariya.passcodes.autofill.settings.AutofillPreferences
 import com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity
 import com.jeeldobariya.passcodes.autofill.settings.FillMode
@@ -91,28 +90,17 @@ class PasscodesAutofillServiceModule : Module() {
     // address). Stored in their own DataStore — never in the Drizzle
     // database, and not covered by import/export. See
     // AutofillInformationStore.
-
-    // Whether the device has a secure lock screen (PIN/pattern/password/
-    // biometric). Without one the Autofill service refuses to fill
-    // personal details, so the app should warn before the user enters any.
-    Function("isDeviceSecure") {
-      val context = appContext.reactContext ?: return@Function false
-      return@Function DeviceSecurity.isDeviceSecure(context)
-    }
+    //
+    // Entry happens on the native Autofill settings screen (see
+    // AutofillSettingsActivity) — not from React Native — so this app's
+    // own screens don't need to collect or validate it. These functions
+    // stay in case RN ever wants to read the stored details (e.g. to
+    // show a "configured" badge); they're never used to write them.
 
     AsyncFunction("getAutofillInformation") { ->
       val context = appContext.reactContext ?: return@AsyncFunction AutofillInformation().toMap()
       runBlocking(Dispatchers.IO) {
         AutofillInformationStore.get(context).toMap()
-      }
-    }
-
-    // Validates and trims the input; resolves to what was actually stored.
-    AsyncFunction("setAutofillInformation") { information: Map<String, Any?> ->
-      val requested = AutofillInformation.fromMap(information)
-      val context = appContext.reactContext ?: return@AsyncFunction requested.sanitized().toMap()
-      runBlocking(Dispatchers.IO) {
-        AutofillInformationStore.set(context, requested).toMap()
       }
     }
 

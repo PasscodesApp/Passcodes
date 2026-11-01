@@ -29,9 +29,9 @@ internal object PasswordsSchema {
         ID, DOMAIN, USERNAME, PASSWORD, NOTES, URL,
         APPLICATION_IDS, SOURCE, CREATED_AT, UPDATED_AT
     )
-    
+
     val READ_COLUMNS_WITH_PASSWORD = READ_COLUMNS.joinToString(", ")
-    val READ_COLUMNS_WITHOUT_PASSWORD = READ_COLUMNS.joinToString(", ") { 
+    val READ_COLUMNS_WITHOUT_PASSWORD = READ_COLUMNS.joinToString(", ") {
         if (it == PASSWORD) "'' AS $PASSWORD" else it
     }
 

@@ -66,11 +66,64 @@
 
     <!-- Settings: personal details -->
     <string name="autofill_section_details">Personal details</string>
-    <string name="autofill_details_no_lock_title">Screen lock required</string>
-    <string name="autofill_details_no_lock_body">This device has no screen lock, so Passcodes will not fill personal details such as your phone number, email or address. Set up a PIN, pattern, password or biometric in Android settings to turn this on.</string>
-    <string name="autofill_details_ready_title">Personal details are protected by your screen lock</string>
-    <string name="autofill_details_ready_body">You can add and edit them inside the Passcodes app.</string>
-    <string name="autofill_details_local_note">Personal details stay on this device only. They are not backed up, imported or exported by Passcodes.</string>
+    <string name="autofill_details_no_lock_body">No screen lock is set up, so these won\'t be filled anywhere yet.</string>
+    <string name="autofill_details_local_note">Stored on this device only — not backed up, imported or exported by Passcodes.</string>
+    <string name="autofill_details_subtitle_empty">Not added yet</string>
+    <string name="autofill_details_subtitle_filled">Name, contact details and more are saved</string>
+    <string name="autofill_details_open">Open</string>
+
+    <!-- Personal details entry screen -->
+    <string name="autofill_details_title">Personal details</string>
+    <string name="autofill_details_screen_intro">Used only to autofill forms outside Passcodes — things like your name, phone number or address. Saved credentials are not affected.</string>
+
+    <string name="autofill_details_warning_no_lock_title">Won\'t be filled yet</string>
+    <string name="autofill_details_warning_no_lock_body">This device has no screen lock. You can still save your details, but Passcodes will not offer them on any form until you set up a PIN, pattern, password or biometric.</string>
+    <string name="autofill_details_warning_local_title">Stored on this device only</string>
+    <string name="autofill_details_warning_local_body">Not backed up, imported or exported — if you reinstall Passcodes or switch devices, you\'ll need to re-enter these.</string>
+
+    <string name="autofill_details_section_name">Name</string>
+    <string name="autofill_details_field_first_name">First name</string>
+    <string name="autofill_details_field_last_name">Last name</string>
+    <string name="autofill_details_field_full_name">Full name (optional)</string>
+    <string name="autofill_details_field_full_name_help">Leave blank to use first + last name</string>
+
+    <string name="autofill_details_section_birth_date">Birth date</string>
+    <string name="autofill_details_field_birth_date">Birth date</string>
+    <string name="autofill_details_field_birth_date_placeholder">Not set</string>
+    <string name="autofill_details_clear_date">Clear date</string>
+
+    <string name="autofill_details_section_phones">Phone numbers</string>
+    <string name="autofill_details_field_phone_label">Label (e.g. Mobile)</string>
+    <string name="autofill_details_field_phone_code">Code</string>
+    <string name="autofill_details_field_phone_number">Phone number</string>
+    <string name="autofill_details_add_phone">Add phone number</string>
+    <string name="autofill_details_remove_phone">Remove this phone number</string>
+    <string name="autofill_details_limit_phones">You can save up to %1$d phone numbers</string>
+
+    <string name="autofill_details_section_emails">Emails</string>
+    <string name="autofill_details_field_email_label">Label (e.g. Personal)</string>
+    <string name="autofill_details_field_email_address">Email address</string>
+    <string name="autofill_details_add_email">Add email</string>
+    <string name="autofill_details_remove_email">Remove this email</string>
+    <string name="autofill_details_limit_emails">You can save up to %1$d emails</string>
+
+    <string name="autofill_details_default_hint">Default — used first when several fit a form</string>
+
+    <string name="autofill_details_section_address">Address</string>
+    <string name="autofill_details_field_street">Street address</string>
+    <string name="autofill_details_field_street2">Apartment, suite, unit (optional)</string>
+    <string name="autofill_details_field_city">City</string>
+    <string name="autofill_details_field_region">State / region</string>
+    <string name="autofill_details_field_postal_code">Postal code</string>
+    <string name="autofill_details_field_country">Country</string>
+
+    <string name="autofill_details_save">Save</string>
+    <string name="autofill_details_saved">Details saved</string>
+    <string name="autofill_details_clear_all">Clear all details</string>
+    <string name="autofill_details_clear_confirm_title">Clear personal details?</string>
+    <string name="autofill_details_clear_confirm_body">This removes everything on this screen from this device. It can\'t be undone.</string>
+    <string name="autofill_details_cleared">Personal details cleared</string>
+    <string name="autofill_action_cancel">Cancel</string>
 
     <string name="autofill_how_title">How Autofill works</string>
     <string name="autofill_how_body_1">When you focus a login field, Android asks Passcodes for matching credentials. Passcodes then provides matching entries as Autofill suggestions.</string>

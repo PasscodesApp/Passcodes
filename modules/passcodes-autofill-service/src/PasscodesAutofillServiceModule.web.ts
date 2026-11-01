@@ -54,21 +54,8 @@ const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
     return mode;
   },
 
-  isDeviceSecure(): boolean {
-    return false; // Not applicable outside Android native builds.
-  },
-
   async getAutofillInformation(): Promise<AutofillInformation> {
     return {}; // Not applicable outside Android native builds.
-  },
-
-  async setAutofillInformation(
-    information: AutofillInformation,
-  ): Promise<AutofillInformation> {
-    console.warn(
-      "Autofill personal details are only stored on Android native builds.",
-    );
-    return information;
   },
 
   async clearAutofillInformation(): Promise<AutofillInformation> {

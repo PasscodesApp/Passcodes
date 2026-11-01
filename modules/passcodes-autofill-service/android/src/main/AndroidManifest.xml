@@ -6,6 +6,15 @@
             android:theme="@style/Theme.PasscodesAutofill"
             android:exported="true" />
 
+        <!-- Personal-details entry, opened from the settings screen. Not
+             exported: nothing outside this app ever needs to launch it
+             directly. -->
+        <activity
+            android:name="com.jeeldobariya.passcodes.autofill.settings.AutofillPersonalDetailsActivity"
+            android:theme="@style/Theme.PasscodesAutofill"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
+
         <!-- Host for the biometric "tap to unlock" step. Not exported:
              it's only ever launched via the PendingIntent this app
              creates itself in Dataset.Builder#setAuthentication. -->

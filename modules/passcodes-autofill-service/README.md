@@ -30,15 +30,19 @@ Besides saved logins, the service can fill a small, deliberately limited set of 
 - first / last / full name, one or more **emails**, one or more **phone numbers** (full, country code, national part), **birth date**, and **address** (full line or street / unit / city / region / postal code / country).
 - Suggestions are grouped: one "My details" bundle (default name + email + phone), one per extra email/phone, plus separate **Birth date** and **Address** suggestions. Birth date and address are never mixed into the contact bundle.
 - Sign-in screens get saved logins only. Long-press → *Autofill* (a manual request) can still offer details on such a screen.
-- **Requires a secure screen lock.** If the device has no PIN/pattern/password/biometric, no personal detail is ever filled. The Autofill settings screen shows this, and the app should show its own warning (`isDeviceSecure()`).
+- **Requires a secure screen lock.** If the device has no PIN/pattern/password/biometric, no personal detail is ever filled. The settings screen and the entry screen both show this.
 - Honours the same **authentication** switch as saved logins (locked suggestions show "Tap to unlock"; the values are only released after the prompt, and the unlock intent carries field ids, never the data).
 - Address and birth date are not offered on `http://` pages or on pages that mix web origins (e.g. a third-party iframe).
 - Values that don't fit a field are **skipped, not truncated** (maxlength, numeric-only inputs, drop-downs that don't contain the exact option, date formats we can't infer).
+- **Entered on a native screen, not from React Native.** `AutofillPersonalDetailsActivity` (reached from Autofill settings) is the only place these are written; see below.
 - **Stored in its own DataStore** (`passcodes_autofill_information`), not in the Drizzle database. It is local to the device and is **not backed up, imported or exported** by Passcodes. Not encrypted yet: `AutofillInformationStore.encode/decode` is the single place to add that.
 - Never logged: the data classes print as `<redacted>`.
 
 ### Settings screen (`AutofillSettingsActivity`)
-Autofill service status, authentication switch, inline switch, fill-mode selector, light/dark theme. Open it from React Native with `openAutofillSettings()`.
+Autofill service status, authentication switch, inline switch, fill-mode selector, light/dark theme, and a "Personal details" card. Open it from React Native with `openAutofillSettings()`.
+
+### Personal details screen (`AutofillPersonalDetailsActivity`)
+Reached by tapping the "Personal details" card in settings — not exposed to React Native. A plain Material 3 form: name, birth date (native date picker), a repeatable list of phone numbers and a repeatable list of emails (each with a label, a "default" star and a remove button, capped at 5), and address. Shows the same "no screen lock → won't be filled yet" warning and a "stored on this device only" note at the top. Save writes straight to `AutofillInformationStore` (which validates/trims/caps); "Clear all details" asks for confirmation first.
 
 ## Using it from React Native
 
@@ -55,33 +59,24 @@ await Module.setBiometricLockEnabled(true);
 await Module.getFillMode();                   // "smart" | "auto" | "dumb"
 await Module.setFillMode("smart");
 
-// Personal details (own DataStore, not the database)
-Module.isDeviceSecure();                      // boolean (sync) — warn the user when false
-const info = await Module.getAutofillInformation();
-const saved = await Module.setAutofillInformation({
-  firstName: "Asha",
-  lastName: "Patel",
-  birthDate: "1994-03-07",                    // ISO yyyy-MM-dd
-  emails: [{ label: "Personal", address: "asha@example.com", isDefault: true }],
-  phones: [{ label: "Mobile", countryCode: "91", number: "9876543210", isDefault: true }],
-  address: { street: "12 Park Road", city: "Pune", postalCode: "411001", country: "India" },
-});                                           // resolves to what was actually stored — render from this
+// Personal details: entered on the native settings screen, not from RN.
+// These two are read-only — there is no setter in the bridge.
+const info = await Module.getAutofillInformation();   // e.g. to show a "configured" badge
 await Module.clearAutofillInformation();
 ```
-The input is validated natively (trimmed, length-capped, invalid emails / dates / duplicate entries dropped, max 5 emails and 5 phones). On the screen where users enter these details, show two notices: **no screen lock → details will not be filled** (when `isDeviceSecure()` is false) and **this data is local and is not backed up, imported or exported**.
-Settings live in one DataStore file (`passcodes_autofill_settings`) shared by the service, the settings screen and the bridge, so all three always agree.
+Settings live in one DataStore file (`passcodes_autofill_settings`) shared by the service, the settings screen and the bridge, so all three always agree. There's no `isDeviceSecure()` here any more — if your own screens need that, check with `expo-local-authentication` instead of duplicating it.
 
 ## Code layout
 
 ```
-PasscodesAutofillServiceModule.kt   JS bridge (suspend AsyncFunctions)
+PasscodesAutofillServiceModule.kt   JS bridge (AsyncFunctions wrapping runBlocking)
 service/       PasscodesAutofillService        fill + save entry points
 parser/        AutofillRequestParser, AutofillValues
 presentation/  AutofillPresentationFactory (dropdown/inline), AutofillSaveUiFactory (save card)
 information/   AutofillInformation (pure model), AutofillInformationStore (DataStore)
-identity/      field classifier, form resolver, filler, dataset planner (pure Kotlin, unit-checked)
+identity/      field classifier, form resolver, filler, dataset planner (pure Kotlin)
 security/      DeviceSecurity (screen-lock check)
-settings/      AutofillPreferences, FillMode, AutofillSettingsActivity
+settings/      AutofillPreferences, FillMode, AutofillSettingsActivity, AutofillPersonalDetailsActivity
 unlock/        AutofillUnlockActivity          transparent host for BiometricPrompt
 ```
 
@@ -96,8 +91,9 @@ unlock/        AutofillUnlockActivity          transparent host for BiometricPro
 - **Dropdown/save RemoteViews use explicit colour resources** (with `values-night` variants), not theme attributes — the system inflates them in another process. Only RemoteViews-safe widgets are allowed in those layouts (no plain `View`).
 - Passwords are read/written exactly as stored in the `password` column — this module adds no encryption layer.
 - Not yet verified on a range of real devices/keyboards/browsers; test on Chrome, a native app, with and without the lock, and with inline on and off.
+- **No automated tests ship with this module, by project convention** — Passcodes is built and fixed from real usage rather than anticipated test cases. Nothing here has been compiled or run on a device in the environment it was written in; verify on-device before relying on it.
 
-- **Personal-detail detection is heuristic.** It weighs autofill hints, HTML `autocomplete`/`type`, input type and id/label keywords; ambiguous fields ("Name", bare "Country code") are only filled with supporting context. Expect some forms to be missed rather than mis-filled. The pure logic has an off-device check suite (`tests/IdentityLogicChecks.kt`); the Android glue has **not been compiled or run on a device** in the environment this was written in.
+- **Personal-detail detection is heuristic.** It weighs autofill hints, HTML `autocomplete`/`type`, input type and id/label keywords; ambiguous fields ("Name", bare "Country code") are only filled with supporting context. Expect some forms to be missed rather than mis-filled.
 - **Native max length isn't visible** to Autofill, so only HTML `maxlength` is respected.
 - If you want Android's own cloud backup to skip this data too, exclude `datastore/passcodes_autofill_information.preferences_pb` in your `data_extraction_rules` / `fullBackupContent`:
   ```xml
@@ -133,14 +129,14 @@ Found by reading the code, **not by profiling** — measure on a device before a
 6. Localise: all strings are in `strings.xml` already; add translations and RTL checks (`start`/`end` everywhere).
 
 ### Code quality
+No automated tests, by design (see "Quirks and limitations") — these are about the code's structure, not about adding a test suite.
 1. **Split `PasscodesAutofillService.kt` (~540 lines):** move dataset building into a `DatasetBuilder` class and request/response policy into a small pure `FillPolicy`, leaving the service as plumbing.
-2. **Make the Android glue testable:** add Robolectric / instrumented tests for the parser, presentation factory and unlock activity; today only the pure `identity/` + `information/` code has checks.
-3. **Move `run_checks`-style checks into a Gradle `test` source set** (JUnit) so CI runs them; add golden fixtures of real form structures (Chrome checkout, Amazon app, bank app).
-4. **Replace stringly-typed intent extras** with one typed `UnlockRequest` (parcelable/serialisable) shared by service and activity.
-5. **Single source for the partition rules** (`identity` vs credential vs save) so the "never mix partitions" invariant is asserted in one place.
-6. **Structured logging with a redaction wrapper** so a future `Log.d` cannot print form content; add a lint/ktlint rule banning `Log` calls in `identity/` and `information/`.
-7. **Version and migrate the stored record** (`information_v1` → v2) with an explicit migrator, ahead of citizen-card / passport fields.
-8. **Lint/detekt + `-Werror`** for the module once the SDK build is wired up; remove the unused imports left by the refactor.
+2. **Replace stringly-typed intent extras** with one typed `UnlockRequest` (parcelable/serialisable) shared by service and activity.
+3. **Single source for the partition rules** (`identity` vs credential vs save) so the "never mix partitions" invariant is asserted in one place.
+4. **Structured logging with a redaction wrapper** so a future `Log.d` cannot print form content; add a lint/ktlint rule banning `Log` calls in `identity/` and `information/`.
+5. **Version and migrate the stored record** (`information_v1` → v2) with an explicit migrator, ahead of citizen-card / passport fields.
+6. **Lint/detekt + `-Werror`** for the module once the SDK build is wired up; remove unused imports as the code moves.
+7. **`AutofillPersonalDetailsActivity` is one largish Activity** (view binding, row inflation and persistence all in one place); split row management (phones/emails) into a small adapter-like helper if it grows further.
 
 ### Security / privacy
 1. **Encrypt the details** with an Android Keystore key (AES-GCM) in `AutofillInformationStore.encode/decode`; optionally require user-auth-bound keys.
@@ -165,5 +161,8 @@ Found by reading the code, **not by profiling** — measure on a device before a
 - Autofill code split into sub-packages; all SQLite code moved out into the database module.
 - Added schema awareness (`application_ids`, `source`, soft-delete via `deleted_at`).
 - Added biometric unlock flow, inline-suggestion toggle, Smart/Auto/Dumb fill modes, dark mode and restyled UI, custom Save card.
-- Replaced `Executors`/`Thread`/`runBlocking` with coroutines (`lifecycleScope` in Activities, a service-owned scope in the service, `Coroutine` AsyncFunctions in the bridge).
+- Added personal-details autofill (name, phone, email, birth date, address) behind the same screen-lock and authentication gates as saved logins.
+- Service-side read/write paths use coroutines (`lifecycleScope` in Activities, a service-owned scope in the service); the JS bridge (`PasscodesAutofillServiceModule`) uses `AsyncFunction` + `runBlocking(Dispatchers.IO)`, by project choice.
 - Robustness: empty `FillResponse` no longer throws; unexpected exceptions in a request are caught instead of crashing the app process.
+- Personal details are entered entirely on a native screen (`AutofillPersonalDetailsActivity`, opened from Autofill settings) — there's no React Native entry point or bridge setter for them, and `isDeviceSecure()` was removed from the bridge (use `expo-local-authentication` from RN if you need that check).
+- No automated tests ship with this module — see "Quirks and limitations".

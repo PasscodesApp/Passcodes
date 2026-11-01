@@ -15,8 +15,11 @@ import org.json.JSONObject
  * ("passcodes_autofill_settings") and from the Drizzle-managed
  * passwords database.
  *
- *  - React Native reads/writes it through the module's
- *    getAutofillInformation / setAutofillInformation bridge functions.
+ *  - Entered and edited on [com.jeeldobariya.passcodes.autofill.settings.AutofillPersonalDetailsActivity],
+ *    a native screen reached from Autofill settings — not from React
+ *    Native. The bridge only exposes a read-only `getAutofillInformation`
+ *    (and `clearAutofillInformation`), in case the app ever wants to
+ *    show a "details configured" badge.
  *  - The Autofill service and unlock screen read it directly.
  *
  * The whole record is kept as one JSON string under a single key, so an

@@ -54,28 +54,16 @@ export interface PasscodesAutofillServiceModuleInterface {
   setFillMode(mode: FillMode): Promise<FillMode>;
 
   /**
-   * Whether the device has a secure screen lock (PIN, pattern, password
-   * or biometric). Without one the Autofill service never fills
-   * personal details — show a clear warning on the screen where the user
-   * enters them.
-   */
-  isDeviceSecure(): boolean;
-
-  /**
    * The personal details used for form filling, or an empty record.
    * Stored in a native DataStore — NOT in the Drizzle database — and
    * therefore not part of any backup, import or export.
+   *
+   * These are entered and edited only on the native Autofill settings
+   * screen (`openAutofillSettings()`) — there is no write method here.
+   * This getter exists only if the app wants to read them back, e.g. to
+   * show a "details configured" badge.
    */
   getAutofillInformation(): Promise<AutofillInformation>;
-
-  /**
-   * Validates, trims and saves the details. Resolves to what was
-   * actually stored (invalid entries are dropped), so always render
-   * from the result.
-   */
-  setAutofillInformation(
-    information: AutofillInformation,
-  ): Promise<AutofillInformation>;
 
   /** Deletes all stored personal details. */
   clearAutofillInformation(): Promise<AutofillInformation>;
