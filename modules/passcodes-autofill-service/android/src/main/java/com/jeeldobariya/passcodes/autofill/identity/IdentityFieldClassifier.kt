@@ -46,7 +46,7 @@ object IdentityFieldClassifier {
 
         // 2. HTML autocomplete (the last token wins: "shipping given-name").
         signals.htmlAutocomplete
-            ?.trim()?.lowercase()?.split(Regex("\\s+"))?.lastOrNull()
+            ?.trim()?.lowercase()?.split(WHITESPACE)?.lastOrNull()
             ?.takeIf { it.isNotEmpty() }
             ?.let { token ->
                 when (val r = lookupToken(token)) {
@@ -206,14 +206,21 @@ object IdentityFieldClassifier {
 
     private val CONTACT_CONTEXT = setOf(EMAIL, PHONE_FULL, PHONE_NATIONAL, FIRST_NAME, LAST_NAME)
 
+    // Compiled once: tokenize() runs for every field of every form.
+    private val WHITESPACE = Regex("\\s+")
+    private val NON_ALNUM = Regex("[^a-z0-9]+")
+    private val CAMEL_BOUNDARY = Regex("([a-z])([A-Z])")
+    private val LETTER_DIGIT_BOUNDARY = Regex("([A-Za-z])([0-9])")
+    private val DIGIT_LETTER_BOUNDARY = Regex("([0-9])([A-Za-z])")
+
     internal fun tokenize(texts: List<String>): Set<String> {
         val out = mutableSetOf<String>()
         for (text in texts) {
             val spaced = text
-                .replace(Regex("([a-z])([A-Z])"), "$1 $2")
-                .replace(Regex("([A-Za-z])([0-9])"), "$1 $2")
-                .replace(Regex("([0-9])([A-Za-z])"), "$1 $2")
-            spaced.lowercase().split(Regex("[^a-z0-9]+")).filterTo(out) { it.isNotEmpty() }
+                .replace(CAMEL_BOUNDARY, "$1 $2")
+                .replace(LETTER_DIGIT_BOUNDARY, "$1 $2")
+                .replace(DIGIT_LETTER_BOUNDARY, "$1 $2")
+            spaced.lowercase().split(NON_ALNUM).filterTo(out) { it.isNotEmpty() }
         }
         return out
     }

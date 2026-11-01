@@ -40,6 +40,8 @@ sealed interface FillValue {
  */
 object IdentityFiller {
 
+    private val ISO_DATE = Regex("""^(\d{4})-(\d{2})-(\d{2})$""")
+
     fun resolve(
         info: AutofillInformation,
         selection: Selection,
@@ -58,7 +60,8 @@ object IdentityFiller {
                 if (cc.isEmpty()) return null
                 val options = traits.listOptions
                 if (options != null) {
-                    val matches = options.indices.filter { Regex("""(^|\D)\+?$cc(\D|$)""").containsMatchIn(options[it]) }
+                    val codeRegex = Regex("""(^|\D)\+?${Regex.escape(cc)}(\D|$)""")
+                    val matches = options.indices.filter { codeRegex.containsMatchIn(options[it]) }
                     return if (matches.size == 1) FillValue.ListIndex(matches.first()) else null
                 }
                 val plain = if (traits.numericOnly || traits.maxLength == cc.length) cc else "+$cc"
@@ -112,7 +115,7 @@ object IdentityFiller {
     }
 
     private fun resolveBirthDate(iso: String, traits: FieldTraits, zone: ZoneId): FillValue? {
-        val m = Regex("""^(\d{4})-(\d{2})-(\d{2})$""").matchEntire(iso) ?: return null
+        val m = ISO_DATE.matchEntire(iso) ?: return null
         val (y, mo, d) = m.destructured
         if (traits.acceptsDate) {
             val date = runCatching { LocalDate.of(y.toInt(), mo.toInt(), d.toInt()) }.getOrNull() ?: return null

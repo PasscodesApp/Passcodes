@@ -36,6 +36,22 @@ object AutofillPreferences {
     private const val DEFAULT_INLINE_SUGGESTIONS_ENABLED = true
     private const val DEFAULT_BIOMETRIC_LOCK_ENABLED = false
 
+    /** All three settings from ONE DataStore read — what a fill request needs. */
+    data class Snapshot(
+        val inlineSuggestionsEnabled: Boolean,
+        val biometricLockEnabled: Boolean,
+        val fillMode: FillMode
+    )
+
+    suspend fun snapshot(context: Context): Snapshot {
+        val prefs = context.autofillDataStore.data.first()
+        return Snapshot(
+            inlineSuggestionsEnabled = prefs[KEY_INLINE_SUGGESTIONS_ENABLED] ?: DEFAULT_INLINE_SUGGESTIONS_ENABLED,
+            biometricLockEnabled = prefs[KEY_BIOMETRIC_LOCK_ENABLED] ?: DEFAULT_BIOMETRIC_LOCK_ENABLED,
+            fillMode = FillMode.fromStorage(prefs[KEY_FILL_MODE])
+        )
+    }
+
     // -- Inline suggestions -------------------------------------------
 
     suspend fun isInlineSuggestionsEnabled(context: Context): Boolean =

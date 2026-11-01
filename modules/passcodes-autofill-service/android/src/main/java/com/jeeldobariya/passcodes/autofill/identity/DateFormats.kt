@@ -12,6 +12,9 @@ object DateFormats {
         """(?i)\b(dd|mm|yyyy|yy)([/.\- ])(dd|mm|yyyy|yy)\2(dd|mm|yyyy|yy)\b"""
     )
 
+    private val ISO_DATE = Regex("""^(\d{4})-(\d{2})-(\d{2})$""")
+    private val FORMAT_PATTERN = Regex("""^(dd|MM|yyyy|yy)([/.\- ])(dd|MM|yyyy|yy)\2(dd|MM|yyyy|yy)$""")
+
     fun infer(texts: List<String>, htmlType: String?): String? {
         if (htmlType == "date") return "yyyy-MM-dd"
         for (text in texts) {
@@ -35,9 +38,9 @@ object DateFormats {
 
     /** Formats an ISO "yyyy-MM-dd" date with a pattern from [infer]. Null if either is invalid. */
     fun format(isoDate: String, pattern: String): String? {
-        val m = Regex("""^(\d{4})-(\d{2})-(\d{2})$""").matchEntire(isoDate) ?: return null
+        val m = ISO_DATE.matchEntire(isoDate) ?: return null
         val (year, month, day) = m.destructured
-        if (!Regex("""^(dd|MM|yyyy|yy)([/.\- ])(dd|MM|yyyy|yy)\2(dd|MM|yyyy|yy)$""").matches(pattern)) return null
+        if (!FORMAT_PATTERN.matches(pattern)) return null
         val separator = pattern.first { it in "/.- " }.toString()
         return pattern.split(separator).joinToString(separator) {
             when (it) {

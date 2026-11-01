@@ -148,16 +148,18 @@ class PasscodesAutofillService : AutofillService() {
         parsed: ParsedAutofillRequest,
         callback: FillCallback
     ) {
-        val inlineRequest = resolveInlineSuggestionsRequest(request)
-        val biometricGateActive = resolveBiometricGateActive()
+        val prefs = AutofillPreferences.snapshot(applicationContext) // one DataStore read
+        val inlineRequest = resolveInlineSuggestionsRequest(request, prefs.inlineSuggestionsEnabled)
+        val biometricGateActive = resolveBiometricGateActive(prefs.biometricLockEnabled)
         val destination = resolveSiteLabel(parsed)
 
         val matches = if (fields.isEmpty) {
             emptyList()
         } else {
-            val fillMode = AutofillPreferences.getFillMode(applicationContext)
             try {
-                selectCredentials(fillMode, parsed).take(MAX_DATASETS)
+                // A locked row never shows or carries the password (it is
+                // re-read by id after unlock), so don't load it at all.
+                selectCredentials(prefs.fillMode, parsed, includePassword = !biometricGateActive).take(MAX_DATASETS)
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to load credentials", e)
                 emptyList()
@@ -223,20 +225,20 @@ class PasscodesAutofillService : AutofillService() {
     /** Picks which saved credentials to offer, per the user's fill-mode setting. */
     private fun selectCredentials(
         mode: FillMode,
-        parsed: ParsedAutofillRequest
+        parsed: ParsedAutofillRequest,
+        includePassword: Boolean
     ): List<PasswordEntry> {
         val db = PasscodesDatabase(applicationContext)
         return when (mode) {
-            FillMode.SMART -> db.filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = false)
-            FillMode.AUTO -> db.filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = true)
-            FillMode.DUMB -> db.getAllPasswords()
+            FillMode.SMART -> db.filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = false, includePassword = includePassword)
+            FillMode.AUTO -> db.filterPasswords(parsed.webDomain, parsed.packageName, fallbackToAll = true, includePassword = includePassword)
+            FillMode.DUMB -> db.getAllPasswords(includePassword = includePassword)
         }
     }
 
     /** Honors the user's inline-suggestions preference on top of OS/API support. */
-    private suspend fun resolveInlineSuggestionsRequest(request: FillRequest): InlineSuggestionsRequest? {
+    private fun resolveInlineSuggestionsRequest(request: FillRequest, enabled: Boolean): InlineSuggestionsRequest? {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return null
-        val enabled = AutofillPreferences.isInlineSuggestionsEnabled(applicationContext)
         return if (enabled) request.inlineSuggestionsRequest else null
     }
 
@@ -247,8 +249,7 @@ class PasscodesAutofillService : AutofillService() {
      * all never blocks the user from their own vault — there's nothing
      * meaningful to gate behind.
      */
-    private suspend fun resolveBiometricGateActive(): Boolean {
-        val preferenceEnabled = AutofillPreferences.isBiometricLockEnabled(applicationContext)
+    private fun resolveBiometricGateActive(preferenceEnabled: Boolean): Boolean {
         if (!preferenceEnabled) return false
 
         val canAuthenticate = BiometricManager.from(applicationContext)

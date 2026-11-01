@@ -109,16 +109,20 @@ unlock/        AutofillUnlockActivity          transparent host for BiometricPro
 Found by reading the code, **not by profiling** — measure on a device before and after each one. Roughly ordered by value within each group.
 
 ### Performance (fill latency is what the user feels)
-1. **Don't load passwords just to show a locked row.** In biometric mode the fill response only needs id, domain and username; the password is read after unlock (`AutofillUnlockActivity` already fetches by row id). Add a light "list" query that skips the `password` column.
-2. **Push matching into SQL.** `filterPasswords` / `getAllPasswords` load rows and filter in memory; a `WHERE domain = ? OR package = ?` (or an indexed normalised-domain column) with `LIMIT` avoids reading the whole vault per request.
-3. **Reuse one `PasscodesDatabase` / connection** instead of constructing one per request in `selectCredentials`.
-4. **Read the three preferences in one DataStore snapshot** (`data.first()` once) instead of three separate suspend reads (inline, biometric, fill mode) per fill; consider an in-memory cache invalidated by the DataStore flow.
-5. **Load personal details only when needed** — already skipped on login forms and without a screen lock; also skip when no identity field is resolved (done) and cache the decoded record briefly.
-6. **Hoist `Regex` objects** (`DateFormats`, `IdentityFiller` phone-option match, `IdentityFieldClassifier` tokenizer) into `private val`s; they are rebuilt per field today.
-7. **Short-circuit the parser:** stop walking subtrees once enough fields are found, and skip invisible / non-importantForAutofill nodes earlier.
-8. **Tokenise each node once** and share the tokens between the classifier and the form resolver.
-9. **Lower the dataset caps** (`MAX_DATASETS`, `MAX_IDENTITY_DATASETS`) or build inline specs lazily when the keyboard shows few slots — fewer RemoteViews/Binder bytes per response.
-10. **Cache `RemoteViews` / icon resources** per kind instead of rebuilding for every dataset.
+**Done**
+- Locked rows no longer read the password column at all (`includePassword = false`; the real password is read by id after unlock).
+- One DataStore read per fill request (`AutofillPreferences.snapshot`) instead of three.
+- Regexes in the classifier tokenizer, date formatting/parsing and phone-code matching are compiled once.
+- Credential matching was already done in SQL (domain / subdomain / package), and `PasscodesDatabase` is a thin wrapper that opens a short-lived connection per call, so neither needed changing.
+
+**Still open**
+1. Cache the decoded personal-details record briefly (cleared on `onDestroy`), instead of decoding the JSON on every fill that needs it.
+2. Short-circuit the parser: stop walking subtrees once enough fields are found, and skip invisible / not-important-for-autofill nodes earlier.
+3. Tokenise each node once and share the tokens between the classifier and the form resolver.
+4. Lower the dataset caps (`MAX_DATASETS`, `MAX_IDENTITY_DATASETS`) or build inline specs lazily when the keyboard shows few slots — fewer RemoteViews / Binder bytes per response.
+5. Cache `RemoteViews` / icon resources per kind instead of rebuilding for every dataset.
+6. Add an index on the normalised domain if the vault grows large, and `LIMIT` the `dumb`-mode query in SQL rather than after loading (`take(MAX_DATASETS)`).
+7. Measure first (Perfetto / `adb shell dumpsys autofill`, time-to-first-dataset) — none of the above has been profiled.
 
 ### Accessibility
 1. Give the dropdown row a real `contentDescription` (e.g. "Passcodes, example.com, Tap to unlock"); the icon is currently `@null`, which is right for the icon but the row text should be announced as one item.

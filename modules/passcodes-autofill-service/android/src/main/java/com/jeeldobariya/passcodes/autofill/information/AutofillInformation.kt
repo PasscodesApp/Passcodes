@@ -142,6 +142,7 @@ data class AutofillInformation(
     override fun toString() = "AutofillInformation(<redacted>)"
 
     companion object {
+        private val ISO_DATE = Regex("""^(\d{4})-(\d{2})-(\d{2})$""")
         const val MAX_EMAILS = 5
         const val MAX_PHONES = 5
 
@@ -209,7 +210,7 @@ data class AutofillInformation(
         }
 
         internal fun isValidIsoDate(value: String): Boolean {
-            val m = Regex("""^(\d{4})-(\d{2})-(\d{2})$""").matchEntire(value) ?: return false
+            val m = ISO_DATE.matchEntire(value) ?: return false
             val (y, mo, d) = m.destructured.toList().map(String::toInt)
             if (y !in 1900..2100 || mo !in 1..12) return false
             val leap = (y % 4 == 0 && y % 100 != 0) || y % 400 == 0

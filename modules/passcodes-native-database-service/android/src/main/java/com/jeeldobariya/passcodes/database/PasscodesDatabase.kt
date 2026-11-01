@@ -30,8 +30,8 @@ class PasscodesDatabase(context: Context) {
     // -----------------------------------------------------------------
 
     /** Every non-deleted credential, most recently updated first. */
-    fun getAllPasswords(): List<PasswordEntry> =
-        read("getAllPasswords", emptyList()) { PasswordReader.queryAll(it) }
+    fun getAllPasswords(includePassword: Boolean = true): List<PasswordEntry> =
+        read("getAllPasswords", emptyList()) { PasswordReader.queryAll(it, includePassword) }
 
     /**
      * Credentials relevant to [webDomain] and/or [packageName].
@@ -43,6 +43,10 @@ class PasscodesDatabase(context: Context) {
      *   `application_ids` column — never against `domain`, which holds
      *   site/app display names, not package identifiers.
      *
+     * [includePassword] = false skips reading the password column; entries
+     * then carry an EMPTY password and must only be used to *list* (e.g. a
+     * locked suggestion) — fetch the real one with [getPasswordById].
+     *
      * [fallbackToAll] defaults to false: if the site/app can't be
      * identified, or nothing matches, you get nothing rather than the
      * entire vault. Flip it on only for an explicit "show everything if
@@ -51,17 +55,18 @@ class PasscodesDatabase(context: Context) {
     fun filterPasswords(
         webDomain: String?,
         packageName: String?,
-        fallbackToAll: Boolean = false
+        fallbackToAll: Boolean = false,
+        includePassword: Boolean = true
     ): List<PasswordEntry> {
         val normalizedWebDomain = DomainHelper.normalizeDomain(webDomain)
         val normalizedPackage = packageName?.trim()?.lowercase()?.takeIf { it.isNotBlank() }
 
         return read("filterPasswords", emptyList()) { db ->
             if (normalizedWebDomain == null && normalizedPackage == null) {
-                if (fallbackToAll) PasswordReader.queryAll(db) else emptyList()
+                if (fallbackToAll) PasswordReader.queryAll(db, includePassword) else emptyList()
             } else {
-                val matches = PasswordReader.queryFiltered(db, normalizedWebDomain, normalizedPackage)
-                if (matches.isEmpty() && fallbackToAll) PasswordReader.queryAll(db) else matches
+                val matches = PasswordReader.queryFiltered(db, normalizedWebDomain, normalizedPackage, includePassword)
+                if (matches.isEmpty() && fallbackToAll) PasswordReader.queryAll(db, includePassword) else matches
             }
         }
     }
