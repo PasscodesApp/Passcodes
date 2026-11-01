@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- The "middle" divider between repeated rows in a dynamic list
+     (LinearLayout showDividers="middle"): a hairline with breathing
+     room above and below, so added/removed items don't feel cramped. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetBottom="8dp"
+    android:insetTop="16dp">
+
+    <shape android:shape="rectangle">
+        <solid android:color="?attr/colorOutlineVariant" />
+        <size android:height="1dp" />
+    </shape>
+
+</inset>

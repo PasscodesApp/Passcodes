@@ -1,6 +1,8 @@
 package com.jeeldobariya.passcodes.autofill.settings
 
 import com.jeeldobariya.passcodes.autofill.R
+import com.jeeldobariya.passcodes.autofill.information.AutofillInformationStore
+import com.jeeldobariya.passcodes.autofill.security.DeviceSecurity
 import com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity
 import android.content.Intent
 import android.net.Uri
@@ -49,6 +51,10 @@ class AutofillSettingsActivity : AppCompatActivity() {
         findViewById<MaterialToolbar>(R.id.autofill_toolbar)
             .setNavigationOnClickListener { finish() }
 
+        findViewById<View>(R.id.autofill_details_card).setOnClickListener {
+            startActivity(Intent(this, AutofillPersonalDetailsActivity::class.java))
+        }
+
         authenticationSwitch = findViewById(R.id.autofill_authentication_switch)
         inlineSwitch = findViewById(R.id.autofill_inline_switch)
         fillModeGroup = findViewById(R.id.autofill_fill_mode_group)
@@ -65,6 +71,7 @@ class AutofillSettingsActivity : AppCompatActivity() {
         super.onResume()
         updateAutofillStatus()
         updateAuthenticationHint()
+        updateDetailsCard()
     }
 
     private fun setUpPreferenceControls() {
@@ -170,7 +177,25 @@ class AutofillSettingsActivity : AppCompatActivity() {
         )
     }
 
-    /** Warns when the lock switch can't actually do anything on this device. */
+    /**
+     * Row subtitle (added / not added yet) and the inline "won't be
+     * filled" warning when the device has no screen lock. Entry itself
+     * happens on [AutofillPersonalDetailsActivity], opened by tapping
+     * the card.
+     */
+    private fun updateDetailsCard() {
+        val secure = DeviceSecurity.isDeviceSecure(this)
+        findViewById<View>(R.id.autofill_details_lock_divider).visibility = if (secure) View.GONE else View.VISIBLE
+        findViewById<View>(R.id.autofill_details_lock_warning).visibility = if (secure) View.GONE else View.VISIBLE
+
+        lifecycleScope.launch {
+            val hasDetails = !AutofillInformationStore.get(applicationContext).isEmpty
+            findViewById<TextView>(R.id.autofill_details_body).setText(
+                if (hasDetails) R.string.autofill_details_subtitle_filled else R.string.autofill_details_subtitle_empty
+            )
+        }
+    }
+
     private fun updateAuthenticationHint() {
         val canAuthenticate = BiometricManager.from(this)
             .canAuthenticate(AutofillUnlockActivity.ALLOWED_AUTHENTICATORS)

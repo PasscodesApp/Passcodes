@@ -3,6 +3,8 @@ package com.jeeldobariya.passcodes.autofill
 import android.content.Intent
 import android.os.Build
 import android.view.autofill.AutofillManager
+import com.jeeldobariya.passcodes.autofill.information.AutofillInformation
+import com.jeeldobariya.passcodes.autofill.information.AutofillInformationStore
 import com.jeeldobariya.passcodes.autofill.settings.AutofillPreferences
 import com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity
 import com.jeeldobariya.passcodes.autofill.settings.FillMode
@@ -38,11 +40,6 @@ class PasscodesAutofillServiceModule : Module() {
     // The functions below all read/write the same DataStore file that
     // PasscodesAutofillService and AutofillSettingsActivity use — one
     // source of truth regardless of which side changes it.
-
-    // Settings functions are suspend-based (`Coroutine`) rather than
-    // wrapping runBlocking: DataStore is already asynchronous, so the
-    // module thread is never blocked waiting on disk. Setters resolve to
-    // the value read back after the write.
 
     AsyncFunction("isInlineSuggestionsEnabled") { ->
       val context = appContext.reactContext ?: return@AsyncFunction true
@@ -85,6 +82,32 @@ class PasscodesAutofillServiceModule : Module() {
       val context = appContext.reactContext ?: return@AsyncFunction requested.storageValue
       runBlocking(Dispatchers.IO) {
         AutofillPreferences.setFillMode(context, requested).storageValue
+      }
+    }
+
+    // -------
+    // Personal details for form filling (phone, email, name, birth date,
+    // address). Stored in their own DataStore — never in the Drizzle
+    // database, and not covered by import/export. See
+    // AutofillInformationStore.
+    //
+    // Entry happens on the native Autofill settings screen (see
+    // AutofillSettingsActivity) — not from React Native — so this app's
+    // own screens don't need to collect or validate it. These functions
+    // stay in case RN ever wants to read the stored details (e.g. to
+    // show a "configured" badge); they're never used to write them.
+
+    AsyncFunction("getAutofillInformation") { ->
+      val context = appContext.reactContext ?: return@AsyncFunction AutofillInformation().toMap()
+      runBlocking(Dispatchers.IO) {
+        AutofillInformationStore.get(context).toMap()
+      }
+    }
+
+    AsyncFunction("clearAutofillInformation") { ->
+      val context = appContext.reactContext ?: return@AsyncFunction AutofillInformation().toMap()
+      runBlocking(Dispatchers.IO) {
+        AutofillInformationStore.clear(context).toMap()
       }
     }
   }

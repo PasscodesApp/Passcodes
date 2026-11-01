@@ -1,4 +1,5 @@
 import {
+  AutofillInformation,
   FillMode,
   PasscodesAutofillServiceModuleInterface,
 } from "./PasscodesAutofillService.types";
@@ -51,6 +52,14 @@ const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
 
     // Not applicable outside Android native builds; return the requested value.
     return mode;
+  },
+
+  async getAutofillInformation(): Promise<AutofillInformation> {
+    return {}; // Not applicable outside Android native builds.
+  },
+
+  async clearAutofillInformation(): Promise<AutofillInformation> {
+    return {};
   },
 };
 

@@ -2,6 +2,7 @@ package com.jeeldobariya.passcodes.autofill.presentation
 
 import com.jeeldobariya.passcodes.autofill.R
 import com.jeeldobariya.passcodes.autofill.settings.AutofillSettingsActivity
+import com.jeeldobariya.passcodes.autofill.identity.PlanKind
 import com.jeeldobariya.passcodes.database.model.PasswordEntry
 import android.app.PendingIntent
 import android.content.Context
@@ -34,15 +35,66 @@ class AutofillPresentationFactory(
     private val context: Context
 ) {
 
+    // -- What each kind of suggestion looks like --------------------------
+
+    fun displayForCredential(entry: PasswordEntry, locked: Boolean, requestKey: Int): DatasetDisplay {
+        val tapToUnlock = context.getString(R.string.autofill_tap_to_unlock)
+        return if (locked) {
+            DatasetDisplay(
+                title = entry.domain, subtitle = tapToUnlock,
+                inlineTitle = entry.domain, inlineSubtitle = tapToUnlock,
+                iconRes = R.drawable.ic_autofill_lock, requestKey = requestKey
+            )
+        } else {
+            DatasetDisplay(
+                title = entry.domain, subtitle = entry.username,
+                inlineTitle = entry.username.ifBlank { entry.domain }, inlineSubtitle = entry.domain,
+                iconRes = R.drawable.ic_autofill_key, requestKey = requestKey
+            )
+        }
+    }
+
+    /** [summary] is only shown when unlocked; a locked suggestion shows "Tap to unlock" instead. */
+    fun displayForIdentity(kind: PlanKind, summary: String, locked: Boolean, requestKey: Int): DatasetDisplay {
+        val title = context.getString(
+            when (kind) {
+                PlanKind.CONTACT_BUNDLE -> R.string.autofill_identity_contact
+                PlanKind.EMAIL_ALTERNATIVE -> R.string.autofill_identity_email_alternative
+                PlanKind.PHONE_ALTERNATIVE -> R.string.autofill_identity_phone_alternative
+                PlanKind.BIRTH_DATE -> R.string.autofill_identity_birth_date
+                PlanKind.ADDRESS -> R.string.autofill_identity_address
+            }
+        )
+        val icon = when (kind) {
+            PlanKind.BIRTH_DATE -> R.drawable.ic_autofill_event
+            PlanKind.ADDRESS -> R.drawable.ic_autofill_location
+            else -> R.drawable.ic_autofill_person
+        }
+        return if (locked) {
+            val tapToUnlock = context.getString(R.string.autofill_tap_to_unlock)
+            DatasetDisplay(
+                title = title, subtitle = tapToUnlock,
+                inlineTitle = title, inlineSubtitle = tapToUnlock,
+                iconRes = R.drawable.ic_autofill_lock, requestKey = requestKey
+            )
+        } else {
+            DatasetDisplay(
+                title = title, subtitle = summary,
+                inlineTitle = summary.ifBlank { title }, inlineSubtitle = title,
+                iconRes = icon, requestKey = requestKey
+            )
+        }
+    }
+
     /** Applies a real, fillable value with the full tiered presentation. */
     fun applyValue(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
         value: AutofillValue,
-        entry: PasswordEntry,
+        display: DatasetDisplay,
         inlineSpec: InlinePresentationSpec?
     ) {
-        val menuPresentation = buildMenuPresentation(entry, locked = false)
+        val menuPresentation = buildMenuPresentation(display)
 
         when {
             // Presentations/Field/Dataset.Builder#setField were added in
@@ -54,7 +106,7 @@ class AutofillPresentationFactory(
                     datasetBuilder = datasetBuilder,
                     id = id,
                     value = value,
-                    entry = entry,
+                    display = display,
                     menuPresentation = menuPresentation,
                     inlineSpec = inlineSpec
                 )
@@ -67,7 +119,7 @@ class AutofillPresentationFactory(
                     datasetBuilder = datasetBuilder,
                     id = id,
                     value = value,
-                    entry = entry,
+                    display = display,
                     menuPresentation = menuPresentation,
                     inlineSpec = inlineSpec
                 )
@@ -99,14 +151,14 @@ class AutofillPresentationFactory(
     fun applyLockedPlaceholder(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
-        entry: PasswordEntry,
+        display: DatasetDisplay,
         inlineSpec: InlinePresentationSpec?
     ) {
-        val menuPresentation = buildMenuPresentation(entry, locked = true)
+        val menuPresentation = buildMenuPresentation(display)
 
         val inlinePresentation =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && inlineSpec != null) {
-                buildInlinePresentation(inlineSpec, entry, locked = true)
+                buildInlinePresentation(inlineSpec, display)
             } else {
                 null
             }
@@ -118,28 +170,14 @@ class AutofillPresentationFactory(
         }
     }
 
-    private fun buildMenuPresentation(
-        entry: PasswordEntry,
-        locked: Boolean
-    ): RemoteViews {
+    private fun buildMenuPresentation(display: DatasetDisplay): RemoteViews {
         return RemoteViews(
             context.packageName,
             R.layout.autofill_item
         ).apply {
-            setImageViewResource(
-                R.id.autofill_icon,
-                if (locked) R.drawable.ic_autofill_lock else R.drawable.ic_autofill_key
-            )
-
-            setTextViewText(
-                R.id.autofill_domain,
-                entry.domain
-            )
-
-            setTextViewText(
-                R.id.autofill_username,
-                if (locked) context.getString(R.string.autofill_tap_to_unlock) else entry.username
-            )
+            setImageViewResource(R.id.autofill_icon, display.iconRes)
+            setTextViewText(R.id.autofill_domain, display.title)
+            setTextViewText(R.id.autofill_username, display.subtitle)
         }
     }
 
@@ -148,7 +186,7 @@ class AutofillPresentationFactory(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
         value: AutofillValue,
-        entry: PasswordEntry,
+        display: DatasetDisplay,
         menuPresentation: RemoteViews,
         inlineSpec: InlinePresentationSpec?
     ) {
@@ -157,7 +195,7 @@ class AutofillPresentationFactory(
             .setDialogPresentation(menuPresentation)
 
         inlineSpec?.let { spec ->
-            buildInlinePresentation(spec, entry, locked = false)?.let {
+            buildInlinePresentation(spec, display)?.let {
                 presentationsBuilder.setInlinePresentation(it)
             }
         }
@@ -180,15 +218,14 @@ class AutofillPresentationFactory(
         datasetBuilder: Dataset.Builder,
         id: AutofillId,
         value: AutofillValue,
-        entry: PasswordEntry,
+        display: DatasetDisplay,
         menuPresentation: RemoteViews,
         inlineSpec: InlinePresentationSpec
     ) {
         val inlinePresentation =
             buildInlinePresentation(
                 inlineSpec,
-                entry,
-                locked = false
+                display
             )
 
         if (inlinePresentation != null) {
@@ -210,8 +247,7 @@ class AutofillPresentationFactory(
     @RequiresApi(Build.VERSION_CODES.R)
     private fun buildInlinePresentation(
         spec: InlinePresentationSpec,
-        entry: PasswordEntry,
-        locked: Boolean
+        display: DatasetDisplay
     ): InlinePresentation? {
 
         if (
@@ -227,21 +263,16 @@ class AutofillPresentationFactory(
         // The vector drawables are plain black shapes meant to be tinted;
         // untinted they'd be invisible on a dark keyboard strip. The tint
         // colour has a night variant, so it follows the system theme.
-        val icon = Icon.createWithResource(
-            context,
-            if (locked) R.drawable.ic_autofill_lock else R.drawable.ic_autofill_key
-        ).setTint(context.getColor(R.color.autofill_inline_icon))
-
-        val title = if (locked) entry.domain else entry.username.ifBlank { entry.domain }
-        val subtitle = if (locked) context.getString(R.string.autofill_tap_to_unlock) else entry.domain
+        val icon = Icon.createWithResource(context, display.iconRes)
+            .setTint(context.getColor(R.color.autofill_inline_icon))
 
         val content =
             InlineSuggestionUi
-                .newContentBuilder(createInlineSuggestionIntent(entry))
-                .setTitle(title)
-                .setSubtitle(subtitle)
+                .newContentBuilder(createInlineSuggestionIntent(display))
+                .setTitle(display.inlineTitle)
+                .setSubtitle(display.inlineSubtitle)
                 .setStartIcon(icon)
-                .setContentDescription("$title, $subtitle")
+                .setContentDescription("${display.inlineTitle}, ${display.inlineSubtitle}")
                 .build()
 
         return InlinePresentation(
@@ -253,7 +284,7 @@ class AutofillPresentationFactory(
 
     @RequiresApi(Build.VERSION_CODES.R)
     private fun createInlineSuggestionIntent(
-        entry: PasswordEntry
+        display: DatasetDisplay
     ): PendingIntent {
 
         val intent = Intent(
@@ -265,7 +296,7 @@ class AutofillPresentationFactory(
 
         return PendingIntent.getActivity(
             context,
-            entry.id.hashCode(),
+            display.requestKey,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or
                 PendingIntent.FLAG_IMMUTABLE

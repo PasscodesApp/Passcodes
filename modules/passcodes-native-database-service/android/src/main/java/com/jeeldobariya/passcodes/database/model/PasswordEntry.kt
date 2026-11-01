@@ -19,4 +19,8 @@ data class PasswordEntry(
     val source: String?,
     val createdAt: Long,
     val updatedAt: Long
-)
+) {
+    // Never print credentials: a stray log line or crash report that
+    // includes an entry must not leak the password.
+    override fun toString(): String = "PasswordEntry(id=$id, <redacted>)"
+}

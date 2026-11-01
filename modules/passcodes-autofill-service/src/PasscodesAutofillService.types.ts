@@ -52,6 +52,58 @@ export interface PasscodesAutofillServiceModuleInterface {
    * Updates the fill mode. Resolves to the value read back after the update.
    */
   setFillMode(mode: FillMode): Promise<FillMode>;
+
+  /**
+   * The personal details used for form filling, or an empty record.
+   * Stored in a native DataStore — NOT in the Drizzle database — and
+   * therefore not part of any backup, import or export.
+   *
+   * These are entered and edited only on the native Autofill settings
+   * screen (`openAutofillSettings()`) — there is no write method here.
+   * This getter exists only if the app wants to read them back, e.g. to
+   * show a "details configured" badge.
+   */
+  getAutofillInformation(): Promise<AutofillInformation>;
+
+  /** Deletes all stored personal details. */
+  clearAutofillInformation(): Promise<AutofillInformation>;
 }
+
+export type AutofillEmail = {
+  label?: string;
+  address: string;
+  isDefault?: boolean;
+};
+
+export type AutofillPhone = {
+  label?: string;
+  /** Dialing code digits only, without "+": "91". */
+  countryCode?: string;
+  /** National number, digits only. */
+  number: string;
+  isDefault?: boolean;
+};
+
+export type AutofillAddress = {
+  street?: string;
+  street2?: string;
+  city?: string;
+  region?: string;
+  postalCode?: string;
+  country?: string;
+  /** Optional one-line version; composed from the parts when empty. */
+  full?: string;
+};
+
+export type AutofillInformation = {
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  /** ISO date "yyyy-MM-dd". */
+  birthDate?: string;
+  emails?: AutofillEmail[];
+  phones?: AutofillPhone[];
+  address?: AutofillAddress;
+};
 
 export type FillMode = "smart" | "auto" | "dumb";
