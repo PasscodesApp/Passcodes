@@ -597,7 +597,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/details_clear_button"
-                style="?attr/materialButtonTextStyle"
+                style="?attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
