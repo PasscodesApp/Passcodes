@@ -24,6 +24,19 @@ All database access goes through [`passcodes-native-database-service`](../passco
 - Web form → `domain` is the web domain, no `application_ids` change. Native app form → `domain` is the app's label and the package name is appended to `application_ids` (comma-separated, de-duplicated).
 - Rows written this way get `source = AUTOFILL` and a note saying they need review. An existing real `url` is never overwritten.
 
+### Personal details (new)
+Besides saved logins, the service can fill a small, deliberately limited set of personal details on forms that aren't sign-in screens (checkout, registration, contact forms):
+
+- first / last / full name, one or more **emails**, one or more **phone numbers** (full, country code, national part), **birth date**, and **address** (full line or street / unit / city / region / postal code / country).
+- Suggestions are grouped: one "My details" bundle (default name + email + phone), one per extra email/phone, plus separate **Birth date** and **Address** suggestions. Birth date and address are never mixed into the contact bundle.
+- Sign-in screens get saved logins only. Long-press → *Autofill* (a manual request) can still offer details on such a screen.
+- **Requires a secure screen lock.** If the device has no PIN/pattern/password/biometric, no personal detail is ever filled. The Autofill settings screen shows this, and the app should show its own warning (`isDeviceSecure()`).
+- Honours the same **authentication** switch as saved logins (locked suggestions show "Tap to unlock"; the values are only released after the prompt, and the unlock intent carries field ids, never the data).
+- Address and birth date are not offered on `http://` pages or on pages that mix web origins (e.g. a third-party iframe).
+- Values that don't fit a field are **skipped, not truncated** (maxlength, numeric-only inputs, drop-downs that don't contain the exact option, date formats we can't infer).
+- **Stored in its own DataStore** (`passcodes_autofill_information`), not in the Drizzle database. It is local to the device and is **not backed up, imported or exported** by Passcodes. Not encrypted yet: `AutofillInformationStore.encode/decode` is the single place to add that.
+- Never logged: the data classes print as `<redacted>`.
+
 ### Settings screen (`AutofillSettingsActivity`)
 Autofill service status, authentication switch, inline switch, fill-mode selector, light/dark theme. Open it from React Native with `openAutofillSettings()`.
 
@@ -41,7 +54,21 @@ await Module.isBiometricLockEnabled();        // boolean
 await Module.setBiometricLockEnabled(true);
 await Module.getFillMode();                   // "smart" | "auto" | "dumb"
 await Module.setFillMode("smart");
+
+// Personal details (own DataStore, not the database)
+Module.isDeviceSecure();                      // boolean (sync) — warn the user when false
+const info = await Module.getAutofillInformation();
+const saved = await Module.setAutofillInformation({
+  firstName: "Asha",
+  lastName: "Patel",
+  birthDate: "1994-03-07",                    // ISO yyyy-MM-dd
+  emails: [{ label: "Personal", address: "asha@example.com", isDefault: true }],
+  phones: [{ label: "Mobile", countryCode: "91", number: "9876543210", isDefault: true }],
+  address: { street: "12 Park Road", city: "Pune", postalCode: "411001", country: "India" },
+});                                           // resolves to what was actually stored — render from this
+await Module.clearAutofillInformation();
 ```
+The input is validated natively (trimmed, length-capped, invalid emails / dates / duplicate entries dropped, max 5 emails and 5 phones). On the screen where users enter these details, show two notices: **no screen lock → details will not be filled** (when `isDeviceSecure()` is false) and **this data is local and is not backed up, imported or exported**.
 Settings live in one DataStore file (`passcodes_autofill_settings`) shared by the service, the settings screen and the bridge, so all three always agree.
 
 ## Code layout
@@ -51,6 +78,9 @@ PasscodesAutofillServiceModule.kt   JS bridge (suspend AsyncFunctions)
 service/       PasscodesAutofillService        fill + save entry points
 parser/        AutofillRequestParser, AutofillValues
 presentation/  AutofillPresentationFactory (dropdown/inline), AutofillSaveUiFactory (save card)
+information/   AutofillInformation (pure model), AutofillInformationStore (DataStore)
+identity/      field classifier, form resolver, filler, dataset planner (pure Kotlin, unit-checked)
+security/      DeviceSecurity (screen-lock check)
 settings/      AutofillPreferences, FillMode, AutofillSettingsActivity
 unlock/        AutofillUnlockActivity          transparent host for BiometricPrompt
 ```
@@ -66,6 +96,61 @@ unlock/        AutofillUnlockActivity          transparent host for BiometricPro
 - **Dropdown/save RemoteViews use explicit colour resources** (with `values-night` variants), not theme attributes — the system inflates them in another process. Only RemoteViews-safe widgets are allowed in those layouts (no plain `View`).
 - Passwords are read/written exactly as stored in the `password` column — this module adds no encryption layer.
 - Not yet verified on a range of real devices/keyboards/browsers; test on Chrome, a native app, with and without the lock, and with inline on and off.
+
+- **Personal-detail detection is heuristic.** It weighs autofill hints, HTML `autocomplete`/`type`, input type and id/label keywords; ambiguous fields ("Name", bare "Country code") are only filled with supporting context. Expect some forms to be missed rather than mis-filled. The pure logic has an off-device check suite (`tests/IdentityLogicChecks.kt`); the Android glue has **not been compiled or run on a device** in the environment this was written in.
+- **Native max length isn't visible** to Autofill, so only HTML `maxlength` is respected.
+- If you want Android's own cloud backup to skip this data too, exclude `datastore/passcodes_autofill_information.preferences_pb` in your `data_extraction_rules` / `fullBackupContent`:
+  ```xml
+  <exclude domain="file" path="datastore/passcodes_autofill_information.preferences_pb"/>
+  ```
+
+## Future enhancements
+
+Found by reading the code, **not by profiling** — measure on a device before and after each one. Roughly ordered by value within each group.
+
+### Performance (fill latency is what the user feels)
+1. **Don't load passwords just to show a locked row.** In biometric mode the fill response only needs id, domain and username; the password is read after unlock (`AutofillUnlockActivity` already fetches by row id). Add a light "list" query that skips the `password` column.
+2. **Push matching into SQL.** `filterPasswords` / `getAllPasswords` load rows and filter in memory; a `WHERE domain = ? OR package = ?` (or an indexed normalised-domain column) with `LIMIT` avoids reading the whole vault per request.
+3. **Reuse one `PasscodesDatabase` / connection** instead of constructing one per request in `selectCredentials`.
+4. **Read the three preferences in one DataStore snapshot** (`data.first()` once) instead of three separate suspend reads (inline, biometric, fill mode) per fill; consider an in-memory cache invalidated by the DataStore flow.
+5. **Load personal details only when needed** — already skipped on login forms and without a screen lock; also skip when no identity field is resolved (done) and cache the decoded record briefly.
+6. **Hoist `Regex` objects** (`DateFormats`, `IdentityFiller` phone-option match, `IdentityFieldClassifier` tokenizer) into `private val`s; they are rebuilt per field today.
+7. **Short-circuit the parser:** stop walking subtrees once enough fields are found, and skip invisible / non-importantForAutofill nodes earlier.
+8. **Tokenise each node once** and share the tokens between the classifier and the form resolver.
+9. **Lower the dataset caps** (`MAX_DATASETS`, `MAX_IDENTITY_DATASETS`) or build inline specs lazily when the keyboard shows few slots — fewer RemoteViews/Binder bytes per response.
+10. **Cache `RemoteViews` / icon resources** per kind instead of rebuilding for every dataset.
+
+### Accessibility
+1. Give the dropdown row a real `contentDescription` (e.g. "Passcodes, example.com, Tap to unlock"); the icon is currently `@null`, which is right for the icon but the row text should be announced as one item.
+2. Check touch-target size (≥ 48dp) and contrast of every row in light **and** dark with TalkBack on; `contrast.py`-style checks only cover the settings screen.
+3. Settings: mark section titles as headings (`accessibilityHeading`), group each switch row so TalkBack reads label + state once, and announce the screen-lock warning with `accessibilityLiveRegion`.
+4. Respect font scale: avoid fixed heights in `autofill_item.xml` and the save card; test at 200%.
+5. Don't rely on colour alone for the "no screen lock" and "authentication unavailable" states — add an icon + text (partly done).
+6. Localise: all strings are in `strings.xml` already; add translations and RTL checks (`start`/`end` everywhere).
+
+### Code quality
+1. **Split `PasscodesAutofillService.kt` (~540 lines):** move dataset building into a `DatasetBuilder` class and request/response policy into a small pure `FillPolicy`, leaving the service as plumbing.
+2. **Make the Android glue testable:** add Robolectric / instrumented tests for the parser, presentation factory and unlock activity; today only the pure `identity/` + `information/` code has checks.
+3. **Move `run_checks`-style checks into a Gradle `test` source set** (JUnit) so CI runs them; add golden fixtures of real form structures (Chrome checkout, Amazon app, bank app).
+4. **Replace stringly-typed intent extras** with one typed `UnlockRequest` (parcelable/serialisable) shared by service and activity.
+5. **Single source for the partition rules** (`identity` vs credential vs save) so the "never mix partitions" invariant is asserted in one place.
+6. **Structured logging with a redaction wrapper** so a future `Log.d` cannot print form content; add a lint/ktlint rule banning `Log` calls in `identity/` and `information/`.
+7. **Version and migrate the stored record** (`information_v1` → v2) with an explicit migrator, ahead of citizen-card / passport fields.
+8. **Lint/detekt + `-Werror`** for the module once the SDK build is wired up; remove the unused imports left by the refactor.
+
+### Security / privacy
+1. **Encrypt the details** with an Android Keystore key (AES-GCM) in `AutofillInformationStore.encode/decode`; optionally require user-auth-bound keys.
+2. **Per-site consent for sensitive fields:** remember "never offer address / birth date on this domain".
+3. **Verify web origin against Digital Asset Links** before offering personal details to a native app.
+4. **Auto-lock the cache:** clear any in-memory copy of the details when the service is destroyed.
+5. Exclude the DataStore from cloud backup explicitly (snippet above) rather than relying on app-level defaults.
+
+### Features / accuracy
+1. Learn from corrections: when a user edits a filled field, optionally record "this id means X" for that form (local only).
+2. More field kinds (national ID, passport, tax ID) behind the same partition model, each in its own dataset, with stricter confidence and mandatory authentication.
+3. More locales for address ordering, phone formats and date patterns; per-country postal-code validation.
+4. Support `AutofillValue.forToggle` fields (e.g. gender, consent checkboxes) only if the user opts in.
+5. In-app "test my details" screen that shows what each stored value would look like in a typical form.
 
 ## Dependencies
 

@@ -56,6 +56,22 @@
     <string name="autofill_recommend_turn_off">Turn off inline</string>
     <string name="autofill_recommend_keep">Keep inline</string>
 
+    <!-- Personal-detail suggestions (names, phone, email, birth date, address) -->
+    <string name="autofill_identity_contact">My details</string>
+    <string name="autofill_identity_email_alternative">Other email</string>
+    <string name="autofill_identity_phone_alternative">Other phone</string>
+    <string name="autofill_identity_birth_date">Birth date</string>
+    <string name="autofill_identity_address">Address</string>
+    <string name="autofill_unlock_subtitle_destination">Authenticate to fill your details in %1$s</string>
+
+    <!-- Settings: personal details -->
+    <string name="autofill_section_details">Personal details</string>
+    <string name="autofill_details_no_lock_title">Screen lock required</string>
+    <string name="autofill_details_no_lock_body">This device has no screen lock, so Passcodes will not fill personal details such as your phone number, email or address. Set up a PIN, pattern, password or biometric in Android settings to turn this on.</string>
+    <string name="autofill_details_ready_title">Personal details are protected by your screen lock</string>
+    <string name="autofill_details_ready_body">You can add and edit them inside the Passcodes app.</string>
+    <string name="autofill_details_local_note">Personal details stay on this device only. They are not backed up, imported or exported by Passcodes.</string>
+
     <string name="autofill_how_title">How Autofill works</string>
     <string name="autofill_how_body_1">When you focus a login field, Android asks Passcodes for matching credentials. Passcodes then provides matching entries as Autofill suggestions.</string>
     <string name="autofill_how_body_2">Your passwords remain inside Passcodes and are only provided when Android requests an Autofill operation.</string>

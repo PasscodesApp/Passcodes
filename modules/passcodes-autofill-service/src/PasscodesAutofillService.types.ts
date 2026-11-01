@@ -52,6 +52,70 @@ export interface PasscodesAutofillServiceModuleInterface {
    * Updates the fill mode. Resolves to the value read back after the update.
    */
   setFillMode(mode: FillMode): Promise<FillMode>;
+
+  /**
+   * Whether the device has a secure screen lock (PIN, pattern, password
+   * or biometric). Without one the Autofill service never fills
+   * personal details — show a clear warning on the screen where the user
+   * enters them.
+   */
+  isDeviceSecure(): boolean;
+
+  /**
+   * The personal details used for form filling, or an empty record.
+   * Stored in a native DataStore — NOT in the Drizzle database — and
+   * therefore not part of any backup, import or export.
+   */
+  getAutofillInformation(): Promise<AutofillInformation>;
+
+  /**
+   * Validates, trims and saves the details. Resolves to what was
+   * actually stored (invalid entries are dropped), so always render
+   * from the result.
+   */
+  setAutofillInformation(
+    information: AutofillInformation,
+  ): Promise<AutofillInformation>;
+
+  /** Deletes all stored personal details. */
+  clearAutofillInformation(): Promise<AutofillInformation>;
 }
+
+export type AutofillEmail = {
+  label?: string;
+  address: string;
+  isDefault?: boolean;
+};
+
+export type AutofillPhone = {
+  label?: string;
+  /** Dialing code digits only, without "+": "91". */
+  countryCode?: string;
+  /** National number, digits only. */
+  number: string;
+  isDefault?: boolean;
+};
+
+export type AutofillAddress = {
+  street?: string;
+  street2?: string;
+  city?: string;
+  region?: string;
+  postalCode?: string;
+  country?: string;
+  /** Optional one-line version; composed from the parts when empty. */
+  full?: string;
+};
+
+export type AutofillInformation = {
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  /** ISO date "yyyy-MM-dd". */
+  birthDate?: string;
+  emails?: AutofillEmail[];
+  phones?: AutofillPhone[];
+  address?: AutofillAddress;
+};
 
 export type FillMode = "smart" | "auto" | "dumb";

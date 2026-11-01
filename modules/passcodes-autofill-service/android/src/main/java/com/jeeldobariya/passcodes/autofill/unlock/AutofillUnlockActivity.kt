@@ -19,6 +19,10 @@ import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.jeeldobariya.passcodes.autofill.identity.FillValue
+import com.jeeldobariya.passcodes.autofill.identity.IdentityFiller
+import com.jeeldobariya.passcodes.autofill.information.AutofillInformationStore
+import com.jeeldobariya.passcodes.autofill.security.DeviceSecurity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,6 +48,14 @@ class AutofillUnlockActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val destination = intent.getStringExtra(EXTRA_DESTINATION).orEmpty()
+
+        // Personal details (email, phone, address…) take their own path.
+        if (intent.hasExtra(EXTRA_IS_IDENTITY)) {
+            startIdentityUnlock(destination)
+            return
+        }
+
         val rowId = intent.getLongExtra(EXTRA_ROW_ID, NO_ROW_ID)
         val usernameId = intent.autofillIdExtra(EXTRA_USERNAME_AUTOFILL_ID)
         val passwordId = intent.autofillIdExtra(EXTRA_PASSWORD_AUTOFILL_ID)
@@ -64,13 +76,31 @@ class AutofillUnlockActivity : AppCompatActivity() {
             return
         }
 
-        showBiometricPrompt(rowId, usernameId, passwordId)
+        showBiometricPrompt(destination) { completeWithCredential(rowId, usernameId, passwordId) }
     }
 
-    private fun showBiometricPrompt(rowId: Long, usernameId: AutofillId?, passwordId: AutofillId?) {
+    /**
+     * Personal details are stricter than saved logins: with no secure
+     * lock screen there is nothing to authenticate against, so nothing
+     * is filled (a login would proceed; these never do).
+     */
+    private fun startIdentityUnlock(destination: String) {
+        val payload = IdentityUnlockExtras.read(intent)
+        if (payload == null ||
+            !DeviceSecurity.isDeviceSecure(this) ||
+            BiometricManager.from(this).canAuthenticate(ALLOWED_AUTHENTICATORS) != BiometricManager.BIOMETRIC_SUCCESS
+        ) {
+            finishCancelled()
+            return
+        }
+
+        showBiometricPrompt(destination) { completeWithIdentity(payload) }
+    }
+
+    private fun showBiometricPrompt(destination: String, onSuccess: () -> Unit) {
         val callback = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                completeWithCredential(rowId, usernameId, passwordId)
+                onSuccess()
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
@@ -86,13 +116,49 @@ class AutofillUnlockActivity : AppCompatActivity() {
 
         val prompt = BiometricPrompt(this, ContextCompat.getMainExecutor(this), callback)
 
+        // Naming the destination lets the user spot a form they didn't expect.
+        val subtitle = if (destination.isNotBlank()) {
+            getString(R.string.autofill_unlock_subtitle_destination, destination)
+        } else {
+            getString(R.string.autofill_unlock_subtitle)
+        }
+
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getString(R.string.autofill_unlock_title))
-            .setSubtitle(getString(R.string.autofill_unlock_subtitle))
+            .setSubtitle(subtitle)
             .setAllowedAuthenticators(ALLOWED_AUTHENTICATORS)
             .build()
 
         prompt.authenticate(promptInfo)
+    }
+
+    private fun completeWithIdentity(payload: IdentityUnlockExtras.Payload) {
+        lifecycleScope.launch {
+            val info = withContext(Dispatchers.IO) { AutofillInformationStore.get(applicationContext) }
+
+            val datasetBuilder = Dataset.Builder()
+            var filled = 0
+            for (field in payload.fields) {
+                val value = IdentityFiller.resolve(info, payload.selection, field.spec) ?: continue
+                datasetBuilder.setValue(field.id, value.toAutofillValue())
+                filled++
+            }
+
+            if (filled == 0) {
+                finishCancelled()
+                return@launch
+            }
+
+            val resultIntent = Intent().putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, datasetBuilder.build())
+            setResult(RESULT_OK, resultIntent)
+            finish()
+        }
+    }
+
+    private fun FillValue.toAutofillValue(): AutofillValue = when (this) {
+        is FillValue.Text -> AutofillValue.forText(value)
+        is FillValue.ListIndex -> AutofillValue.forList(index)
+        is FillValue.DateMillis -> AutofillValue.forDate(millis)
     }
 
     private fun completeWithCredential(rowId: Long, usernameId: AutofillId?, passwordId: AutofillId?) {
@@ -132,6 +198,12 @@ class AutofillUnlockActivity : AppCompatActivity() {
         const val EXTRA_ROW_ID = "com.jeeldobariya.passcodes.autofill.EXTRA_ROW_ID"
         const val EXTRA_USERNAME_AUTOFILL_ID = "com.jeeldobariya.passcodes.autofill.EXTRA_USERNAME_AUTOFILL_ID"
         const val EXTRA_PASSWORD_AUTOFILL_ID = "com.jeeldobariya.passcodes.autofill.EXTRA_PASSWORD_AUTOFILL_ID"
+
+        /** Marks a personal-details unlock (see [IdentityUnlockExtras] for the rest). */
+        const val EXTRA_IS_IDENTITY = "com.jeeldobariya.passcodes.autofill.EXTRA_IS_IDENTITY"
+
+        /** Site or app name shown in the prompt. Display text only. */
+        const val EXTRA_DESTINATION = "com.jeeldobariya.passcodes.autofill.EXTRA_DESTINATION"
 
         private const val NO_ROW_ID = -1L
 

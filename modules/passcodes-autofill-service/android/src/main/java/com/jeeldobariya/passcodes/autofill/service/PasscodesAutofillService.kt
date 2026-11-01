@@ -1,9 +1,19 @@
 package com.jeeldobariya.passcodes.autofill.service
 
+import com.jeeldobariya.passcodes.autofill.identity.FillValue
+import com.jeeldobariya.passcodes.autofill.identity.IdentityDatasetPlanner
+import com.jeeldobariya.passcodes.autofill.identity.IdentityFiller
+import com.jeeldobariya.passcodes.autofill.identity.IdentityPartition
+import com.jeeldobariya.passcodes.autofill.identity.PlannedDataset
+import com.jeeldobariya.passcodes.autofill.identity.PlannedField
+import com.jeeldobariya.passcodes.autofill.information.AutofillInformationStore
 import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser
 import com.jeeldobariya.passcodes.autofill.parser.AutofillValues
 import com.jeeldobariya.passcodes.autofill.presentation.AutofillPresentationFactory
 import com.jeeldobariya.passcodes.autofill.presentation.AutofillSaveUiFactory
+import com.jeeldobariya.passcodes.autofill.presentation.DatasetDisplay
+import com.jeeldobariya.passcodes.autofill.security.DeviceSecurity
+import com.jeeldobariya.passcodes.autofill.unlock.IdentityUnlockExtras
 import com.jeeldobariya.passcodes.autofill.settings.AutofillPreferences
 import com.jeeldobariya.passcodes.autofill.settings.FillMode
 import com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity
@@ -12,6 +22,7 @@ import com.jeeldobariya.passcodes.database.model.PasswordEntry
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.CancellationSignal
 import android.service.autofill.AutofillService
@@ -40,8 +51,10 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicInteger
 
 import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser.AutofillFieldType
+import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser.IdentityField
 import com.jeeldobariya.passcodes.autofill.parser.AutofillRequestParser.ParsedAutofillRequest
 
 /**
@@ -86,9 +99,11 @@ class PasscodesAutofillService : AutofillService() {
 
         val parsed = AutofillRequestParser().parse(fillContext.structure)
         val fields = LoginFieldIds.from(parsed)
+        val manualRequest = request.flags and FillRequest.FLAG_MANUAL_REQUEST != 0
+        val identityFields = identityFieldsToOffer(parsed, manualRequest)
 
-        // Not a login/account form we understand — decline politely.
-        if (fields.isEmpty) {
+        // Neither a login form nor personal details we recognise — decline politely.
+        if (fields.isEmpty && identityFields.isEmpty()) {
             callback.onSuccess(null)
             return
         }
@@ -98,7 +113,7 @@ class PasscodesAutofillService : AutofillService() {
             // process down (and the RN app shares it), so anything
             // unexpected degrades to "no suggestions".
             try {
-                handleFillRequest(request, fields, parsed, callback)
+                handleFillRequest(request, fields, identityFields, parsed, callback)
             } catch (e: CancellationException) {
                 throw e // cancelled by the system: it no longer wants a reply
             } catch (t: Throwable) {
@@ -111,44 +126,93 @@ class PasscodesAutofillService : AutofillService() {
         cancellationSignal.setOnCancelListener { job.cancel() }
     }
 
+    /**
+     * Which personal-detail fields may be offered on this screen.
+     *
+     *  - Sign-in screens get saved logins only (a manual request can override).
+     *  - Address and birth date are never offered on a page that mixes
+     *    origins (a third-party iframe) or isn't HTTPS.
+     */
+    private fun identityFieldsToOffer(parsed: ParsedAutofillRequest, manualRequest: Boolean): List<IdentityField> {
+        if (parsed.isLoginForm && !manualRequest) return emptyList()
+
+        val resolved = parsed.resolveIdentityFields(manualRequest)
+        val sensitiveAllowed = parsed.distinctWebDomains.size <= 1 && !parsed.webScheme.equals("http", ignoreCase = true)
+        return if (sensitiveAllowed) resolved else resolved.filter { it.spec.kind.partition == IdentityPartition.CONTACT }
+    }
+
     private suspend fun handleFillRequest(
         request: FillRequest,
         fields: LoginFieldIds,
+        identityFields: List<IdentityField>,
         parsed: ParsedAutofillRequest,
         callback: FillCallback
     ) {
         val inlineRequest = resolveInlineSuggestionsRequest(request)
         val biometricGateActive = resolveBiometricGateActive()
-        val fillMode = AutofillPreferences.getFillMode(applicationContext)
+        val destination = resolveSiteLabel(parsed)
 
-        val matches = try {
-            selectCredentials(fillMode, parsed).take(MAX_DATASETS)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to load credentials", e)
+        val matches = if (fields.isEmpty) {
             emptyList()
+        } else {
+            val fillMode = AutofillPreferences.getFillMode(applicationContext)
+            try {
+                selectCredentials(fillMode, parsed).take(MAX_DATASETS)
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to load credentials", e)
+                emptyList()
+            }
+        }
+
+        val information = if (identityFields.isEmpty() || !DeviceSecurity.isDeviceSecure(applicationContext)) {
+            null // no personal details without a secure lock screen
+        } else {
+            AutofillInformationStore.get(applicationContext)
         }
 
         currentCoroutineContext().ensureActive()
 
         val responseBuilder = FillResponse.Builder()
+        var slot = 0
+        var offered = 0
 
-        matches.forEachIndexed { index, entry ->
-            val inlineSpec = inlineRequest?.let { pickInlineSpec(it, index) }
+        matches.forEach { entry ->
+            val inlineSpec = inlineRequest?.let { pickInlineSpec(it, slot++) }
+            val display = presentations.displayForCredential(entry, biometricGateActive, nextRequestCode())
             val dataset = if (biometricGateActive) {
-                buildLockedDataset(fields, entry, inlineSpec)
+                buildLockedDataset(fields, entry, display, destination, inlineSpec)
             } else {
-                buildDataset(fields, entry, inlineSpec)
+                buildDataset(fields, entry, display, inlineSpec)
             }
             responseBuilder.addDataset(dataset)
+            offered++
+        }
+
+        if (information != null && !information.isEmpty) {
+            val planned = IdentityDatasetPlanner.plan(
+                info = information,
+                fields = identityFields.map { PlannedField(it.autofillId, it.spec) },
+                maxDatasets = MAX_IDENTITY_DATASETS
+            )
+            for (plan in planned) {
+                val inlineSpec = inlineRequest?.let { pickInlineSpec(it, slot++) }
+                val dataset = if (biometricGateActive) {
+                    buildLockedIdentityDataset(plan, destination, inlineSpec)
+                } else {
+                    buildIdentityDataset(plan, information, inlineSpec)
+                }
+                responseBuilder.addDataset(dataset)
+                offered++
+            }
         }
 
         // Even with nothing to offer, still let the user save whatever
         // they type into this form.
-        val hasSaveInfo = attachSaveInfo(responseBuilder, fields, resolveSiteLabel(parsed))
+        val hasSaveInfo = attachSaveInfo(responseBuilder, fields, destination)
 
         // FillResponse.Builder#build() throws if it holds neither a
         // dataset nor SaveInfo — answer "nothing here" instead.
-        if (matches.isEmpty() && !hasSaveInfo) {
+        if (offered == 0 && !hasSaveInfo) {
             callback.onSuccess(null)
             return
         }
@@ -211,15 +275,16 @@ class PasscodesAutofillService : AutofillService() {
     private fun buildDataset(
         fields: LoginFieldIds,
         entry: PasswordEntry,
+        display: DatasetDisplay,
         inlineSpec: InlinePresentationSpec?
     ): Dataset {
         val datasetBuilder = Dataset.Builder()
 
         fields.usernameId?.let { id ->
-            presentations.applyValue(datasetBuilder, id, AutofillValue.forText(entry.username), entry, inlineSpec)
+            presentations.applyValue(datasetBuilder, id, AutofillValue.forText(entry.username), display, inlineSpec)
         }
         fields.passwordId?.let { id ->
-            presentations.applyValue(datasetBuilder, id, AutofillValue.forText(entry.password), entry, inlineSpec)
+            presentations.applyValue(datasetBuilder, id, AutofillValue.forText(entry.password), display, inlineSpec)
         }
 
         return datasetBuilder.build()
@@ -239,33 +304,96 @@ class PasscodesAutofillService : AutofillService() {
     private fun buildLockedDataset(
         fields: LoginFieldIds,
         entry: PasswordEntry,
+        display: DatasetDisplay,
+        destination: String,
         inlineSpec: InlinePresentationSpec?
     ): Dataset {
         val datasetBuilder = Dataset.Builder()
 
-        fields.usernameId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, entry, inlineSpec) }
-        fields.passwordId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, entry, inlineSpec) }
+        fields.usernameId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, display, inlineSpec) }
+        fields.passwordId?.let { presentations.applyLockedPlaceholder(datasetBuilder, it, display, inlineSpec) }
 
-        datasetBuilder.setAuthentication(buildUnlockPendingIntent(entry, fields).intentSender)
-        return datasetBuilder.build()
-    }
-
-    private fun buildUnlockPendingIntent(entry: PasswordEntry, fields: LoginFieldIds): PendingIntent {
-        val intent = Intent(applicationContext, AutofillUnlockActivity::class.java).apply {
+        val pendingIntent = createUnlockPendingIntent {
             putExtra(AutofillUnlockActivity.EXTRA_ROW_ID, entry.id)
+            putExtra(AutofillUnlockActivity.EXTRA_DESTINATION, destination)
             fields.usernameId?.let { putExtra(AutofillUnlockActivity.EXTRA_USERNAME_AUTOFILL_ID, it) }
             fields.passwordId?.let { putExtra(AutofillUnlockActivity.EXTRA_PASSWORD_AUTOFILL_ID, it) }
         }
+        datasetBuilder.setAuthentication(pendingIntent.intentSender)
+        return datasetBuilder.build()
+    }
 
-        // Request code unique per row so Android never collapses two
-        // different rows' unlock intents into one stale PendingIntent.
+    /** Personal details, unlocked: the real values go straight into the dataset. */
+    private fun buildIdentityDataset(
+        plan: PlannedDataset<AutofillId>,
+        information: com.jeeldobariya.passcodes.autofill.information.AutofillInformation,
+        inlineSpec: InlinePresentationSpec?
+    ): Dataset {
+        val datasetBuilder = Dataset.Builder()
+        val display = presentations.displayForIdentity(plan.kind, plan.summary, locked = false, requestKey = nextRequestCode())
+
+        for (field in plan.fields) {
+            val value = IdentityFiller.resolve(information, plan.selection, field.spec) ?: continue
+            presentations.applyValue(datasetBuilder, field.id, value.toAutofillValue(), display, inlineSpec)
+        }
+        return datasetBuilder.build()
+    }
+
+    /**
+     * Personal details, locked: placeholders only. The intent carries
+     * which fields to fill and how — never the values (see
+     * [IdentityUnlockExtras]).
+     */
+    private fun buildLockedIdentityDataset(
+        plan: PlannedDataset<AutofillId>,
+        destination: String,
+        inlineSpec: InlinePresentationSpec?
+    ): Dataset {
+        val datasetBuilder = Dataset.Builder()
+        val display = presentations.displayForIdentity(plan.kind, plan.summary, locked = true, requestKey = nextRequestCode())
+
+        for (field in plan.fields) {
+            presentations.applyLockedPlaceholder(datasetBuilder, field.id, display, inlineSpec)
+        }
+
+        val pendingIntent = createUnlockPendingIntent {
+            putExtra(AutofillUnlockActivity.EXTRA_IS_IDENTITY, true)
+            putExtra(AutofillUnlockActivity.EXTRA_DESTINATION, destination)
+            IdentityUnlockExtras.write(this, plan.fields, plan.selection)
+        }
+        datasetBuilder.setAuthentication(pendingIntent.intentSender)
+        return datasetBuilder.build()
+    }
+
+    private fun FillValue.toAutofillValue(): AutofillValue = when (this) {
+        is FillValue.Text -> AutofillValue.forText(value)
+        is FillValue.ListIndex -> AutofillValue.forList(index)
+        is FillValue.DateMillis -> AutofillValue.forDate(millis)
+    }
+
+    /**
+     * Every unlock PendingIntent gets its own request code AND its own
+     * data URI. PendingIntents are matched on the Intent minus its
+     * extras, so two suggestions that differed only in extras (same row,
+     * different fields) would otherwise collapse into one — and
+     * FLAG_UPDATE_CURRENT would then overwrite the first's fields with
+     * the second's, filling the wrong inputs.
+     */
+    private fun createUnlockPendingIntent(configure: Intent.() -> Unit): PendingIntent {
+        val code = nextRequestCode()
+        val intent = Intent(applicationContext, AutofillUnlockActivity::class.java).apply {
+            data = Uri.parse("passcodes-autofill://unlock/$code")
+            configure()
+        }
         return PendingIntent.getActivity(
             applicationContext,
-            entry.id.hashCode(),
+            code,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
+
+    private fun nextRequestCode(): Int = requestCodes.incrementAndGet()
 
     @RequiresApi(Build.VERSION_CODES.R)
     private fun pickInlineSpec(inlineRequest: InlineSuggestionsRequest, index: Int): InlinePresentationSpec? {
@@ -402,5 +530,10 @@ class PasscodesAutofillService : AutofillService() {
         // vault in "dumb" mode must not be sent whole. Rows are already
         // ordered most-recently-updated first.
         private const val MAX_DATASETS = 20
+
+        /** Personal-detail suggestions per screen (on top of saved logins). */
+        private const val MAX_IDENTITY_DATASETS = 6
+
+        private val requestCodes = AtomicInteger()
     }
 }

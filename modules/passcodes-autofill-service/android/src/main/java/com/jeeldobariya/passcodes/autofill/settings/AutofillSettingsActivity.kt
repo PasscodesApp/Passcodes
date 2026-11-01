@@ -1,6 +1,7 @@
 package com.jeeldobariya.passcodes.autofill.settings
 
 import com.jeeldobariya.passcodes.autofill.R
+import com.jeeldobariya.passcodes.autofill.security.DeviceSecurity
 import com.jeeldobariya.passcodes.autofill.unlock.AutofillUnlockActivity
 import android.content.Intent
 import android.net.Uri
@@ -65,6 +66,7 @@ class AutofillSettingsActivity : AppCompatActivity() {
         super.onResume()
         updateAutofillStatus()
         updateAuthenticationHint()
+        updateDetailsCard()
     }
 
     private fun setUpPreferenceControls() {
@@ -171,6 +173,15 @@ class AutofillSettingsActivity : AppCompatActivity() {
     }
 
     /** Warns when the lock switch can't actually do anything on this device. */
+    /** Warns when the device has no screen lock (personal details are then never filled). */
+    private fun updateDetailsCard() {
+        val secure = DeviceSecurity.isDeviceSecure(this)
+        findViewById<TextView>(R.id.autofill_details_title)
+            .setText(if (secure) R.string.autofill_details_ready_title else R.string.autofill_details_no_lock_title)
+        findViewById<TextView>(R.id.autofill_details_body)
+            .setText(if (secure) R.string.autofill_details_ready_body else R.string.autofill_details_no_lock_body)
+    }
+
     private fun updateAuthenticationHint() {
         val canAuthenticate = BiometricManager.from(this)
             .canAuthenticate(AutofillUnlockActivity.ALLOWED_AUTHENTICATORS)

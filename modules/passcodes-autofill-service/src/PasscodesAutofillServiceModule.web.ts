@@ -1,4 +1,5 @@
 import {
+  AutofillInformation,
   FillMode,
   PasscodesAutofillServiceModuleInterface,
 } from "./PasscodesAutofillService.types";
@@ -51,6 +52,27 @@ const PasscodesAutofillServiceWeb: PasscodesAutofillServiceModuleInterface = {
 
     // Not applicable outside Android native builds; return the requested value.
     return mode;
+  },
+
+  isDeviceSecure(): boolean {
+    return false; // Not applicable outside Android native builds.
+  },
+
+  async getAutofillInformation(): Promise<AutofillInformation> {
+    return {}; // Not applicable outside Android native builds.
+  },
+
+  async setAutofillInformation(
+    information: AutofillInformation,
+  ): Promise<AutofillInformation> {
+    console.warn(
+      "Autofill personal details are only stored on Android native builds.",
+    );
+    return information;
+  },
+
+  async clearAutofillInformation(): Promise<AutofillInformation> {
+    return {};
   },
 };
 

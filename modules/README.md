@@ -26,3 +26,7 @@ passcodes-autofill-service/          Android Autofill; depends on the database m
 A autofill & also importer/exporter module should depend on the database module
 and call `PasscodesDatabase` — nothing else needs to know
 about SQLite.
+
+## Autofill personal details
+
+`passcodes-autofill-service` can also fill phone number(s), email(s), names, birth date and address on non-login forms. The details are kept in a native DataStore (not the Drizzle database), only filled when the device has a screen lock, and are local-only: not backed up, imported or exported. See that module's README.
