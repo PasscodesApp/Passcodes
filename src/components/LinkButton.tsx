@@ -14,7 +14,7 @@ export default function LinkButton({
   variant = "secondary",
   ...props
 }: Props) {
-  let theme = useTheme();
+  const theme = useTheme();
 
   return (
     <Button

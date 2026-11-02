@@ -65,8 +65,10 @@ function VersionRow({
           value={value}
           onValueChange={onValueChange}
           disabled={disabled}
-          color={destructive ? theme.colors.error : theme.colors.primary}
-          accessibilityLabel={`${switchLabel}: ${title}`}
+          theme={
+            destructive ? { colors: { primary: theme.colors.error } } : undefined
+          }
+          aria-label={`${switchLabel}: ${title}`}
         />
         <Text
           variant="labelSmall"
@@ -140,7 +142,7 @@ export default function ConflictGroupCard({
               />
             )}
             onPress={() => setRevealed((value) => !value)}
-            accessibilityLabel={revealed ? "Hide passwords" : "Show passwords"}
+            aria-label={revealed ? "Hide passwords" : "Show passwords"}
           />
         </View>
 

@@ -7,7 +7,7 @@ enum SCREENSHOT_PREVENTION_KV {
 }
 
 export function toggleScreenshotPrevention() {
-  let isEnabled = isScreenshotPreventionEnabled();
+  const isEnabled = isScreenshotPreventionEnabled();
 
   AsyncStorage.setItemAsync(
     IS_SCREENSHOT_PREVENTION_ENABLED,
@@ -20,7 +20,7 @@ export function toggleScreenshotPrevention() {
 }
 
 export function isScreenshotPreventionEnabled() {
-  let result = AsyncStorage.getItemSync(IS_SCREENSHOT_PREVENTION_ENABLED);
+  const result = AsyncStorage.getItemSync(IS_SCREENSHOT_PREVENTION_ENABLED);
 
   // this line make sure, this feature is turn on by default.
   return result === SCREENSHOT_PREVENTION_KV.DISABLED ? false : true;

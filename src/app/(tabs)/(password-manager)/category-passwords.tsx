@@ -1,6 +1,7 @@
 import AddPasswordFab from "@/components/AddPasswordFab";
 import GridToggleButton from "@/components/GridToggleButton";
 import PasswordListItem from "@/components/PasswordListItem";
+import Screen from "@/components/Screen";
 import SelectionBar from "@/components/SelectionBar";
 import Text from "@/components/Text";
 import {
@@ -73,7 +74,7 @@ export default function CategoryPasswordsScreen() {
   );
 
   return (
-    <>
+    <Screen>
       <Stack.Screen
         options={{
           title,
@@ -89,7 +90,7 @@ export default function CategoryPasswordsScreen() {
                   uncategorized has none: it can't be renamed or deleted. */}
               {categoryId !== null && (
                 <IconButton
-                  accessibilityLabel="Folder actions"
+                  aria-label="Folder actions"
                   icon={() => (
                     <FontAwesome6
                       name="ellipsis-vertical"
@@ -157,6 +158,6 @@ export default function CategoryPasswordsScreen() {
       <AddPasswordFab categoryId={categoryId} />
 
       {dialogElement}
-    </>
+    </Screen>
   );
 }

@@ -29,7 +29,7 @@ export default function FormatSelector({
           value: option.value,
           label: option.label,
           disabled,
-          accessibilityLabel: option.label,
+          "aria-label": option.label,
         }))}
       />
 

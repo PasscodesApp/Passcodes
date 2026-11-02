@@ -2,6 +2,7 @@ import PasswordDetailCardActions from "@/components/PasswordDetailCardActions";
 import PasswordFormCard, {
   usePasswordForm,
 } from "@/components/PasswordFormCard";
+import Screen from "@/components/Screen";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
 import { formatTimestamp } from "@passcodes/passalgo";
@@ -10,11 +11,10 @@ import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { Href, router, useLocalSearchParams } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Keyboard, ScrollView, TextInput } from "react-native";
 
 import { FAB } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -39,7 +39,7 @@ export default function PasswordDetailsScreen() {
     Keyboard.dismiss();
   }
 
-  async function loadAndRefreshPassword() {
+  const loadAndRefreshPassword = useCallback(async () => {
     const password = await passwordRepository.getById(Number(id));
 
     if (!password) {
@@ -59,7 +59,7 @@ export default function PasswordDetailsScreen() {
         ? formatTimestamp(password.updatedAt)
         : "just now",
     });
-  }
+  }, [id, passwordRepository, setState]);
 
   async function updatePassword() {
     /*
@@ -112,10 +112,10 @@ export default function PasswordDetailsScreen() {
 
   useEffect(() => {
     loadAndRefreshPassword();
-  }, []);
+  }, [loadAndRefreshPassword]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <Screen>
       <ScrollView
         contentContainerStyle={{
           margin: 20,
@@ -153,6 +153,6 @@ export default function PasswordDetailsScreen() {
         )}
         onPress={handleFabPress}
       />
-    </SafeAreaView>
+    </Screen>
   );
 }

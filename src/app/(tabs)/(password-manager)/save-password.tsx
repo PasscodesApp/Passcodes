@@ -1,5 +1,6 @@
 import CategoryField from "@/components/CategoryField";
 import FormTextField from "@/components/FormTextField";
+import Screen from "@/components/Screen";
 import SecureTextField from "@/components/SecureTextField";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
@@ -8,14 +9,13 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Button } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SavePasswordScreen() {
-  let [domain, setDomain] = useState("");
-  let [username, setUsername] = useState("");
-  let [password, setPassword] = useState("");
-  let [url, setUrl] = useState("");
-  let [notes, setNotes] = useState("");
+  const [domain, setDomain] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [url, setUrl] = useState("");
+  const [notes, setNotes] = useState("");
 
   // Preselect the category the user was viewing when they pressed "+".
   // (missing / invalid param = Uncategorized)
@@ -25,7 +25,7 @@ export default function SavePasswordScreen() {
     categoryId?: string;
     lockCategory?: string;
   }>();
-  let [categoryId, setCategoryId] = useState<number | null>(() => {
+  const [categoryId, setCategoryId] = useState<number | null>(() => {
     const parsed = Number(categoryIdParam);
     return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
   });
@@ -59,7 +59,7 @@ export default function SavePasswordScreen() {
   const { showToast } = useToast();
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <Screen>
       <ScrollView
         contentContainerStyle={{
           padding: 20,
@@ -138,6 +138,6 @@ export default function SavePasswordScreen() {
           </Button>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </Screen>
   );
 }

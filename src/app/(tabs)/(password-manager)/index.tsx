@@ -12,6 +12,7 @@ import {
 } from "@/libs/selection_store";
 import { router, Stack, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
+import { View } from "react-native";
 import { useTheme } from "react-native-paper";
 
 export default function LoadPasswordScreen() {
@@ -62,7 +63,7 @@ export default function LoadPasswordScreen() {
   }, []);
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           title: "Password Manager",
@@ -85,7 +86,7 @@ export default function LoadPasswordScreen() {
           hintTextColor={theme.colors.onSurface}
           tintColor={theme.colors.onSurface}
           headerIconColor={theme.colors.onSurface}
-          barTintColor={theme.colors.surfaceDisabled}
+          barTintColor={theme.colors.surfaceDim}
           placeholder="Search passwords..."
           placement="stacked"
           onChangeText={(event) => {
@@ -125,6 +126,6 @@ export default function LoadPasswordScreen() {
       <HomeFab layout={layout} noun={noun} onCreateCategory={openCreate} />
 
       {dialogElement}
-    </>
+    </View>
   );
 }

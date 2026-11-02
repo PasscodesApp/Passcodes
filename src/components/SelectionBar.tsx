@@ -87,17 +87,17 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
       >
         <Surface
           elevation={4}
+          borderTopLeftRadius={20}
+          borderTopRightRadius={20}
           style={{
             flexDirection: "row",
             alignItems: "center",
             paddingHorizontal: 8,
             paddingVertical: 4,
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
           }}
         >
           <IconButton
-            accessibilityLabel="Cancel selection"
+            aria-label="Cancel selection"
             icon={() => (
               <FontAwesome6
                 name="xmark"
@@ -114,7 +114,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
           </Text>
 
           <IconButton
-            accessibilityLabel="Select all"
+            aria-label="Select all"
             icon={() => (
               <FontAwesome6
                 name="check-double"
@@ -127,7 +127,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
           />
 
           <IconButton
-            accessibilityLabel="Move selected"
+            aria-label="Move selected"
             icon={() => (
               <FontAwesome6
                 name="folder-open"
@@ -140,7 +140,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
           />
 
           <IconButton
-            accessibilityLabel="Delete selected"
+            aria-label="Delete selected"
             icon={() => (
               <FontAwesome6
                 name="trash"

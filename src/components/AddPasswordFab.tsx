@@ -38,7 +38,7 @@ function AddPasswordFab({ categoryId }: { categoryId: number | null }) {
         bottom: 35,
         right: 35,
       }}
-      accessibilityLabel="Add password"
+      aria-label="Add password"
       icon={PlusIcon}
       onPress={handlePress}
     />

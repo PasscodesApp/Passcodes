@@ -1,10 +1,10 @@
+import Screen from "@/components/Screen";
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
 import Config from "@/config";
 import dataRecoveryFromTestDB from "@/libs/data_recovery_test_db_mess";
 import { withSQLiteDatabase } from "@/libs/withSQLiteDatabase";
 import { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type MigrationResult = {
   state: "Running" | "Error" | "Success";
@@ -40,9 +40,8 @@ export default function DataRecoveryScreen() {
   }, []);
 
   return (
-    <SafeAreaView
+    <Screen
       style={{
-        flex: 1,
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
@@ -60,6 +59,6 @@ export default function DataRecoveryScreen() {
       >
         {result.message}
       </Text>
-    </SafeAreaView>
+    </Screen>
   );
 }

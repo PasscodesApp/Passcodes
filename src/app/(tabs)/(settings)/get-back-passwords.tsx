@@ -1,12 +1,11 @@
+import Screen from "@/components/Screen";
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GetBackPasswordsScreen() {
   return (
-    <SafeAreaView
+    <Screen
       style={{
-        flex: 1,
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
@@ -22,6 +21,6 @@ export default function GetBackPasswordsScreen() {
       >
         Migration is not need for your device!!
       </Text>
-    </SafeAreaView>
+    </Screen>
   );
 }

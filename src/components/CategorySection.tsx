@@ -83,7 +83,7 @@ function CategorySection({
         {categoryId !== null && (
           <IconButton
             size={18}
-            accessibilityLabel={`Actions for ${name}`}
+            aria-label={`Actions for ${name}`}
             icon={() => (
               <FontAwesome6
                 name="ellipsis-vertical"

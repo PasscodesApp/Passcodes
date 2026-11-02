@@ -52,19 +52,22 @@ export default function CategoryField({
             label="Category"
             value={selectedName}
             editable={false}
-            right={
-              editable ? (
-                <TextInput.Icon
-                  icon={({ size, color }) => (
-                    <FontAwesome6
-                      name="chevron-down"
-                      size={size}
-                      color={color}
-                      iconStyle="solid"
+            endAccessory={
+              editable
+                ? (accessoryProps) => (
+                    <TextInput.Icon
+                      {...accessoryProps}
+                      icon={({ size, color }) => (
+                        <FontAwesome6
+                          name="chevron-down"
+                          size={size}
+                          color={color}
+                          iconStyle="solid"
+                        />
+                      )}
                     />
-                  )}
-                />
-              ) : undefined
+                  )
+                : undefined
             }
           />
         </View>

@@ -77,7 +77,7 @@ function HomeFab({ layout, noun, onCreateCategory }: HomeFabProps) {
           bottom: 35,
           right: 35,
         }}
-        accessibilityLabel={`New ${noun}`}
+        aria-label={`New ${noun}`}
         icon={FolderPlusIcon}
         onPress={onCreateCategory}
       />

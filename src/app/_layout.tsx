@@ -11,6 +11,7 @@ import { PaperProvider } from "react-native-paper";
 
 export default function RootLayout() {
   let systemScheme = useColorScheme();
+  let isDarkScheme = systemScheme === "dark";
 
   useEffect(() => {
     StatusBar.setStyle("auto");
@@ -21,16 +22,17 @@ export default function RootLayout() {
   }, [systemScheme]);
 
   return (
-    <RepositoryProvider dbName={Config.DATABASE_NAME}>
-      <AppContent />
-    </RepositoryProvider>
+    <ThemeProvider value={isDarkScheme ? DarkTheme : DefaultTheme}>
+      <PaperProvider>
+        <RepositoryProvider dbName={Config.DATABASE_NAME}>
+          <AppContent />
+        </RepositoryProvider>
+      </PaperProvider>
+    </ThemeProvider>
   );
 }
 
 function AppContent() {
-  let systemScheme = useColorScheme();
-  let isDarkScheme = systemScheme === "dark";
-
   // All App Lock behaviour (when to lock, re-locking after the app was in
   // the background, the unlock prompt) lives in the biometrics feature.
   const { locked, authenticating, message, unlock } = useAppLock();
@@ -42,12 +44,8 @@ function AppContent() {
   }
 
   return (
-    <ThemeProvider value={isDarkScheme ? DarkTheme : DefaultTheme}>
-      <PaperProvider>
-        <ToastProvider>
-          <Slot />
-        </ToastProvider>
-      </PaperProvider>
-    </ThemeProvider>
+    <ToastProvider>
+      <Slot />
+    </ToastProvider>
   );
 }

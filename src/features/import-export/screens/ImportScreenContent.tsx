@@ -121,7 +121,7 @@ export default function ImportScreenContent() {
         onPress={handleImport}
         loading={busy}
         disabled={busy}
-        accessibilityLabel="Select a file to import"
+        aria-label="Select a file to import"
       >
         {busy ? "Working…" : "Select file"}
       </Button>
