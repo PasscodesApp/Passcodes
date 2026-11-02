@@ -1,7 +1,7 @@
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
 import { Button } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Screen from "@/components/Screen";
 
 interface LockScreenProps {
   onUnlock: () => void;
@@ -17,9 +17,8 @@ interface LockScreenProps {
  */
 export default function LockScreen({ onUnlock, busy, message }: LockScreenProps) {
   return (
-    <SafeAreaView
+    <Screen
       style={{
-        flex: 1,
         alignItems: "center",
         justifyContent: "center",
         gap: 10,
@@ -38,6 +37,6 @@ export default function LockScreen({ onUnlock, busy, message }: LockScreenProps)
       ) : null}
 
       <Button title="Unlock" onPress={onUnlock} disabled={busy} />
-    </SafeAreaView>
+    </Screen>
   );
 }

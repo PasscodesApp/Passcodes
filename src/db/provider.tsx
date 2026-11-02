@@ -1,3 +1,4 @@
+import Screen from "@/components/Screen";
 import Text from "@/components/Text";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
@@ -10,7 +11,6 @@ import {
 } from "react";
 import { View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import migrations from "./drizzle/migrations";
 import * as schema from "./schema";
@@ -103,9 +103,8 @@ export function useDrizzleDatabase(): DrizzleDatabase {
 
 function DrizzleDatabaseLoading() {
   return (
-    <SafeAreaView
+    <Screen
       style={{
-        flex: 1,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#020221",
@@ -115,15 +114,14 @@ function DrizzleDatabaseLoading() {
 
       <Text style={{ color: "lightblue", fontSize: 30 }}>Please Wait.....</Text>
       <Text style={{ color: "lightblue" }}>Opening Local Database...</Text>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 function DrizzleDatabaseError({ error }: { error: unknown }) {
   return (
-    <SafeAreaView
+    <Screen
       style={{
-        flex: 1,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#020221",
@@ -185,6 +183,6 @@ function DrizzleDatabaseError({ error }: { error: unknown }) {
           reopen the app.
         </Text>
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 }

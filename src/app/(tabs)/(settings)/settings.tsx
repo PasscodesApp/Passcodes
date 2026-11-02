@@ -1,5 +1,6 @@
 import LinkButton from "@/components/LinkButton";
 import { LinkIconButton } from "@/components/LinkIconButton";
+import Screen from "@/components/Screen";
 import Text from "@/components/Text";
 import Config from "@/config";
 import { isAppLockEnabled, toggleAppLock } from "@/features/biometrics";
@@ -25,7 +26,6 @@ import {
   Switch,
   useTheme,
 } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
 
@@ -65,7 +65,7 @@ export default function SettingsScreen() {
   const theme = useTheme();
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingVertical: 12 }}>
+    <Screen headerless>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 12,
@@ -372,15 +372,15 @@ export default function SettingsScreen() {
 
       <LinearGradient
         pointerEvents="none"
-        colors={["transparent", theme.colors.background]}
+        colors={["transparent", "#000"]}
         style={{
           position: "absolute",
           left: 0,
           right: 0,
           bottom: 0,
-          height: 150,
+          height: 100,
         }}
       />
-    </SafeAreaView>
+    </Screen>
   );
 }

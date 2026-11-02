@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 import { Keyboard, ScrollView, TextInput } from "react-native";
 
 import { FAB } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -115,7 +114,7 @@ export default function PasswordDetailsScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       <ScrollView
         contentContainerStyle={{
           margin: 20,
@@ -153,6 +152,6 @@ export default function PasswordDetailsScreen() {
         )}
         onPress={handleFabPress}
       />
-    </SafeAreaView>
+    </>
   );
 }

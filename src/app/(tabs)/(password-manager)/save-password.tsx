@@ -8,7 +8,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Button } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Screen from "@/components/Screen";
 
 export default function SavePasswordScreen() {
   let [domain, setDomain] = useState("");
@@ -59,7 +59,7 @@ export default function SavePasswordScreen() {
   const { showToast } = useToast();
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <Screen>
       <ScrollView
         contentContainerStyle={{
           padding: 20,
@@ -138,6 +138,6 @@ export default function SavePasswordScreen() {
           </Button>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </Screen>
   );
 }

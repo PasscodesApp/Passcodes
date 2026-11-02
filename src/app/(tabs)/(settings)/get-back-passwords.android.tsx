@@ -6,7 +6,7 @@ import { withSQLiteDatabase } from "@/libs/withSQLiteDatabase";
 import AsyncStorage from "expo-sqlite/kv-store";
 import { useEffect, useState } from "react";
 import { Button } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Screen from "@/components/Screen";
 
 enum MIGRATION_STATUS {
   IDLE = "idle",
@@ -76,9 +76,8 @@ export default function GetBackPasswordsScreen() {
   }, []);
 
   return (
-    <SafeAreaView
+    <Screen
       style={{
-        flex: 1,
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
@@ -106,6 +105,6 @@ export default function GetBackPasswordsScreen() {
           });
         }}
       />
-    </SafeAreaView>
+    </Screen>
   );
 }
