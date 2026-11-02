@@ -1,5 +1,5 @@
-import ScreenHeading from "@/components/ScreenHeading";
 import Screen from "@/components/Screen";
+import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
 
 export default function GetBackPasswordsScreen() {

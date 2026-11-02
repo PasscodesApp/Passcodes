@@ -7,6 +7,7 @@ import {
   createContext,
   Suspense,
   useContext,
+  useEffect,
   type PropsWithChildren,
 } from "react";
 import { View } from "react-native";
@@ -119,6 +120,10 @@ function DrizzleDatabaseLoading() {
 }
 
 function DrizzleDatabaseError({ error }: { error: unknown }) {
+  useEffect(() => {
+    console.error("Database initialization failed:", error);
+  }, [error]);
+
   return (
     <Screen
       style={{

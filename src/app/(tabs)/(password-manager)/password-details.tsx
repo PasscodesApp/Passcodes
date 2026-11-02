@@ -2,6 +2,7 @@ import PasswordDetailCardActions from "@/components/PasswordDetailCardActions";
 import PasswordFormCard, {
   usePasswordForm,
 } from "@/components/PasswordFormCard";
+import Screen from "@/components/Screen";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
 import { formatTimestamp } from "@passcodes/passalgo";
@@ -114,7 +115,7 @@ export default function PasswordDetailsScreen() {
   }, []);
 
   return (
-    <>
+    <Screen>
       <ScrollView
         contentContainerStyle={{
           margin: 20,
@@ -152,6 +153,6 @@ export default function PasswordDetailsScreen() {
         )}
         onPress={handleFabPress}
       />
-    </>
+    </Screen>
   );
 }

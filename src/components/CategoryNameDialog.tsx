@@ -12,7 +12,7 @@ import {
   Pressable,
   View,
 } from "react-native";
-import { Button, HelperText, useTheme } from "react-native-paper";
+import { Button, useTheme } from "react-native-paper";
 
 type CategoryNameDialogProps = {
   title: string;
@@ -102,26 +102,21 @@ export default function CategoryNameDialog({
           >
             <Text variant="titleLarge">{title}</Text>
 
-            <View>
-              <FormTextField
-                label="Name"
-                value={name}
-                onChangeText={(text) => {
-                  setName(text);
-                  setError("");
-                }}
-                placeholder="Work, School, Games..."
-                placeholderTextColor={"#9e9e9e"}
-                maxLength={CATEGORY_NAME_MAX_LENGTH}
-                autoFocus
-                error={!!error}
-                onSubmitEditing={handleSubmit}
-              />
-
-              <HelperText type="error" visible={!!error}>
-                {error}
-              </HelperText>
-            </View>
+            <FormTextField
+              label="Name"
+              value={name}
+              onChangeText={(text) => {
+                setName(text);
+                setError("");
+              }}
+              placeholder="Work, School, Games..."
+              placeholderTextColor={"#9e9e9e"}
+              maxLength={CATEGORY_NAME_MAX_LENGTH}
+              autoFocus
+              error={!!error}
+              supportingText={error || undefined}
+              onSubmitEditing={handleSubmit}
+            />
 
             <View style={{ flexDirection: "row-reverse", gap: 4 }}>
               <Button

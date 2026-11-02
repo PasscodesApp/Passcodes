@@ -210,7 +210,7 @@ export default function ImportReviewScreenContent() {
           onPress={handleConfirm}
           loading={busy}
           disabled={busy}
-          accessibilityLabel="Import the selected passwords"
+          aria-label="Import the selected passwords"
         >
           {busy
             ? "Importing…"

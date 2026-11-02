@@ -132,7 +132,7 @@ export default function ExportScreenContent() {
         onPress={handleExport}
         loading={busy}
         disabled={busy || count === 0 || count === undefined}
-        accessibilityLabel="Export passwords"
+        aria-label="Export passwords"
       >
         {busy ? "Exporting…" : "Export"}
       </Button>

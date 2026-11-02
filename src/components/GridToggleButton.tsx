@@ -17,7 +17,7 @@ export default function GridToggleButton({
 }) {
   return (
     <IconButton
-      accessibilityLabel={isGrid ? "Show as list" : "Show as grid"}
+      aria-label={isGrid ? "Show as list" : "Show as grid"}
       icon={() => (
         <FontAwesome6
           name={isGrid ? "list" : "grip"}

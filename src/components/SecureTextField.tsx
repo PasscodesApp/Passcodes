@@ -1,10 +1,13 @@
 import { useSecretScreenController } from "@/features/screenshot-prevention";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6";
 import { useState } from "react";
-import { TextInput, TextInputProps } from "react-native-paper";
+import { TextInput, type TextInputProps } from "react-native-paper";
 import FormTextField from "./FormTextField";
 
-type StrippedTextFieldProps = Omit<TextInputProps, "secureTextEntry" | "right">;
+type StrippedTextFieldProps = Omit<
+  TextInputProps,
+  "secureTextEntry" | "endAccessory"
+>;
 type SecureTextFieldProps = StrippedTextFieldProps & {
   /* generally, you can set to name of screen route, we need it for screen shot prevention */
   screenCaptureKey: string;
@@ -14,18 +17,18 @@ export default function SecureTextField({
   screenCaptureKey,
   ...props
 }: SecureTextFieldProps) {
-  let { preventScreenShots, allowScreenShots } =
+  const { preventScreenShots, allowScreenShots } =
     useSecretScreenController(screenCaptureKey);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
     <FormTextField
-      mode="outlined"
       autoCapitalize="none"
       autoCorrect={false}
       secureTextEntry={!isPasswordVisible}
-      right={
+      endAccessory={(accessoryProps) => (
         <TextInput.Icon
+          {...accessoryProps}
           onPress={() => {
             setIsPasswordVisible((prev) => {
               // Note: this checks are hard to understand,
@@ -42,14 +45,14 @@ export default function SecureTextField({
           icon={({ size, color }) => (
             <FontAwesome6
               name={isPasswordVisible ? "eye-slash" : "eye"}
-              size={size}
+              size={size - 6}
               color={color}
               iconStyle="solid"
             />
           )}
           forceTextInputFocus={false}
         />
-      }
+      )}
       {...props}
     />
   );

@@ -120,8 +120,8 @@ function SpeedDialFab({
             >
               <Surface
                 elevation={2}
+                borderRadius={8}
                 style={{
-                  borderRadius: 8,
                   paddingHorizontal: 12,
                   paddingVertical: 6,
                 }}
@@ -131,7 +131,7 @@ function SpeedDialFab({
 
               <FAB
                 size="small"
-                accessibilityLabel={action.label}
+                aria-label={action.label}
                 icon={({ size, color }) => action.renderIcon(size, color)}
                 onPress={() => {
                   close();
@@ -142,8 +142,8 @@ function SpeedDialFab({
           ))}
 
         <FAB
-          accessibilityLabel={accessibilityLabel}
-          accessibilityState={{ expanded: open }}
+          aria-label={accessibilityLabel}
+          aria-expanded={open}
           icon={mainIcon}
           onPress={() => setOpen((value) => !value)}
         />

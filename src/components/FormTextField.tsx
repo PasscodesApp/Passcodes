@@ -1,12 +1,15 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { TextInput as RNTextInput } from "react-native";
-import { TextInput, TextInputProps } from "react-native-paper";
+import {
+  TextInput,
+  type TextInputHandles,
+  type TextInputProps,
+} from "react-native-paper";
 
 type Props = TextInputProps;
 
-const FormTextField = forwardRef<RNTextInput, Props>(
+const FormTextField = forwardRef<TextInputHandles, Props>(
   ({ editable = true, ...props }, ref) => {
-    const inputRef = useRef<RNTextInput>(null);
+    const inputRef = useRef<TextInputHandles | null>(null);
 
     const [internalEditable, setInternalEditable] = useState(editable);
 
@@ -24,7 +27,7 @@ const FormTextField = forwardRef<RNTextInput, Props>(
 
     return (
       <TextInput
-        ref={(instance: RNTextInput) => {
+        ref={(instance: TextInputHandles | null) => {
           inputRef.current = instance;
 
           if (typeof ref === "function") {
@@ -33,7 +36,7 @@ const FormTextField = forwardRef<RNTextInput, Props>(
             ref.current = instance;
           }
         }}
-        mode="outlined"
+        variant="outlined"
         style={{ fontSize: 12 }}
         editable={internalEditable}
         {...props}

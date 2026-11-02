@@ -1,10 +1,10 @@
+import Screen from "@/components/Screen";
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
 import Config from "@/config";
 import dataRecoveryFromTestDB from "@/libs/data_recovery_test_db_mess";
 import { withSQLiteDatabase } from "@/libs/withSQLiteDatabase";
 import { useEffect, useState } from "react";
-import Screen from "@/components/Screen";
 
 type MigrationResult = {
   state: "Running" | "Error" | "Success";

@@ -41,7 +41,7 @@ export default function SettingsScreen() {
   const toggleScreenshotPreventSwitch = () =>
     setIsScreenshotPreventOn(toggleScreenshotPrevention());
 
-  let [isAutofillEnabled, setIsAutofillEnabled] = useState(
+  const [isAutofillEnabled, setIsAutofillEnabled] = useState(
     PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
   );
 
@@ -372,13 +372,13 @@ export default function SettingsScreen() {
 
       <LinearGradient
         pointerEvents="none"
-        colors={["transparent", "#000"]}
+        colors={["transparent", theme.colors.background]}
         style={{
           position: "absolute",
           left: 0,
           right: 0,
           bottom: 0,
-          height: 100,
+          height: 150,
         }}
       />
     </Screen>

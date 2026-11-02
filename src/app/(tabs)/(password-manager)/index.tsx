@@ -86,7 +86,7 @@ export default function LoadPasswordScreen() {
           hintTextColor={theme.colors.onSurface}
           tintColor={theme.colors.onSurface}
           headerIconColor={theme.colors.onSurface}
-          barTintColor={theme.colors.surfaceDisabled}
+          barTintColor={theme.colors.surfaceDim}
           placeholder="Search passwords..."
           placement="stacked"
           onChangeText={(event) => {

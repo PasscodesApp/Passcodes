@@ -90,7 +90,7 @@ export default function CategoryPasswordsScreen() {
                   uncategorized has none: it can't be renamed or deleted. */}
               {categoryId !== null && (
                 <IconButton
-                  accessibilityLabel="Folder actions"
+                  aria-label="Folder actions"
                   icon={() => (
                     <FontAwesome6
                       name="ellipsis-vertical"

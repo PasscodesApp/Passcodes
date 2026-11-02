@@ -1,7 +1,7 @@
+import Screen from "@/components/Screen";
 import ScreenHeading from "@/components/ScreenHeading";
 import Text from "@/components/Text";
 import { Button } from "react-native";
-import Screen from "@/components/Screen";
 
 interface LockScreenProps {
   onUnlock: () => void;
