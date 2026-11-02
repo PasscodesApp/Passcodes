@@ -7,7 +7,7 @@ export default function useSecretScreenController(key: string) {
     return () => {
       allowScreenShots(key);
     };
-  }, []);
+  }, [key]);
 
   return {
     preventScreenShots: () => preventScreenShots(key),

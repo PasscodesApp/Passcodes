@@ -8,6 +8,7 @@ import {
   Suspense,
   useContext,
   useEffect,
+  useMemo,
   type PropsWithChildren,
 } from "react";
 import { View } from "react-native";
@@ -62,11 +63,16 @@ export default function DrizzleDatabaseProvider({
   children,
   databaseName,
 }: DrizzleDatabaseProviderProps) {
-  const expoDb = openDatabaseSync(databaseName, {
-    enableChangeListener: true,
-  });
+  // Opened once per database name. Re-opening on every render would give
+  // every consumer a new `db` (and new repositories) each time this
+  // provider re-renders, e.g. when the colour scheme changes.
+  const db = useMemo(() => {
+    const expoDb = openDatabaseSync(databaseName, {
+      enableChangeListener: true,
+    });
 
-  const db = drizzle(expoDb, { schema });
+    return drizzle(expoDb, { schema });
+  }, [databaseName]);
 
   const { success, error } = useMigrations(db, migrations);
 

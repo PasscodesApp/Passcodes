@@ -1,5 +1,5 @@
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Animated, View } from "react-native";
 import { Text } from "react-native-paper";
 
@@ -20,7 +20,9 @@ export default function ToastMessage({
   duration = 2200,
   onHide,
 }: ToastMessageProps) {
-  const opacity = useRef(new Animated.Value(0)).current;
+  // State (not a ref) holds the animated value: created once, safe to read
+  // during render.
+  const [opacity] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     if (!visible) {

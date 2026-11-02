@@ -10,7 +10,7 @@ import {
 import Slider from "@react-native-community/slider";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import * as Clipboard from "expo-clipboard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Card, Divider, useTheme } from "react-native-paper";
 import GeneratorOption from "./GeneratorOption.component";
@@ -62,38 +62,37 @@ export default function PasswordGeneratorScreenContent() {
   const strength = getPasswordStrength(password);
 
   /*
-   * Regenerate the password whenever any generator
-   * option changes.
+   * Change the options and regenerate the password in the same step,
+   * so the password always matches the options (no effect needed).
    */
-  useEffect(() => {
-    setPassword(generatePassword(options, quickCryptoRandom));
-  }, [options]);
+  function applyOptions(next: PasswordGeneratorOptions) {
+    setOptions(next);
+    setPassword(generatePassword(next, quickCryptoRandom));
+  }
 
   function updateOption(key: CharacterType) {
-    setOptions((current) => {
-      const enabledCharacterTypes = CHARACTER_OPTIONS.filter(
-        (option) => current[option.key],
-      );
+    const enabledCharacterTypes = CHARACTER_OPTIONS.filter(
+      (option) => options[option.key],
+    );
 
-      /*
-       * Keep at least one character type enabled.
-       */
-      if (current[key] && enabledCharacterTypes.length === 1) {
-        return current;
-      }
+    /*
+     * Keep at least one character type enabled.
+     */
+    if (options[key] && enabledCharacterTypes.length === 1) {
+      return;
+    }
 
-      return {
-        ...current,
-        [key]: !current[key],
-      };
+    applyOptions({
+      ...options,
+      [key]: !options[key],
     });
   }
 
   function updateLength(length: number) {
-    setOptions((current) => ({
-      ...current,
+    applyOptions({
+      ...options,
       length: Math.round(length),
-    }));
+    });
   }
 
   function generate() {
