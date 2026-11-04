@@ -1,9 +1,7 @@
 {
     "recommendations": [
-        "catppuccin.catppuccin-vsc",
         "esbenp.prettier-vscode",
         "expo.vscode-expo-tools",
-        "leonardssh.vscord",
         "zensical.zensical-studio"
     ]
 }
