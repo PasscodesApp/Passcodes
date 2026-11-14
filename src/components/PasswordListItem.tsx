@@ -69,7 +69,6 @@ function PasswordListItem({
       <PasswordItemCard
         domain={item.domain}
         username={item.username}
-        updatedAt={item.updatedAt}
         url={item.url}
         compact={compact}
         style={{

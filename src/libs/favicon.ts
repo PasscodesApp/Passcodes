@@ -1,12 +1,67 @@
 /**
- * Website icons ("favicons") for saved passwords.
+ * Website icons ("favicons") for saved passwords: which sites get one, and
+ * where the image comes from.
  *
- * PRIVACY: showing an icon means asking an icon service for it, which tells
- * that service which websites are saved. That is why this is a setting
- * (Settings > Website icons) and why nothing is requested for entries without
- * a web address. To use another icon source, or your own server later,
- * change `faviconUrl` only.
+ * PRIVACY: getting an icon tells the icon service which websites are saved.
+ * That is why the source is a setting (Settings > Website icons, including
+ * "Off") and why nothing is requested for entries without a web address.
  */
+
+export type FaviconProvider = "google" | "duckduckgo" | "faviconim" | "off";
+
+export const DEFAULT_FAVICON_PROVIDER: FaviconProvider = "google";
+
+export const FAVICON_PROVIDERS: ReadonlyArray<{
+  id: FaviconProvider;
+  label: string;
+  description: string;
+}> = [
+  {
+    id: "google",
+    label: "Google",
+    description: "Best coverage. Google sees the site names.",
+  },
+  {
+    id: "duckduckgo",
+    label: "DuckDuckGo",
+    description: "Privacy-focused. DuckDuckGo sees the site names.",
+  },
+  {
+    id: "faviconim",
+    label: "Favicon.im",
+    description: "Independent service. It sees the site names.",
+  },
+  {
+    id: "off",
+    label: "Off",
+    description: "Nothing is downloaded. Placeholder icons only.",
+  },
+];
+
+export function getFaviconProviderLabel(provider: FaviconProvider): string {
+  return FAVICON_PROVIDERS.find((item) => item.id === provider)?.label ?? "";
+}
+
+/**
+ * Image address for a host from the chosen provider, or `null` for "off".
+ * To add a provider or point at your own server later, change only this
+ * function and the list above.
+ */
+export function faviconUrl(
+  host: string,
+  provider: FaviconProvider,
+): string | null {
+  switch (provider) {
+    case "google":
+      return `https://www.google.com/s2/favicons?domain=${host}&sz=128`;
+    case "duckduckgo":
+      return `https://icons.duckduckgo.com/ip3/${host}.ico`;
+    case "faviconim":
+      return `https://favicon.im/${host}?larger=true`;
+    case "off":
+      return null;
+  }
+}
 
 const WEB_ADDRESS = /^(?:(https?):\/\/)?(?:[^@/?#]*@)?([^/:?#\s]+)/i;
 
@@ -48,9 +103,4 @@ export function getFaviconHost(url: string | null | undefined): string | null {
     /^169\.254\./.test(host);
 
   return isPrivate ? null : host;
-}
-
-/** Where the icon image for a host comes from (PNG, returns 404 if unknown). */
-export function faviconUrl(host: string): string {
-  return `https://icons.duckduckgo.com/ip3/${host}.ico`;
 }

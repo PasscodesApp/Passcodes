@@ -7,10 +7,9 @@ import {
   isScreenshotPreventionEnabled,
   toggleScreenshotPrevention,
 } from "@/features/screenshot-prevention";
-import {
-  setWebsiteIconsEnabled,
-  useWebsiteIconsEnabled,
-} from "@/libs/favicon_setting";
+import FaviconProviderDialog from "@/components/FaviconProviderDialog";
+import { getFaviconProviderLabel } from "@/libs/favicon";
+import { useFaviconProvider } from "@/libs/favicon_setting";
 import {
   setHomeLayout,
   useHomeLayout,
@@ -65,7 +64,8 @@ export default function SettingsScreen() {
   }, [appState]);
 
   const homeLayout = useHomeLayout();
-  const websiteIconsOn = useWebsiteIconsEnabled();
+  const faviconProvider = useFaviconProvider();
+  const [iconDialogOpen, setIconDialogOpen] = useState(false);
 
   const theme = useTheme();
 
@@ -147,8 +147,7 @@ export default function SettingsScreen() {
             <List.Item
               style={{ paddingRight: 0 }}
               title="Website icons"
-              description="Shows each site's icon. The website names of your passwords are sent to an icon service (DuckDuckGo) to get them."
-              descriptionNumberOfLines={4}
+              description={`Source: ${getFaviconProviderLabel(faviconProvider)}`}
               left={(props) => (
                 <FontAwesome6
                   {...props}
@@ -158,13 +157,15 @@ export default function SettingsScreen() {
                   size={20}
                 />
               )}
-              right={() => (
-                <Switch
-                  style={{ alignSelf: "flex-end" }}
-                  value={websiteIconsOn}
-                  onValueChange={setWebsiteIconsEnabled}
+              right={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="chevron-right"
+                  iconStyle="solid"
+                  size={20}
                 />
               )}
+              onPress={() => setIconDialogOpen(true)}
             />
           </List.Section>
         </Card>
@@ -462,6 +463,11 @@ export default function SettingsScreen() {
           bottom: 0,
           height: 150,
         }}
+      />
+
+      <FaviconProviderDialog
+        visible={iconDialogOpen}
+        onDismiss={() => setIconDialogOpen(false)}
       />
     </SafeAreaView>
   );

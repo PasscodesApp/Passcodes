@@ -1,47 +1,54 @@
-import { faviconUrl } from "@/libs/favicon";
-import { memo, useState } from "react";
+import { useFaviconProvider } from "@/libs/favicon_setting";
+import { useFavicon } from "@/libs/useFavicon";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
+import { memo } from "react";
 import { Image, View } from "react-native";
 import { useTheme } from "react-native-paper";
 
 type FaviconProps = {
-  /** Website host to fetch the icon for (see `getFaviconHost`). */
+  /** Website host the icon belongs to (see `getFaviconHost`). */
   host: string;
   size: number;
 };
 
 /**
- * A website icon. Shows nothing until the image has really loaded and
- * nothing at all if it can't be loaded (offline, unknown site), so an entry
- * never shows a broken-image box. Give it `key={host}` so a changed address
- * starts fresh.
+ * A website icon with a placeholder (a globe) that stays in place while the
+ * icon is loading, when it can't be fetched, and when icons are turned off.
+ * Icons come from the on-device cache (see libs/favicon_cache.ts).
  */
 function Favicon({ host, size }: FaviconProps) {
   const theme = useTheme();
-  const [loaded, setLoaded] = useState(false);
-  const [failed, setFailed] = useState(false);
-
-  if (failed) {
-    return <View style={{ width: size, height: size }} />;
-  }
+  const provider = useFaviconProvider();
+  const { uri, onImageError } = useFavicon(host, provider);
 
   return (
     <View
       style={{
         width: size,
         height: size,
-        borderRadius: size * 0.22,
+        borderRadius: size * 0.25,
         overflow: "hidden",
-        backgroundColor: loaded ? theme.colors.surfaceVariant : "transparent",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: theme.colors.surfaceVariant,
       }}
     >
-      <Image
-        source={{ uri: faviconUrl(host) }}
-        style={{ width: size, height: size, opacity: loaded ? 1 : 0 }}
-        resizeMode="contain"
-        accessible={false}
-        onLoad={() => setLoaded(true)}
-        onError={() => setFailed(true)}
-      />
+      {uri ? (
+        <Image
+          source={{ uri }}
+          style={{ width: size, height: size }}
+          resizeMode="contain"
+          accessible={false}
+          onError={onImageError}
+        />
+      ) : (
+        <FontAwesome6
+          name="globe"
+          iconStyle="solid"
+          size={size * 0.5}
+          color={theme.colors.onSurfaceVariant}
+        />
+      )}
     </View>
   );
 }

@@ -1,23 +1,42 @@
 import AsyncStorage from "expo-sqlite/kv-store";
 import { useSyncExternalStore } from "react";
 
-const KEY = "feat_website_icons_isEnabled";
+import { DEFAULT_FAVICON_PROVIDER, type FaviconProvider } from "./favicon";
 
-let current: boolean | undefined;
+const KEY = "feat_favicon_provider";
+
+/** Older versions had an on/off switch only; "false" there means "off". */
+const LEGACY_KEY = "feat_website_icons_isEnabled";
+
+const VALID: readonly FaviconProvider[] = [
+  "google",
+  "duckduckgo",
+  "faviconim",
+  "off",
+];
+
+let current: FaviconProvider | undefined;
 const listeners = new Set<() => void>();
 
-/** On by default; only an explicit "false" turns it off. */
-export function areWebsiteIconsEnabled(): boolean {
+export function getFaviconProvider(): FaviconProvider {
   if (current === undefined) {
-    current = AsyncStorage.getItemSync(KEY) !== "false";
+    const stored = AsyncStorage.getItemSync(KEY);
+
+    if (stored && (VALID as readonly string[]).includes(stored)) {
+      current = stored as FaviconProvider;
+    } else if (AsyncStorage.getItemSync(LEGACY_KEY) === "false") {
+      current = "off";
+    } else {
+      current = DEFAULT_FAVICON_PROVIDER;
+    }
   }
 
   return current;
 }
 
-export function setWebsiteIconsEnabled(enabled: boolean) {
-  current = enabled;
-  AsyncStorage.setItemAsync(KEY, enabled ? "true" : "false");
+export function setFaviconProvider(provider: FaviconProvider) {
+  current = provider;
+  AsyncStorage.setItemAsync(KEY, provider);
   listeners.forEach((listener) => listener());
 }
 
@@ -29,7 +48,7 @@ function subscribe(listener: () => void) {
   };
 }
 
-/** Reactive: components re-render when the setting changes. */
-export function useWebsiteIconsEnabled(): boolean {
-  return useSyncExternalStore(subscribe, areWebsiteIconsEnabled);
+/** Reactive: components re-render when the provider changes. */
+export function useFaviconProvider(): FaviconProvider {
+  return useSyncExternalStore(subscribe, getFaviconProvider);
 }
