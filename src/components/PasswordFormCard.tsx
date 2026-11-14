@@ -12,6 +12,8 @@ type PasswordFormValue = {
   /** `null` = Uncategorized. */
   categoryId: number | null;
   url: string;
+  /** Typed text: IDs separated by commas, spaces or new lines. */
+  applicationIds: string;
   notes: string;
   updatedAt: string;
 };
@@ -75,6 +77,18 @@ export default function PasswordFormCard({
       />
 
       <FormTextField
+        label="Application IDs"
+        value={value.applicationIds}
+        onChangeText={(text) => onChange("applicationIds", text)}
+        editable={editable}
+        placeholder="com.example.app, com.example.beta"
+        placeholderTextColor={"#9e9e9e"}
+        autoCapitalize="none"
+        autoCorrect={false}
+        multiline
+      />
+
+      <FormTextField
         label="Notes"
         value={value.notes}
         onChangeText={(text) => onChange("notes", text)}
@@ -101,6 +115,7 @@ export function usePasswordForm() {
     password: "",
     categoryId: null,
     url: "",
+    applicationIds: "",
     notes: "",
     updatedAt: "",
   });

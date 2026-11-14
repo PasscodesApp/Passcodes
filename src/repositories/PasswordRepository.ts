@@ -30,6 +30,8 @@ export interface CreatePasswordInput {
   password: string;
   notes?: string | null;
   url?: string | null;
+  /** Comma-separated application IDs (see libs/application_ids), `null` = none. */
+  applicationIds?: string | null;
   /** `null` / omitted = Uncategorized. */
   categoryId?: number | null;
 }
@@ -41,6 +43,7 @@ export interface ImportPasswordRow {
   password: string;
   notes: string | null;
   url: string | null;
+  applicationIds: string | null;
   categoryId: number | null;
   createdAt: number | null;
   updatedAt: number | null;
@@ -59,6 +62,8 @@ export interface UpdatePasswordInput {
   password?: string;
   notes?: string | null;
   url?: string | null;
+  /** Comma-separated application IDs, `null` = none. */
+  applicationIds?: string | null;
   /** `null` = move to Uncategorized. */
   categoryId?: number | null;
 }
@@ -176,6 +181,7 @@ export class PasswordRepository {
       password: row.password,
       notes: row.notes,
       url: row.url,
+      applicationIds: row.applicationIds,
       categoryId: row.categoryId,
       createdAt: row.createdAt ?? undefined,
       updatedAt: row.updatedAt ?? undefined,

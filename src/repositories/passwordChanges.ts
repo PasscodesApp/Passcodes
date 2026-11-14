@@ -15,6 +15,8 @@ export interface EditablePasswordFields {
   password?: string;
   notes?: string | null;
   url?: string | null;
+  /** Comma-separated application IDs, `null` = none. */
+  applicationIds?: string | null;
   /** `null` = move to Uncategorized. */
   categoryId?: number | null;
 }
@@ -29,6 +31,8 @@ export function pickEditablePasswordFields(
   if (data.password !== undefined) changes.password = data.password;
   if (data.notes !== undefined) changes.notes = data.notes;
   if (data.url !== undefined) changes.url = data.url;
+  if (data.applicationIds !== undefined)
+    changes.applicationIds = data.applicationIds;
   if (data.categoryId !== undefined) changes.categoryId = data.categoryId;
 
   return changes;

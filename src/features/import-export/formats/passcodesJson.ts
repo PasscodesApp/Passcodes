@@ -12,7 +12,9 @@
  *   "data": {
  *     "passwords": [
  *       { "_id": 1, "domain": "...", "url": null, "username": "...",
- *         "password": "...", "notes": null, "category-id": 2,
+ *         "password": "...", "notes": null,
+ *         "application-ids": "com.example.app,com.example.beta",
+ *         "category-id": 2,
  *         "created-at": 1767268800, "updated-at": 1769947200 }
  *     ],
  *     "categories": [
@@ -40,6 +42,7 @@ import {
   MAX_UNIX_TIMESTAMP_SECONDS,
   MIN_UNIX_TIMESTAMP_SECONDS,
 } from "@/libs/timestamp_unixepoch_utils";
+import { parseApplicationIds } from "@/libs/application_ids";
 import { UNCATEGORIZED_LABEL } from "@/repositories/CategoryRepository";
 import type {
   CandidateCategory,
@@ -62,6 +65,7 @@ export interface PasswordExportRow {
   password: string;
   notes: string | null;
   url: string | null;
+  applicationIds: string | null;
   createdAt: number | null;
   updatedAt: number | null;
   categoryId: number | null;
@@ -98,6 +102,7 @@ export function serializePasscodesJson(
         username: row.username,
         password: row.password,
         notes: row.notes,
+        "application-ids": row.applicationIds,
         "category-id":
           row.categoryId === null
             ? null
@@ -316,11 +321,13 @@ export function parsePasscodesJson(text: string): ParseResult {
 
     const url = readOptionalString(record["url"]);
     const notes = readOptionalString(record["notes"]);
+    const applicationIds = readOptionalString(record["application-ids"]);
     const categoryRaw = record["category-id"];
 
     if (
       !url.ok ||
       !notes.ok ||
+      !applicationIds.ok ||
       (categoryRaw !== undefined &&
         categoryRaw !== null &&
         !isPositiveInteger(categoryRaw))
@@ -342,6 +349,8 @@ export function parsePasscodesJson(text: string): ParseResult {
       username,
       password,
       notes: notes.value,
+      // Older backups have no such field; unusable entries are dropped.
+      applicationIds: parseApplicationIds(applicationIds.value).value,
       categorySourceId: isPositiveInteger(categoryRaw) ? categoryRaw : null,
       createdAt: readTimestamp(record["created-at"], badTimestamps),
       updatedAt: readTimestamp(record["updated-at"], badTimestamps),
