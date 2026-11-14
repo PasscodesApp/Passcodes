@@ -1,3 +1,4 @@
+import EmptyState from "@/components/EmptyState";
 import Text from "@/components/Text";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
 import { useToast } from "@/contexts/ToastContext";
@@ -6,7 +7,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useCallback } from "react";
 import { Alert, View } from "react-native";
-import { Button, Card, useTheme } from "react-native-paper";
+import { Button, Card, Divider, useTheme } from "react-native-paper";
 
 import { describeDeletedAt } from "./describeDeletedAt";
 
@@ -16,7 +17,8 @@ function passwordsLabel(count: number) {
 
 /**
  * "Recently deleted": every soft-deleted password, with Restore and
- * "Delete forever" for one password or for all of them.
+ * "Delete forever" for one password or for all of them. All buttons are
+ * plain text buttons.
  *
  * Nothing here is permanent unless the user confirms "Delete forever".
  */
@@ -73,40 +75,62 @@ export default function RecentlyDeletedScreenContent() {
 
   if (error) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", padding: 24 }}>
-        <Text style={{ textAlign: "center", color: theme.colors.error }}>
-          Recently deleted passwords couldn&apos;t be loaded. Please go back and
-          try again.
-        </Text>
-      </View>
+      <EmptyState
+        icon="triangle-exclamation"
+        title="Couldn't load this list"
+        message="Please go back and open Recently deleted again."
+      />
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <FlashList
-        data={deleted}
-        keyExtractor={(item) => String(item.id)}
-        contentContainerStyle={{ padding: 12, paddingBottom: 32 }}
-        ListHeaderComponent={
-          <View style={{ gap: 12, marginBottom: 12 }}>
-            <Text style={{ color: theme.colors.onSurfaceVariant }}>
-              Deleted passwords stay here until you delete them forever. Restore
-              a password to bring it back.
-            </Text>
+    <FlashList
+      data={deleted}
+      keyExtractor={(item) => String(item.id)}
+      contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+      ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+      ListEmptyComponent={
+        <EmptyState
+          icon="trash-can"
+          title="Nothing deleted"
+          message="Passwords you delete stay here so you can bring them back. You can remove them for good at any time."
+        />
+      }
+      ListHeaderComponent={
+        deleted.length === 0 ? null : (
+          <Card style={{ marginBottom: 16 }}>
+            <Card.Content style={{ gap: 4 }}>
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+              >
+                <FontAwesome6
+                  name="circle-info"
+                  iconStyle="solid"
+                  size={16}
+                  color={theme.colors.primary}
+                />
+                <Text variant="titleSmall">
+                  {passwordsLabel(deleted.length)} in Recently deleted
+                </Text>
+              </View>
 
-            {deleted.length > 0 ? (
-              <View style={{ flexDirection: "row", gap: 12 }}>
+              <Text
+                variant="bodySmall"
+                style={{ color: theme.colors.onSurfaceVariant }}
+              >
+                They stay here until you delete them forever. Restore one to
+                bring it back.
+              </Text>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  marginTop: 4,
+                }}
+              >
                 <Button
-                  mode="contained-tonal"
-                  style={{ flex: 1 }}
-                  onPress={() => restore(allIds)}
-                >
-                  Restore all
-                </Button>
-                <Button
-                  mode="outlined"
-                  style={{ flex: 1 }}
+                  mode="text"
                   textColor={theme.colors.error}
                   onPress={() =>
                     confirmDeleteForever(
@@ -117,75 +141,85 @@ export default function RecentlyDeletedScreenContent() {
                 >
                   Delete all
                 </Button>
+                <Button mode="text" onPress={() => restore(allIds)}>
+                  Restore all
+                </Button>
               </View>
-            ) : null}
-          </View>
-        }
-        ListEmptyComponent={
-          <View style={{ alignItems: "center", padding: 32, gap: 12 }}>
-            <FontAwesome6
-              name="trash-can"
-              iconStyle="solid"
-              size={40}
-              color={theme.colors.onSurfaceVariant}
-            />
-            <Text style={{ fontSize: 18, fontWeight: "600" }}>
-              Nothing here
-            </Text>
-            <Text
-              style={{
-                textAlign: "center",
-                color: theme.colors.onSurfaceVariant,
-              }}
-            >
-              Passwords you delete will show up here.
-            </Text>
-          </View>
-        }
-        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-        renderItem={({ item }) => (
-          <Card>
-            <Card.Content style={{ gap: 4 }}>
-              <Text style={{ fontSize: 17, fontWeight: "600" }} numberOfLines={1}>
-                {item.domain || "(no name)"}
-              </Text>
-
-              {item.username ? (
-                <Text
-                  numberOfLines={1}
-                  style={{ color: theme.colors.onSurfaceVariant }}
-                >
-                  {item.username}
-                </Text>
-              ) : null}
-
-              <Text
-                variant="labelMedium"
-                style={{ color: theme.colors.onSurfaceVariant }}
-              >
-                {item.deletedAt ? describeDeletedAt(item.deletedAt) : "Deleted"}
-              </Text>
             </Card.Content>
-
-            <Card.Actions>
-              <Button
-                textColor={theme.colors.error}
-                onPress={() =>
-                  confirmDeleteForever(
-                    [item.id],
-                    `Delete "${item.domain || "this password"}" forever?`,
-                  )
-                }
-              >
-                Delete forever
-              </Button>
-              <Button mode="contained-tonal" onPress={() => restore([item.id])}>
-                Restore
-              </Button>
-            </Card.Actions>
           </Card>
-        )}
-      />
-    </View>
+        )
+      }
+      renderItem={({ item }) => {
+        const title = item.domain || "Untitled";
+
+        return (
+          <Card>
+            <Card.Content style={{ gap: 12 }}>
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 14 }}
+              >
+                <View
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 22,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: theme.colors.secondaryContainer,
+                  }}
+                >
+                  <Text
+                    variant="titleMedium"
+                    style={{ color: theme.colors.onSecondaryContainer }}
+                  >
+                    {title.charAt(0).toUpperCase()}
+                  </Text>
+                </View>
+
+                <View style={{ flex: 1 }}>
+                  <Text variant="titleMedium" numberOfLines={1}>
+                    {title}
+                  </Text>
+
+                  {item.username ? (
+                    <Text
+                      variant="bodyMedium"
+                      numberOfLines={1}
+                      style={{ color: theme.colors.onSurfaceVariant }}
+                    >
+                      {item.username}
+                    </Text>
+                  ) : null}
+
+                  <Text
+                    variant="labelSmall"
+                    style={{ color: theme.colors.onSurfaceVariant }}
+                  >
+                    {describeDeletedAt(item.deletedAt)}
+                  </Text>
+                </View>
+              </View>
+
+              <Divider />
+
+              <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+                <Button
+                  mode="text"
+                  textColor={theme.colors.error}
+                  onPress={() =>
+                    confirmDeleteForever([item.id], `Delete "${title}" forever?`)
+                  }
+                >
+                  Delete forever
+                </Button>
+                <Button mode="text" onPress={() => restore([item.id])}>
+                  Restore
+                </Button>
+              </View>
+            </Card.Content>
+          </Card>
+        );
+      }}
+    />
   );
 }
