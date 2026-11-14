@@ -1,18 +1,18 @@
-import Screen from "@/components/Screen";
 import Text from "@/components/Text";
+import { DatabaseRecoveryScreen } from "@/features/database-recovery";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { openDatabaseSync } from "expo-sqlite";
+import { openDatabaseSync, type SQLiteDatabase } from "expo-sqlite";
 import {
   createContext,
   Suspense,
+  useCallback,
   useContext,
-  useEffect,
-  useMemo,
+  useState,
   type PropsWithChildren,
 } from "react";
-import { View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import migrations from "./drizzle/migrations";
 import * as schema from "./schema";
@@ -22,6 +22,35 @@ export type DrizzleDatabase = ReturnType<typeof drizzle>;
 const DrizzleDatabaseContext = createContext<DrizzleDatabase | undefined>(
   undefined,
 );
+
+/**
+ * Connections that are already open, by file name.
+ *
+ * A connection is reused when the user taps "Try again" and is never closed
+ * here: closing the last connection to a WAL database makes SQLite merge and
+ * delete the -wal file, which would modify the user's database files while
+ * they are trying to recover them.
+ */
+const openConnections = new Map<string, SQLiteDatabase>();
+
+type OpenResult =
+  | { ok: true; db: DrizzleDatabase }
+  | { ok: false; error: unknown };
+
+function openDrizzleDatabase(databaseName: string): OpenResult {
+  try {
+    let expoDb = openConnections.get(databaseName);
+
+    if (!expoDb) {
+      expoDb = openDatabaseSync(databaseName, { enableChangeListener: true });
+      openConnections.set(databaseName, expoDb);
+    }
+
+    return { ok: true, db: drizzle(expoDb, { schema }) };
+  } catch (error) {
+    return { ok: false, error };
+  }
+}
 
 interface DrizzleDatabaseProviderProps extends PropsWithChildren {
   /**
@@ -42,13 +71,13 @@ interface DrizzleDatabaseProviderProps extends PropsWithChildren {
  * 4. Waits until migrations have completed successfully.
  * 5. Provides the ready Drizzle database through React context.
  *
- * Children are never rendered before the database is ready.
- * Migration failures are displayed using the provider's fatal
- * database error UI.
+ * Children are never rendered before the database is ready. If opening the
+ * database or running a migration fails, the database recovery screen is
+ * shown instead. It never changes the existing database, and "Try again"
+ * repeats the whole start-up.
  *
- * The database instance is shared by all descendants. Consumers
- * should access it using `useDrizzleDatabase()` instead of opening
- * their own SQLite connection.
+ * Consumers should access the database with `useDrizzleDatabase()` instead
+ * of opening their own SQLite connection.
  *
  * @example
  * ```tsx
@@ -63,21 +92,66 @@ export default function DrizzleDatabaseProvider({
   children,
   databaseName,
 }: DrizzleDatabaseProviderProps) {
-  // Opened once per database name. Re-opening on every render would give
-  // every consumer a new `db` (and new repositories) each time this
-  // provider re-renders, e.g. when the colour scheme changes.
-  const db = useMemo(() => {
-    const expoDb = openDatabaseSync(databaseName, {
-      enableChangeListener: true,
-    });
+  const [attempt, setAttempt] = useState(0);
+  const retry = useCallback(() => setAttempt((current) => current + 1), []);
 
-    return drizzle(expoDb, { schema });
-  }, [databaseName]);
+  // `key` restarts the whole start-up (open + migrate) on every retry.
+  return (
+    <DatabaseStartup key={attempt} databaseName={databaseName} onRetry={retry}>
+      {children}
+    </DatabaseStartup>
+  );
+}
 
+function DatabaseStartup({
+  children,
+  databaseName,
+  onRetry,
+}: DrizzleDatabaseProviderProps & { onRetry: () => void }) {
+  // Opened once per start-up attempt (lazy initial state), not on every render.
+  const [opened] = useState(() => openDrizzleDatabase(databaseName));
+
+  if (!opened.ok) {
+    return (
+      <DatabaseRecoveryScreen
+        databaseName={databaseName}
+        error={opened.error}
+        onRetry={onRetry}
+      />
+    );
+  }
+
+  return (
+    <DatabaseMigrator
+      db={opened.db}
+      databaseName={databaseName}
+      onRetry={onRetry}
+    >
+      {children}
+    </DatabaseMigrator>
+  );
+}
+
+function DatabaseMigrator({
+  children,
+  db,
+  databaseName,
+  onRetry,
+}: PropsWithChildren<{
+  db: DrizzleDatabase;
+  databaseName: string;
+  onRetry: () => void;
+}>) {
   const { success, error } = useMigrations(db, migrations);
 
   if (error) {
-    return <DrizzleDatabaseError error={error} />;
+    return (
+      <DatabaseRecoveryScreen
+        databaseName={databaseName}
+        error={error}
+        onRetry={onRetry}
+      />
+    );
   }
 
   if (!success) {
@@ -110,8 +184,9 @@ export function useDrizzleDatabase(): DrizzleDatabase {
 
 function DrizzleDatabaseLoading() {
   return (
-    <Screen
+    <SafeAreaView
       style={{
+        flex: 1,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#020221",
@@ -121,79 +196,6 @@ function DrizzleDatabaseLoading() {
 
       <Text style={{ color: "lightblue", fontSize: 30 }}>Please Wait.....</Text>
       <Text style={{ color: "lightblue" }}>Opening Local Database...</Text>
-    </Screen>
-  );
-}
-
-function DrizzleDatabaseError({ error }: { error: unknown }) {
-  useEffect(() => {
-    console.error("Database initialization failed:", error);
-  }, [error]);
-
-  return (
-    <Screen
-      style={{
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#020221",
-        paddingHorizontal: 24,
-      }}
-    >
-      <View
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          padding: 24,
-          borderRadius: 24,
-          alignItems: "center",
-          gap: 12,
-        }}
-      >
-        <View
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 28,
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "#351B25",
-            marginBottom: 4,
-          }}
-        >
-          <Text
-            style={{
-              color: "#EF9F9F",
-              fontSize: 26,
-              fontWeight: "800",
-            }}
-          >
-            !
-          </Text>
-        </View>
-
-        <Text
-          style={{
-            color: "#EF9F9F",
-            fontSize: 18,
-            fontWeight: "800",
-            textAlign: "center",
-          }}
-        >
-          Database initialization failed
-        </Text>
-
-        <Text
-          style={{
-            color: "#D9BFC3",
-            fontSize: 14,
-            lineHeight: 21,
-            textAlign: "center",
-          }}
-        >
-          Passcodes couldn&apos;t prepare its local database. Please close and
-          reopen the app.
-        </Text>
-      </View>
-    </Screen>
+    </SafeAreaView>
   );
 }
