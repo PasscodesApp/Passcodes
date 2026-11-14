@@ -137,7 +137,9 @@ export default function CategoryPasswordsScreen() {
             }
           />
         }
-        renderItem={({ item }) => <PasswordListItem item={item} />}
+        renderItem={({ item }) => (
+          <PasswordListItem item={item} compact={numColumns === 2} />
+        )}
       />
 
       <SelectionBar allIds={visibleIds} />

@@ -24,7 +24,11 @@ function PasswordCardGrid({
     <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
       {passwords.map((password) => (
         <View key={password.id} style={{ width }}>
-          <PasswordListItem item={password} style={FILL} />
+          <PasswordListItem
+            item={password}
+            style={FILL}
+            compact={numColumns === 2}
+          />
         </View>
       ))}
     </View>

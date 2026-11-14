@@ -8,6 +8,10 @@ import {
   toggleScreenshotPrevention,
 } from "@/features/screenshot-prevention";
 import {
+  setWebsiteIconsEnabled,
+  useWebsiteIconsEnabled,
+} from "@/libs/favicon_setting";
+import {
   setHomeLayout,
   useHomeLayout,
   type HomeLayout,
@@ -61,6 +65,7 @@ export default function SettingsScreen() {
   }, [appState]);
 
   const homeLayout = useHomeLayout();
+  const websiteIconsOn = useWebsiteIconsEnabled();
 
   const theme = useTheme();
 
@@ -131,6 +136,33 @@ export default function SettingsScreen() {
                   style={{ alignSelf: "flex-end" }}
                   value={isScreenshotPreventOn}
                   onValueChange={toggleScreenshotPreventSwitch}
+                />
+              )}
+            />
+          </List.Section>
+
+          <Divider />
+
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              style={{ paddingRight: 0 }}
+              title="Website icons"
+              description="Shows each site's icon. The website names of your passwords are sent to an icon service (DuckDuckGo) to get them."
+              descriptionNumberOfLines={4}
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  style={[props.style, { marginVertical: "auto" }]}
+                  name="globe"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={() => (
+                <Switch
+                  style={{ alignSelf: "flex-end" }}
+                  value={websiteIconsOn}
+                  onValueChange={setWebsiteIconsEnabled}
                 />
               )}
             />
