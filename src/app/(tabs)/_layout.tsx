@@ -25,20 +25,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="password-generator"
-        options={{
-          title: "Generate",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome6
-              name="key"
-              size={size}
-              color={color}
-              iconStyle="solid"
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="(settings)"
         options={{
           title: "Settings",
