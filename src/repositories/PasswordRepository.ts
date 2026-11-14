@@ -1,8 +1,11 @@
 import type { DrizzleDatabase } from "@/db/provider";
 import { passwords } from "@/db/schema";
-import { and, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNotNull, isNull, sql } from "drizzle-orm";
 
 import { CURRENT_TIMESTAMP_SQL } from "@/libs/timestamp_unixepoch_utils";
+
+/** Evaluated by SQLite (`sql.raw`), not bound as a text value. */
+const NOW = sql.raw(CURRENT_TIMESTAMP_SQL);
 import { pickEditablePasswordFields } from "./passwordChanges";
 
 /** SQLite limits the number of bound variables, so big batches are chunked. */
@@ -87,6 +90,28 @@ export class PasswordRepository {
             : eq(passwords.categoryId, categoryId),
         ),
       );
+  }
+
+  /**
+   * Observes soft-deleted passwords ("Recently deleted"), the most recently
+   * deleted first.
+   */
+  observeDeleted() {
+    return this.db
+      .select()
+      .from(passwords)
+      .where(isNotNull(passwords.deletedAt))
+      .orderBy(desc(passwords.deletedAt), desc(passwords.id));
+  }
+
+  /** Number of soft-deleted passwords. */
+  async countDeleted() {
+    const [row] = await this.db
+      .select({ count: sql<number>`count(*)` })
+      .from(passwords)
+      .where(isNotNull(passwords.deletedAt));
+
+    return Number(row?.count ?? 0);
   }
 
   /**
@@ -216,7 +241,7 @@ export class PasswordRepository {
   async delete(id: number) {
     const [deletedPassword] = await this.db
       .update(passwords)
-      .set({ deletedAt: sql`${CURRENT_TIMESTAMP_SQL}` })
+      .set({ deletedAt: NOW })
       .where(and(eq(passwords.id, id), isNull(passwords.deletedAt)))
       .returning();
 
@@ -266,12 +291,71 @@ export class PasswordRepository {
     this.db.transaction((tx) => {
       for (const idChunk of chunk(ids, BATCH_SIZE)) {
         tx.update(passwords)
-          .set({ deletedAt: sql`${CURRENT_TIMESTAMP_SQL}` })
+          .set({ deletedAt: NOW })
           .where(
             and(inArray(passwords.id, idChunk), isNull(passwords.deletedAt)),
           )
           .run();
       }
     });
+  }
+
+  /**
+   * Restores soft-deleted passwords. A password whose category was deleted
+   * in the meantime comes back as Uncategorized, never with a dangling
+   * category.
+   */
+  async restoreMany(ids: number[]) {
+    if (ids.length === 0) {
+      return;
+    }
+
+    this.db.transaction((tx) => {
+      for (const idChunk of chunk(ids, BATCH_SIZE)) {
+        tx.update(passwords)
+          .set({ deletedAt: null })
+          .where(
+            and(inArray(passwords.id, idChunk), isNotNull(passwords.deletedAt)),
+          )
+          .run();
+
+        tx.update(passwords)
+          .set({ categoryId: null })
+          .where(
+            and(
+              inArray(passwords.id, idChunk),
+              isNotNull(passwords.categoryId),
+              sql`${passwords.categoryId} NOT IN (SELECT id FROM categories)`,
+            ),
+          )
+          .run();
+      }
+    });
+  }
+
+  /**
+   * PERMANENTLY removes passwords. Only passwords that are already in
+   * "Recently deleted" can be removed this way, so an active password can
+   * never be destroyed by mistake.
+   */
+  async permanentlyDeleteMany(ids: number[]) {
+    if (ids.length === 0) {
+      return;
+    }
+
+    this.db.transaction((tx) => {
+      for (const idChunk of chunk(ids, BATCH_SIZE)) {
+        tx.delete(passwords)
+          .where(
+            and(inArray(passwords.id, idChunk), isNotNull(passwords.deletedAt)),
+          )
+          .run();
+      }
+    });
+  }
+
+  /** PERMANENTLY removes everything in "Recently deleted". */
+  async permanentlyDeleteAllDeleted() {
+    await this.db.delete(passwords).where(isNotNull(passwords.deletedAt));
   }
 }

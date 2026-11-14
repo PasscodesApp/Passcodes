@@ -1,6 +1,5 @@
 import LinkButton from "@/components/LinkButton";
 import { LinkIconButton } from "@/components/LinkIconButton";
-import Screen from "@/components/Screen";
 import Text from "@/components/Text";
 import Config from "@/config";
 import { isAppLockEnabled, toggleAppLock } from "@/features/biometrics";
@@ -8,6 +7,10 @@ import {
   isScreenshotPreventionEnabled,
   toggleScreenshotPrevention,
 } from "@/features/screenshot-prevention";
+import {
+  setWebsiteIconsEnabled,
+  useWebsiteIconsEnabled,
+} from "@/libs/favicon_setting";
 import {
   setHomeLayout,
   useHomeLayout,
@@ -26,6 +29,7 @@ import {
   Switch,
   useTheme,
 } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import PasscodesAutofillServiceModule from "../../../../modules/passcodes-autofill-service/src/PasscodesAutofillServiceModule";
 
@@ -41,7 +45,7 @@ export default function SettingsScreen() {
   const toggleScreenshotPreventSwitch = () =>
     setIsScreenshotPreventOn(toggleScreenshotPrevention());
 
-  const [isAutofillEnabled, setIsAutofillEnabled] = useState(
+  let [isAutofillEnabled, setIsAutofillEnabled] = useState(
     PasscodesAutofillServiceModule.isAutofillServiceEnabled(),
   );
 
@@ -61,11 +65,12 @@ export default function SettingsScreen() {
   }, [appState]);
 
   const homeLayout = useHomeLayout();
+  const websiteIconsOn = useWebsiteIconsEnabled();
 
   const theme = useTheme();
 
   return (
-    <Screen headerless>
+    <SafeAreaView style={{ flex: 1, paddingVertical: 12 }}>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 12,
@@ -135,6 +140,33 @@ export default function SettingsScreen() {
               )}
             />
           </List.Section>
+
+          <Divider />
+
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              style={{ paddingRight: 0 }}
+              title="Website icons"
+              description="Shows each site's icon. The website names of your passwords are sent to an icon service (DuckDuckGo) to get them."
+              descriptionNumberOfLines={4}
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  style={[props.style, { marginVertical: "auto" }]}
+                  name="globe"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={() => (
+                <Switch
+                  style={{ alignSelf: "flex-end" }}
+                  value={websiteIconsOn}
+                  onValueChange={setWebsiteIconsEnabled}
+                />
+              )}
+            />
+          </List.Section>
         </Card>
 
         <Card>
@@ -162,6 +194,56 @@ export default function SettingsScreen() {
                 { value: "grouped", label: "Grouped list" },
                 { value: "folders", label: "Folders" },
               ]}
+            />
+          </List.Section>
+        </Card>
+
+        <Card>
+          <List.Section style={{ margin: 15 }}>
+            <List.Item
+              title="Password generator"
+              description="Create strong, random passwords"
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="wand-magic-sparkles"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="chevron-right"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              onPress={() => router.navigate("/password-generator")}
+            />
+
+            <Divider />
+
+            <List.Item
+              title="Recently deleted"
+              description="Restore or permanently delete removed passwords"
+              left={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="trash-can-arrow-up"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              right={(props) => (
+                <FontAwesome6
+                  {...props}
+                  name="chevron-right"
+                  iconStyle="solid"
+                  size={20}
+                />
+              )}
+              onPress={() => router.navigate("/recently-deleted")}
             />
           </List.Section>
         </Card>
@@ -381,6 +463,6 @@ export default function SettingsScreen() {
           height: 150,
         }}
       />
-    </Screen>
+    </SafeAreaView>
   );
 }

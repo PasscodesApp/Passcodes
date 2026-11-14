@@ -30,9 +30,12 @@ import { useTheme } from "react-native-paper";
 function PasswordListItem({
   item,
   style,
+  compact = false,
 }: {
   item: Password;
   style?: StyleProp<ViewStyle>;
+  /** Grid cell instead of a full-width row. */
+  compact?: boolean;
 }) {
   const theme = useTheme();
   const selection = useSelectionState(item.id);
@@ -67,6 +70,8 @@ function PasswordListItem({
         domain={item.domain}
         username={item.username}
         updatedAt={item.updatedAt}
+        url={item.url}
+        compact={compact}
         style={{
           height: "100%",
         }}

@@ -1,7 +1,7 @@
 import CategorySection from "@/components/CategorySection";
-import Text from "@/components/Text";
 import type { CategoryRef } from "@/libs/category_actions";
 import type { CategoryGroup } from "@/libs/category_groups";
+import type { ReactNode } from "react";
 import { memo } from "react";
 import { RefreshControl, ScrollView } from "react-native";
 import { LayoutAnimationConfig } from "react-native-reanimated";
@@ -12,7 +12,8 @@ type GroupedPasswordListProps = {
   forceExpanded: boolean;
   refreshing: boolean;
   onRefresh: () => void;
-  emptyText: string;
+  /** Shown instead of the list when there is nothing to show. */
+  empty: ReactNode;
   onOpenActions: (category: CategoryRef) => void;
 };
 
@@ -30,7 +31,7 @@ function GroupedPasswordList({
   forceExpanded,
   refreshing,
   onRefresh,
-  emptyText,
+  empty,
   onOpenActions,
 }: GroupedPasswordListProps) {
   return (
@@ -48,16 +49,7 @@ function GroupedPasswordList({
       {/* skipEntering: don't animate the very first render of the list. */}
       <LayoutAnimationConfig skipEntering>
         {groups.length === 0 ? (
-          <Text
-            style={{
-              textAlign: "center",
-              marginTop: 40,
-              fontSize: 12,
-              color: "gray",
-            }}
-          >
-            {emptyText}
-          </Text>
+          empty
         ) : (
           groups.map((group) => (
             <CategorySection

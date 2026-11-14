@@ -6,6 +6,16 @@ export default function SettingsLayout() {
       <Stack.Screen name="settings"></Stack.Screen>
 
       <Stack.Screen
+        name="password-generator"
+        options={{ title: "Password generator", headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="recently-deleted"
+        options={{ title: "Recently deleted", headerShown: true }}
+      />
+
+      <Stack.Screen
         name="import-passwords"
         options={{ title: "Import passwords", headerShown: true }}
       />

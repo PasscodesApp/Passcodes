@@ -100,7 +100,11 @@ export class CategoryRepository {
       // TODO: migrate this password table code to password repository.
       if (mode === "delete") {
         tx.update(passwords)
-          .set({ categoryId: null, deletedAt: sql`${CURRENT_TIMESTAMP_SQL}` })
+          .set({
+            categoryId: null,
+            // Evaluated by SQLite (`sql.raw`), not bound as a text value.
+            deletedAt: sql.raw(CURRENT_TIMESTAMP_SQL),
+          })
           .where(and(eq(passwords.categoryId, id), isNull(passwords.deletedAt)))
           .run();
       } else {

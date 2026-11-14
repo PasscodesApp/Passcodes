@@ -1,9 +1,8 @@
 import AddPasswordFab from "@/components/AddPasswordFab";
+import EmptyState from "@/components/EmptyState";
 import GridToggleButton from "@/components/GridToggleButton";
 import PasswordListItem from "@/components/PasswordListItem";
-import Screen from "@/components/Screen";
 import SelectionBar from "@/components/SelectionBar";
-import Text from "@/components/Text";
 import {
   useCategoryRepository,
   usePasswordRepository,
@@ -25,7 +24,7 @@ import {
 } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { View } from "react-native";
-import { Button, IconButton } from "react-native-paper";
+import { IconButton } from "react-native-paper";
 
 /**
  * The passwords of ONE folder (flat, no nesting).
@@ -74,7 +73,7 @@ export default function CategoryPasswordsScreen() {
   );
 
   return (
-    <Screen>
+    <>
       <Stack.Screen
         options={{
           title,
@@ -90,7 +89,7 @@ export default function CategoryPasswordsScreen() {
                   uncategorized has none: it can't be renamed or deleted. */}
               {categoryId !== null && (
                 <IconButton
-                  aria-label="Folder actions"
+                  accessibilityLabel="Folder actions"
                   icon={() => (
                     <FontAwesome6
                       name="ellipsis-vertical"
@@ -122,35 +121,25 @@ export default function CategoryPasswordsScreen() {
         }}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <View style={{ alignItems: "center", marginTop: 40, gap: 12 }}>
-            <Text style={{ textAlign: "center", fontSize: 12, color: "gray" }}>
-              No passwords in this folder.
-            </Text>
-
-            <Button
-              icon={({ size, color }) => (
-                <FontAwesome6
-                  name="plus"
-                  size={size}
-                  color={color}
-                  iconStyle="solid"
-                />
-              )}
-              onPress={() =>
-                router.push({
-                  pathname: "/save-password",
-                  params:
-                    categoryId === null
-                      ? { lockCategory: "1" }
-                      : { categoryId, lockCategory: "1" },
-                })
-              }
-            >
-              Add Password
-            </Button>
-          </View>
+          <EmptyState
+            icon="folder-open"
+            title="This folder is empty"
+            message="Passwords you add to this folder will show up here."
+            actionLabel="Add a password"
+            onAction={() =>
+              router.push({
+                pathname: "/save-password",
+                params:
+                  categoryId === null
+                    ? { lockCategory: "1" }
+                    : { categoryId, lockCategory: "1" },
+              })
+            }
+          />
         }
-        renderItem={({ item }) => <PasswordListItem item={item} />}
+        renderItem={({ item }) => (
+          <PasswordListItem item={item} compact={numColumns === 2} />
+        )}
       />
 
       <SelectionBar allIds={visibleIds} />
@@ -158,6 +147,6 @@ export default function CategoryPasswordsScreen() {
       <AddPasswordFab categoryId={categoryId} />
 
       {dialogElement}
-    </Screen>
+    </>
   );
 }

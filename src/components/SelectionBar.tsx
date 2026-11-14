@@ -53,7 +53,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
 
     Alert.alert(
       `Delete ${passwordsLabel(ids.length)}?`,
-      "This can't be undone.",
+      "They move to Recently Deleted (Settings), where you can restore or permanently delete them.",
       [
         { text: "Cancel", style: "cancel" },
         {
@@ -63,7 +63,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
             try {
               await passwordRepository.deleteMany(ids);
               clearSelection();
-              showToast(`Deleted ${passwordsLabel(ids.length)}`);
+              showToast(`Moved ${passwordsLabel(ids.length)} to Recently Deleted`);
             } catch (err) {
               console.error("Failed to delete passwords:", err);
               showToast("Failed to delete; please try again", "error");
@@ -87,17 +87,17 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
       >
         <Surface
           elevation={4}
-          borderTopLeftRadius={20}
-          borderTopRightRadius={20}
           style={{
             flexDirection: "row",
             alignItems: "center",
             paddingHorizontal: 8,
             paddingVertical: 4,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
           }}
         >
           <IconButton
-            aria-label="Cancel selection"
+            accessibilityLabel="Cancel selection"
             icon={() => (
               <FontAwesome6
                 name="xmark"
@@ -114,7 +114,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
           </Text>
 
           <IconButton
-            aria-label="Select all"
+            accessibilityLabel="Select all"
             icon={() => (
               <FontAwesome6
                 name="check-double"
@@ -127,7 +127,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
           />
 
           <IconButton
-            aria-label="Move selected"
+            accessibilityLabel="Move selected"
             icon={() => (
               <FontAwesome6
                 name="folder-open"
@@ -140,7 +140,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
           />
 
           <IconButton
-            aria-label="Delete selected"
+            accessibilityLabel="Delete selected"
             icon={() => (
               <FontAwesome6
                 name="trash"

@@ -1,3 +1,4 @@
+import EmptyState from "@/components/EmptyState";
 import FolderList from "@/components/FolderList";
 import GridToggleButton from "@/components/GridToggleButton";
 import GroupedPasswordList from "@/components/GroupedPasswordList";
@@ -12,7 +13,6 @@ import {
 } from "@/libs/selection_store";
 import { router, Stack, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { View } from "react-native";
 import { useTheme } from "react-native-paper";
 
 export default function LoadPasswordScreen() {
@@ -63,7 +63,7 @@ export default function LoadPasswordScreen() {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <>
       <Stack.Screen
         options={{
           title: "Password Manager",
@@ -86,7 +86,7 @@ export default function LoadPasswordScreen() {
           hintTextColor={theme.colors.onSurface}
           tintColor={theme.colors.onSurface}
           headerIconColor={theme.colors.onSurface}
-          barTintColor={theme.colors.surfaceDim}
+          barTintColor={theme.colors.surfaceDisabled}
           placeholder="Search passwords..."
           placement="stacked"
           onChangeText={(event) => {
@@ -115,7 +115,23 @@ export default function LoadPasswordScreen() {
             forceExpanded={isSearching}
             refreshing={refreshing}
             onRefresh={onRefresh}
-            emptyText={isSearching ? "No passwords found!!" : "No data!!"}
+            empty={
+              isSearching ? (
+                <EmptyState
+                  icon="magnifying-glass"
+                  title="No matches"
+                  message="Nothing matches your search. Try a different name, username or website."
+                />
+              ) : (
+                <EmptyState
+                  icon="shield-halved"
+                  title="Your vault is empty"
+                  message="Save your first password and it will be kept safely on this device."
+                  actionLabel="Add a password"
+                  onAction={() => router.push("/save-password")}
+                />
+              )
+            }
             onOpenActions={openActions}
           />
 
@@ -126,6 +142,6 @@ export default function LoadPasswordScreen() {
       <HomeFab layout={layout} noun={noun} onCreateCategory={openCreate} />
 
       {dialogElement}
-    </View>
+    </>
   );
 }
