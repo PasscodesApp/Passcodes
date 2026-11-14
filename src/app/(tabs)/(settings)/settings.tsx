@@ -7,9 +7,11 @@ import {
   isScreenshotPreventionEnabled,
   toggleScreenshotPrevention,
 } from "@/features/screenshot-prevention";
-import FaviconProviderDialog from "@/components/FaviconProviderDialog";
-import { getFaviconProviderLabel } from "@/libs/favicon";
-import { useFaviconProvider } from "@/libs/favicon_setting";
+import {
+  FaviconProviderDialog,
+  getFaviconProviderLabel,
+  useFaviconProvider,
+} from "@/features/favicons";
 import {
   setHomeLayout,
   useHomeLayout,

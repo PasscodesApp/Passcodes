@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
-import type { FaviconProvider } from "./favicon";
+import type { FaviconProvider } from "./providers";
 import {
   discardFavicon,
   fetchFavicon,
   readCachedFavicon,
-} from "./favicon_cache";
+} from "./cache";
 
 /**
  * The local image address of a website's icon, or `null` while there is none

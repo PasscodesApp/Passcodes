@@ -1,7 +1,7 @@
 import AsyncStorage from "expo-sqlite/kv-store";
 import { useSyncExternalStore } from "react";
 
-import { DEFAULT_FAVICON_PROVIDER, type FaviconProvider } from "./favicon";
+import { DEFAULT_FAVICON_PROVIDER, type FaviconProvider } from "./providers";
 
 const KEY = "feat_favicon_provider";
 

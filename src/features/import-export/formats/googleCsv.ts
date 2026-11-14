@@ -181,6 +181,7 @@ export function parseGoogleCsv(text: string): ParseResult {
       username,
       password,
       notes: note === "" ? null : note,
+      applicationIds: null, // the CSV has no column for it
       categorySourceId: null,
       createdAt: null,
       updatedAt: null,

@@ -1,6 +1,5 @@
-import Favicon from "@/components/Favicon";
 import Text from "@/components/Text";
-import { getFaviconHost } from "@/libs/favicon";
+import { Favicon, getFaviconHost } from "@/features/favicons";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 

@@ -2,8 +2,12 @@ import PasswordDetailCardActions from "@/components/PasswordDetailCardActions";
 import PasswordFormCard, {
   usePasswordForm,
 } from "@/components/PasswordFormCard";
-import Screen from "@/components/Screen";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
+import {
+  describeInvalidApplicationIds,
+  formatApplicationIds,
+  parseApplicationIds,
+} from "@/libs/application_ids";
 import { useToast } from "@/contexts/ToastContext";
 import { formatTimestamp } from "@passcodes/passalgo";
 
@@ -11,10 +15,11 @@ import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { Href, router, useLocalSearchParams } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Keyboard, ScrollView, TextInput } from "react-native";
 
 import { FAB } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PasswordDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -39,7 +44,7 @@ export default function PasswordDetailsScreen() {
     Keyboard.dismiss();
   }
 
-  const loadAndRefreshPassword = useCallback(async () => {
+  async function loadAndRefreshPassword() {
     const password = await passwordRepository.getById(Number(id));
 
     if (!password) {
@@ -54,12 +59,13 @@ export default function PasswordDetailsScreen() {
       password: password.password,
       categoryId: password.categoryId ?? null,
       url: password.url || "",
+      applicationIds: formatApplicationIds(password.applicationIds),
       notes: password.notes || "",
       updatedAt: password.updatedAt
         ? formatTimestamp(password.updatedAt)
         : "just now",
     });
-  }, [id, passwordRepository, setState]);
+  }
 
   async function updatePassword() {
     /*
@@ -70,8 +76,21 @@ export default function PasswordDetailsScreen() {
      */
     unfocusAllFields();
 
+    const parsedApplicationIds = parseApplicationIds(state.applicationIds);
+    const applicationIdsProblem = describeInvalidApplicationIds(
+      parsedApplicationIds,
+    );
+
+    if (applicationIdsProblem) {
+      showToast(applicationIdsProblem, "error");
+      return;
+    }
+
     try {
-      await passwordRepository.update(Number(id), state);
+      await passwordRepository.update(Number(id), {
+        ...state,
+        applicationIds: parsedApplicationIds.value,
+      });
 
       setIsEditing(false);
 
@@ -112,10 +131,10 @@ export default function PasswordDetailsScreen() {
 
   useEffect(() => {
     loadAndRefreshPassword();
-  }, [loadAndRefreshPassword]);
+  }, []);
 
   return (
-    <Screen>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
         contentContainerStyle={{
           margin: 20,
@@ -153,6 +172,6 @@ export default function PasswordDetailsScreen() {
         )}
         onPress={handleFabPress}
       />
-    </Screen>
+    </SafeAreaView>
   );
 }

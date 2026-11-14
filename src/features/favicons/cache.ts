@@ -17,7 +17,7 @@
 import { Directory, File, Paths } from "expo-file-system";
 import AsyncStorage from "expo-sqlite/kv-store";
 
-import { faviconUrl, type FaviconProvider } from "./favicon";
+import { faviconUrl, type FaviconProvider } from "./providers";
 
 const DAY_MS = 86_400_000;
 const FRESH_FOR_MS = 30 * DAY_MS;

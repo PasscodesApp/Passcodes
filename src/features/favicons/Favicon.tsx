@@ -1,9 +1,10 @@
-import { useFaviconProvider } from "@/libs/favicon_setting";
-import { useFavicon } from "@/libs/useFavicon";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
 import { memo } from "react";
 import { Image, View } from "react-native";
 import { useTheme } from "react-native-paper";
+
+import { useFaviconProvider } from "./setting";
+import { useFavicon } from "./useFavicon";
 
 type FaviconProps = {
   /** Website host the icon belongs to (see `getFaviconHost`). */
@@ -14,7 +15,7 @@ type FaviconProps = {
 /**
  * A website icon with a placeholder (a globe) that stays in place while the
  * icon is loading, when it can't be fetched, and when icons are turned off.
- * Icons come from the on-device cache (see libs/favicon_cache.ts).
+ * Icons come from the on-device cache (see ./cache.ts).
  */
 function Favicon({ host, size }: FaviconProps) {
   const theme = useTheme();

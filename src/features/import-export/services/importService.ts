@@ -229,6 +229,7 @@ export async function commitImport(
     password: candidate.password,
     notes: candidate.notes,
     url: candidate.url,
+    applicationIds: candidate.applicationIds,
     categoryId:
       candidate.categorySourceId === null
         ? null

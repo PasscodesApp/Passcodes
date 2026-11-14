@@ -103,6 +103,7 @@ export function useCategoryGroups(query: string, refreshKey = 0) {
             (password.username?.toLowerCase() ?? "").includes(query) ||
             (password.url?.toLowerCase() ?? "").includes(query) ||
             (password.notes?.toLowerCase() ?? "").includes(query) ||
+            (password.applicationIds?.toLowerCase() ?? "").includes(query) ||
             categoryName.includes(query)
           );
         })

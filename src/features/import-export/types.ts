@@ -29,7 +29,7 @@ export const TRANSFER_FORMAT_OPTIONS: readonly TransferFormatOption[] = [
     value: "passcodes-json",
     label: "Passcodes JSON",
     description:
-      "Passcodes backup. Keeps notes, categories and timestamps. Not encrypted.",
+      "Passcodes backup. Keeps notes, application IDs, categories and timestamps. Not encrypted.",
   },
 ];
 
@@ -44,6 +44,8 @@ export interface CandidatePassword {
   username: string;
   password: string;
   notes: string | null;
+  /** Comma-separated application IDs, `null` = none. */
+  applicationIds: string | null;
   /** `_id` of the category in the same file. `null` = Uncategorized. */
   categorySourceId: number | null;
   /** Raw stored timestamp, or `null` to use the import time. */

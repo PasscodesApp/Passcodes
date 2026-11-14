@@ -1,9 +1,13 @@
 import {
-  FAVICON_PROVIDERS,
-  type FaviconProvider,
-} from "@/libs/favicon";
-import { setFaviconProvider, useFaviconProvider } from "@/libs/favicon_setting";
-import { Dialog, Portal, RadioButton, Text, useTheme } from "react-native-paper";
+  Dialog,
+  Portal,
+  RadioButton,
+  Text,
+  useTheme,
+} from "react-native-paper";
+
+import { FAVICON_PROVIDERS, type FaviconProvider } from "./providers";
+import { setFaviconProvider, useFaviconProvider } from "./setting";
 
 type Props = {
   visible: boolean;
