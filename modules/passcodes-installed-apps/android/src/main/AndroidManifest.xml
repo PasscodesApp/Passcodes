@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!--
+    Android 11+ hides other apps unless the app declares what it needs to see.
+    This asks to see only apps that have a launcher icon (the apps a person
+    would pick), instead of the broad QUERY_ALL_PACKAGES permission, which
+    Google Play restricts.
+  -->
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.MAIN" />
+      <category android:name="android.intent.category.LAUNCHER" />
+    </intent>
+  </queries>
+</manifest>

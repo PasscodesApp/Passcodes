@@ -1,3 +1,4 @@
+import { ApplicationIdsField } from "@/features/application-picker";
 import CategoryField from "@/components/CategoryField";
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
@@ -76,16 +77,10 @@ export default function PasswordFormCard({
         autoCorrect={false}
       />
 
-      <FormTextField
-        label="Application IDs"
+      <ApplicationIdsField
         value={value.applicationIds}
         onChangeText={(text) => onChange("applicationIds", text)}
         editable={editable}
-        placeholder="com.example.app, com.example.beta"
-        placeholderTextColor={"#9e9e9e"}
-        autoCapitalize="none"
-        autoCorrect={false}
-        multiline
       />
 
       <FormTextField
