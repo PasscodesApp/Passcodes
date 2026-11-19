@@ -5,6 +5,7 @@ before changing anything. It tells you what the project is, where things live,
 which rules are non-negotiable and how to make a change safely.
 
 - Business rules (what the app must do, with source files): [`Business rules.md`](./Business%20rules.md)
+- Privacy policy (what data is handled and what can leave the device): [`PRIVACY.md`](./PRIVACY.md). Update it whenever you add a network call, SDK, permission, data type, backup or encryption change.
 - Human docs: [`README.md`](./README.md), [`building.md`](./building.md), [`SECURITY.md`](./SECURITY.md) and the external
   [Passcodes-Docs](https://passcodesapp.github.io/Passcodes-Docs) site.
 
@@ -374,4 +375,5 @@ To release: bump `VERSION`, `BUILD_VERSION`, `BUILD_ANDROID_VERSIONCODE` (and iO
 - [ ] Defaults for security flags unchanged (ON)
 - [ ] `npm run lint` and `npx tsc --noEmit` pass
 - [ ] `Business rules.md` and this file updated if a rule or structure changed
+- [ ] `PRIVACY.md` updated if data handling, network use, permissions or storage changed
 - [ ] PR description filled using the template
