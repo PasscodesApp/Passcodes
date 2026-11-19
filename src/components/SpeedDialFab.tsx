@@ -1,4 +1,5 @@
 import Text from "@/components/Text";
+import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import {
   memo,
   useCallback,
@@ -8,14 +9,6 @@ import {
 } from "react";
 import { BackHandler, Pressable, StyleSheet, View } from "react-native";
 import { FAB, Surface } from "react-native-paper";
-import Animated, {
-  Extrapolation,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-  type SharedValue,
-} from "react-native-reanimated";
 
 export type SpeedDialAction = {
   key: string;
@@ -26,15 +19,10 @@ export type SpeedDialAction = {
 
 type SpeedDialFabProps = {
   actions: SpeedDialAction[];
-  /** Icon of the main button (rotates to an "x" while open). */
+  /** Icon of the main button while the menu is closed. */
   renderIcon: (size: number, color: string) => ReactNode;
   accessibilityLabel?: string;
 };
-
-const DURATION = 200;
-
-/** Fraction of the animation between two actions appearing. */
-const STAGGER = 0.15;
 
 /**
  * Reusable expanding FAB ("speed dial").
@@ -43,11 +31,8 @@ const STAGGER = 0.15;
  * Portal, i.e. above the tab bar). Memoized: as long as `actions` is stable
  * it never re-renders because of its parent.
  *
- * Open / close is driven by ONE shared value (`progress`). Nothing is mounted
- * or unmounted while animating, so there are no Reanimated entering / exiting
- * layout animations. Those were the crash source: pressing an action closed
- * the menu (exit animations started) and navigated away in the same tick, and
- * coming back the animated views no longer existed.
+ * No animation on purpose (Reanimated was crashing the app): opening shows
+ * the actions at once and the main icon is swapped for an "x".
  */
 function SpeedDialFab({
   actions,
@@ -55,13 +40,6 @@ function SpeedDialFab({
   accessibilityLabel = "Open actions",
 }: SpeedDialFabProps) {
   const [open, setOpen] = useState(false);
-
-  // 0 = closed, 1 = open.
-  const progress = useSharedValue(0);
-
-  useEffect(() => {
-    progress.set(withTiming(open ? 1 : 0, { duration: DURATION }));
-  }, [open, progress]);
 
   // Android back button closes the menu first.
   useEffect(() => {
@@ -80,51 +58,36 @@ function SpeedDialFab({
     return () => subscription.remove();
   }, [open]);
 
-  const scrimStyle = useAnimatedStyle(() => ({
-    opacity: progress.get(),
-  }));
-
-  const iconStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${progress.get() * 45}deg` }],
-  }));
-
   const close = useCallback(() => setOpen(false), []);
   const toggle = useCallback(() => setOpen((value) => !value), []);
 
   const mainIcon = useCallback(
-    ({ size, color }: { size: number; color: string }) => (
-      <Animated.View style={iconStyle}>{renderIcon(size, color)}</Animated.View>
-    ),
-    [iconStyle, renderIcon],
+    ({ size, color }: { size: number; color: string }) =>
+      open ? (
+        <FontAwesome6 name="xmark" size={size} color={color} iconStyle="solid" />
+      ) : (
+        renderIcon(size, color)
+      ),
+    [open, renderIcon],
   );
 
   return (
     <>
-      <Animated.View
-        pointerEvents={open ? "auto" : "none"}
-        style={[StyleSheet.absoluteFill, styles.scrim, scrimStyle]}
-      >
-        <Pressable
-          style={StyleSheet.absoluteFill}
-          onPress={close}
-          disabled={!open}
-          accessible={open}
-          accessibilityLabel="Close actions"
-        />
-      </Animated.View>
+      {open && (
+        <View style={[StyleSheet.absoluteFill, styles.scrim]}>
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={close}
+            accessibilityLabel="Close actions"
+          />
+        </View>
+      )}
 
       <View pointerEvents="box-none" style={styles.container}>
-        {actions.map((action, index) => (
-          <SpeedDialItem
-            key={action.key}
-            action={action}
-            // The action closest to the main button appears first.
-            start={Math.min((actions.length - 1 - index) * STAGGER, 0.6)}
-            progress={progress}
-            open={open}
-            onClose={close}
-          />
-        ))}
+        {open &&
+          actions.map((action) => (
+            <SpeedDialItem key={action.key} action={action} onClose={close} />
+          ))}
 
         <FAB
           aria-label={accessibilityLabel}
@@ -139,34 +102,13 @@ function SpeedDialFab({
 
 type SpeedDialItemProps = {
   action: SpeedDialAction;
-  /** Point of `progress` (0..1) where this item starts to appear. */
-  start: number;
-  progress: SharedValue<number>;
-  open: boolean;
   onClose: () => void;
 };
 
 const SpeedDialItem = memo(function SpeedDialItem({
   action,
-  start,
-  progress,
-  open,
   onClose,
 }: SpeedDialItemProps) {
-  const style = useAnimatedStyle(() => {
-    const visible = interpolate(
-      progress.get(),
-      [start, 1],
-      [0, 1],
-      Extrapolation.CLAMP,
-    );
-
-    return {
-      opacity: visible,
-      transform: [{ translateY: (1 - visible) * 16 }],
-    };
-  });
-
   const renderActionIcon = useCallback(
     ({ size, color }: { size: number; color: string }) =>
       action.renderIcon(size, color),
@@ -179,12 +121,7 @@ const SpeedDialItem = memo(function SpeedDialItem({
   }, [action, onClose]);
 
   return (
-    <Animated.View
-      pointerEvents={open ? "auto" : "none"}
-      accessibilityElementsHidden={!open}
-      importantForAccessibility={open ? "auto" : "no-hide-descendants"}
-      style={[styles.item, style]}
-    >
+    <View style={styles.item}>
       <Surface elevation={2} borderRadius={8} style={styles.label}>
         <Text>{action.label}</Text>
       </Surface>
@@ -195,7 +132,7 @@ const SpeedDialItem = memo(function SpeedDialItem({
         icon={renderActionIcon}
         onPress={handlePress}
       />
-    </Animated.View>
+    </View>
   );
 });
 

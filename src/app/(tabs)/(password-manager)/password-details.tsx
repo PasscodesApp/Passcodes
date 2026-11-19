@@ -8,7 +8,7 @@ import {
   formatApplicationIds,
   parseApplicationIds,
 } from "@/libs/application_ids";
-import { useToast } from "@/contexts/ToastContext";
+import { useToast } from "@/features/toast";
 import { formatTimestamp } from "@passcodes/passalgo";
 
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";

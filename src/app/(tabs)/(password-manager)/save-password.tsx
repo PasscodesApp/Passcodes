@@ -2,7 +2,7 @@ import CategoryField from "@/components/CategoryField";
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
-import { useToast } from "@/contexts/ToastContext";
+import { useToast } from "@/features/toast";
 import {
   describeInvalidApplicationIds,
   parseApplicationIds,
