@@ -25,36 +25,45 @@ export default function ToastMessage({
   const [opacity] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
+    // Nothing to animate while hidden. (The view is not even mounted then,
+    // so starting a native animation here would run on a detached node.)
     if (!visible) {
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 150,
-        useNativeDriver: true,
-      }).start();
-
       return;
     }
 
-    Animated.timing(opacity, {
+    const fadeIn = Animated.timing(opacity, {
       toValue: 1,
       duration: 150,
       useNativeDriver: true,
-    }).start();
+    });
+
+    const fadeOut = Animated.timing(opacity, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    });
+
+    fadeIn.start();
 
     const timeout = setTimeout(() => {
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start(() => {
-        onHide();
+      fadeOut.start(({ finished }) => {
+        // An interrupted fade-out (new toast, unmount) must not hide the
+        // toast that replaced it.
+        if (finished) {
+          onHide();
+        }
       });
     }, duration);
 
     return () => {
       clearTimeout(timeout);
+
+      // Stop running native animations before the view goes away.
+      fadeIn.stop();
+      fadeOut.stop();
     };
-  }, [visible, duration, onHide, opacity]);
+    // `message`: a new toast while one is showing restarts the timer.
+  }, [visible, message, duration, onHide, opacity]);
 
   if (!visible) {
     return null;

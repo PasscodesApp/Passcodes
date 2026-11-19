@@ -130,11 +130,13 @@ function AnimatedChevron({
   const rotation = useSharedValue(expanded ? 1 : 0);
 
   useEffect(() => {
-    rotation.value = withTiming(expanded ? 1 : 0, { duration: 220 });
+    // `.set()` / `.get()` instead of `.value`: the React Compiler (enabled in
+    // app.config.ts) rejects mutating a value returned from a hook.
+    rotation.set(withTiming(expanded ? 1 : 0, { duration: 220 }));
   }, [expanded, rotation]);
 
   const style = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotation.value * 90}deg` }],
+    transform: [{ rotate: `${rotation.get() * 90}deg` }],
   }));
 
   return (
