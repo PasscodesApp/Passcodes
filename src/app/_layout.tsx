@@ -1,6 +1,6 @@
 import Config from "@/config";
 import { RepositoryProvider } from "@/contexts/RepositoryContext";
-import { ToastProvider } from "@/contexts/ToastContext";
+import { ToastProvider } from "@/features/toast";
 import { LockScreen, useAppLock } from "@/features/biometrics";
 import { NavigationBar } from "expo-navigation-bar";
 import { DarkTheme, DefaultTheme, Slot, ThemeProvider } from "expo-router";

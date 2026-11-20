@@ -1,7 +1,7 @@
 import EmptyState from "@/components/EmptyState";
 import Text from "@/components/Text";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
-import { useToast } from "@/contexts/ToastContext";
+import { undoPlaceholder, useToast } from "@/features/toast";
 import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6/static";
 import { FlashList } from "@shopify/flash-list";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
@@ -36,7 +36,9 @@ export default function RecentlyDeletedScreenContent() {
     async (ids: number[]) => {
       try {
         await passwordRepository.restoreMany(ids);
-        showToast(`Restored ${passwordsLabel(ids.length)}`);
+        showToast(`Restored ${passwordsLabel(ids.length)}`, "success", {
+          onUndo: undoPlaceholder,
+        });
       } catch (err) {
         console.error("Failed to restore passwords:", err);
         showToast("Failed to restore; please try again", "error");
