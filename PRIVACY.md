@@ -4,6 +4,12 @@
 **Version this policy describes:** v4.0.1 (STABLE RC.3)
 **Effective date:** 2026-11-19
 
+> **DRAFT.** This privacy policy is a draft. It describes how Passcodes works today
+> as best we understand it, but it has not been through a formal review and it is
+> not legal advice. We plan to make it more complete and more effective in the near
+> future, and making it effective as soon as possible is a priority for the project.
+> If something here is unclear or looks wrong, please tell us (see Contact).
+
 > **Please read first.** Passcodes is a beta, open-source project. Your data is
 > **not encrypted yet** (neither on your device nor in exported files).
 > Encryption is planned but not implemented. Until a stable release with
