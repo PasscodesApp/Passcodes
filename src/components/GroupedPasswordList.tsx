@@ -4,6 +4,7 @@ import type { CategoryGroup } from "@/libs/category_groups";
 import type { ReactNode } from "react";
 import { memo } from "react";
 import { RefreshControl, ScrollView } from "react-native";
+import { LayoutAnimationConfig } from "react-native-reanimated";
 
 type GroupedPasswordListProps = {
   groups: CategoryGroup[];
@@ -19,10 +20,10 @@ type GroupedPasswordListProps = {
 /**
  * Grouped layout: collapsible category sections.
  *
- * A plain ScrollView on purpose: sections change height when they expand /
- * collapse, which a recycling list (FlashList) handles badly. Collapsed
- * sections unmount their cards, and each card is memoized, so this stays
- * cheap for a normal password vault.
+ * A plain ScrollView on purpose: accordion animations (height changes of
+ * rows) are reliable here, while a recycling list (FlashList) fights with
+ * them. Collapsed sections unmount their cards, and each card is memoized,
+ * so this stays cheap for a normal password vault.
  */
 function GroupedPasswordList({
   groups,
@@ -45,9 +46,12 @@ function GroupedPasswordList({
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      {groups.length === 0
-        ? empty
-        : groups.map((group) => (
+      {/* skipEntering: don't animate the very first render of the list. */}
+      <LayoutAnimationConfig skipEntering>
+        {groups.length === 0 ? (
+          empty
+        ) : (
+          groups.map((group) => (
             <CategorySection
               key={group.key}
               group={group}
@@ -55,7 +59,9 @@ function GroupedPasswordList({
               forceExpanded={forceExpanded}
               onOpenActions={onOpenActions}
             />
-          ))}
+          ))
+        )}
+      </LayoutAnimationConfig>
     </ScrollView>
   );
 }

@@ -2,7 +2,7 @@ import CategoryField from "@/components/CategoryField";
 import FormTextField from "@/components/FormTextField";
 import SecureTextField from "@/components/SecureTextField";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
-import { useToast } from "@/features/toast";
+import { useToast } from "@/contexts/ToastContext";
 import {
   describeInvalidApplicationIds,
   parseApplicationIds,
@@ -15,16 +15,12 @@ import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SavePasswordScreen() {
-  // Hooks first: `showToast` must be declared before the handlers that use it
-  // (React Compiler: "variable accessed before it is declared").
-  const { showToast } = useToast();
-
-  const [domain, setDomain] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [url, setUrl] = useState("");
-  const [applicationIds, setApplicationIds] = useState("");
-  const [notes, setNotes] = useState("");
+  let [domain, setDomain] = useState("");
+  let [username, setUsername] = useState("");
+  let [password, setPassword] = useState("");
+  let [url, setUrl] = useState("");
+  let [applicationIds, setApplicationIds] = useState("");
+  let [notes, setNotes] = useState("");
 
   // Preselect the category the user was viewing when they pressed "+".
   // (missing / invalid param = Uncategorized)
@@ -34,7 +30,7 @@ export default function SavePasswordScreen() {
     categoryId?: string;
     lockCategory?: string;
   }>();
-  const [categoryId, setCategoryId] = useState<number | null>(() => {
+  let [categoryId, setCategoryId] = useState<number | null>(() => {
     const parsed = Number(categoryIdParam);
     return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
   });
@@ -75,6 +71,8 @@ export default function SavePasswordScreen() {
       showToast("Failed to save, please try again!!", "error");
     }
   }
+
+  const { showToast } = useToast();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

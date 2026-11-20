@@ -5,9 +5,15 @@ import type { CategoryRef } from "@/libs/category_actions";
 import type { CategoryGroup } from "@/libs/category_groups";
 import { toggleCollapsed, useIsCollapsed } from "@/libs/collapse_store";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { IconButton, useTheme } from "react-native-paper";
+import Animated, {
+  LinearTransition,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 type CategorySectionProps = {
   group: CategoryGroup;
@@ -19,7 +25,7 @@ type CategorySectionProps = {
 
 /**
  * One collapsible category in the grouped layout: header (chevron, name,
- * count, actions) + body (not rendered while collapsed, no animation).
+ * count, actions) + animated body.
  *
  * Collapsed state comes from the collapse store, so toggling re-renders only
  * this section.
@@ -37,7 +43,10 @@ function CategorySection({
   const { categoryId, name, count } = group;
 
   return (
-    <View style={{ marginBottom: 16 }}>
+    <Animated.View
+      layout={LinearTransition.duration(220)}
+      style={{ marginBottom: 16 }}
+    >
       <View
         style={{
           flexDirection: "row",
@@ -62,14 +71,7 @@ function CategorySection({
             paddingHorizontal: 4,
           }}
         >
-          <View style={{ width: 16, alignItems: "center" }}>
-            <FontAwesome6
-              name={expanded ? "chevron-down" : "chevron-right"}
-              size={14}
-              color={theme.colors.onSurface}
-              iconStyle="solid"
-            />
-          </View>
+          <AnimatedChevron expanded={expanded} color={theme.colors.onSurface} />
 
           <Text variant="titleMedium" style={{ flex: 1 }} numberOfLines={1}>
             {name}
@@ -114,7 +116,36 @@ function CategorySection({
           </Text>
         )}
       </Collapsible>
-    </View>
+    </Animated.View>
+  );
+}
+
+function AnimatedChevron({
+  expanded,
+  color,
+}: {
+  expanded: boolean;
+  color: string;
+}) {
+  const rotation = useSharedValue(expanded ? 1 : 0);
+
+  useEffect(() => {
+    rotation.value = withTiming(expanded ? 1 : 0, { duration: 220 });
+  }, [expanded, rotation]);
+
+  const style = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value * 90}deg` }],
+  }));
+
+  return (
+    <Animated.View style={[{ width: 16, alignItems: "center" }, style]}>
+      <FontAwesome6
+        name="chevron-right"
+        size={14}
+        color={color}
+        iconStyle="solid"
+      />
+    </Animated.View>
   );
 }
 

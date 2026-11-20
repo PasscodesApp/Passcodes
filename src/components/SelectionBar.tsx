@@ -1,7 +1,7 @@
 import CategoryPickerSheet from "@/components/CategoryPickerSheet";
 import Text from "@/components/Text";
 import { usePasswordRepository } from "@/contexts/RepositoryContext";
-import { undoPlaceholder, useToast } from "@/features/toast";
+import { useToast } from "@/contexts/ToastContext";
 import {
   clearSelection,
   getSelectedIds,
@@ -10,8 +10,9 @@ import {
 } from "@/libs/selection_store";
 import FontAwesome6 from "@react-native-vector-icons/fontawesome6/static";
 import { memo, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert } from "react-native";
 import { IconButton, Surface, useTheme } from "react-native-paper";
+import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
 
 function passwordsLabel(count: number) {
   return `${count} ${count === 1 ? "password" : "passwords"}`;
@@ -40,9 +41,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
     try {
       await passwordRepository.moveToCategory(ids, categoryId);
       clearSelection();
-      showToast(`Moved ${passwordsLabel(ids.length)} to ${name}`, "success", {
-        onUndo: undoPlaceholder,
-      });
+      showToast(`Moved ${passwordsLabel(ids.length)} to ${name}`);
     } catch (err) {
       console.error("Failed to move passwords:", err);
       showToast("Failed to move; please try again", "error");
@@ -64,11 +63,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
             try {
               await passwordRepository.deleteMany(ids);
               clearSelection();
-              showToast(
-                `Moved ${passwordsLabel(ids.length)} to Recently Deleted`,
-                "success",
-                { onUndo: undoPlaceholder },
-              );
+              showToast(`Moved ${passwordsLabel(ids.length)} to Recently Deleted`);
             } catch (err) {
               console.error("Failed to delete passwords:", err);
               showToast("Failed to delete; please try again", "error");
@@ -85,7 +80,11 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
 
   return (
     <>
-      <View style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}>
+      <Animated.View
+        entering={FadeInDown.duration(180)}
+        exiting={FadeOutDown.duration(150)}
+        style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}
+      >
         <Surface
           elevation={4}
           style={{
@@ -153,7 +152,7 @@ function SelectionBar({ allIds }: { allIds: number[] }) {
             onPress={handleDelete}
           />
         </Surface>
-      </View>
+      </Animated.View>
 
       {isMoving && (
         <CategoryPickerSheet

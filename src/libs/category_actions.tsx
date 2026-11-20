@@ -3,7 +3,7 @@ import {
   useCategoryRepository,
   usePasswordRepository,
 } from "@/contexts/RepositoryContext";
-import { undoPlaceholder, useToast } from "@/features/toast";
+import { useToast } from "@/contexts/ToastContext";
 import {
   UNCATEGORIZED_LABEL,
   type DeleteCategoryPasswordsMode,
@@ -51,22 +51,13 @@ export function useCategoryActions(noun: CategoryNoun) {
         await categoryRepository.delete(category.id, mode);
         onDeleted?.();
 
-        // Undo is a placeholder for now (see features/toast/undo.ts).
-        const undo = { onUndo: undoPlaceholder };
-
         if (count === 0) {
-          showToast(`${Noun} deleted`, "success", undo);
+          showToast(`${Noun} deleted`);
         } else if (mode === "delete") {
-          showToast(
-            `${Noun} and ${passwordsLabel(count)} deleted`,
-            "success",
-            undo,
-          );
+          showToast(`${Noun} and ${passwordsLabel(count)} deleted`);
         } else {
           showToast(
             `${Noun} deleted, ${passwordsLabel(count)} moved to ${UNCATEGORIZED_LABEL}`,
-            "success",
-            undo,
           );
         }
       } catch (err) {
