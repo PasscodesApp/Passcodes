@@ -1,7 +1,8 @@
 # Privacy Policy
 
 **Passcodes**
-**Effective date:** 2026-11-19
+
+**Effective date:** Not yet effective. (probably, 2027-01-01)
 
 > **DRAFT.** This privacy policy is a draft. It describes how Passcodes works
 > today as best we understand it, but it has not been through a formal review and
