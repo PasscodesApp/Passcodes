@@ -4,7 +4,7 @@ Guide for AI coding agents working in the **Passcodes** repository. Read this
 before changing anything. It tells you what the project is, where things live,
 which rules are non-negotiable and how to make a change safely.
 
-- Business rules (what the app must do, with source files): [`Business rules.md`](./Business%20rules.md)
+- Business rules (what the app must do, with source files): [`BUSINESS_RULES.md`](./BUSINESS_RULES.md)
 - Roadmap, inconsistencies and priorities: [`NEXT.md`](./NEXT.md). Check it before starting work and remove items you finish.
 - Privacy policy (draft, intentionally general): [`PRIVACY.md`](./PRIVACY.md). It is written for users, so it avoids implementation detail. Update it in the same PR whenever you:
   - add **any** network request, SDK, analytics, crash reporting, update checker, sync or cloud feature (today's only network call is the website-icon download in `src/features/favicons/`);
