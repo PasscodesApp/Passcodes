@@ -3,7 +3,7 @@
 A guide for moving Passcodes forward: what is inconsistent today, which business
 rules need attention, what to improve, and in which order. Everything here was
 found by reading the code (see [`AGENT.md`](./AGENT.md) and
-[`Business rules.md`](./Business%20rules.md)); nothing was changed or run on a
+[`BUSINESS_RULES.md`](./BUSINESS_RULES.md)); nothing was changed or run on a
 device. Treat it as a proposal for the maintainer, not a decision.
 
 Priority legend: **P0** = do before calling it a stable release / security or
