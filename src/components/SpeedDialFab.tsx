@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { BackHandler, Pressable, StyleSheet, View } from "react-native";
-import { FAB, Surface } from "react-native-paper";
+import { FAB, Surface, useTheme } from "react-native-paper";
 
 export type SpeedDialAction = {
   key: string;
@@ -33,6 +33,13 @@ type SpeedDialFabProps = {
  *
  * No animation on purpose (Reanimated was crashing the app): opening shows
  * the actions at once and the main icon is swapped for an "x".
+ *
+ * The small action buttons are a hand-built `MiniFabButton`, NOT Paper's
+ * `<FAB size="small">`: on react-native-paper 6.0.0-alpha.2 that crashes
+ * every time with "Cannot read property 'shape' of undefined" inside
+ * Paper's internal `Shell` component (a Material 3 shape-morph wrapper).
+ * The main (default size) FAB below does not use that code path and is
+ * unaffected.
  */
 function SpeedDialFab({
   actions,
@@ -109,11 +116,7 @@ const SpeedDialItem = memo(function SpeedDialItem({
   action,
   onClose,
 }: SpeedDialItemProps) {
-  const renderActionIcon = useCallback(
-    ({ size, color }: { size: number; color: string }) =>
-      action.renderIcon(size, color),
-    [action],
-  );
+  const theme = useTheme();
 
   const handlePress = useCallback(() => {
     onClose();
@@ -126,12 +129,22 @@ const SpeedDialItem = memo(function SpeedDialItem({
         <Text>{action.label}</Text>
       </Surface>
 
-      <FAB
-        size="small"
-        aria-label={action.label}
-        icon={renderActionIcon}
+      <Pressable
         onPress={handlePress}
-      />
+        accessibilityRole="button"
+        aria-label={action.label}
+        hitSlop={8}
+        style={({ pressed }) => [
+          styles.miniFab,
+          {
+            backgroundColor: theme.colors.secondaryContainer,
+            elevation: 3,
+            opacity: pressed ? 0.85 : 1,
+          },
+        ]}
+      >
+        {action.renderIcon(20, theme.colors.onSecondaryContainer)}
+      </Pressable>
     </View>
   );
 });
@@ -155,6 +168,19 @@ const styles = StyleSheet.create({
   label: {
     paddingHorizontal: 12,
     paddingVertical: 6,
+  },
+  // Material 3 "small FAB" size (40x40, 12dp corner radius), built by hand to
+  // avoid Paper's broken `<FAB size="small">` on this alpha version.
+  miniFab: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
   },
 });
 
